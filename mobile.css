@@ -42,20 +42,31 @@ table[width="1325"] {
     font-size: max(16px, 1em);
   }
 
-  button,
+  button:not(.space-mobile-nav__toggle):not(.lugano-bell-btn),
   .btnmnini,
   a.btnmnini {
     min-height: 44px;
   }
 }
 
-/* ——— Cabecera: menú desplegable en móvil ——— */
+/* ——— Cabecera móvil: barra + panel de navegación ——— */
+html.space-mobile-nav-open {
+  overflow: hidden;
+}
+
+html.space-layout-mobile header:has(.space-mobile-nav) {
+  background: #0a0a0a !important;
+  padding: 0;
+  box-shadow:
+    0 1px 0 rgba(255, 152, 0, 0.28),
+    0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
 .space-mobile-nav {
   display: none;
   position: relative;
   z-index: 1001;
-  background: #000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
 }
 
 .space-mobile-nav__bar {
@@ -63,17 +74,60 @@ table[width="1325"] {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: max(8px, env(safe-area-inset-top)) 10px 10px;
-  border-bottom: 1px solid rgba(255, 152, 0, 0.35);
+  padding: 10px max(14px, env(safe-area-inset-right)) 10px max(14px, env(safe-area-inset-left));
+  padding-top: max(10px, env(safe-area-inset-top));
+  background: linear-gradient(180deg, #161616 0%, #0a0a0a 100%);
 }
 
 .space-mobile-nav__brand {
-  font-weight: 700;
-  font-size: 15px;
-  letter-spacing: 0.06em;
-  color: #ffb74d;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
   text-decoration: none;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.space-mobile-nav__logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  object-fit: cover;
+  object-position: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: #121018;
+}
+
+.space-mobile-nav__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.space-mobile-nav__site {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ff9800;
+  line-height: 1.2;
+}
+
+.space-mobile-nav__page {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f3f4f6;
+  line-height: 1.25;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .space-mobile-nav__actions {
@@ -83,25 +137,47 @@ table[width="1325"] {
   flex-shrink: 0;
 }
 
+.space-mobile-nav__alerts-slot .lugano-bell-btn--header,
+.space-mobile-nav__alerts-slot .lugano-bell-btn--mobile-bar {
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.space-mobile-nav__alerts-slot .lugano-bell-btn--header:hover,
+.space-mobile-nav__alerts-slot .lugano-bell-btn--mobile-bar:hover {
+  background: rgba(255, 152, 0, 0.16);
+  border-color: rgba(255, 152, 0, 0.45);
+}
+
 .space-mobile-nav__toggle {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
   min-height: 44px;
-  padding: 0 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  background: linear-gradient(180deg, #ffa726 0%, #e65100 100%);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
+  padding: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: #f3f4f6;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   font-family: inherit;
+  flex-shrink: 0;
+}
+
+.space-mobile-nav__toggle:active {
+  background: rgba(255, 152, 0, 0.2);
+  border-color: rgba(255, 152, 0, 0.4);
 }
 
 .space-mobile-nav__toggle-icon {
-  width: 18px;
+  width: 20px;
   height: 2px;
   background: currentColor;
   border-radius: 1px;
@@ -115,7 +191,7 @@ table[width="1325"] {
   content: "";
   position: absolute;
   left: 0;
-  width: 18px;
+  width: 20px;
   height: 2px;
   background: currentColor;
   border-radius: 1px;
@@ -128,6 +204,12 @@ table[width="1325"] {
 
 .space-mobile-nav__toggle-icon::after {
   top: 6px;
+}
+
+.space-mobile-nav.is-open .space-mobile-nav__toggle {
+  background: rgba(255, 152, 0, 0.22);
+  border-color: rgba(255, 152, 0, 0.5);
+  color: #fff8f0;
 }
 
 .space-mobile-nav.is-open .space-mobile-nav__toggle-icon {
@@ -144,23 +226,57 @@ table[width="1325"] {
   transform: rotate(-45deg);
 }
 
+.space-mobile-nav__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
 .space-mobile-nav__menu {
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
-  top: 100%;
-  max-height: min(70dvh, 420px);
+  top: var(--space-mobile-nav-top, 64px);
+  bottom: 0;
+  z-index: 1002;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
-  border-bottom: 2px solid #ff9800;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
+  background: linear-gradient(180deg, #141414 0%, #080808 100%);
+  border-top: 1px solid rgba(255, 152, 0, 0.35);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.35);
+  animation: space-mobile-nav-in 0.22s ease-out;
+}
+
+@keyframes space-mobile-nav-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.space-mobile-nav__menu-head {
+  padding: 14px 16px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9ca3af;
 }
 
 .space-mobile-nav__list {
   list-style: none;
   margin: 0;
-  padding: 8px 0 max(12px, env(safe-area-inset-bottom));
+  padding: 8px 14px max(20px, env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .space-mobile-nav__list li {
@@ -169,39 +285,40 @@ table[width="1325"] {
 }
 
 .space-mobile-nav__list a {
-  display: block;
-  padding: 14px 18px;
-  color: #e8eaef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 10px;
+  text-align: center;
   text-decoration: none;
-  font-size: 15px;
-  font-weight: 500;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  transition: background 0.15s ease, color 0.15s ease;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  color: #fff8f0;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(180deg, #ffa726 0%, #fb8c00 42%, #e65100 100%);
+  box-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.space-mobile-nav__list a:hover,
-.space-mobile-nav__list a:focus-visible {
-  background: rgba(255, 152, 0, 0.12);
-  color: #ffb74d;
-  outline: none;
+.space-mobile-nav__list a:active {
+  transform: scale(0.98);
+  filter: brightness(1.05);
 }
 
 .space-mobile-nav__list a.is-active {
-  background: rgba(255, 152, 0, 0.2);
-  color: #ffb74d;
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow:
+    0 0 0 2px rgba(255, 152, 0, 0.55),
+    0 4px 14px rgba(245, 124, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
   font-weight: 700;
-  border-left: 3px solid #ff9800;
-  padding-left: 15px;
-}
-
-.space-mobile-nav .site-header-controls {
-  flex-wrap: nowrap;
-}
-
-.space-mobile-nav .site-header-collapse-toggle {
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
 }
 
 @media (max-width: 900px) {
@@ -209,7 +326,6 @@ table[width="1325"] {
     display: block;
   }
 
-  /* Ocultar tabla de menú desktop; el JS arma el desplegable */
   header:has(.space-mobile-nav) > center {
     display: none !important;
   }
@@ -218,8 +334,21 @@ table[width="1325"] {
     display: none !important;
   }
 
-  .site-header-controls--floating {
+  header:has(.space-mobile-nav) .site-header-controls,
+  header:has(.space-mobile-nav) .site-header-controls--floating {
     display: none !important;
+  }
+
+  /* Una sola fila de acciones; sin forzar 44px en todo el header */
+  .space-mobile-nav__toggle,
+  .space-mobile-nav__list a {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 380px) {
+  .space-mobile-nav__list {
+    grid-template-columns: 1fr;
   }
 }
 
