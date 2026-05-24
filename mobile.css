@@ -1,0 +1,321 @@
+/**
+ * S.P.A.C.E · diseño adaptable para teléfonos y tablets
+ * Incluir después de style.css en todas las páginas HTML.
+ */
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Contenedores principales (patrones comunes del sitio) */
+.stats-wrap,
+.rep-wrap,
+.pc-wrap,
+.rc-wrap,
+[class$="-wrap"]:not(.lp-help-panel-wrap) {
+  box-sizing: border-box;
+}
+
+/* Tablas anchas del index y páginas legacy */
+center {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table[width="1325"] {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Evita zoom automático en iOS al enfocar campos */
+@media (max-width: 900px) {
+  input,
+  select,
+  textarea {
+    font-size: max(16px, 1em);
+  }
+
+  button,
+  .btnmnini,
+  a.btnmnini {
+    min-height: 44px;
+  }
+}
+
+/* ——— Cabecera y menú ——— */
+@media (max-width: 900px) {
+  header:has(table .btnmnini) table,
+  #main-app > header table {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block;
+    box-sizing: border-box;
+  }
+
+  header:has(table .btnmnini) table tbody,
+  #main-app > header table tbody {
+    display: block;
+    width: 100%;
+  }
+
+  /* Más espacio útil: ocultar banner grande en móvil */
+  header:has(table .btnmnini) table tr:first-child,
+  #main-app > header table tr:first-child,
+  header:has(table .btnmnini) table td[rowspan="2"],
+  #main-app > header table td[rowspan="2"] {
+    display: none !important;
+  }
+
+  header:has(table .btnmnini) table tr:last-child,
+  #main-app > header table tr:last-child {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px 8px max(10px, env(safe-area-inset-bottom));
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  header:has(table .btnmnini) table tr:last-child td,
+  #main-app > header table tr:last-child td {
+    display: block !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  header:has(table .btnmnini) table tr:last-child td center,
+  #main-app > header table tr:last-child td center {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+
+  header:has(table .btnmnini) .btnmnini,
+  #main-app > header .btnmnini {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 44px;
+    font-size: 11px !important;
+    line-height: 1.2;
+    padding: 8px 6px !important;
+    box-sizing: border-box;
+  }
+
+  .site-header-controls--floating {
+    top: max(4px, env(safe-area-inset-top));
+    right: max(6px, env(safe-area-inset-right));
+    max-width: calc(100vw - 12px);
+  }
+
+  .site-header-collapse-toggle {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 420px) {
+  header:has(table .btnmnini) table tr:last-child,
+  #main-app > header table tr:last-child {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ——— Estacionamientos y paneles con pestañas ——— */
+@media (max-width: 900px) {
+  .stats-wrap,
+  .esta-tab-panel {
+    padding-left: max(10px, env(safe-area-inset-left));
+    padding-right: max(10px, env(safe-area-inset-right));
+  }
+
+  .stats-wrap {
+    max-width: 100% !important;
+    padding-bottom: max(32px, env(safe-area-inset-bottom));
+  }
+
+  .esta-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 6px;
+    padding-bottom: 4px;
+    margin-bottom: 12px;
+    scrollbar-width: thin;
+  }
+
+  .esta-tab {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+
+  .esta-lotes-filters,
+  .esta-lotes-toolbar,
+  .esta-sedes-actions,
+  .esta-lotes-kpis {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .esta-lotes-filters label {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .esta-lotes-filters input,
+  .esta-lotes-filters select {
+    width: 100%;
+    max-width: none;
+  }
+
+  .esta-lotes-kpi {
+    min-width: 0;
+  }
+
+  .esta-lotes-table-wrap,
+  .esta-lotes-cupos-table-wrap,
+  .esta-lotes-grupos-table-wrap,
+  .esta-sedes-list,
+  .tabla-vehiculos-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-left: -4px;
+    margin-right: -4px;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .esta-lotes-table {
+    min-width: 720px;
+  }
+
+  .esta-lotes-cupos-table-wrap .esta-lotes-table,
+  .esta-lotes-grupos-table-wrap .esta-lotes-table {
+    min-width: 560px;
+  }
+
+  .esta-lotes-cupos-actions,
+  .esta-lotes-cupos-limitar-wrap {
+    min-width: 120px;
+  }
+
+  .esta-sedes-layout,
+  .esta-sedes-horario-row,
+  .esta-lotes-grupos-toolbar {
+    grid-template-columns: 1fr !important;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .esta-sedes-list-card {
+    position: static;
+    max-height: none;
+  }
+
+  .esta-sedes-list {
+    max-height: min(50vh, 360px);
+  }
+
+  .stats-kpis,
+  .esta-insights {
+    grid-template-columns: 1fr !important;
+  }
+
+  .esta-board-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .esta-chart-board .stats-charts {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Diálogos a pantalla casi completa en móvil */
+@media (max-width: 640px) {
+  .esta-tarifas-dialog {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .esta-tarifas-dialog-card,
+  .esta-lotes-cupos-dialog .esta-tarifas-dialog-card,
+  .esta-lotes-grupos-dialog .esta-tarifas-dialog-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .esta-tarifas-dialog-foot {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  .esta-lotes-grupos-toolbar label {
+    width: 100%;
+  }
+}
+
+/* Planillas, recaudos, mensualidades (submenús y grillas) */
+@media (max-width: 900px) {
+  .rep-wrap,
+  .pc-wrap,
+  .rc-wrap {
+    max-width: 100% !important;
+    padding-left: max(10px, env(safe-area-inset-left));
+    padding-right: max(10px, env(safe-area-inset-right));
+  }
+
+  .rep-subnav,
+  .pc-subnav,
+  nav[aria-label*="reportes"] {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pc-filters,
+  .rc-filters,
+  .rc-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pc-table-wrap,
+  .rc-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Widget de ayuda: no tapar contenido en pantallas estrechas */
+@media (max-width: 600px) {
+  .lp-help-widget {
+    bottom: max(12px, env(safe-area-inset-bottom));
+    right: max(4px, env(safe-area-inset-right));
+  }
+
+  .lp-help-panel {
+    width: min(100vw - 16px, 360px) !important;
+    max-height: min(70dvh, 520px);
+  }
+}
+
+/* Impresión: sin cambios móviles */
+@media print {
+  header:has(table .btnmnini) table tr:first-child {
+    display: table-row !important;
+  }
+}
