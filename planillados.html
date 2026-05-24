@@ -1,0 +1,3427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="logolugano1.jpg">
+    <link rel="apple-touch-icon" href="logolugano1.jpg">
+    <title>Planillados · S.P.A.C.E</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="help-widget.css">
+    <script src="help-widget.js" defer></script>
+    <script src="lugano-banner-ssr.js"></script>
+    <script src="site-header-toggle.js" defer></script>
+  <script src="lugano-header-alerts.js" defer></script>
+    <link rel="stylesheet" href="lugano-auth-gate.css">
+    <script>
+        window.onload = function () {
+            var el = document.getElementById("pln");
+            if (el) el.style.background = "black";
+        };
+    </script>
+    <style>
+        body.plan-body {
+            margin: 0;
+            background: #0a0a0a;
+            color: #e8eaef;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        }
+        .plan-main-wrap {
+            max-width: 1325px;
+            margin: 0 auto;
+            padding: 16px 16px 32px;
+            box-sizing: border-box;
+        }
+        .plan-main-wrap[hidden] {
+            display: none !important;
+        }
+        .plan-search-panel {
+            background: linear-gradient(165deg, #161616 0%, #121212 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        .plan-search-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 12px 14px;
+        }
+        .plan-search-field {
+            flex: 0 1 auto;
+            min-width: 0;
+        }
+        .plan-search-field label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #9ca3af;
+            margin-bottom: 6px;
+        }
+        #plan-placa-input {
+            width: 100%;
+            max-width: 148px;
+            padding: 8px 10px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            font-family: Consolas, "Courier New", monospace;
+            border-radius: 8px;
+            border: 2px solid #1a1a1a;
+            background: #ffdd00;
+            color: #111;
+            text-transform: uppercase;
+            box-sizing: border-box;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
+        }
+        #plan-placa-input:focus {
+            outline: none;
+            border-color: #ffb74d;
+            box-shadow: 0 0 0 2px rgba(255, 183, 77, 0.35);
+        }
+        #plan-placa-input::placeholder {
+            color: #666;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .plan-search-actions {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            padding-bottom: 1px;
+        }
+        .plan-action-btn {
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            border: 1px solid transparent;
+            transition: filter 0.15s ease, opacity 0.15s ease;
+        }
+        .plan-action-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+        .plan-action-btn--pdf {
+            border-color: #e65100;
+            background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+            color: #fff;
+        }
+        .plan-action-btn--pdf:hover:not(:disabled) {
+            filter: brightness(1.08);
+        }
+        .plan-action-btn--mail {
+            border-color: rgba(100, 181, 246, 0.45);
+            background: linear-gradient(180deg, #1e3a5f 0%, #152238 100%);
+            color: #e3f2fd;
+        }
+        .plan-action-btn--mail:hover:not(:disabled) {
+            filter: brightness(1.12);
+        }
+        #plan-status {
+            margin: 10px 0 0;
+            font-size: 13px;
+            color: #94a3b8;
+            min-height: 1.4em;
+            line-height: 1.45;
+        }
+        .plan-reg-nav {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px 14px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 183, 77, 0.35);
+            background: rgba(255, 183, 77, 0.08);
+        }
+        .plan-reg-nav[hidden] {
+            display: none !important;
+        }
+        .plan-reg-btn {
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background: #2a2a2a;
+            color: #eee;
+            cursor: pointer;
+        }
+        .plan-reg-btn:hover:not(:disabled) {
+            background: #3a3a3a;
+        }
+        .plan-reg-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .plan-reg-counter {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffe0b2;
+            min-width: 4.5em;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+        .plan-layout {
+            display: grid;
+            grid-template-columns: minmax(220px, 1fr) minmax(280px, 1.2fr) minmax(240px, 1fr);
+            gap: 16px;
+            align-items: start;
+        }
+        @media (max-width: 1100px) {
+            .plan-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        .plan-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .plan-card h3 {
+            margin: 0;
+            padding: 12px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+            color: #e8eaef;
+            border-bottom: 1px solid #333;
+        }
+        h3.plan-photo-title {
+            font-size: 12px;
+            line-height: 1.4;
+            font-weight: 600;
+            word-break: break-word;
+        }
+        .plan-img-slot {
+            aspect-ratio: 4/3;
+            background: #0d0d0d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .plan-img-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+        .plan-img-slot video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+        .plan-img-placeholder {
+            color: #555;
+            font-size: 13px;
+            padding: 16px;
+            text-align: center;
+        }
+        .plan-data-block {
+            padding: 12px 14px 14px;
+            font-size: 13px;
+            line-height: 1.55;
+            color: #ccc;
+        }
+        .plan-data-block dl {
+            margin: 0;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 6px 14px;
+        }
+        .plan-data-block dt {
+            color: #888;
+            font-weight: 500;
+        }
+        .plan-data-block dd {
+            margin: 0;
+            color: #e8eaef;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+        .plan-data-block dt.plan-obs-clickable,
+        .plan-data-block dd.plan-obs-clickable {
+            cursor: pointer;
+            outline: none;
+        }
+        .plan-data-block dd.plan-obs-clickable {
+            border-radius: 6px;
+            padding: 4px 6px;
+            margin: -4px -6px;
+            transition: background 0.15s ease;
+        }
+        .plan-data-block dt.plan-obs-clickable:focus-visible,
+        .plan-data-block dd.plan-obs-clickable:focus-visible {
+            box-shadow: 0 0 0 2px rgba(255, 183, 77, 0.45);
+            border-radius: 6px;
+        }
+        .plan-data-block dd.plan-obs-clickable:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .plan-obs-dialog {
+            max-width: min(92vw, 520px);
+            width: 100%;
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            background: linear-gradient(165deg, #1e2128 0%, #14161c 100%);
+            color: #e8eaef;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+        }
+        .plan-obs-dialog::backdrop {
+            background: rgba(0, 0, 0, 0.72);
+        }
+        .plan-obs-dialog-inner {
+            padding: 18px 20px 16px;
+        }
+        .plan-obs-dialog-title {
+            margin: 0 0 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #f3f4f6;
+        }
+        .plan-obs-dialog-body {
+            margin: 0 0 18px;
+            font-size: 14px;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: #d1d5db;
+            max-height: min(60vh, 420px);
+            overflow-y: auto;
+        }
+        .plan-obs-dialog-close {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background: #2a2a2a;
+            color: #eee;
+            cursor: pointer;
+            width: 100%;
+        }
+        .plan-obs-dialog-close:hover {
+            background: #383838;
+        }
+        .plan-paths-note {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #2a2a2a;
+            font-size: 11px;
+            color: #666;
+            font-family: ui-monospace, Consolas, monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .plan-img-slot.plan-slot-clickable {
+            cursor: zoom-in;
+        }
+        .plan-thumbs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+            gap: 8px;
+            padding: 12px;
+            max-height: 420px;
+            overflow-y: auto;
+        }
+        .plan-thumbs button {
+            padding: 0;
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: zoom-in;
+            background: #000;
+            aspect-ratio: 1;
+        }
+        .plan-thumbs button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .plan-thumbs button video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+        /* Visor de fotos (misma experiencia que index.html: zoom, arrastre, realce) */
+        .fotos-lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+        .fotos-lightbox[hidden] {
+            display: none !important;
+        }
+        .fotos-lightbox-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            cursor: pointer;
+        }
+        .fotos-lightbox-inner {
+            position: relative;
+            z-index: 1;
+            max-width: min(96vw, 1100px);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .fotos-lightbox-stage {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+        .fotos-lightbox-close {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            z-index: 2;
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 50%;
+            background: #333;
+            color: #fff;
+            font-size: 26px;
+            line-height: 1;
+            cursor: pointer;
+        }
+        .fotos-lightbox-close:hover {
+            background: #555;
+        }
+        .fotos-lightbox-prev,
+        .fotos-lightbox-next {
+            flex-shrink: 0;
+            min-width: 48px;
+            height: 56px;
+            border: 1px solid #444;
+            border-radius: 10px;
+            background: #222;
+            color: #eee;
+            font-size: 28px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0 12px;
+        }
+        .fotos-lightbox-prev:hover,
+        .fotos-lightbox-next:hover {
+            background: #333;
+        }
+        .fotos-lightbox-prev:disabled,
+        .fotos-lightbox-next:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+        .fotos-lightbox-counter {
+            margin: 0;
+            color: #ccc;
+            font-size: 14px;
+            text-align: center;
+        }
+        .fotos-lightbox-plate {
+            margin: 0;
+            color: #ffb74d;
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .fotos-lightbox-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px 14px;
+            width: 100%;
+            padding: 8px 12px;
+            background: rgba(22, 22, 22, 0.96);
+            border-radius: 10px;
+            border: 1px solid #3a3a3a;
+            box-sizing: border-box;
+        }
+        .fotos-zoom-btn {
+            min-width: 40px;
+            height: 38px;
+            padding: 0 12px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background: #2a2a2a;
+            color: #eee;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .fotos-zoom-btn:hover {
+            background: #383838;
+        }
+        .fotos-zoom-label {
+            min-width: 52px;
+            text-align: center;
+            font-size: 14px;
+            color: #b8e994;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+        .fotos-zoom-reset {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background: #333;
+            color: #ddd;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .fotos-zoom-reset:hover {
+            background: #444;
+        }
+        .fotos-enhance-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #ccc;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fotos-enhance-label input {
+            width: 18px;
+            height: 18px;
+            accent-color: #ffb74d;
+            cursor: pointer;
+        }
+        .fotos-zoom-toolbar-group {
+            display: inline-flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 14px;
+        }
+        .fotos-lightbox-video {
+            display: block;
+            max-height: min(78vh, 720px);
+            max-width: min(88vw, 1000px);
+            width: auto;
+            height: auto;
+            border-radius: 8px;
+            background: #111;
+            margin: 0 auto;
+        }
+        .fotos-lightbox-video[hidden] {
+            display: none !important;
+        }
+        .fotos-lightbox-viewport {
+            overflow: hidden;
+            max-height: min(78vh, 720px);
+            max-width: min(88vw, 1000px);
+            width: 100%;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            touch-action: none;
+            border-radius: 8px;
+            background: #111;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+        .fotos-lightbox-viewport:active {
+            cursor: grabbing;
+        }
+        .fotos-lightbox-zoom-layer {
+            position: relative;
+            transform-origin: center center;
+            will-change: transform;
+        }
+        .fotos-lightbox-img {
+            display: block;
+            max-height: min(78vh, 720px);
+            max-width: min(88vw, 1000px);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #111;
+            margin: 0 auto;
+        }
+        .fotos-lightbox-canvas {
+            display: block;
+            max-height: min(78vh, 720px);
+            max-width: min(88vw, 1000px);
+            width: auto;
+            height: auto;
+            margin: 0 auto;
+            border-radius: 8px;
+            background: #111;
+        }
+        .fotos-lightbox-canvas[hidden] {
+            display: none !important;
+        }
+        .fotos-lightbox-hint {
+            margin: 0;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+            max-width: 520px;
+            line-height: 1.45;
+        }
+        @media print {
+            header,
+            .auth-gate,
+            .plan-search-panel,
+            #plan-reg-nav {
+                display: none !important;
+            }
+            body.plan-body {
+                background: #fff;
+                color: #111;
+            }
+            #plan-report-print {
+                display: block !important;
+            }
+            #plan-thumbs img,
+            #plan-thumbs video {
+                max-width: 220px !important;
+                max-height: 180px !important;
+                width: auto !important;
+                height: auto !important;
+                object-fit: contain;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                page-break-inside: avoid;
+            }
+            #plan-thumbs button {
+                border: none !important;
+                background: transparent !important;
+                padding: 4px !important;
+                margin: 4px !important;
+                display: inline-block !important;
+                vertical-align: top !important;
+            }
+            .plan-card h3 {
+                background: #eee;
+                color: #111;
+            }
+            .plan-card {
+                border-color: #ccc;
+                break-inside: avoid;
+            }
+        }
+        @media (max-width: 600px) {
+            .fotos-lightbox-prev,
+            .fotos-lightbox-next {
+                min-width: 40px;
+                height: 48px;
+                font-size: 22px;
+            }
+            .fotos-lightbox-toolbar {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body class="plan-body auth-gate-active" bgcolor="black" text="white" text-align="center">
+
+<div id="auth-gate" class="auth-gate" role="dialog" aria-modal="true" aria-labelledby="auth-gate-title">
+  <div class="auth-gate-brand">
+    <img src="logolugano1.jpg" height="88" alt="S.P.A.C.E" />
+  </div>
+  <div id="auth-logged-out" class="auth-panel-inner auth-gate-card">
+    <p class="auth-panel-title" id="auth-gate-title">Bienvenido</p>
+    <p class="auth-panel-desc">
+      Portal corporativo para la <strong>gestión y administración</strong> del planillado S.P.A.C.E.
+      Use su cuenta institucional para acceder de forma segura, supervisar la operación en tiempo real y consultar la información consolidada del negocio desde un solo lugar.
+    </p>
+    <button type="button" id="btn-google-signin">Iniciar sesión con Google</button>
+    <p id="auth-domain-hint" class="auth-domain-hint"></p>
+  </div>
+</div>
+
+<div id="main-app" class="main-app" hidden aria-hidden="true">
+
+<header bgcolor="white" text="white">
+ <center><table border="0" style="
+    background-position: center;
+    background: position y 10pt;
+    background-image: url(banner1.png);" font color="white" text="white" text-align="center" width="1325">
+<tr>
+<td rowspan="2" bgcolor="black"><a href="index.html"><img src="logolugano1.jpg" height="120" bgcolor="black" alt="S.P.A.C.E"></a></td>
+<td text="white" colspan="11" height="120" color="white">
+    <h1 style="color: aliceblue;">Planillados y Vehículos</h1>
+            <h2 style="color: aliceblue;"></h2>
+</td>
+</tr>
+<tr>
+<td width="120"><center>
+    <a href="index.html" id="index" class="btnmnini">inicio</a></center></td>
+<td width="120" id="planillados"><center>
+    <a href="planillados.html" id="pln" class="btnmnini"><span style="color: aliceblue;">Planillados</span></a></center></td>
+<td width="120" id="mensualidades"><center>
+    <a href="mensualidades.html" id="mes" class="btnmnini"><span style="color: aliceblue;">Mensualidades</span></a></center></td>
+<td width="120" id="reportes"><center>
+    <a href="reportes.html" id="rep" class="btnmnini"><span style="color: aliceblue;">Reportes</span></a></center></td>
+<td width="120" id="estadistico"><center>
+    <a href="estadistico.html" id="est" class="btnmnini"><span style="color: aliceblue;">Estadístico</span></a></center></td>
+<td width="120" id="seguridad"><center>
+    <a href="seguridad.html" id="seg" class="btnmnini"><span style="color: aliceblue;">Seguridad</span></a></center></td>
+<td width="120" id="usuarios"><center>
+    <a href="usuarios.html" id="usu" class="btnmnini"><span style="color: aliceblue;">Usuarios</span></a></center></td>
+<td width="120" id="estacionamientos"><center>
+    <a href="estacionamientos.html" id="esta" class="btnmnini"><span style="color: aliceblue;">Estacionamientos</span></a></center></td>
+<td width="120" id="programacion"><center>
+    <a href="programacion.html" id="prog" class="btnmnini"><span style="color: aliceblue;">Programación</span></a></center></td>
+<td width="120" id="ayuda"><center>
+    <a href="ayuda.html" id="ayu" class="btnmnini"><span style="color: aliceblue;">Ayuda</span></a></center></td>
+</tr>
+</table></center>
+ </header>
+
+<div id="plan-main" class="plan-main-wrap">
+  <section class="plan-search-panel">
+    <div class="plan-search-toolbar">
+      <div class="plan-search-field">
+        <label for="plan-placa-input">Placa</label>
+        <input id="plan-placa-input" type="text" maxlength="32" placeholder="ABC-123" autocomplete="off" spellcheck="false" />
+      </div>
+      <div class="plan-search-actions" role="group" aria-label="Reporte">
+        <button type="button" id="plan-btn-pdf" class="plan-action-btn plan-action-btn--pdf" disabled title="Imprimir o guardar como PDF. El nombre del archivo sugerido será planillado_PLACA_fecha_hora (según el navegador).">PDF</button>
+        <button type="button" id="plan-btn-email" class="plan-action-btn plan-action-btn--mail" disabled title="Abrir el correo con el resumen del registro">Correo</button>
+      </div>
+    </div>
+    <p id="plan-status">Escriba una placa para cargar datos y fotos.</p>
+    <div id="plan-reg-nav" class="plan-reg-nav" hidden role="group" aria-label="Varios registros con la misma placa">
+      <button type="button" id="plan-reg-prev" class="plan-reg-btn">← Anterior</button>
+      <span id="plan-reg-counter" class="plan-reg-counter" aria-live="polite">1 / 1</span>
+      <button type="button" id="plan-reg-next" class="plan-reg-btn">Siguiente →</button>
+    </div>
+  </section>
+
+  <div id="plan-report-print" class="plan-report-print">
+    <p class="plan-report-heading" style="margin:0 0 14px;font-size:14px;color:#94a3b8;text-align:left;">
+      <strong style="color:#e8eaef;">S.P.A.C.E · Planillados</strong>
+      <span id="plan-report-placa-label"></span>
+    </p>
+  <div class="plan-layout">
+    <div class="plan-col">
+      <div class="plan-card">
+        <h3 id="plan-title-slot-vehiculo" class="plan-photo-title">Foto principal · vehículo</h3>
+        <div id="plan-slot-vehiculo" class="plan-img-slot"><span class="plan-img-placeholder">Sin imagen</span></div>
+      </div>
+    </div>
+
+    <div class="plan-col">
+      <div class="plan-card">
+        <h3>Datos de entrada</h3>
+        <div id="plan-datos-entrada" class="plan-data-block"><p style="margin:0;color:#666;">—</p></div>
+      </div>
+      <div class="plan-card" style="margin-top:14px;">
+        <h3>Datos de planillado</h3>
+        <div id="plan-datos-planillado" class="plan-data-block"><p style="margin:0;color:#666;">—</p></div>
+      </div>
+      <div class="plan-card" style="margin-top:14px;">
+        <h3>Datos de revisión</h3>
+        <div id="plan-datos-revision" class="plan-data-block"><p style="margin:0;color:#666;">—</p></div>
+      </div>
+    </div>
+
+    <div class="plan-col">
+      <div class="plan-card">
+        <h3>Fotos del registro</h3>
+        <div id="plan-thumbs" class="plan-thumbs"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<dialog id="plan-obs-dialog" class="plan-obs-dialog" aria-labelledby="plan-obs-dialog-title">
+  <div class="plan-obs-dialog-inner">
+    <h3 id="plan-obs-dialog-title" class="plan-obs-dialog-title">Observaciones</h3>
+    <div id="plan-obs-dialog-body" class="plan-obs-dialog-body"></div>
+    <button type="button" id="plan-obs-dialog-close" class="plan-obs-dialog-close">Cerrar</button>
+  </div>
+</dialog>
+
+<div id="fotos-lightbox" class="fotos-lightbox" hidden aria-hidden="true">
+    <div class="fotos-lightbox-backdrop" tabindex="-1"></div>
+    <div class="fotos-lightbox-inner" role="dialog" aria-modal="true" aria-label="Visor de fotos y vídeos del planillado">
+        <button type="button" class="fotos-lightbox-close" aria-label="Cerrar visor">×</button>
+        <p class="fotos-lightbox-plate" id="fotos-lightbox-plate"></p>
+        <div class="fotos-lightbox-toolbar">
+            <span id="fotos-zoom-toolbar" class="fotos-zoom-toolbar-group">
+                <button type="button" class="fotos-zoom-btn" id="fotos-zoom-out" aria-label="Alejar">−</button>
+                <span class="fotos-zoom-label" id="fotos-zoom-label">100%</span>
+                <button type="button" class="fotos-zoom-btn" id="fotos-zoom-in" aria-label="Acercar">+</button>
+                <button type="button" class="fotos-zoom-reset" id="fotos-zoom-reset">Restablecer vista</button>
+            </span>
+            <label id="fotos-enhance-wrap" class="fotos-enhance-label" title="Realza contraste, saturación y brillo solo en tu navegador (sin subir archivos). Fotos: una pasada en canvas; vídeo: filtros en tiempo real. No usa servicios en la nube.">
+                <input type="checkbox" id="fotos-enhance-clarity" />
+                Mejorar calidad (realce local)
+            </label>
+        </div>
+        <div class="fotos-lightbox-stage">
+            <button type="button" class="fotos-lightbox-prev" aria-label="Anterior">‹</button>
+            <div class="fotos-lightbox-viewport" id="fotos-lightbox-viewport">
+                <div class="fotos-lightbox-zoom-layer" id="fotos-lightbox-zoom-layer">
+                    <img class="fotos-lightbox-img" id="fotos-lightbox-img" alt="" decoding="async" />
+                    <canvas class="fotos-lightbox-canvas" id="fotos-lightbox-canvas" hidden></canvas>
+                </div>
+                <video id="fotos-lightbox-video" class="fotos-lightbox-video" controls playsinline preload="metadata" hidden></video>
+            </div>
+            <button type="button" class="fotos-lightbox-next" aria-label="Siguiente">›</button>
+        </div>
+        <p class="fotos-lightbox-counter" id="fotos-lightbox-counter"></p>
+        <p class="fotos-lightbox-hint" id="fotos-lightbox-hint">Arrastra para mover cuando hay zoom. Rueda o pellizco para ampliar en fotos. «Mejorar calidad» mejora contraste/saturación/brillo solo aquí (sin subir archivos).</p>
+    </div>
+</div>
+
+</div>
+
+<div id="auth-error-strip">
+  <p id="auth-banner-detail" style="margin:0;font-family:Consolas,monospace;font-size:12px;"></p>
+</div>
+
+<script src="firebase-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script>
+(function () {
+  firebase.initializeApp(typeof firebaseConfig !== "undefined" ? firebaseConfig : {});
+  var db = firebase.firestore();
+  var auth = firebase.auth();
+  var storage = firebase.storage && firebase.storage();
+  var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
+  if (!cfg.planilladoDefaultSubcollectionsForAllParkings || !cfg.planilladoDefaultSubcollectionsForAllParkings.length) {
+    cfg.planilladoDefaultSubcollectionsForAllParkings = [
+      "registros",
+      "LugJR112",
+      "LugLJ141",
+      "LugMC421",
+      "LugLJ142",
+      "LugLJ143",
+      "LugMC422",
+      "LugMC423"
+    ];
+  }
+  if (!cfg.planilladoParkingIdsFallback || !cfg.planilladoParkingIdsFallback.length) {
+    cfg.planilladoParkingIdsFallback = ["E-50 FUNDONAL", "E-56 Bog Americas"];
+  }
+  /** Misma colección legacy que index.html */
+  var PLANILLADO_OLD = "planillado_old";
+
+  /** Igual que decodeId en index.html */
+  function decodeId(seg) {
+    try {
+      return decodeURIComponent(String(seg));
+    } catch (e) {
+      return String(seg);
+    }
+  }
+
+  /** Quita saltos de línea/espacios dentro de la URL (Firestore a veces parte el string). */
+  function normalizePdfMediaUrl(raw) {
+    return String(raw || "")
+      .replace(/[\u200B-\u200D\uFEFF]/g, "")
+      .replace(/[\r\n\t\f\v\u00A0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]+/g, "")
+      .trim();
+  }
+
+  /**
+   * Decodifica el segmento `/o/…` de la URL API de Storage, limpia caracteres rotos y vuelve a codificar.
+   * Corrige enlaces donde el nombre del archivo quedó partido en varias líneas en Firestore.
+   * Importante: si decodeURIComponent falla (path truncado / % sueltos), limpia el segmento y reintenta.
+   */
+  function rebuildFirebaseStorageDownloadUrl(raw) {
+    var n = normalizePdfMediaUrl(raw);
+    if (!n || n.indexOf("firebasestorage.googleapis.com/v0/b/") === -1) return n;
+    try {
+      var m = n.match(/^(https:\/\/firebasestorage\.googleapis\.com\/v0\/b\/[^/]+\/o\/)([^?]+)(\?[\s\S]*)?$/);
+      if (!m) return n;
+      var seg = m[2].replace(/\+/g, " ");
+      seg = seg.replace(/[\r\n\t\f\v\u200B-\u200D\uFEFF\u00A0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]+/g, "");
+      var decoded;
+      try {
+        decoded = decodeURIComponent(seg);
+      } catch (eDec) {
+        seg = seg.replace(/%(?![0-9A-Fa-f]{2})/gi, "%25");
+        decoded = decodeURIComponent(seg);
+      }
+      var cleaned = decoded.replace(/[\u200B-\u200D\uFEFF\r\n\t\f\v]+/g, "").trim();
+      cleaned = cleaned.replace(/[\u0000-\u001F\u007F-\u009F]+/g, "");
+      /**
+       * Nombre de archivo partido (p. ej. …/AAA_111/20 + salto + 260509_HHMMSS_….jpg).
+       * Sin esto el path queda …/20260509… pero si quedó un espacio raro, fuerza YYMMDD.
+       */
+      cleaned = cleaned.replace(/\/20\s+(\d{2})(\d{2})(\d{2})(_\d+)/g, "/20$1$2$3$4");
+      return m[1] + encodeURIComponent(cleaned) + (m[3] || "");
+    } catch (e) {
+      return n;
+    }
+  }
+
+  /** Normaliza URLs de evidencia antes de mostrarlas o pedirlas al PDF (Firestore puede partir el string). */
+  function sanitizePlanilladoEvidenceUrl(raw) {
+    var s = normalizePdfMediaUrl(raw);
+    if (s.indexOf("firebasestorage.googleapis.com") !== -1) {
+      s = rebuildFirebaseStorageDownloadUrl(s);
+    }
+    return s;
+  }
+
+  /** extrae `inspection_photos/.../archivo.jpg` de una URL API HTTPS de Firebase Storage */
+  function firebaseEncodedPathFromStorageApiUrl(fullUrl) {
+    try {
+      var norm = normalizePdfMediaUrl(fullUrl);
+      if (norm.indexOf("firebasestorage.googleapis.com") !== -1) {
+        norm = rebuildFirebaseStorageDownloadUrl(norm);
+      }
+      var m = String(norm).match(/\/v0\/b\/[^/]+\/o\/([^?]+)/);
+      if (!m) return null;
+      return decodeURIComponent(m[1].replace(/\+/g, " "));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /** Misma ruta que la función estricta, pero tolera URLs raras si falla el regex. */
+  function firebaseEncodedPathFromStorageApiUrlLoose(fullUrl) {
+    try {
+      var norm = sanitizePlanilladoEvidenceUrl(fullUrl);
+      var i = norm.indexOf("/v0/b/");
+      if (i === -1) return null;
+      var o = norm.indexOf("/o/", i);
+      if (o === -1) return null;
+      var rest = norm.slice(o + 3);
+      var q = rest.indexOf("?");
+      if (q !== -1) rest = rest.slice(0, q);
+      return decodeURIComponent(rest.replace(/\+/g, " "));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /** Ruta objeto única para comparar miniatura ↔ PDF */
+  function firebaseStorageObjectPathKey(fullUrl) {
+    return (
+      firebaseEncodedPathFromStorageApiUrl(fullUrl) ||
+      firebaseEncodedPathFromStorageApiUrlLoose(fullUrl) ||
+      ""
+    );
+  }
+
+  /** Nombre del bucket en URLs `…/v0/b/BUCKET/o/…` */
+  function firebaseBucketFromStorageApiUrl(fullUrl) {
+    try {
+      var norm = normalizePdfMediaUrl(fullUrl);
+      var m = String(norm).match(/\/v0\/b\/([^/]+)\//);
+      return m ? m[1] : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /** MIME por extensión (p. ej. bytes de `getBytes` sin tipo). */
+  function mimeFromStoragePath(pathStr) {
+    var low = String(pathStr || "").toLowerCase();
+    if (/\.(jpe?g)$/.test(low)) return "image/jpeg";
+    if (/\.png$/.test(low)) return "image/png";
+    if (/\.webp$/.test(low)) return "image/webp";
+    if (/\.gif$/.test(low)) return "image/gif";
+    if (/\.(mp4|m4v)$/.test(low)) return "video/mp4";
+    if (/\.webm$/.test(low)) return "video/webm";
+    if (/\.mov$/.test(low)) return "video/quicktime";
+    return "application/octet-stream";
+  }
+
+  /** Comparación insensible a espacios (ej. ABC123 vs ABC 123); normaliza guiones «raros» del teclado */
+  function normalizePlateKey(s) {
+    return String(s || "")
+      .trim()
+      .replace(/\u2013|\u2014|\u2212/g, "-")
+      .replace(/\s+/g, "")
+      .toUpperCase();
+  }
+
+  /**
+   * Campo de placa: inserta guión tras el 3.er carácter alfanumérico si el primero es letra (ej. ABC123 → ABC-123).
+   * Si el primer carácter es dígito, no se añade guión (ej. motos u otros formatos).
+   */
+  function formatPlanilladoPlateDisplay(raw) {
+    var alnum = String(raw || "")
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "");
+    if (!alnum.length) return "";
+    if (/\d/.test(alnum.charAt(0))) {
+      return alnum;
+    }
+    if (alnum.length <= 3) return alnum;
+    return alnum.slice(0, 3) + "-" + alnum.slice(3);
+  }
+
+  function onPlanPlacaInput() {
+    if (!inputPlaca) return;
+    var cur = inputPlaca.value;
+    var formatted = formatPlanilladoPlateDisplay(cur);
+    if (formatted !== cur) {
+      var len = formatted.length;
+      inputPlaca.value = formatted;
+      try {
+        inputPlaca.setSelectionRange(len, len);
+      } catch (e) {}
+    }
+    scheduleSearch();
+  }
+
+  /**
+   * Igual que plateLabel en index: pick(licensePlate, placa, Placa) || docId
+   */
+  function plateFromDocSnap(doc) {
+    var d = doc.data() || {};
+    return String(pick(d, "licensePlate", "placa", "Placa") || doc.id || "").trim();
+  }
+
+  function docMatchesPlate(doc, wantedNormKeys) {
+    var labelNorm = normalizePlateKey(plateFromDocSnap(doc));
+    var idNorm = normalizePlateKey(decodeId(doc.id));
+    var cand = [
+      labelNorm,
+      idNorm,
+      labelNorm.replace(/-/g, ""),
+      idNorm.replace(/-/g, "")
+    ];
+    var i, j, w;
+    for (i = 0; i < wantedNormKeys.length; i++) {
+      w = wantedNormKeys[i];
+      if (!w) continue;
+      for (j = 0; j < cand.length; j++) {
+        if (cand[j] && cand[j] === w) return true;
+      }
+    }
+    return false;
+  }
+
+  function wantedNormKeysFromInput(plateRaw) {
+    var t = String(plateRaw || "").trim();
+    if (!t) return [];
+    var seen = {};
+    var out = [];
+    function add(str) {
+      var k = normalizePlateKey(str);
+      if (!k || seen[k]) return;
+      seen[k] = true;
+      out.push(k);
+      var loose = k.replace(/-/g, "");
+      if (loose && loose !== k && !seen[loose]) {
+        seen[loose] = true;
+        out.push(loose);
+      }
+    }
+    add(t);
+    add(t.toUpperCase());
+    add(t.toLowerCase());
+    return out;
+  }
+
+  /** IDs de sede desde firebase-config (fallback + mapa operarios) */
+  function allSedeIdsFromConfig() {
+    var m = {};
+    (cfg.planilladoParkingIdsFallback || []).forEach(function (s) {
+      s = String(s || "").trim();
+      if (s) m[s] = true;
+    });
+    Object.keys(cfg.planilladoParkingOperarios || {}).forEach(function (k) {
+      k = String(k || "").trim();
+      if (k) m[k] = true;
+    });
+    return Object.keys(m);
+  }
+
+  /** Variantes en texto crudo para consultas where y rutas directas (debe declararse antes de plateDocIdVariants) */
+  function rawVariantsForQuery(plateRaw) {
+    var t = String(plateRaw || "").trim();
+    if (!t) return [];
+    var seen = {};
+    var out = [];
+    function add(x) {
+      if (!x || seen[x]) return;
+      seen[x] = true;
+      out.push(x);
+    }
+    add(t);
+    add(t.toUpperCase());
+    add(t.toLowerCase());
+    return out;
+  }
+
+  /** Variantes del ID de documento placa (con/sin guion), mismo criterio que rutas tipo …/LugMC421/TUY-567 */
+  function plateDocIdVariants(plateRaw) {
+    var r = rawVariantsForQuery(plateRaw);
+    var seen = {};
+    var out = [];
+    function add(x) {
+      if (!x || seen[x]) return;
+      seen[x] = true;
+      out.push(x);
+    }
+    r.forEach(function (v) {
+      add(v);
+      add(v.replace(/-/g, ""));
+    });
+    return out;
+  }
+
+  /**
+   * Lectura directa planillado/{sede}/{operario}/{placa} como en la consola de Firebase.
+   */
+  async function fetchDirectPathHits(plateRaw, addDoc, errBag) {
+    /** Evita cientos de .get() mientras el usuario aún escribe una placa corta (las consultas indexadas bastan). */
+    var compactLen = normalizePlateKey(plateRaw).replace(/-/g, "").length;
+    if (compactLen > 0 && compactLen < 5) {
+      return;
+    }
+    /** Una sola raíz por defecto (las tres variantes triplicaban tiempo y lecturas). */
+    var roots =
+      cfg.planilladoDirectPathRoots && cfg.planilladoDirectPathRoots.length
+        ? cfg.planilladoDirectPathRoots.map(function (r) {
+            return String(r).trim();
+          }).filter(Boolean)
+        : ["planillado"];
+    var sedes = allSedeIdsFromConfig();
+    var ops = (cfg.planilladoDefaultSubcollectionsForAllParkings || [])
+      .map(function (s) {
+        return String(s).trim();
+      })
+      .filter(Boolean);
+    var pids = plateDocIdVariants(plateRaw);
+    if (!sedes.length || !ops.length || !pids.length) {
+      if (errBag && !sedes.length) {
+        errBag.push("Sin sedes en firebase-config (planilladoParkingIdsFallback).");
+      }
+      return;
+    }
+
+    var specs = [];
+    roots.forEach(function (root) {
+      sedes.forEach(function (sede) {
+        ops.forEach(function (op) {
+          pids.forEach(function (pid) {
+            specs.push({ root: root, sede: sede, op: op, pid: pid });
+          });
+        });
+      });
+    });
+
+    /** Más lecturas en paralelo por ronda = menos vueltas de red (antes 25 → muchas rondas). */
+    var CHUNK = 72;
+    var i;
+    for (i = 0; i < specs.length; i += CHUNK) {
+      var chunk = specs.slice(i, i + CHUNK);
+      await Promise.all(
+        chunk.map(function (spec) {
+          return db
+            .collection(spec.root)
+            .doc(spec.sede)
+            .collection(spec.op)
+            .doc(spec.pid)
+            .get()
+            .then(function (snap) {
+              if (snap.exists) addDoc(snap);
+            })
+            .catch(function (err) {
+              console.warn("[planillados] lectura directa", err.code, spec);
+              if (errBag && err.code) errBag.push(err.code + ": " + (err.message || ""));
+            });
+        })
+      );
+    }
+  }
+
+  function timestampToMillis(v) {
+    if (v == null || v === "") return null;
+    if (typeof v === "number" && !isNaN(v)) {
+      if (v > 1e12) return v;
+      if (v > 1e9) return v * 1000;
+      return v;
+    }
+    if (typeof v === "object") {
+      if (typeof v.toDate === "function") {
+        try {
+          return v.toDate().getTime();
+        } catch (e) {
+          return null;
+        }
+      }
+      if (v.seconds != null) {
+        var ns = v.nanoseconds || 0;
+        return v.seconds * 1000 + Math.floor(ns / 1e6);
+      }
+    }
+    return null;
+  }
+
+  function recencyMillis(data) {
+    if (!data) return 0;
+    var keys = [
+      "lastCheckDateTime",
+      "lastCheckTimestamp",
+      "dateTime",
+      "updatedAt",
+      "createdAt",
+      "ultimoUso",
+      "fecha"
+    ];
+    var best = 0;
+    var i, k, ms;
+    for (i = 0; i < keys.length; i++) {
+      k = keys[i];
+      ms = timestampToMillis(data[k]);
+      if (ms == null) ms = timestampToMillis(pick(data, k));
+      if (ms != null && ms > best) best = ms;
+    }
+    return best;
+  }
+
+  function isPlanilladoRootSeg(seg) {
+    var l = String(seg || "").toLowerCase();
+    return l === "planillado" || l === "planillados";
+  }
+
+  /** Estacionamiento desde la ruta (como stationId en index) */
+  function stationFromPath(fullPath) {
+    var parts = String(fullPath || "")
+      .split("/")
+      .filter(Boolean);
+    if (!parts.length) return "";
+    if (parts[0] === PLANILLADO_OLD && parts[1]) return decodeId(parts[1]);
+    if (parts.length >= 2 && isPlanilladoRootSeg(parts[0])) return decodeId(parts[1]);
+    return "";
+  }
+
+  var inputPlaca = document.getElementById("plan-placa-input");
+  var statusEl = document.getElementById("plan-status");
+  var slotVehiculo = document.getElementById("plan-slot-vehiculo");
+  var datosEntrada = document.getElementById("plan-datos-entrada");
+  var datosPlanillado = document.getElementById("plan-datos-planillado");
+  var datosRevision = document.getElementById("plan-datos-revision");
+  var thumbsEl = document.getElementById("plan-thumbs");
+  var btnPdf = document.getElementById("plan-btn-pdf");
+  var btnEmail = document.getElementById("plan-btn-email");
+  var reportPrintRoot = document.getElementById("plan-report-print");
+  var reportPlacaLabel = document.getElementById("plan-report-placa-label");
+  var titleSlotVehiculo = document.getElementById("plan-title-slot-vehiculo");
+  var DEFAULT_TITLE_VEH = "Foto principal · vehículo";
+  var lastObservacionesPlainForDialog = "";
+  var lastGalleryUrls = [];
+  var planObsDialog = document.getElementById("plan-obs-dialog");
+  var planObsDialogBody = document.getElementById("plan-obs-dialog-body");
+  var planObsDialogCloseBtn = document.getElementById("plan-obs-dialog-close");
+  var lastPlateLabelForGallery = "";
+
+  var debounceTimer = null;
+  /** Descarta resultados si el usuario siguió escribiendo (evita UI lenta y datos desactualizados). */
+  var planSearchRunId = 0;
+  /** Documentos devueltos por la última búsqueda (ordenados por recencia). */
+  var planResultDocs = [];
+  var planResultIndex = 0;
+  /** Debe coincidir con el `runId` de la búsqueda que generó `planResultDocs`. */
+  var planResultRunId = 0;
+
+  function esc(s) {
+    var d = document.createElement("div");
+    d.textContent = s == null ? "" : String(s);
+    return d.innerHTML;
+  }
+
+  function fmtTs(v) {
+    if (v == null || v === "") return "";
+    try {
+      if (typeof v.toDate === "function") return v.toDate().toLocaleString("es-CO");
+      if (v.seconds != null) return new Date(v.seconds * 1000).toLocaleString("es-CO");
+    } catch (e) {}
+    return String(v);
+  }
+
+  function pick(data) {
+    if (!data) return "";
+    var keys = Array.prototype.slice.call(arguments, 1);
+    var i, k, lower, want, kk;
+    for (i = 0; i < keys.length; i++) {
+      k = keys[i];
+      if (data[k] !== undefined && data[k] !== null && data[k] !== "") return data[k];
+    }
+    lower = Object.keys(data);
+    for (i = 0; i < keys.length; i++) {
+      want = keys[i];
+      for (kk = 0; kk < lower.length; kk++) {
+        if (lower[kk].toLowerCase() === String(want).toLowerCase()) {
+          if (data[lower[kk]] !== undefined && data[lower[kk]] !== null && data[lower[kk]] !== "")
+            return data[lower[kk]];
+        }
+      }
+    }
+    return "";
+  }
+
+  function collectHttpPhotoUrls(data) {
+    if (!data) return [];
+    var out = [];
+    var seen = {};
+    function normalizeHttpString(s) {
+      if (typeof s !== "string") return null;
+      var t = String(s)
+        .replace(/^\uFEFF/, "")
+        .trim()
+        .replace(/^["']+|["']+$/g, "");
+      if (!t) return null;
+      var low = t.toLowerCase();
+      if (low.indexOf("file:") === 0 || low.indexOf("gs:") === 0 || low.indexOf("content:") === 0) return null;
+      if (low.indexOf("http://") === 0 || low.indexOf("https://") === 0) return t;
+      if (t.indexOf("//") === 0 && t.indexOf("///") !== 0) return "https:" + t;
+      if (
+        /^[\w.-]+\.(googleapis\.com|googleusercontent\.com|gstatic\.com)\b/i.test(t) &&
+        low.indexOf("http") !== 0 &&
+        low.indexOf("//") !== 0
+      ) {
+        return "https://" + t.replace(/^\/+/, "");
+      }
+      return null;
+    }
+    function recordUrl(norm) {
+      if (!norm) return;
+      var fixed = sanitizePlanilladoEvidenceUrl(norm);
+      if (!fixed || seen[fixed]) return;
+      seen[fixed] = true;
+      out.push(fixed);
+    }
+    function harvestStringsFromText(s) {
+      if (typeof s !== "string" || !s) return;
+      var collapsed = String(s).replace(/[\r\n\t\f\v\u200B-\u200D\uFEFF]+/g, "");
+      var found = collapsed.match(/https?:\/\/[^\s"'<>|\\[\]{}]+/gi);
+      if (found && found.length) {
+        var i, chunk, norm;
+        for (i = 0; i < found.length; i++) {
+          chunk = found[i].replace(/[,;.)\]}'"´`]+$/g, "");
+          norm = normalizeHttpString(chunk);
+          if (norm) recordUrl(norm);
+        }
+        return;
+      }
+      var norm = normalizeHttpString(s);
+      if (norm) recordUrl(norm);
+    }
+    function walk(v, depth) {
+      if (v == null || depth > 22) return;
+      var t = typeof v;
+      if (t === "string") {
+        harvestStringsFromText(v);
+        return;
+      }
+      if (t === "number" || t === "boolean") return;
+      if (t !== "object") return;
+      if (typeof v.toDate === "function") return;
+      if (Array.isArray(v)) {
+        var i;
+        for (i = 0; i < v.length; i++) walk(v[i], depth + 1);
+        return;
+      }
+      harvestStringsFromText(v.url);
+      harvestStringsFromText(v.downloadURL);
+      harvestStringsFromText(v.downloadUrl);
+      harvestStringsFromText(v.uri);
+      harvestStringsFromText(v.photoUrl);
+      harvestStringsFromText(v.secureUrl);
+      var k;
+      for (k in v) {
+        if (!Object.prototype.hasOwnProperty.call(v, k)) continue;
+        walk(v[k], depth + 1);
+      }
+    }
+    walk(data, 0);
+    return out;
+  }
+
+  var fotoLightboxForceVideo = Object.create(null);
+
+  function urlLooksLikeVideo(url) {
+    if (!url || typeof url !== "string") return false;
+    var pathRaw = url.split(/[?#]/)[0];
+    var pathTry = pathRaw;
+    try {
+      pathTry = decodeURIComponent(pathRaw);
+    } catch (e) {}
+    var pathLow = pathTry.toLowerCase();
+    if (/\.(mp4|webm|ogg|ogv|mov|m4v|mkv|3gp)(\b|$)/i.test(pathLow)) return true;
+    if (/\/videos?\//i.test(pathLow)) return true;
+    var lowFull = url.toLowerCase();
+    if (/[?&](content[_-]?type|mime|format)=(video\/|[^&]*mp4|[^&]*webm)/i.test(lowFull)) return true;
+    return false;
+  }
+
+  function urlCountsAsVideo(url) {
+    return urlLooksLikeVideo(url) || !!fotoLightboxForceVideo[url];
+  }
+
+  function formatLightboxCounter(urls, index) {
+    if (!urls || !urls.length) return "";
+    var total = urls.length;
+    var curVid = urlCountsAsVideo(urls[index]);
+    var i = index + 1;
+    var v = 0;
+    var k;
+    for (k = 0; k < urls.length; k++) {
+      if (urlCountsAsVideo(urls[k])) v++;
+    }
+    var p = total - v;
+    if (total === 1) return curVid ? "1 vídeo" : "1 foto";
+    if (v && p) return "Archivo " + i + " de " + total;
+    if (v === total) return "Vídeo " + i + " de " + total;
+    return "Foto " + i + " de " + total;
+  }
+
+  function collectStorageCandidates(data) {
+    if (!data) return [];
+    var seen = {};
+    var out = [];
+    function isHttpLike(s) {
+      var low = String(s).toLowerCase();
+      return (
+        low.indexOf("http://") === 0 ||
+        low.indexOf("https://") === 0 ||
+        (low.indexOf("//") === 0 && low.indexOf("///") !== 0)
+      );
+    }
+    function couldBeStorageRef(s) {
+      if (typeof s !== "string") return false;
+      var t = s.trim().replace(/^\uFEFF/, "");
+      if (!t || t.length > 1500) return false;
+      var low = t.toLowerCase();
+      if (low.indexOf("file:") === 0 || low.indexOf("content:") === 0 || low.indexOf("blob:") === 0)
+        return false;
+      if (isHttpLike(t)) return false;
+      if (low.indexOf("gs://") === 0) return true;
+      if (/^inspection_photos\//i.test(t)) return true;
+      if (
+        t.indexOf("/") !== -1 &&
+        t.indexOf(":") === -1 &&
+        /\.(jpe?g|png|webp|gif|mp4|webm|mov|m4v|mkv)(\?.*)?$/i.test(t)
+      )
+        return true;
+      return false;
+    }
+    function walk(v, depth) {
+      if (v == null || depth > 22) return;
+      if (typeof v === "string") {
+        if (couldBeStorageRef(v) && !seen[v]) {
+          seen[v] = true;
+          out.push(v);
+        }
+        return;
+      }
+      if (typeof v !== "object") return;
+      if (typeof v.toDate === "function") return;
+      if (Array.isArray(v)) {
+        v.forEach(function (x) {
+          walk(x, depth + 1);
+        });
+        return;
+      }
+      var k;
+      for (k in v) {
+        if (Object.prototype.hasOwnProperty.call(v, k)) walk(v[k], depth + 1);
+      }
+    }
+    walk(data, 0);
+    return out;
+  }
+
+  function resolveStorageCandidates(candidates) {
+    if (!storage) return Promise.resolve([]);
+    if (!auth.currentUser) return Promise.resolve([]);
+    return Promise.all(
+      candidates.map(function (raw) {
+        var s = String(raw).trim();
+        if (s.toLowerCase().indexOf("gs://") === 0) {
+          return storage.refFromURL(s).getDownloadURL();
+        }
+        return storage.ref(s.replace(/^\/+/, "")).getDownloadURL();
+      })
+    ).catch(function () {
+      return [];
+    });
+  }
+
+  function setSlot(el, urlOrNull) {
+    el.innerHTML = "";
+    if (!urlOrNull) {
+      el.innerHTML = '<span class="plan-img-placeholder">Sin imagen</span>';
+      return;
+    }
+    if (urlLooksLikeVideo(urlOrNull)) {
+      var vid = document.createElement("video");
+      vid.src = urlOrNull;
+      vid.controls = true;
+      vid.playsInline = true;
+      vid.setAttribute("playsinline", "");
+      vid.preload = "metadata";
+      vid.setAttribute("aria-label", "Vídeo");
+      el.appendChild(vid);
+      return;
+    }
+    var img = document.createElement("img");
+    img.src = urlOrNull;
+    img.alt = "Foto";
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.addEventListener(
+      "error",
+      function onImgErr() {
+        img.removeEventListener("error", onImgErr);
+        if (!el.contains(img)) return;
+        var v = document.createElement("video");
+        v.src = urlOrNull;
+        v.controls = true;
+        v.playsInline = true;
+        v.setAttribute("playsinline", "");
+        v.preload = "metadata";
+        el.innerHTML = "";
+        el.appendChild(v);
+      },
+      false
+    );
+    el.appendChild(img);
+  }
+
+  function renderDl(target, rows) {
+    if (!rows.length) {
+      target.innerHTML = '<p style="margin:0;color:#666;">Sin datos.</p>';
+      return;
+    }
+    var html = "<dl>";
+    rows.forEach(function (r) {
+      if (r[1] === undefined || r[1] === null || r[1] === "") return;
+      html += "<dt>" + esc(r[0]) + "</dt><dd>" + esc(String(r[1])) + "</dd>";
+    });
+    html += "</dl>";
+    target.innerHTML = html;
+  }
+
+  function decoratePlanilladoObsRow(containerEl, rawObs) {
+    var text = rawObs != null ? String(rawObs).trim() : "";
+    if (!containerEl) return;
+    var dl = containerEl.querySelector("dl");
+    if (!dl) return;
+    var dts = dl.querySelectorAll("dt");
+    var i, dt, dd;
+    for (i = 0; i < dts.length; i++) {
+      dt = dts[i];
+      if (dt.textContent.trim() !== "Observaciones") continue;
+      dd = dt.nextElementSibling;
+      if (!dd || dd.tagName !== "DD") continue;
+      dt.classList.remove("plan-obs-clickable");
+      dd.classList.remove("plan-obs-clickable");
+      dt.removeAttribute("data-plan-obs-trigger");
+      dd.removeAttribute("data-plan-obs-trigger");
+      dt.removeAttribute("tabindex");
+      dd.removeAttribute("tabindex");
+      dt.removeAttribute("role");
+      dt.removeAttribute("title");
+      dd.removeAttribute("title");
+      if (!text) return;
+      dt.classList.add("plan-obs-clickable");
+      dd.classList.add("plan-obs-clickable");
+      dt.setAttribute("data-plan-obs-trigger", "1");
+      dd.setAttribute("data-plan-obs-trigger", "1");
+      dt.setAttribute("tabindex", "0");
+      dd.setAttribute("tabindex", "0");
+      dd.setAttribute("role", "button");
+      var hint = "Pulse para ver el texto completo";
+      dt.setAttribute("title", hint);
+      dd.setAttribute("title", hint);
+      break;
+    }
+  }
+
+  function openPlanObservacionesDialog() {
+    if (!planObsDialogBody) return;
+    var t =
+      lastObservacionesPlainForDialog != null
+        ? String(lastObservacionesPlainForDialog).trim()
+        : "";
+    planObsDialogBody.textContent = t || "Sin observaciones.";
+    if (planObsDialog && planObsDialog.showModal) {
+      try {
+        planObsDialog.showModal();
+      } catch (e) {}
+    }
+  }
+
+  function closePlanObservacionesDialog() {
+    if (planObsDialog && planObsDialog.close) planObsDialog.close();
+  }
+
+  function resetPlanPhotoTitles() {
+    if (titleSlotVehiculo) titleSlotVehiculo.textContent = DEFAULT_TITLE_VEH;
+  }
+
+  function truncateObsForTitle(s, max) {
+    max = max || 160;
+    var t = String(s || "")
+      .trim()
+      .replace(/\s+/g, " ");
+    if (t.length <= max) return t;
+    return t.slice(0, max - 1) + "…";
+  }
+
+  /** Parte identificada por IA (o etiqueta por defecto) + observación del registro */
+  function composePhotoCardTitle(aiPart, obsText, fallbackPartLabel) {
+    var part = (aiPart || "").trim().replace(/\s+/g, " ");
+    if (!part) part = (fallbackPartLabel || "").trim();
+    var obs = truncateObsForTitle(obsText, 160);
+    if (obs) return part + " · Obs.: " + obs;
+    return part || fallbackPartLabel || "";
+  }
+
+  function fetchUrlAsImageBase64(url) {
+    return fetch(url, { mode: "cors", credentials: "omit" })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.blob();
+      })
+      .then(function (blob) {
+        return new Promise(function (resolve, reject) {
+          var reader = new FileReader();
+          reader.onloadend = function () {
+            var dataUrl = reader.result;
+            var comma = String(dataUrl).indexOf(",");
+            var base64 = comma >= 0 ? dataUrl.slice(comma + 1) : dataUrl;
+            var mime =
+              blob.type && blob.type.indexOf("image/") === 0 ? blob.type : "image/jpeg";
+            resolve({ base64: base64, mime: mime });
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+      });
+  }
+
+  function geminiDescribePlanPhoto(apiKey, model, base64Payload, mime, instruction) {
+    if (!apiKey || !base64Payload) return Promise.resolve("");
+    var m = String(model || "gemini-2.0-flash").trim();
+    var endpoint =
+      "https://generativelanguage.googleapis.com/v1beta/models/" +
+      encodeURIComponent(m) +
+      ":generateContent?key=" +
+      encodeURIComponent(apiKey);
+    return fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              { text: instruction },
+              {
+                inline_data: {
+                  mime_type: mime || "image/jpeg",
+                  data: base64Payload
+                }
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          maxOutputTokens: 128,
+          temperature: 0.15
+        }
+      })
+    })
+      .then(function (r) {
+        return r.json();
+      })
+      .then(function (json) {
+        if (json && json.error) {
+          console.warn("[planillados] Gemini API", json.error.message || json.error);
+          return "";
+        }
+        var txt =
+          json &&
+          json.candidates &&
+          json.candidates[0] &&
+          json.candidates[0].content &&
+          json.candidates[0].content.parts &&
+          json.candidates[0].content.parts[0] &&
+          json.candidates[0].content.parts[0].text;
+        return typeof txt === "string" ? txt.trim().replace(/\s+/g, " ") : "";
+      })
+      .catch(function (err) {
+        console.warn("[planillados] Gemini", err);
+        return "";
+      });
+  }
+
+  /**
+   * Titular de la foto principal: texto breve de Gemini (si hay planilladoGeminiApiKey) + campo description.
+   */
+  function updatePlanPhotoCardTitles(viewCommitId, urlMain, obsText) {
+    var key = String(cfg.planilladoGeminiApiKey || "").trim();
+    var model = cfg.planilladoGeminiModel || "gemini-2.0-flash";
+
+    if (!urlMain) {
+      resetPlanPhotoTitles();
+      return;
+    }
+
+    var promptMain =
+      "En español, una sola frase breve (máximo 15 palabras). Describe qué muestra la foto del vehículo o del estacionamiento (ángulo, zona del vehículo, placa visible si aplica). Sin saludos ni comillas.";
+
+    if (!key) {
+      if (titleSlotVehiculo) {
+        titleSlotVehiculo.textContent = composePhotoCardTitle(
+          "",
+          obsText,
+          "Vista general del vehículo"
+        );
+      }
+      return;
+    }
+
+    var obsShort = truncateObsForTitle(obsText, 160);
+    if (titleSlotVehiculo) {
+      titleSlotVehiculo.textContent = urlMain
+        ? obsShort
+          ? "Analizando foto (IA)… · Obs.: " + obsShort
+          : "Analizando foto (IA)…"
+        : composePhotoCardTitle("", obsText, "Sin imagen");
+    }
+
+    function safeDescribe(u, prompt) {
+      if (!u) return Promise.resolve("");
+      return fetchUrlAsImageBase64(u)
+        .then(function (img) {
+          return geminiDescribePlanPhoto(key, model, img.base64, img.mime, prompt);
+        })
+        .catch(function () {
+          return "";
+        });
+    }
+
+    safeDescribe(urlMain, promptMain).then(function (aiTxt) {
+      if (viewCommitId !== planSearchRunId) return;
+      if (titleSlotVehiculo) {
+        titleSlotVehiculo.textContent = composePhotoCardTitle(
+          aiTxt,
+          obsText,
+          urlMain ? "Vista del vehículo" : "Sin imagen"
+        );
+      }
+    });
+  }
+
+  function clearAll() {
+    lastGalleryUrls = [];
+    lastPlateLabelForGallery = "";
+    if (btnPdf) {
+      btnPdf.disabled = true;
+    }
+    if (btnEmail) {
+      btnEmail.disabled = true;
+    }
+    slotVehiculo.classList.remove("plan-slot-clickable");
+    slotVehiculo.onclick = null;
+    setSlot(slotVehiculo, null);
+    datosEntrada.innerHTML = '<p style="margin:0;color:#666;">—</p>';
+    datosPlanillado.innerHTML = '<p style="margin:0;color:#666;">—</p>';
+    datosRevision.innerHTML = '<p style="margin:0;color:#666;">—</p>';
+    thumbsEl.innerHTML = "";
+    if (reportPlacaLabel) reportPlacaLabel.textContent = "";
+    lastObservacionesPlainForDialog = "";
+    resetPlanPhotoTitles();
+    closePlanObservacionesDialog();
+    planResultDocs = [];
+    planResultIndex = 0;
+    planResultRunId = 0;
+    var regNav = document.getElementById("plan-reg-nav");
+    if (regNav) regNav.hidden = true;
+  }
+
+  function bindMainPhotoSlots(urls, plateLabel) {
+    var list = urls || [];
+    slotVehiculo.classList.toggle("plan-slot-clickable", !!list[0]);
+    slotVehiculo.onclick = list[0]
+      ? function () {
+          openFotoLightbox(list, plateLabel, 0);
+        }
+      : null;
+  }
+
+  function elementPlainText(el) {
+    if (!el) return "";
+    var t = el.innerText || el.textContent || "";
+    return String(t)
+      .replace(/\r\n/g, "\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+  }
+
+  function sendPlanReportEmail() {
+    if (!btnEmail || btnEmail.disabled) return;
+    var plate =
+      lastPlateLabelForGallery ||
+      String(inputPlaca.value || "").trim() ||
+      "—";
+    var subj = "Planillado S.P.A.C.E · " + plate;
+    var lines = [
+      "Reporte de planillado — S.P.A.C.E",
+      "",
+      "Placa: " + plate,
+      "",
+      "— Datos de entrada —",
+      elementPlainText(datosEntrada),
+      "",
+      "— Datos de planillado —",
+      elementPlainText(datosPlanillado),
+      "",
+      "— Datos de revisión —",
+      elementPlainText(datosRevision),
+      "",
+      "Para adjuntar las fotos: pulse PDF → en imprimir elija «Guardar como PDF» y adjunte ese archivo."
+    ];
+    var body = lines.join("\n");
+    var maxBody = 1900;
+    if (body.length > maxBody) {
+      body = body.slice(0, maxBody - 40).trim() + "\n… (mensaje acortado)";
+    }
+    var to = String(cfg.planilladoReportEmailTo || "").trim();
+    var href = "mailto:";
+    if (to) href += to;
+    href += "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(body);
+    try {
+      window.location.href = href;
+    } catch (err) {
+      window.alert("No se pudo abrir el cliente de correo.");
+    }
+  }
+
+  function buildPdfFileSlug(plate) {
+    var s = String(plate || "placa")
+      .trim()
+      .replace(/\s+/g, "_")
+      .replace(/[^a-zA-Z0-9._-]/g, "");
+    return s || "placa";
+  }
+
+  /** Nombre sugerido al guardar PDF desde el diálogo de impresión (mucho navegadores usan document.title). */
+  function buildPlanilladoPrintFileBaseName() {
+    var plate =
+      lastPlateLabelForGallery ||
+      (inputPlaca && String(inputPlaca.value || "").trim()) ||
+      "placa";
+    var slug = buildPdfFileSlug(plate);
+    var d = new Date();
+    function pad2(n) {
+      return n < 10 ? "0" + n : String(n);
+    }
+    var y = d.getFullYear();
+    var mo = pad2(d.getMonth() + 1);
+    var day = pad2(d.getDate());
+    var hh = pad2(d.getHours());
+    var mm = pad2(d.getMinutes());
+    var ss = pad2(d.getSeconds());
+    return "planillado_" + slug + "_" + y + mo + day + "_" + hh + mm + ss;
+  }
+
+  /** Vídeo → JPEG (fotograma) para incrustar en PDF sin depender de html2canvas. */
+  function videoBlobToJpegRasterForPdf(blob) {
+    var blobUrl = URL.createObjectURL(blob);
+    return new Promise(function (resolve) {
+      var done = false;
+      function finish(result) {
+        if (done) return;
+        done = true;
+        try {
+          URL.revokeObjectURL(blobUrl);
+        } catch (e) {}
+        resolve(result);
+      }
+      var v = document.createElement("video");
+      v.muted = true;
+      v.playsInline = true;
+      v.setAttribute("playsinline", "");
+      v.preload = "auto";
+      v.src = blobUrl;
+      v.addEventListener("loadeddata", function () {
+        try {
+          var dur = v.duration;
+          var t =
+            dur && !isNaN(dur) && dur > 0 ? Math.min(0.25, dur / 4) : 0.1;
+          v.currentTime = t;
+        } catch (e1) {
+          try {
+            v.currentTime = 0;
+          } catch (e2) {}
+        }
+      });
+      v.addEventListener("seeked", function () {
+        try {
+          var nw = v.videoWidth;
+          var nh = v.videoHeight;
+          if (!nw || !nh) {
+            finish(null);
+            return;
+          }
+          var maxPx = 2000;
+          var cw = nw;
+          var ch = nh;
+          if (nw > maxPx) {
+            ch = Math.round((nh * maxPx) / nw);
+            cw = maxPx;
+          }
+          var c = document.createElement("canvas");
+          c.width = cw;
+          c.height = ch;
+          var ctx = c.getContext("2d");
+          ctx.fillStyle = "#000";
+          ctx.fillRect(0, 0, cw, ch);
+          ctx.drawImage(v, 0, 0, cw, ch);
+          finish({
+            dataUrl: c.toDataURL("image/jpeg", 0.88),
+            format: "JPEG",
+            ratio: ch / cw
+          });
+        } catch (err) {
+          finish(null);
+        }
+      });
+      v.addEventListener("error", function () {
+        finish(null);
+      });
+      setTimeout(function () {
+        finish(null);
+      }, 20000);
+    });
+  }
+
+  /**
+   * Blob del archivo (evita CORS del navegador frente a URLs firmadas).
+   * Orden: getBytes modular (script type=module) → compat getBlob → SDK completo → fetch → REST → XHR → img.
+   */
+  function fetchBlobForPdf(url) {
+    var u = sanitizePlanilladoEvidenceUrl(String(url || ""));
+    if (!u) return Promise.reject(new Error("empty"));
+    if (u.indexOf("//") === 0) u = "https:" + u;
+    var decodedFsPath =
+      firebaseEncodedPathFromStorageApiUrl(u) || firebaseEncodedPathFromStorageApiUrlLoose(u);
+
+    /**
+     * Bytes vía SDK modular (misma sesión que compat): primero función instalada por <script type="module">,
+     * si no, import() dinámico (puede fallar si la página es file://).
+     */
+    function tryAnyModularGetBytes(pathStr) {
+      if (!pathStr) return Promise.reject(new Error("no path"));
+      if (typeof globalThis.__planStorageGetBytesFromPath === "function") {
+        return globalThis.__planStorageGetBytesFromPath(pathStr).then(function (bytes) {
+          return new Blob([bytes], { type: mimeFromStoragePath(pathStr) });
+        });
+      }
+      var modUrl = "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+      return import(modUrl).then(function (mod) {
+        var app = firebase.app();
+        function getBytesFrom(st) {
+          var r = mod.ref(st, pathStr);
+          return mod.getBytes(r);
+        }
+        var gs = cfg.storageBucket ? "gs://" + String(cfg.storageBucket).replace(/^gs:\/\//, "") : null;
+        if (gs) {
+          return getBytesFrom(mod.getStorage(app, gs)).catch(function () {
+            return getBytesFrom(mod.getStorage(app));
+          });
+        }
+        return getBytesFrom(mod.getStorage(app));
+      }).then(function (bytes) {
+        return new Blob([bytes], { type: mimeFromStoragePath(pathStr) });
+      });
+    }
+
+    function xhrBlob(url, headerObj) {
+      return new Promise(function (resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.responseType = "blob";
+        xhr.onload = function () {
+          if (xhr.status >= 200 && xhr.status < 300) resolve(xhr.response);
+          else reject(new Error("xhr " + xhr.status));
+        };
+        xhr.onerror = function () {
+          reject(new Error("xhr"));
+        };
+        if (headerObj && typeof headerObj === "object") {
+          Object.keys(headerObj).forEach(function (k) {
+            xhr.setRequestHeader(k, headerObj[k]);
+          });
+        }
+        xhr.send();
+      });
+    }
+
+    function tryXhrFetch(urlToLoad, withBearer) {
+      if (withBearer) {
+        if (!auth.currentUser) return Promise.reject(new Error("no auth"));
+        return auth.currentUser.getIdToken(false).then(function (tok) {
+          return xhrBlob(urlToLoad, { Authorization: "Bearer " + tok });
+        });
+      }
+      return xhrBlob(urlToLoad);
+    }
+
+    function tryPlainFetch(targetUrl) {
+      return fetch(targetUrl, { mode: "cors", credentials: "omit" }).then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.blob();
+      });
+    }
+
+    function tryBearerFetch() {
+      if (!auth.currentUser) return Promise.reject(new Error("no auth"));
+      return auth.currentUser.getIdToken(false).then(function (token) {
+        return fetch(u, {
+          mode: "cors",
+          credentials: "omit",
+          headers: { Authorization: "Bearer " + token }
+        }).then(function (res) {
+          if (!res.ok) throw new Error("Bearer HTTP " + res.status);
+          return res.blob();
+        });
+      });
+    }
+
+    function tryStorageSdkBlob() {
+      if (!storage) return Promise.reject(new Error("no storage"));
+      var decodedPath =
+        firebaseEncodedPathFromStorageApiUrl(u) || firebaseEncodedPathFromStorageApiUrlLoose(u);
+      var ref = null;
+      if (decodedPath) {
+        try {
+          ref = storage.ref(decodedPath);
+        } catch (eRef) {}
+      }
+      if (!ref) {
+        try {
+          ref = storage.refFromURL(u);
+        } catch (e0) {
+          if (!decodedPath) throw e0;
+          ref = storage.ref(decodedPath);
+        }
+      }
+      function blobViaFreshUrl() {
+        return ref.getDownloadURL().then(function (fresh) {
+          var fu = normalizePdfMediaUrl(fresh);
+          return tryPlainFetch(fu).catch(function () {
+            if (!auth.currentUser) return Promise.reject(new Error("sdk falló"));
+            return auth.currentUser.getIdToken(false).then(function (token) {
+              return fetch(fu, {
+                mode: "cors",
+                credentials: "omit",
+                headers: { Authorization: "Bearer " + token }
+              }).then(function (res) {
+                if (!res.ok) throw new Error("fresh Bearer " + res.status);
+                return res.blob();
+              });
+            });
+          });
+        });
+      }
+      if (typeof ref.getBlob === "function") {
+        return ref.getBlob().catch(function () {
+          return blobViaFreshUrl();
+        });
+      }
+      return blobViaFreshUrl();
+    }
+
+    /**
+     * Descarga con la API REST de Firebase Storage (alt=media + Bearer ID token).
+     * Suele funcionar cuando fetch a la URL firmada falla por CORS del bucket.
+     */
+    function tryFirebaseStorageRestAltMedia() {
+      var decodedPath =
+        firebaseEncodedPathFromStorageApiUrl(u) || firebaseEncodedPathFromStorageApiUrlLoose(u);
+      if (!decodedPath) return Promise.reject(new Error("no path"));
+      if (!auth.currentUser) return Promise.reject(new Error("no auth"));
+      var bucket =
+        (cfg && cfg.storageBucket) ||
+        firebaseBucketFromStorageApiUrl(u) ||
+        (firebase.app && firebase.app() && firebase.app().options && firebase.app().options.storageBucket);
+      if (!bucket) return Promise.reject(new Error("no bucket"));
+      return auth.currentUser.getIdToken(false).then(function (token) {
+        var encObj = encodeURIComponent(decodedPath);
+        var apiUrl =
+          "https://firebasestorage.googleapis.com/v0/b/" + bucket + "/o/" + encObj + "?alt=media";
+        return fetch(apiUrl, {
+          mode: "cors",
+          credentials: "omit",
+          headers: { Authorization: "Bearer " + token }
+        }).then(function (res) {
+          if (res.ok) return res.blob();
+          return fetch(
+            "https://firebasestorage.googleapis.com/v0/b/" +
+              encodeURIComponent(bucket) +
+              "/o/" +
+              encObj +
+              "?alt=media",
+            {
+              mode: "cors",
+              credentials: "omit",
+              headers: { Authorization: "Bearer " + token }
+            }
+          ).then(function (res2) {
+            if (!res2.ok) throw new Error("REST " + res.status + "/" + res2.status);
+            return res2.blob();
+          });
+        });
+      });
+    }
+
+    function tryImageCrossOriginBlob(targetUrl) {
+      if (urlLooksLikeVideo(targetUrl)) return Promise.reject(new Error("video"));
+      return new Promise(function (resolve, reject) {
+        var img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = function () {
+          try {
+            var nw = img.naturalWidth;
+            var nh = img.naturalHeight;
+            if (!nw || !nh) {
+              reject(new Error("empty img"));
+              return;
+            }
+            var maxPx = 2000;
+            var cw = nw;
+            var ch = nh;
+            if (nw > maxPx) {
+              ch = Math.round((nh * maxPx) / nw);
+              cw = maxPx;
+            }
+            var c = document.createElement("canvas");
+            c.width = cw;
+            c.height = ch;
+            c.getContext("2d").drawImage(img, 0, 0, cw, ch);
+            c.toBlob(
+              function (blob) {
+                if (blob) resolve(blob);
+                else reject(new Error("toBlob"));
+              },
+              "image/jpeg",
+              0.9
+            );
+          } catch (e) {
+            reject(e);
+          }
+        };
+        img.onerror = function () {
+          reject(new Error("img"));
+        };
+        img.src = targetUrl;
+      });
+    }
+
+    var isFirebaseStorage = u.indexOf("firebasestorage.googleapis.com") !== -1;
+
+    function tryCompatRefGetBlobFirst() {
+      if (!storage || !decodedFsPath) return Promise.reject(new Error("skip compat ref"));
+      var r = storage.ref(decodedFsPath);
+      if (typeof r.getBlob !== "function") return Promise.reject(new Error("no getBlob"));
+      return r.getBlob();
+    }
+
+    return (
+      isFirebaseStorage && decodedFsPath
+        ? tryAnyModularGetBytes(decodedFsPath)
+        : Promise.reject(new Error("skip modular first"))
+    )
+      .catch(function () {
+        if (!isFirebaseStorage || !auth.currentUser) return Promise.reject(new Error("skip rest early"));
+        return tryFirebaseStorageRestAltMedia();
+      })
+      .catch(function () {
+        return tryCompatRefGetBlobFirst();
+      })
+      .catch(function () {
+        if (isFirebaseStorage && storage) return tryStorageSdkBlob();
+        return tryPlainFetch(u);
+      })
+      .catch(function () {
+        return tryPlainFetch(u);
+      })
+      .catch(function () {
+        if (!auth.currentUser) return Promise.reject(new Error("no auth"));
+        return tryBearerFetch();
+      })
+      .catch(function () {
+        if (!isFirebaseStorage || !auth.currentUser) return Promise.reject(new Error("skip rest"));
+        return tryFirebaseStorageRestAltMedia();
+      })
+      .catch(function () {
+        return tryXhrFetch(u, false);
+      })
+      .catch(function () {
+        return tryXhrFetch(u, true);
+      })
+      .catch(function () {
+        return tryImageCrossOriginBlob(u);
+      });
+  }
+
+  /** Corrige `application/octet-stream` cuando los bytes son JPEG/PNG (REST/SDK a veces omiten el tipo). */
+  function sniffImageBlobMime(blob) {
+    var t = (blob.type || "").toLowerCase();
+    if (t.indexOf("video/") === 0) return Promise.resolve(blob);
+    if (t && t !== "application/octet-stream" && t.indexOf("image/") === 0) {
+      return Promise.resolve(blob);
+    }
+    return blob.slice(0, 16).arrayBuffer().then(function (buf) {
+      var h = new Uint8Array(buf);
+      if (h.length >= 3 && h[0] === 0xff && h[1] === 0xd8 && h[2] === 0xff) {
+        return new Blob([blob], { type: "image/jpeg" });
+      }
+      if (h.length >= 8 && h[0] === 0x89 && h[1] === 0x50 && h[2] === 0x4e && h[3] === 0x47) {
+        return new Blob([blob], { type: "image/png" });
+      }
+      return blob;
+    });
+  }
+
+  function rasterizeBlobForPdf(blob) {
+    if (!blob || blob.size === 0) return Promise.resolve(null);
+    return sniffImageBlobMime(blob).then(function (b) {
+      var mt = (b.type || "").toLowerCase();
+      if (mt.indexOf("video/") === 0) {
+        return videoBlobToJpegRasterForPdf(b);
+      }
+      var objUrl = URL.createObjectURL(b);
+      return new Promise(function (resolve) {
+        function finishRaster(dataUrl, cw, ch) {
+          try {
+            URL.revokeObjectURL(objUrl);
+          } catch (e0) {}
+          if (!dataUrl || !cw || !ch) {
+            resolve(null);
+            return;
+          }
+          resolve({
+            dataUrl: dataUrl,
+            format: "JPEG",
+            ratio: ch / cw
+          });
+        }
+        var img = new Image();
+        img.onload = function () {
+          try {
+            var nw = img.naturalWidth;
+            var nh = img.naturalHeight;
+            if (!nw || !nh) {
+              tryAlternativeDecode();
+              return;
+            }
+            var maxPx = 2000;
+            var cw = nw;
+            var ch = nh;
+            if (nw > maxPx) {
+              ch = Math.round((nh * maxPx) / nw);
+              cw = maxPx;
+            }
+            var c = document.createElement("canvas");
+            c.width = cw;
+            c.height = ch;
+            c.getContext("2d").drawImage(img, 0, 0, cw, ch);
+            finishRaster(c.toDataURL("image/jpeg", 0.9), cw, ch);
+          } catch (e) {
+            tryAlternativeDecode();
+          }
+        };
+        function tryAlternativeDecode() {
+          if (typeof createImageBitmap !== "function") {
+            try {
+              URL.revokeObjectURL(objUrl);
+            } catch (e1) {}
+            resolve(null);
+            return;
+          }
+          createImageBitmap(b)
+            .then(function (bmp) {
+              try {
+                var nw = bmp.width;
+                var nh = bmp.height;
+                if (!nw || !nh) {
+                  bmp.close();
+                  try {
+                    URL.revokeObjectURL(objUrl);
+                  } catch (e2) {}
+                  resolve(null);
+                  return;
+                }
+                var maxPx = 2000;
+                var cw = nw;
+                var ch = nh;
+                if (nw > maxPx) {
+                  ch = Math.round((nh * maxPx) / nw);
+                  cw = maxPx;
+                }
+                var c = document.createElement("canvas");
+                c.width = cw;
+                c.height = ch;
+                c.getContext("2d").drawImage(bmp, 0, 0, cw, ch);
+                bmp.close();
+                finishRaster(c.toDataURL("image/jpeg", 0.9), cw, ch);
+              } catch (e3) {
+                try {
+                  bmp.close();
+                } catch (e4) {}
+                try {
+                  URL.revokeObjectURL(objUrl);
+                } catch (e5) {}
+                resolve(null);
+              }
+            })
+            .catch(function () {
+              try {
+                URL.revokeObjectURL(objUrl);
+              } catch (e6) {}
+              resolve(null);
+            });
+        }
+        img.onerror = function () {
+          tryAlternativeDecode();
+        };
+        img.src = objUrl;
+      });
+    });
+  }
+
+  /**
+   * Si la miniatura ya está cargada en #plan-thumbs (misma ruta Storage), copiamos píxeles al PDF
+   * sin segunda descarga (evita CORS del fetch cuando el navegador ya decodificó la imagen).
+   */
+  function tryRasterFromLoadedThumbForPdf(canonicalUrl) {
+    return new Promise(function (resolve) {
+      var want = firebaseStorageObjectPathKey(canonicalUrl);
+      if (!want) {
+        resolve(null);
+        return;
+      }
+      var imgs = document.querySelectorAll("#plan-thumbs button img");
+      var i, img, p;
+      for (i = 0; i < imgs.length; i++) {
+        img = imgs[i];
+        if (!img.src) continue;
+        p = firebaseStorageObjectPathKey(img.src);
+        if (p !== want) continue;
+        if (!img.complete || !img.naturalWidth) {
+          resolve(null);
+          return;
+        }
+        try {
+          var nw = img.naturalWidth;
+          var nh = img.naturalHeight;
+          var maxPx = 2000;
+          var cw = nw;
+          var ch = nh;
+          if (nw > maxPx) {
+            ch = Math.round((nh * maxPx) / nw);
+            cw = maxPx;
+          }
+          var c = document.createElement("canvas");
+          c.width = cw;
+          c.height = ch;
+          c.getContext("2d").drawImage(img, 0, 0, cw, ch);
+          resolve({
+            dataUrl: c.toDataURL("image/jpeg", 0.91),
+            format: "JPEG",
+            ratio: ch / cw
+          });
+        } catch (e) {
+          resolve(null);
+        }
+        return;
+      }
+      resolve(null);
+    });
+  }
+
+  /** Descarga (imagen o vídeo) y devuelve JPEG + ratio para jsPDF. */
+  function fetchRasterForPdf(url) {
+    var sanitized = sanitizePlanilladoEvidenceUrl(String(url || ""));
+    return tryRasterFromLoadedThumbForPdf(sanitized).then(function (thumbRaster) {
+      if (thumbRaster && thumbRaster.dataUrl) return thumbRaster;
+      return fetchBlobForPdf(url).then(rasterizeBlobForPdf);
+    }).catch(function () {
+      return null;
+    });
+  }
+
+  function planBlockPlainText(el) {
+    if (!el) return "—";
+    var t = (el.innerText || "").trim();
+    return t || "—";
+  }
+
+  /** Espera a que las miniaturas del registro terminen de cargar (impresión incluye lo que ya pintó el navegador). */
+  function waitForPlanThumbsMediaReady(timeoutMs) {
+    var limit = timeoutMs == null ? 28000 : timeoutMs;
+    var thumbsEl = document.getElementById("plan-thumbs");
+    if (!thumbsEl) return Promise.resolve();
+    var nodes = thumbsEl.querySelectorAll("img, video");
+    if (!nodes.length) return Promise.resolve();
+    var tasks = [];
+    nodes.forEach(function (el) {
+      tasks.push(
+        new Promise(function (resolve) {
+          function ok() {
+            resolve();
+          }
+          if (el.tagName === "IMG") {
+            if (el.complete) {
+              ok();
+              return;
+            }
+            el.addEventListener("load", ok, { once: true });
+            el.addEventListener("error", ok, { once: true });
+          } else {
+            if (el.readyState >= 2) {
+              ok();
+              return;
+            }
+            el.addEventListener("loadeddata", ok, { once: true });
+            el.addEventListener("error", ok, { once: true });
+          }
+        })
+      );
+    });
+    return Promise.race([
+      Promise.all(tasks),
+      new Promise(function (resolve) {
+        setTimeout(resolve, limit);
+      }),
+    ]);
+  }
+
+  /**
+   * PDF vía impresión del navegador: evita CORS/jsPDF al incrustar bytes.
+   * En el diálogo elija «Guardar como PDF» / «Microsoft Print to PDF».
+   */
+  async function downloadPlanReportPdf() {
+    if (!btnPdf || btnPdf.disabled) return;
+    var prevText = btnPdf.textContent;
+    btnPdf.disabled = true;
+    btnPdf.textContent = "Preparando impresión…";
+    try {
+      await waitForPlanThumbsMediaReady(30000);
+    } catch (e) {}
+    btnPdf.textContent = prevText;
+    btnPdf.disabled = false;
+
+    var oldTitle = document.title;
+    var fileBase = buildPlanilladoPrintFileBaseName();
+    document.title = fileBase;
+
+    var titleRestored = false;
+    function restoreTitle() {
+      if (titleRestored) return;
+      titleRestored = true;
+      document.title = oldTitle;
+      try {
+        window.removeEventListener("afterprint", restoreTitle);
+      } catch (eR) {}
+    }
+    window.addEventListener("afterprint", restoreTitle);
+    window.setTimeout(function () {
+      if (!titleRestored) restoreTitle();
+    }, 120000);
+
+    window.requestAnimationFrame(function () {
+      window.print();
+    });
+  }
+
+  var fotosLightbox = document.getElementById("fotos-lightbox");
+  var fotosLightboxImg = document.getElementById("fotos-lightbox-img");
+  var fotosLightboxCounter = document.getElementById("fotos-lightbox-counter");
+  var fotosLightboxPlate = document.getElementById("fotos-lightbox-plate");
+  var fotosLightboxBackdrop = fotosLightbox
+    ? fotosLightbox.querySelector(".fotos-lightbox-backdrop")
+    : null;
+  var fotosLightboxPrev = fotosLightbox ? fotosLightbox.querySelector(".fotos-lightbox-prev") : null;
+  var fotosLightboxNext = fotosLightbox ? fotosLightbox.querySelector(".fotos-lightbox-next") : null;
+  var fotosLightboxClose = fotosLightbox ? fotosLightbox.querySelector(".fotos-lightbox-close") : null;
+  var fotoLightboxUrls = [];
+  var fotoLightboxIndex = 0;
+  var fotoZoomScale = 1;
+  var fotoPanX = 0;
+  var fotoPanY = 0;
+  var fotoPanDragging = false;
+  var fotoPanLastX = 0;
+  var fotoPanLastY = 0;
+  var fotoPinchStartDist = 0;
+  var fotoPinchStartScale = 1;
+
+  var fotosLightboxViewport = document.getElementById("fotos-lightbox-viewport");
+  var fotosLightboxZoomLayer = document.getElementById("fotos-lightbox-zoom-layer");
+  var fotosLightboxCanvas = document.getElementById("fotos-lightbox-canvas");
+  var fotosZoomInBtn = document.getElementById("fotos-zoom-in");
+  var fotosZoomOutBtn = document.getElementById("fotos-zoom-out");
+  var fotosZoomResetBtn = document.getElementById("fotos-zoom-reset");
+  var fotosZoomLabel = document.getElementById("fotos-zoom-label");
+  var fotosEnhanceClarity = document.getElementById("fotos-enhance-clarity");
+  var fotosLightboxVideo = document.getElementById("fotos-lightbox-video");
+  var fotosLightboxHint = document.getElementById("fotos-lightbox-hint");
+  var fotosZoomToolbar = document.getElementById("fotos-zoom-toolbar");
+  var fotosEnhanceWrap = document.getElementById("fotos-enhance-wrap");
+
+  function fotoLightboxCurrentIsVideo() {
+    if (!fotoLightboxUrls.length || fotoLightboxIndex < 0) return false;
+    return urlCountsAsVideo(fotoLightboxUrls[fotoLightboxIndex]);
+  }
+
+  function pauseFotoLightboxVideo() {
+    if (!fotosLightboxVideo) return;
+    try {
+      fotosLightboxVideo.pause();
+    } catch (e) {}
+    fotosLightboxVideo.style.filter = "";
+    fotosLightboxVideo.removeAttribute("src");
+    try {
+      fotosLightboxVideo.load();
+    } catch (e2) {}
+  }
+
+  function clampNum(v, lo, hi) {
+    return Math.min(hi, Math.max(lo, v));
+  }
+
+  function resetFotoLightboxZoomPan() {
+    fotoZoomScale = 1;
+    fotoPanX = 0;
+    fotoPanY = 0;
+    applyFotoLightboxZoomTransform();
+  }
+
+  function applyFotoLightboxZoomTransform() {
+    if (!fotosLightboxZoomLayer) return;
+    fotosLightboxZoomLayer.style.transform =
+      "translate(" + fotoPanX + "px," + fotoPanY + "px) scale(" + fotoZoomScale + ")";
+    if (fotosZoomLabel) {
+      fotosZoomLabel.textContent = Math.round(fotoZoomScale * 100) + "%";
+    }
+  }
+
+  function touchDistance(a, b) {
+    var dx = a.clientX - b.clientX;
+    var dy = a.clientY - b.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  function applyLocalClarityEnhancement(canvas, img) {
+    var maxW = 2400;
+    var nw = img.naturalWidth;
+    var nh = img.naturalHeight;
+    if (!nw || !nh) return;
+    var rw = nw;
+    var rh = nh;
+    if (nw > maxW) {
+      rw = maxW;
+      rh = Math.round(nh * (maxW / nw));
+    }
+    canvas.width = rw;
+    canvas.height = rh;
+    var ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.filter = "contrast(1.09) saturate(1.06) brightness(1.02)";
+    ctx.drawImage(img, 0, 0, rw, rh);
+    ctx.filter = "none";
+  }
+
+  function syncEnhanceDisplay() {
+    if (!fotosLightboxImg || !fotosLightboxCanvas) return;
+    if (
+      fotoLightboxUrls.length &&
+      urlCountsAsVideo(fotoLightboxUrls[fotoLightboxIndex])
+    ) {
+      return;
+    }
+    if (!fotosEnhanceClarity || !fotosEnhanceClarity.checked) {
+      fotosLightboxCanvas.hidden = true;
+      fotosLightboxCanvas.style.display = "none";
+      fotosLightboxImg.style.display = "block";
+      fotosLightboxImg.style.visibility = "";
+      fotosLightboxImg.style.position = "";
+      fotosLightboxImg.style.left = "";
+      return;
+    }
+    if (!fotosLightboxImg.complete || fotosLightboxImg.naturalWidth === 0) return;
+    try {
+      applyLocalClarityEnhancement(fotosLightboxCanvas, fotosLightboxImg);
+      fotosLightboxCanvas.hidden = false;
+      fotosLightboxCanvas.style.display = "block";
+      fotosLightboxImg.style.display = "none";
+    } catch (err) {
+      window.alert(
+        "No se pudo aplicar el realce. Desactiva «Mejorar calidad» y usa solo zoom."
+      );
+      fotosEnhanceClarity.checked = false;
+      fotosLightboxCanvas.hidden = true;
+      fotosLightboxCanvas.style.display = "none";
+      fotosLightboxImg.style.display = "block";
+    }
+  }
+
+  function syncVideoEnhanceDisplay() {
+    if (!fotosLightboxVideo || !fotoLightboxUrls.length) return;
+    if (!urlCountsAsVideo(fotoLightboxUrls[fotoLightboxIndex])) return;
+    if (!fotosEnhanceClarity || !fotosEnhanceClarity.checked) {
+      fotosLightboxVideo.style.filter = "";
+      return;
+    }
+    fotosLightboxVideo.style.filter =
+      "contrast(1.09) saturate(1.06) brightness(1.02)";
+  }
+
+  function updateFotoLightboxView() {
+    if (!fotoLightboxUrls.length) return;
+    var url = fotoLightboxUrls[fotoLightboxIndex];
+    var isVid = urlCountsAsVideo(url);
+
+    pauseFotoLightboxVideo();
+
+    resetFotoLightboxZoomPan();
+
+    if (fotosLightboxCanvas) {
+      fotosLightboxCanvas.hidden = true;
+      fotosLightboxCanvas.style.display = "none";
+      fotosLightboxCanvas.width = 0;
+      fotosLightboxCanvas.height = 0;
+    }
+
+    if (isVid) {
+      if (!fotosLightboxVideo) return;
+      if (fotosLightboxZoomLayer) fotosLightboxZoomLayer.style.display = "none";
+      if (fotosLightboxImg) {
+        fotosLightboxImg.removeAttribute("src");
+        fotosLightboxImg.style.display = "none";
+        fotosLightboxImg.alt = "";
+      }
+      fotosLightboxVideo.hidden = false;
+      fotosLightboxVideo.src = url;
+      try {
+        fotosLightboxVideo.load();
+      } catch (e) {}
+      if (fotosZoomToolbar) fotosZoomToolbar.hidden = true;
+      if (fotosEnhanceWrap) fotosEnhanceWrap.hidden = false;
+      if (fotosEnhanceClarity) fotosEnhanceClarity.disabled = false;
+      if (fotosLightboxHint) {
+        fotosLightboxHint.textContent =
+          "Reproductor integrado. «Mejorar calidad» aplica contraste/saturación/brillo en tiempo real (solo en tu equipo). Usa ‹ › o las flechas para cambiar de archivo.";
+      }
+      syncVideoEnhanceDisplay();
+    } else {
+      if (!fotosLightboxImg) return;
+      if (fotosLightboxVideo) {
+        fotosLightboxVideo.hidden = true;
+      }
+      if (fotosLightboxZoomLayer) fotosLightboxZoomLayer.style.display = "";
+      fotosLightboxImg.style.display = "block";
+      fotosLightboxImg.src = url;
+      if (fotosZoomToolbar) fotosZoomToolbar.hidden = false;
+      if (fotosEnhanceWrap) fotosEnhanceWrap.hidden = false;
+      if (fotosEnhanceClarity) fotosEnhanceClarity.disabled = false;
+      if (fotosLightboxHint) {
+        fotosLightboxHint.textContent =
+          'Arrastra para mover cuando hay zoom. Rueda o pellizco para ampliar. «Mejorar calidad» usa una pasada en canvas para fotos (sin subir archivos).';
+      }
+    }
+
+    var altText = formatLightboxCounter(fotoLightboxUrls, fotoLightboxIndex);
+    if (!isVid && fotosLightboxImg) {
+      fotosLightboxImg.alt = altText;
+    }
+
+    if (fotosLightboxCounter) {
+      fotosLightboxCounter.textContent = altText;
+    }
+    if (fotosLightboxPrev) {
+      fotosLightboxPrev.disabled = fotoLightboxIndex <= 0;
+      fotosLightboxPrev.style.visibility = fotoLightboxUrls.length <= 1 ? "hidden" : "visible";
+    }
+    if (fotosLightboxNext) {
+      fotosLightboxNext.disabled = fotoLightboxIndex >= fotoLightboxUrls.length - 1;
+      fotosLightboxNext.style.visibility = fotoLightboxUrls.length <= 1 ? "hidden" : "visible";
+    }
+  }
+
+  function openFotoLightbox(urls, plateLabel, startIndex) {
+    if (!fotosLightbox || !urls || !urls.length) return;
+    fotoLightboxUrls = urls.slice();
+    fotoLightboxForceVideo = Object.create(null);
+    var si = startIndex == null || startIndex === "" ? 0 : Number(startIndex);
+    if (!isFinite(si)) si = 0;
+    si = Math.max(0, Math.min(Math.floor(si), fotoLightboxUrls.length - 1));
+    fotoLightboxIndex = si;
+    if (fotosLightboxPlate) {
+      var pl = String(plateLabel || "").trim();
+      fotosLightboxPlate.textContent = pl ? "Placa: " + pl : "";
+      fotosLightboxPlate.style.display = pl ? "block" : "none";
+    }
+    fotosLightbox.hidden = false;
+    fotosLightbox.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    updateFotoLightboxView();
+  }
+
+  function closeFotoLightbox() {
+    if (!fotosLightbox) return;
+    fotosLightbox.hidden = true;
+    fotosLightbox.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    resetFotoLightboxZoomPan();
+    if (fotosEnhanceClarity) fotosEnhanceClarity.checked = false;
+    if (fotosLightboxCanvas) {
+      fotosLightboxCanvas.hidden = true;
+      fotosLightboxCanvas.style.display = "none";
+      fotosLightboxCanvas.width = 0;
+      fotosLightboxCanvas.height = 0;
+    }
+    if (fotosLightboxImg) {
+      fotosLightboxImg.removeAttribute("src");
+      fotosLightboxImg.alt = "";
+      fotosLightboxImg.style.display = "";
+      fotosLightboxImg.style.visibility = "";
+      fotosLightboxImg.style.position = "";
+      fotosLightboxImg.style.left = "";
+    }
+    pauseFotoLightboxVideo();
+    if (fotosLightboxVideo) {
+      fotosLightboxVideo.hidden = true;
+    }
+    if (fotosLightboxZoomLayer) fotosLightboxZoomLayer.style.display = "";
+    if (fotosZoomToolbar) fotosZoomToolbar.hidden = false;
+    if (fotosEnhanceWrap) fotosEnhanceWrap.hidden = false;
+    if (fotosEnhanceClarity) fotosEnhanceClarity.disabled = false;
+    fotoLightboxUrls = [];
+    fotoLightboxForceVideo = Object.create(null);
+  }
+
+  function fotoLightboxStep(delta) {
+    var n = fotoLightboxUrls.length;
+    if (n < 2) return;
+    var next = fotoLightboxIndex + delta;
+    if (next < 0 || next >= n) return;
+    fotoLightboxIndex = next;
+    updateFotoLightboxView();
+  }
+
+  if (fotosLightboxImg) {
+    fotosLightboxImg.addEventListener("load", function () {
+      syncEnhanceDisplay();
+    });
+    fotosLightboxImg.addEventListener("error", function () {
+      var url = fotoLightboxUrls[fotoLightboxIndex];
+      if (!url || !fotoLightboxUrls.length) return;
+      if (urlCountsAsVideo(url)) return;
+      if (fotoLightboxForceVideo[url]) return;
+      fotoLightboxForceVideo[url] = true;
+      updateFotoLightboxView();
+    });
+  }
+  if (fotosLightboxVideo) {
+    fotosLightboxVideo.addEventListener("loadedmetadata", function () {
+      syncVideoEnhanceDisplay();
+    });
+    fotosLightboxVideo.addEventListener("error", function () {
+      if (fotosLightboxCounter && fotoLightboxUrls.length) {
+        fotosLightboxCounter.textContent =
+          "No se pudo cargar este vídeo (formato, URL o red). Revisa la consola de red.";
+      }
+    });
+  }
+  if (fotosEnhanceClarity) {
+    fotosEnhanceClarity.addEventListener("change", function () {
+      syncEnhanceDisplay();
+      syncVideoEnhanceDisplay();
+    });
+  }
+  if (fotosZoomInBtn) {
+    fotosZoomInBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      fotoZoomScale = clampNum(fotoZoomScale * 1.2, 1, 5);
+      if (fotoZoomScale === 1) {
+        fotoPanX = 0;
+        fotoPanY = 0;
+      }
+      applyFotoLightboxZoomTransform();
+    });
+  }
+  if (fotosZoomOutBtn) {
+    fotosZoomOutBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      fotoZoomScale = clampNum(fotoZoomScale / 1.2, 1, 5);
+      if (fotoZoomScale === 1) {
+        fotoPanX = 0;
+        fotoPanY = 0;
+      }
+      applyFotoLightboxZoomTransform();
+    });
+  }
+  if (fotosZoomResetBtn) {
+    fotosZoomResetBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      resetFotoLightboxZoomPan();
+    });
+  }
+  if (fotosLightboxViewport) {
+    fotosLightboxViewport.addEventListener(
+      "wheel",
+      function (e) {
+        if (!fotosLightbox || fotosLightbox.hidden) return;
+        if (fotoLightboxCurrentIsVideo()) return;
+        e.preventDefault();
+        var factor = e.deltaY > 0 ? 0.9 : 1.1;
+        fotoZoomScale = clampNum(fotoZoomScale * factor, 1, 5);
+        if (fotoZoomScale === 1) {
+          fotoPanX = 0;
+          fotoPanY = 0;
+        }
+        applyFotoLightboxZoomTransform();
+      },
+      { passive: false }
+    );
+    fotosLightboxViewport.addEventListener("dblclick", function (e) {
+      e.stopPropagation();
+      if (fotoLightboxCurrentIsVideo()) return;
+      resetFotoLightboxZoomPan();
+    });
+    fotosLightboxViewport.addEventListener("pointerdown", function (e) {
+      if (fotoLightboxCurrentIsVideo()) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      if (fotoZoomScale <= 1) return;
+      fotoPanDragging = true;
+      fotoPanLastX = e.clientX;
+      fotoPanLastY = e.clientY;
+      try {
+        fotosLightboxViewport.setPointerCapture(e.pointerId);
+      } catch (err) {}
+    });
+    fotosLightboxViewport.addEventListener("pointermove", function (e) {
+      if (fotoLightboxCurrentIsVideo()) return;
+      if (!fotoPanDragging) return;
+      fotoPanX += e.clientX - fotoPanLastX;
+      fotoPanY += e.clientY - fotoPanLastY;
+      fotoPanLastX = e.clientX;
+      fotoPanLastY = e.clientY;
+      applyFotoLightboxZoomTransform();
+    });
+    fotosLightboxViewport.addEventListener("pointerup", function (e) {
+      fotoPanDragging = false;
+    });
+    fotosLightboxViewport.addEventListener("pointercancel", function (e) {
+      fotoPanDragging = false;
+    });
+    fotosLightboxViewport.addEventListener(
+      "touchstart",
+      function (e) {
+        if (fotoLightboxCurrentIsVideo()) return;
+        if (e.touches.length === 2) {
+          fotoPinchStartDist = touchDistance(e.touches[0], e.touches[1]);
+          fotoPinchStartScale = fotoZoomScale;
+        }
+      },
+      { passive: true }
+    );
+    fotosLightboxViewport.addEventListener(
+      "touchmove",
+      function (e) {
+        if (fotoLightboxCurrentIsVideo()) return;
+        if (e.touches.length === 2 && fotoPinchStartDist > 0) {
+          e.preventDefault();
+          var d = touchDistance(e.touches[0], e.touches[1]);
+          fotoZoomScale = clampNum((fotoPinchStartScale * d) / fotoPinchStartDist, 1, 5);
+          if (fotoZoomScale === 1) {
+            fotoPanX = 0;
+            fotoPanY = 0;
+          }
+          applyFotoLightboxZoomTransform();
+        }
+      },
+      { passive: false }
+    );
+    fotosLightboxViewport.addEventListener("touchend", function (e) {
+      if (e.touches.length < 2) {
+        fotoPinchStartDist = 0;
+      }
+    });
+  }
+
+  if (fotosLightboxClose) {
+    fotosLightboxClose.addEventListener("click", function (e) {
+      e.stopPropagation();
+      closeFotoLightbox();
+    });
+  }
+  if (fotosLightboxBackdrop) {
+    fotosLightboxBackdrop.addEventListener("click", closeFotoLightbox);
+  }
+  if (fotosLightboxPrev) {
+    fotosLightboxPrev.addEventListener("click", function (e) {
+      e.stopPropagation();
+      fotoLightboxStep(-1);
+    });
+  }
+  if (fotosLightboxNext) {
+    fotosLightboxNext.addEventListener("click", function (e) {
+      e.stopPropagation();
+      fotoLightboxStep(1);
+    });
+  }
+  document.addEventListener("keydown", function (e) {
+    if (!fotosLightbox || fotosLightbox.hidden) return;
+    if (e.key === "Escape") {
+      closeFotoLightbox();
+    } else if (e.key === "ArrowRight") {
+      fotoLightboxStep(1);
+    } else if (e.key === "ArrowLeft") {
+      fotoLightboxStep(-1);
+    } else if (e.key === "+" || e.key === "=") {
+      if (fotoLightboxCurrentIsVideo()) return;
+      e.preventDefault();
+      fotoZoomScale = clampNum(fotoZoomScale * 1.15, 1, 5);
+      applyFotoLightboxZoomTransform();
+    } else if (e.key === "-" || e.key === "_") {
+      if (fotoLightboxCurrentIsVideo()) return;
+      e.preventDefault();
+      fotoZoomScale = clampNum(fotoZoomScale / 1.15, 1, 5);
+      if (fotoZoomScale === 1) {
+        fotoPanX = 0;
+        fotoPanY = 0;
+      }
+      applyFotoLightboxZoomTransform();
+    } else if (e.key === "0") {
+      if (fotoLightboxCurrentIsVideo()) return;
+      e.preventDefault();
+      resetFotoLightboxZoomPan();
+    }
+  });
+
+  function uniqueUrls(arr) {
+    var s = {};
+    var o = [];
+    arr.forEach(function (u) {
+      if (!u) return;
+      var fixed = sanitizePlanilladoEvidenceUrl(String(u));
+      if (!fixed || s[fixed]) return;
+      s[fixed] = true;
+      o.push(fixed);
+    });
+    return o;
+  }
+
+  function updateRegNavUI() {
+    var nav = document.getElementById("plan-reg-nav");
+    var counter = document.getElementById("plan-reg-counter");
+    if (!nav) return;
+    var n = planResultDocs.length;
+    if (n <= 1) {
+      nav.hidden = true;
+      return;
+    }
+    nav.hidden = false;
+    if (counter) {
+      counter.textContent = planResultIndex + 1 + " / " + n;
+    }
+  }
+
+  function stepPlanResult(delta) {
+    if (!planResultDocs.length || planResultDocs.length <= 1) return;
+    var n = planResultDocs.length;
+    var next = (planResultIndex + delta + n) % n;
+    var plate = String(inputPlaca.value || "").trim();
+    applyPlanilladoView(planResultDocs, next, planResultRunId, plate).catch(function (err) {
+      console.warn("[planillados] navegación entre registros", err);
+    });
+  }
+
+  /**
+   * Rellena datos y fotos del registro activo (un documento). `searchCommitId` invalida respuestas si hay nueva búsqueda.
+   */
+  async function applyPlanilladoView(docs, index, searchCommitId, plateRaw) {
+    if (!docs || !docs.length) return;
+    if (searchCommitId !== planResultRunId) return;
+    index = Math.max(0, Math.min(index, docs.length - 1));
+    planResultIndex = index;
+    updateRegNavUI();
+
+    var curSnap = docs[index];
+    var primary = curSnap.data();
+    var pathsLine = curSnap.ref.path;
+
+    var total = docs.length;
+    statusEl.textContent =
+      total === 1
+        ? "1 registro encontrado."
+        : total +
+          " registros encontrados. Mostrando el " +
+          (index + 1) +
+          " de " +
+          total +
+          " (use Anterior / Siguiente).";
+
+    var placaShow =
+      pick(primary, "licensePlate", "placa", "Placa") ||
+      decodeId(curSnap.id) ||
+      plateRaw.trim().toUpperCase();
+
+    var parking =
+      pick(primary, "parking", "parkingName", "estacionamiento", "sede") ||
+      stationFromPath(curSnap.ref.path) ||
+      "—";
+    var oper =
+      pick(primary, "lastOperator", "user", "idOperario", "operarioId", "operatorName") || "—";
+    var fechaEnt = fmtTs(pick(primary, "dateTime", "fecha", "lastCheckDateTime", "createdAt"));
+
+    renderDl(datosEntrada, [
+      ["Placa", placaShow],
+      ["Estacionamiento", parking],
+      ["Operario / usuario", oper],
+      ["Fecha / hora entrada", fechaEnt || "—"],
+    ]);
+
+    var llave = pick(primary, "keysNumber", "ticket", "tipoTicket", "ticketTarjeta");
+    var celda = pick(primary, "cellNumber", "idTicket", "id_ticket", "idTarjeta");
+    var tipoVeh = pick(primary, "tipoVehiculo", "tipo", "clase");
+    if (!tipoVeh) {
+      var ic = pick(primary, "isCar");
+      var im = pick(primary, "isMotorcycle");
+      if (ic === true || ic === "true") tipoVeh = "Automóvil";
+      else if (im === true || im === "true") tipoVeh = "Motocicleta";
+    }
+    var observaciones = pick(
+      primary,
+      "description",
+      "Description",
+      "observaciones",
+      "Observaciones",
+      "observacion",
+      "Observacion",
+      "observation",
+      "observations",
+      "notes",
+      "notas",
+      "comentarios",
+      "comments",
+      "remarks",
+      "remark",
+      "mensaje",
+      "detalle"
+    );
+    if (observaciones != null && typeof observaciones === "object") {
+      try {
+        observaciones = JSON.stringify(observaciones);
+      } catch (e) {
+        observaciones = String(observaciones);
+      }
+    } else if (observaciones != null && observaciones !== "") {
+      observaciones = String(observaciones).trim();
+    } else {
+      observaciones = "";
+    }
+
+    renderDl(datosPlanillado, [
+      ["Llave n.º", llave || "—"],
+      ["Celda n.º", celda || "—"],
+      ["Tipo de vehículo", tipoVeh || "—"],
+      ["Observaciones", observaciones || "—"],
+    ]);
+    lastObservacionesPlainForDialog = observaciones || "";
+    decoratePlanilladoObsRow(datosPlanillado, observaciones);
+
+    var ultimo = fmtTs(pick(primary, "lastCheckDateTime", "ultimoUso", "updatedAt"));
+    renderDl(datosRevision, [
+      ["Última actualización / revisión", ultimo || "—"],
+      ["Rutas en base de datos", pathsLine],
+    ]);
+
+    if (reportPlacaLabel) {
+      reportPlacaLabel.textContent = placaShow ? " · Placa " + placaShow : "";
+    }
+
+    var d = curSnap.data();
+    var httpAll = uniqueUrls(collectHttpPhotoUrls(d));
+    var storAll = uniqueUrls(collectStorageCandidates(d));
+
+    if (storAll.length) {
+      statusEl.textContent =
+        (total === 1 ? "1 registro encontrado." : total + " registros encontrados.") +
+        " Obteniendo enlaces de fotos (registro " +
+        (index + 1) +
+        "/" +
+        total +
+        ")…";
+    }
+
+    var extraHttp = await resolveStorageCandidates(storAll);
+    if (planSearchRunId !== searchCommitId) return;
+
+    var allImages = uniqueUrls(httpAll.concat(extraHttp));
+
+    setSlot(slotVehiculo, allImages[0] || null);
+
+    updatePlanPhotoCardTitles(searchCommitId, allImages[0] || "", observaciones);
+
+    lastGalleryUrls = allImages.slice();
+    lastPlateLabelForGallery = placaShow;
+    bindMainPhotoSlots(allImages, placaShow);
+    if (btnPdf) btnPdf.disabled = false;
+    if (btnEmail) btnEmail.disabled = false;
+
+    statusEl.textContent =
+      total === 1
+        ? "1 registro encontrado."
+        : total +
+          " registros encontrados. Mostrando el " +
+          (index + 1) +
+          " de " +
+          total +
+          ".";
+
+    thumbsEl.innerHTML = "";
+    allImages.forEach(function (url, idx) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("aria-label", "Archivo " + (idx + 1));
+      if (urlLooksLikeVideo(url)) {
+        var tv = document.createElement("video");
+        tv.src = url;
+        tv.muted = true;
+        tv.playsInline = true;
+        tv.setAttribute("playsinline", "");
+        tv.preload = "metadata";
+        b.appendChild(tv);
+      } else {
+        var im = document.createElement("img");
+        im.src = url;
+        im.alt = "";
+        im.loading = "lazy";
+        im.addEventListener(
+          "error",
+          function onThErr() {
+            im.removeEventListener("error", onThErr);
+            if (!b.contains(im)) return;
+            var tv2 = document.createElement("video");
+            tv2.src = url;
+            tv2.muted = true;
+            tv2.playsInline = true;
+            tv2.setAttribute("playsinline", "");
+            tv2.preload = "metadata";
+            b.replaceChild(tv2, im);
+          },
+          false
+        );
+        b.appendChild(im);
+      }
+      b.addEventListener("click", function () {
+        openFotoLightbox(allImages, placaShow, idx);
+      });
+      thumbsEl.appendChild(b);
+    });
+  }
+
+  async function searchByPlate(plateRaw) {
+    if (!auth.currentUser) {
+      statusEl.textContent = "Inicie sesión con Google para consultar placas.";
+      return;
+    }
+    var runId = ++planSearchRunId;
+    try {
+      await auth.currentUser.getIdToken(false);
+    } catch (eTok) {
+      statusEl.textContent = "No se pudo validar la sesión. Cierre sesión y vuelva a entrar.";
+      return;
+    }
+
+    var wantedNorm = wantedNormKeysFromInput(plateRaw);
+    if (!wantedNorm.length) {
+      clearAll();
+      statusEl.textContent = "Escriba una placa válida.";
+      return;
+    }
+
+    var rawVars = rawVariantsForQuery(plateRaw);
+    var directErrors = [];
+    statusEl.textContent = "Buscando…";
+    var seenPath = {};
+    var docs = [];
+
+    function addDoc(docSnap) {
+      if (!docSnap || !docSnap.ref) return;
+      if (docSnap.exists === false) return;
+      var p = docSnap.ref.path;
+      if (seenPath[p]) return;
+      seenPath[p] = true;
+      docs.push(docSnap);
+    }
+
+    function merge(qsnap) {
+      qsnap.docs.forEach(function (d) {
+        addDoc(d);
+      });
+    }
+
+    var tasks = [];
+
+    rawVars.forEach(function (v) {
+      tasks.push(
+        db
+          .collectionGroup("registros")
+          .where("licensePlate", "==", v)
+          .get()
+          .then(merge)
+          .catch(function (err) {
+            console.warn("[planillados] licensePlate", err.code, err.message);
+          })
+      );
+      tasks.push(
+        db
+          .collectionGroup("registros")
+          .where("placa", "==", v)
+          .get()
+          .then(merge)
+          .catch(function (err) {
+            console.warn("[planillados] placa", err.code, err.message);
+          })
+      );
+    });
+
+    rawVars.forEach(function (v) {
+      tasks.push(
+        db
+          .collection(PLANILLADO_OLD)
+          .doc(v)
+          .get()
+          .then(function (snap) {
+            addDoc(snap);
+          })
+          .catch(function (err) {
+            console.warn("[planillados] planillado_old", err.code, err.message);
+          })
+      );
+    });
+
+    /**
+     * 1) Solo consultas indexadas + planillado_old (rápidas). Si ya hay registro, NO se hacen
+     * cientos/miles de .get() por ruta ni escaneo masivo (eso era ~15 s en muchos casos).
+     */
+    await Promise.all(tasks);
+
+    if (runId !== planSearchRunId) return;
+
+    var docsBeforeMatch = docs.slice();
+    docs = docs.filter(function (d) {
+      return docMatchesPlate(d, wantedNorm);
+    });
+    if (!docs.length && docsBeforeMatch.length) {
+      docs = docsBeforeMatch;
+    }
+
+    if (!docs.length) {
+      await fetchDirectPathHits(plateRaw, addDoc, directErrors);
+      if (runId !== planSearchRunId) return;
+      docsBeforeMatch = docs.slice();
+      docs = docs.filter(function (d) {
+        return docMatchesPlate(d, wantedNorm);
+      });
+      if (!docs.length && docsBeforeMatch.length) {
+        docs = docsBeforeMatch;
+      }
+    }
+
+    /**
+     * Escaneo completo por grupo de colección: muy pesado; solo con placa ya larga (≥5 alfanum.)
+     * para no bloquear la UI al teclear poco a poco.
+     */
+    var plateCompactForScan = normalizePlateKey(plateRaw).replace(/-/g, "").length;
+    if (!docs.length && plateCompactForScan >= 5) {
+      statusEl.textContent =
+        "Ampliando búsqueda (misma fuente que la tabla del inicio): revisando documentos…";
+      var seenScan = {};
+      var scanIds = cfg.planilladoDefaultSubcollectionsForAllParkings || [
+        "registros",
+        "LugMC421"
+      ];
+      var uniqScan = {};
+      scanIds.forEach(function (g) {
+        g = String(g).trim();
+        if (g) uniqScan[g] = true;
+      });
+      await Promise.all(
+        Object.keys(uniqScan).map(function (sub) {
+          return db
+            .collectionGroup(sub)
+            .get()
+            .then(function (snap) {
+              snap.docs.forEach(function (doc) {
+                if (!docMatchesPlate(doc, wantedNorm)) return;
+                var pth = doc.ref.path;
+                if (seenScan[pth]) return;
+                seenScan[pth] = true;
+                docs.push(doc);
+              });
+            })
+            .catch(function (err) {
+              console.warn("[planillados] escaneo " + sub, err.code, err.message);
+            });
+        })
+      );
+      if (runId !== planSearchRunId) return;
+    }
+
+    docs.sort(function (a, b) {
+      return recencyMillis(b.data()) - recencyMillis(a.data());
+    });
+
+    if (!docs.length) {
+      if (runId !== planSearchRunId) return;
+      clearAll();
+      var hint =
+        'No se encontró la placa «' +
+        esc(plateRaw.trim()) +
+        '». Compruebe que coincida con el ID del documento en Firestore (ej. …/LugMC421/TUY-567).';
+      if (directErrors.length) {
+        hint +=
+          " Error de lectura: " +
+          esc(directErrors.slice(0, 2).join(" · ")) +
+          (directErrors.join(" ").indexOf("permission-denied") !== -1
+            ? " Revise reglas de seguridad para lectura autenticada."
+            : "");
+      }
+      statusEl.textContent = hint;
+      return;
+    }
+
+    if (runId !== planSearchRunId) return;
+
+    planResultRunId = runId;
+    planResultDocs = docs;
+    await applyPlanilladoView(docs, 0, runId, plateRaw.trim());
+  }
+
+  function scheduleSearch() {
+    if (!auth.currentUser) return;
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function () {
+      var trimmed = String(inputPlaca.value || "").trim();
+      if (!trimmed) {
+        clearAll();
+        statusEl.textContent = "Escriba una placa para cargar datos y fotos.";
+        return;
+      }
+      searchByPlate(trimmed).catch(function (e) {
+        statusEl.textContent = "Error: " + (e.message || String(e));
+      });
+    }, 520);
+  }
+
+  auth.onAuthStateChanged(function (user) {
+    if (user) {
+      user.getIdToken(true).catch(function () {});
+      scheduleSearch();
+    } else {
+      clearAll();
+      statusEl.textContent = "Inicie sesión para consultar placas.";
+    }
+  });
+
+  inputPlaca.addEventListener("input", onPlanPlacaInput);
+  inputPlaca.addEventListener("change", onPlanPlacaInput);
+
+  var planRegPrev = document.getElementById("plan-reg-prev");
+  var planRegNext = document.getElementById("plan-reg-next");
+  if (planRegPrev) {
+    planRegPrev.addEventListener("click", function () {
+      stepPlanResult(-1);
+    });
+  }
+  if (planRegNext) {
+    planRegNext.addEventListener("click", function () {
+      stepPlanResult(1);
+    });
+  }
+
+  if (datosPlanillado) {
+    datosPlanillado.addEventListener("click", function (ev) {
+      var hit = ev.target.closest("[data-plan-obs-trigger]");
+      if (!hit || !datosPlanillado.contains(hit)) return;
+      ev.preventDefault();
+      openPlanObservacionesDialog();
+    });
+    datosPlanillado.addEventListener("keydown", function (ev) {
+      if (ev.key !== "Enter" && ev.key !== " ") return;
+      var hit = ev.target.closest("[data-plan-obs-trigger]");
+      if (!hit || !datosPlanillado.contains(hit)) return;
+      ev.preventDefault();
+      openPlanObservacionesDialog();
+    });
+  }
+  if (planObsDialogCloseBtn) {
+    planObsDialogCloseBtn.addEventListener("click", function () {
+      closePlanObservacionesDialog();
+    });
+  }
+  if (planObsDialog) {
+    planObsDialog.addEventListener("click", function (ev) {
+      if (ev.target === planObsDialog) closePlanObservacionesDialog();
+    });
+  }
+
+  if (btnPdf) {
+    btnPdf.addEventListener("click", function () {
+      downloadPlanReportPdf();
+    });
+  }
+  if (btnEmail) {
+    btnEmail.addEventListener("click", function () {
+      sendPlanReportEmail();
+    });
+  }
+})();
+</script>
+
+<script src="lugano-admin-auth.js"></script>
+<script src="lugano-auth-gate.js"></script>
+
+<script src="lugano-firestore-alertas.js"></script>
+</body>
+</html>

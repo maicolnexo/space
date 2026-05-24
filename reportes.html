@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="logolugano1.jpg">
+  <link rel="apple-touch-icon" href="logolugano1.jpg">
+  <title>Reportes · S.P.A.C.E</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="help-widget.css">
+  <script src="help-widget.js" defer></script>
+  <script src="lugano-banner-ssr.js"></script>
+  <script src="site-header-toggle.js" defer></script>
+  <script src="lugano-header-alerts.js" defer></script>
+  <link rel="stylesheet" href="lugano-auth-gate.css">
+  <script>
+    window.onload = function () {
+      var el = document.getElementById("rep");
+      if (el) el.style.background = "black";
+    };
+  </script>
+  <style>
+    body.rep-body {
+      margin: 0;
+      background: #0a0a0a;
+      color: #e8eaef;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      text-align: left;
+    }
+    .rep-wrap {
+      max-width: 1325px;
+      margin: 0 auto;
+      padding: 16px 16px 48px;
+      box-sizing: border-box;
+    }
+    .rep-intro {
+      background: linear-gradient(165deg, #161616 0%, #121212 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px 22px;
+      margin-bottom: 22px;
+    }
+    .rep-intro h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      color: #f3f4f6;
+    }
+    .rep-intro p {
+      margin: 0;
+      font-size: 14px;
+      color: #9ca3af;
+      line-height: 1.55;
+      max-width: 920px;
+    }
+    .rep-section-title {
+      margin: 28px 0 14px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #6b7280;
+    }
+    .rep-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .rep-card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 18px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      min-height: 168px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .rep-card:hover {
+      border-color: rgba(255, 152, 0, 0.45);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    }
+    .rep-card h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #f3f4f6;
+      line-height: 1.35;
+    }
+    .rep-card p {
+      margin: 0 0 auto;
+      padding-bottom: 14px;
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.5;
+      flex: 1;
+    }
+    .rep-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .rep-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+      box-sizing: border-box;
+    }
+    .rep-btn--primary {
+      background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+      border-color: #e65100;
+      color: #fff;
+    }
+    .rep-btn--primary:hover {
+      filter: brightness(1.06);
+    }
+    .rep-btn--secondary {
+      background: #252525;
+      border-color: #444;
+      color: #e0e0e0;
+    }
+    .rep-btn--secondary:hover {
+      background: #333;
+    }
+    .rep-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(255, 193, 7, 0.12);
+      color: #ffe082;
+      border: 1px solid rgba(255, 193, 7, 0.35);
+    }
+    .rep-footer-note {
+      margin-top: 32px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border: 1px dashed #444;
+      background: #141414;
+      font-size: 12px;
+      color: #888;
+      line-height: 1.55;
+    }
+    .rep-subnav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 22px;
+    }
+    .rep-subnav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #c4c9d4;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      text-decoration: none;
+      box-sizing: border-box;
+    }
+    .rep-subnav-btn:hover {
+      background: #252525;
+      border-color: #555;
+      color: #e8eaef;
+    }
+    .rep-subnav-btn.is-active {
+      border-color: #e65100;
+      background: linear-gradient(180deg, rgba(255, 152, 0, 0.22) 0%, rgba(230, 81, 0, 0.12) 100%);
+      color: #fff3e0;
+      cursor: default;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body class="rep-body auth-gate-active" bgcolor="black" text="white">
+
+<div id="auth-gate" class="auth-gate" role="dialog" aria-modal="true" aria-labelledby="auth-gate-title">
+  <div class="auth-gate-brand">
+    <img src="logolugano1.jpg" height="88" alt="S.P.A.C.E" />
+  </div>
+  <div id="auth-logged-out" class="auth-panel-inner auth-gate-card">
+    <p class="auth-panel-title" id="auth-gate-title">Bienvenido</p>
+    <p class="auth-panel-desc">
+      Portal corporativo para la <strong>gestión y administración</strong> del planillado S.P.A.C.E.
+      Use su cuenta institucional para acceder de forma segura, supervisar la operación en tiempo real y consultar la información consolidada del negocio desde un solo lugar.
+    </p>
+    <button type="button" id="btn-google-signin">Iniciar sesión con Google</button>
+    <p id="auth-domain-hint" class="auth-domain-hint"></p>
+  </div>
+</div>
+
+<div id="main-app" class="main-app" hidden aria-hidden="true">
+
+<header bgcolor="white" text="white">
+  <center>
+    <table border="0" style="
+      background-position: center;
+      background: position y 10pt;
+      background-image: url(banner1.png);" font color="white" text="white" text-align="center" width="1325">
+      <tr>
+        <td rowspan="2" bgcolor="black"><a href="index.html"><img src="logolugano1.jpg" height="120" bgcolor="black" alt="S.P.A.C.E"></a></td>
+        <td text="white" colspan="11" height="120" color="white">
+          <h1 style="color: aliceblue;">Reportes y registros</h1>
+        </td>
+      </tr>
+      <tr>
+        <td width="120"><center><a href="index.html" id="index" class="btnmnini"><span style="color: aliceblue;">inicio</span></a></center></td>
+        <td width="120" id="planillados"><center><a href="planillados.html" id="pln" class="btnmnini"><span style="color: aliceblue;">Planillados</span></a></center></td>
+        <td width="120" id="mensualidades"><center><a href="mensualidades.html" id="mes" class="btnmnini"><span style="color: aliceblue;">Mensualidades</span></a></center></td>
+        <td width="120" id="reportes"><center><a href="reportes.html" id="rep" class="btnmnini"><span style="color: aliceblue;">Reportes</span></a></center></td>
+        <td width="120" id="estadistico"><center><a href="estadistico.html" id="est" class="btnmnini"><span style="color: aliceblue;">Estadístico</span></a></center></td>
+        <td width="120" id="seguridad"><center><a href="seguridad.html" id="seg" class="btnmnini"><span style="color: aliceblue;">Seguridad</span></a></center></td>
+        <td width="120" id="usuarios"><center><a href="usuarios.html" id="usu" class="btnmnini"><span style="color: aliceblue;">Usuarios</span></a></center></td>
+        <td width="120" id="estacionamientos"><center><a href="estacionamientos.html" id="esta" class="btnmnini"><span style="color: aliceblue;">Estacionamientos</span></a></center></td>
+        <td width="120" id="programacion"><center><a href="programacion.html" id="prog" class="btnmnini"><span style="color: aliceblue;">Programación</span></a></center></td>
+        <td width="120" id="ayuda"><center><a href="ayuda.html" id="ayu" class="btnmnini"><span style="color: aliceblue;">Ayuda</span></a></center></td>
+      </tr>
+    </table>
+  </center>
+</header>
+
+  <div class="rep-wrap">
+    <section class="rep-intro">
+      <h2>Generación de reportes</h2>
+      <p>
+        Elija el tipo de informe. Donde ya hay pantalla de trabajo enlazamos la herramienta; el resto queda preparado para conectar la fuente de datos (Firestore u otro) y exportar PDF o CSV.
+      </p>
+    </section>
+
+    <nav class="rep-subnav" aria-label="Submenú de reportes">
+      <span class="rep-subnav-btn is-active" aria-current="page">Panel de reportes</span>
+      <a class="rep-subnav-btn" href="planillas-cierres.html">Planillas y cierres</a>
+      <a class="rep-subnav-btn" href="recaudos.html">Recaudos</a>
+    </nav>
+
+    <p class="rep-section-title">Operación y vehículos</p>
+    <div class="rep-grid" role="list">
+      <article class="rep-card" role="listitem">
+        <h3>Planillado</h3>
+        <p>Consulta por placa, fotos y descarga de reporte PDF desde la vista de planillados.</p>
+        <div class="rep-card-actions">
+          <a class="rep-btn rep-btn--primary" href="planillados.html">Abrir planillados</a>
+          <span class="rep-tag">PDF en página</span>
+        </div>
+      </article>
+
+      <article class="rep-card" role="listitem">
+        <h3>Mensualidades</h3>
+        <p>Administración de contratos recurrentes; pendiente enlazar exportación cuando la colección esté en Firebase.</p>
+        <div class="rep-card-actions">
+          <a class="rep-btn rep-btn--primary" href="mensualidades.html">Abrir mensualidades</a>
+          <button type="button" class="rep-btn rep-btn--secondary js-rep-soon" data-nombre="Mensualidades">Informe CSV/PDF</button>
+        </div>
+      </article>
+
+      <article class="rep-card" role="listitem">
+        <h3>Gestión de bicicletas</h3>
+        <p>Reportes de uso, ingreso/salida y novedades del servicio de bicicletas.</p>
+        <div class="rep-card-actions">
+          <button type="button" class="rep-btn rep-btn--secondary js-rep-soon" data-nombre="Gestión de bicicletas">Generar informe</button>
+        </div>
+      </article>
+
+      <article class="rep-card" role="listitem">
+        <h3>Vehículos de carga eléctrica</h3>
+        <p>Uso de puntos de carga, sesiones y consumo asociado al estacionamiento.</p>
+        <div class="rep-card-actions">
+          <button type="button" class="rep-btn rep-btn--secondary js-rep-soon" data-nombre="Vehículos de carga eléctrica">Generar informe</button>
+        </div>
+      </article>
+    </div>
+
+    <p class="rep-section-title">Caja y administración</p>
+    <div class="rep-grid" role="list">
+      <article class="rep-card" role="listitem">
+        <h3>Planillas y cierres</h3>
+        <p>Explorá cierres por estacionamiento y operario; conciliar vouchers y totales con los datos en Firestore (<code>cierres/…</code>).</p>
+        <div class="rep-card-actions">
+          <a class="rep-btn rep-btn--primary" href="planillas-cierres.html">Abrir planillas y cierres</a>
+          <span class="rep-tag">Caja</span>
+        </div>
+      </article>
+
+      <article class="rep-card" role="listitem">
+        <h3>Recaudos · facturas</h3>
+        <p>Acumulado de facturas de venta: subtotal, IVA, total, facturación electrónica y estado DIAN cuando esté en Firestore.</p>
+        <div class="rep-card-actions">
+          <a class="rep-btn rep-btn--primary" href="recaudos.html">Abrir recaudos</a>
+          <span class="rep-tag">Caja</span>
+        </div>
+      </article>
+
+      <article class="rep-card" role="listitem">
+        <h3>Tiquetes perdidos</h3>
+        <p>Registro y trazabilidad de tiquetes reportados como perdidos.</p>
+        <div class="rep-card-actions">
+          <button type="button" class="rep-btn rep-btn--secondary js-rep-soon" data-nombre="Tiquetes perdidos">Generar informe</button>
+        </div>
+      </article>
+
+      <article class="rep-card" role="listitem">
+        <h3>Correspondencia recibida</h3>
+        <p>Ingreso, destinatario y estado de paquetes y correspondencia.</p>
+        <div class="rep-card-actions">
+          <button type="button" class="rep-btn rep-btn--secondary js-rep-soon" data-nombre="Correspondencia recibida">Generar informe</button>
+        </div>
+      </article>
+    </div>
+
+    <p class="rep-section-title">Checklist, aseo y custodia</p>
+    <div class="rep-grid" role="list">
+      <article class="rep-card" role="listitem">
+        <h3>Check list</h3>
+        <p>Cumplimiento de listas de verificación por turno, ítem y sede.</p>
+        <div class="rep-card-actions">
+          <button type="button" class="rep-btn rep-btn--secondary js-rep-soon" data-nombre="Check list">Generar informe</button>
+        </div>
+      </article>
+
+      <article class="rep-card" role="listitem">
+        <h3>Gestiones del aseo</h3>
+        <p>Tareas de limpieza, frecuencias e incidencias del servicio de aseo.</p>
+        <div class="rep-card-actions">
+          <button type="button" class="rep-btn rep-btn--secondary js-rep-soon" data-nombre="Gestiones del aseo">Generar informe</button>
+        </div>
+      </article>
+
+      <article class="rep-card" role="listitem">
+        <h3>Custodia de elementos</h3>
+        <p>Objetos en custodia: ingreso, titular y devolución.</p>
+        <div class="rep-card-actions">
+          <button type="button" class="rep-btn rep-btn--secondary js-rep-soon" data-nombre="Custodia de elementos">Generar informe</button>
+        </div>
+      </article>
+    </div>
+
+    <p class="rep-section-title">Novedades y operación en sede</p>
+    <div class="rep-grid" role="list">
+      <article class="rep-card" role="listitem">
+        <h3>Novedades del estacionamiento</h3>
+        <p>Incidentes, comunicaciones y seguimiento por sede.</p>
+        <div class="rep-card-actions">
+          <button type="button" class="rep-btn rep-btn--secondary js-rep-soon" data-nombre="Novedades del estacionamiento">Generar informe</button>
+        </div>
+      </article>
+    </div>
+
+    <p class="rep-footer-note">
+      Los botones «Generar informe» mostrarán un aviso hasta que exista la colección o API correspondiente. Siguiente paso: definir en Firebase (o backend) cada fuente y sustituir por filtros de fecha, sede y exportación PDF/CSV.
+    </p>
+  </div>
+
+  <script>
+(function () {
+  document.querySelectorAll(".js-rep-soon").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var nombre = btn.getAttribute("data-nombre") || "Este informe";
+      window.alert(
+        nombre +
+          ": pendiente de conectar datos.\n\nCuando exista la fuente en Firestore u otro sistema, aquí se abrirán filtros (fechas, sede) y la exportación PDF/CSV."
+      );
+    });
+  });
+})();
+  </script>
+
+</div>
+
+<div id="auth-error-strip">
+  <p id="auth-banner-detail" style="margin:0;font-family:Consolas,monospace;font-size:12px;"></p>
+</div>
+
+<script src="firebase-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="lugano-admin-auth.js"></script>
+<script src="lugano-auth-gate.js"></script>
+
+<script src="lugano-firestore-alertas.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>Modelo de web 1
+
+
+</title>
+</head>
+
+<body bgcolor="black" text="white">
+ 
+<table border = "1" bgcolor= "black">
+<tr>
+<td rowspan="2"><img src = "logolugano1.jpg" height="120" bgcolor="#00000"></td>
+<td>Inicio</td>
+<td>Planillados</td>
+<td>Mensualidades</td>
+<td>Reportes</td>
+<td>Estadistico</td>
+<td>Seguridad</td>
+<td>Usuarios</td>
+<td>Estacionamientos</td>
+<td>Programación</td>
+<td>Ayuda</td>
+<table border = "1" bgcolor= "#eb1064" long="120">
+<bgcolor= "#eb1064" long="120">
+</tr>
+<tr>
+<!-- td>imagen</td -->
+<td>Inicio</td>
+<td>Planillados</td>
+<td>Mensualidades</td>
+<td>Reportes</td>
+<td>Estadistico</td>
+<td>Seguridad</td>
+<td>Usuarios</td>
+<td>Estacionamientos</td>
+<td>Programación</td>
+<td>Ayuda</td>
+</tr>
+</table>
+</p>
+</body>
+</html>

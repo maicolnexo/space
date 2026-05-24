@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="logolugano1.jpg">
+    <link rel="apple-touch-icon" href="logolugano1.jpg">
+  <title>Estadísticas · S.P.A.C.E</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="help-widget.css">
+    <script src="help-widget.js" defer></script>
+    <script src="lugano-banner-ssr.js"></script>
+    <script src="site-header-toggle.js" defer></script>
+  <script src="lugano-header-alerts.js" defer></script>
+    <link rel="stylesheet" href="lugano-auth-gate.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script>
+    window.onload = function () {
+      var el = document.getElementById("est");
+      if (el) el.style.background = "black";
+    };
+    </script>
+        <style>
+    body.stats-body {
+      margin: 0;
+      background: #0a0a0a;
+      color: #e8eaef;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      text-align: left;
+    }
+    .stats-wrap {
+      max-width: 1325px;
+      margin: 0 auto;
+      padding: 16px 16px 40px;
+      box-sizing: border-box;
+    }
+    .stats-intro {
+      margin-bottom: 18px;
+    }
+    .stats-intro h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      color: #f3f4f6;
+    }
+    .stats-intro p {
+      margin: 0;
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.5;
+    }
+    .stats-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .stats-toolbar button {
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+            cursor: pointer;
+      border: 1px solid #444;
+      background: #252525;
+      color: #eee;
+    }
+    .stats-toolbar button:hover {
+      background: #333;
+    }
+    .stats-toolbar button.primary {
+      border-color: #e65100;
+      background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+      color: #fff;
+    }
+    .stats-toolbar a.stats-link-btn {
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+            cursor: pointer;
+      border: 1px solid #1565c0;
+      background: #1a237e;
+      color: #90caf9;
+            text-decoration: none;
+      display: inline-block;
+      font-family: inherit;
+    }
+    .stats-toolbar a.stats-link-btn:hover {
+      background: #283593;
+      color: #e3f2fd;
+    }
+    #stats-status {
+      font-size: 13px;
+      color: #94a3b8;
+      flex: 1;
+      min-width: 200px;
+    }
+    .stats-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stats-kpi {
+      background: #141414;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .stats-kpi span {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+    .stats-kpi strong {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff3e0;
+      font-variant-numeric: tabular-nums;
+    }
+    .stats-charts {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 900px) {
+      .stats-charts {
+        grid-template-columns: 1fr;
+      }
+    }
+    .stats-chart-card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 14px 16px 8px;
+      min-height: 280px;
+    }
+    .stats-chart-card h3 {
+      margin: 0 0 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #e0e0e0;
+    }
+    .stats-chart-card .canvas-wrap {
+      position: relative;
+      height: 220px;
+    }
+    .stats-table-wrap {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .stats-table-wrap h3 {
+      margin: 0;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+      border-bottom: 1px solid #333;
+      color: #e8eaef;
+    }
+    .stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .stats-table th,
+    .stats-table td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .stats-table th {
+      color: #9ca3af;
+      font-weight: 600;
+      background: #0d0d0d;
+    }
+    .stats-table td.num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .stats-main[hidden] {
+      display: none !important;
+    }
+    </style>
+</head>
+
+<body class="stats-body auth-gate-active" bgcolor="black" text="white">
+
+<div id="auth-gate" class="auth-gate" role="dialog" aria-modal="true" aria-labelledby="auth-gate-title">
+  <div class="auth-gate-brand">
+    <img src="logolugano1.jpg" height="88" alt="S.P.A.C.E" />
+  </div>
+  <div id="auth-logged-out" class="auth-panel-inner auth-gate-card">
+    <p class="auth-panel-title" id="auth-gate-title">Bienvenido</p>
+    <p class="auth-panel-desc">
+      Portal corporativo para la <strong>gestión y administración</strong> del planillado S.P.A.C.E.
+      Use su cuenta institucional para acceder de forma segura, supervisar la operación en tiempo real y consultar la información consolidada del negocio desde un solo lugar.
+    </p>
+    <button type="button" id="btn-google-signin">Iniciar sesión con Google</button>
+    <p id="auth-domain-hint" class="auth-domain-hint"></p>
+  </div>
+</div>
+
+<div id="main-app" class="main-app" hidden aria-hidden="true">
+
+<header bgcolor="white" text="white">
+  <center>
+    <table border="0" style="
+    background-position: center;
+    background: position y 10pt;
+      background-image: url(banner1.png);" font color="white" text="white" text-align="center" width="1325">
+<tr>
+        <td rowspan="2" bgcolor="black"><a href="index.html"><img src="logolugano1.jpg" height="120" bgcolor="black" alt="S.P.A.C.E"></a></td>
+<td text="white" colspan="11" height="120" color="white">
+          <h1 style="color: aliceblue;">Estadísticas y valores</h1>
+</td>
+</tr>
+      <tr>
+        <td width="120"><center><a href="index.html" id="index" class="btnmnini"><span style="color: aliceblue;">inicio</span></a></center></td>
+        <td width="120" id="planillados"><center><a href="planillados.html" id="pln" class="btnmnini"><span style="color: aliceblue;">Planillados</span></a></center></td>
+        <td width="120" id="mensualidades"><center><a href="mensualidades.html" id="mes" class="btnmnini"><span style="color: aliceblue;">Mensualidades</span></a></center></td>
+        <td width="120" id="reportes"><center><a href="reportes.html" id="rep" class="btnmnini"><span style="color: aliceblue;">Reportes</span></a></center></td>
+        <td width="120" id="estadistico"><center><a href="estadistico.html" id="est" class="btnmnini"><span style="color: aliceblue;">Estadístico</span></a></center></td>
+        <td width="120" id="seguridad"><center><a href="seguridad.html" id="seg" class="btnmnini"><span style="color: aliceblue;">Seguridad</span></a></center></td>
+        <td width="120" id="usuarios"><center><a href="usuarios.html" id="usu" class="btnmnini"><span style="color: aliceblue;">Usuarios</span></a></center></td>
+        <td width="120" id="estacionamientos"><center><a href="estacionamientos.html" id="esta" class="btnmnini"><span style="color: aliceblue;">Estacionamientos</span></a></center></td>
+        <td width="120" id="programacion"><center><a href="programacion.html" id="prog" class="btnmnini"><span style="color: aliceblue;">Programación</span></a></center></td>
+        <td width="120" id="ayuda"><center><a href="ayuda.html" id="ayu" class="btnmnini"><span style="color: aliceblue;">Ayuda</span></a></center></td>
+      </tr>
+    </table>
+  </center>
+ </header>
+
+  <div id="stats-main" class="stats-wrap">
+    <div class="stats-intro">
+      <h2>Panel estadístico</h2>
+    </div>
+    <div class="stats-toolbar">
+      <button type="button" class="primary" id="stats-btn-refresh">Actualizar gráficas</button>
+      <span id="stats-status"></span>
+    </div>
+
+    <div class="stats-kpis" id="stats-kpis"></div>
+
+    <div class="stats-charts">
+      <div class="stats-chart-card">
+        <h3>Vehículos / registros por estacionamiento</h3>
+        <div class="canvas-wrap"><canvas id="chart-vehiculos-sede" aria-label="Gráfica barras vehículos por sede"></canvas></div>
+      </div>
+      <div class="stats-chart-card">
+        <h3>Recaudo por estacionamiento (cierres)</h3>
+        <div class="canvas-wrap"><canvas id="chart-recaudos-sede" aria-label="Gráfica barras recaudo"></canvas></div>
+      </div>
+      <div class="stats-chart-card">
+        <h3>Registros con foto vs sin foto</h3>
+        <div class="canvas-wrap"><canvas id="chart-fotos" aria-label="Gráfica circular fotos"></canvas></div>
+      </div>
+      <div class="stats-chart-card">
+        <h3>Registros por sede (comparativa)</h3>
+        <div class="canvas-wrap"><canvas id="chart-registros-horizontal" aria-label="Gráfica barras horizontales"></canvas></div>
+      </div>
+    </div>
+
+    <div class="stats-table-wrap">
+      <h3>Detalle por estacionamiento</h3>
+      <div style="overflow-x:auto;">
+        <table class="stats-table" id="stats-detail-table">
+          <thead>
+            <tr>
+              <th>Estacionamiento</th>
+              <th class="num">Registros</th>
+              <th class="num">Con foto</th>
+              <th class="num">Sin foto</th>
+              <th class="num">% con foto</th>
+              <th class="num">Recaudo (cierres)</th>
+            </tr>
+          </thead>
+          <tbody id="stats-detail-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="auth-error-strip">
+  <p id="auth-banner-detail" style="margin:0;font-family:Consolas,monospace;font-size:12px;"></p>
+</div>
+
+  <script src="firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script>
+(function () {
+  firebase.initializeApp(typeof firebaseConfig !== "undefined" ? firebaseConfig : {});
+  var db = firebase.firestore();
+  var auth = firebase.auth();
+  var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
+
+  var PLANILLADO_OLD = "planillado_old";
+  var chartInstances = [];
+
+  function pick(data) {
+    if (!data) return "";
+    var keys = Array.prototype.slice.call(arguments, 1);
+    var i, k;
+    for (i = 0; i < keys.length; i++) {
+      k = keys[i];
+      if (data[k] !== undefined && data[k] !== null && data[k] !== "") return data[k];
+    }
+    return "";
+  }
+
+  function decodeId(seg) {
+    try {
+      return decodeURIComponent(String(seg));
+    } catch (e) {
+      return String(seg);
+    }
+  }
+
+  function isPlanilladoRootName(seg) {
+    var l = String(seg || "").toLowerCase();
+    return l === "planillado" || l === "planillados";
+  }
+
+  function parseFromFullPath(fullPath) {
+    var parts = fullPath.split("/").filter(Boolean);
+    var out = { stationId: "", operarioId: "", docId: parts.length ? parts[parts.length - 1] : "" };
+    if (parts[0] === PLANILLADO_OLD && parts[1]) {
+      out.docId = decodeId(parts[1]);
+      out.stationId = "(legacy)";
+      return out;
+    }
+    if (parts.length >= 4 && isPlanilladoRootName(parts[0])) {
+      out.stationId = decodeId(parts[1]);
+      out.operarioId = decodeId(parts[2]);
+      out.docId = decodeId(parts[parts.length - 1]);
+      return out;
+    }
+    var pi = parts
+      .map(function (s) {
+        return s.toLowerCase();
+      })
+      .indexOf("planillado");
+    if (pi >= 0 && parts[pi + 1]) out.stationId = decodeId(parts[pi + 1]);
+    return out;
+  }
+
+  /** Detección alineada con index: URL https, gs/rutas Storage o arrays de fotos en campos típicos */
+  function documentHasDisplayablePhoto(d) {
+    if (!d) return false;
+    var str = JSON.stringify(d);
+    if (/https?:\/\/[^\s"',]+\.(jpe?g|png|webp|gif)(\?[^\s"',]*)?/i.test(str)) return true;
+    if (/gs:\/\/[^\s"',]+\.(jpe?g|png|webp|gif)/i.test(str)) return true;
+    if (/inspection_photos\/[^\s"',]+\.(jpe?g|png|webp|gif)/i.test(str)) return true;
+    var fot = pick(d, "photosPaths", "fotos", "foto", "urlsFotos");
+    if (Array.isArray(fot) && fot.length) return true;
+    return false;
+  }
+
+  function stationLabelFromDoc(docSnap) {
+    var d = docSnap.data() || {};
+    var label = pick(d, "parking", "parkingName", "estacionamiento", "sede");
+    if (label) return String(label).trim();
+    var parsed = parseFromFullPath(docSnap.ref.path);
+    if (parsed.stationId && parsed.stationId !== "(legacy)") return parsed.stationId;
+    return "(sin sede)";
+  }
+
+  function extractRecaudoNumberPlain(data) {
+    if (!data || typeof data !== "object") return 0;
+    var prefer = [
+      "grandTotal",
+      "cashTotal",
+      "vouchersTotal",
+      "totalRecaudo",
+      "recaudoTotal",
+      "recaudo",
+      "total",
+      "montoTotal",
+      "monto",
+      "valorTotal",
+      "valor",
+      "ingresos",
+      "efectivo",
+      "totalDia",
+      "cierreMonto",
+      "cierre",
+      "subtotal"
+    ];
+    var i, v;
+    for (i = 0; i < prefer.length; i++) {
+      v = data[prefer[i]];
+      if (typeof v === "number" && !isNaN(v)) return v;
+      if (typeof v === "string" && /^\s*[\d.,]+\s*$/.test(v)) {
+        var n = Number(String(v).replace(/\./g, "").replace(",", "."));
+        if (!isNaN(n)) return n;
+      }
+    }
+    var sum = 0;
+    var found = false;
+    for (var k in data) {
+      if (!Object.prototype.hasOwnProperty.call(data, k)) continue;
+      if (k === "encryptedData" || k === "encrypted_data") continue;
+      v = data[k];
+      if (typeof v === "number" && !isNaN(v) && v >= 0) {
+        sum += v;
+        found = true;
+      }
+    }
+    return found ? sum : 0;
+  }
+
+  /** Objeto tipo FirestoreCashClosing.kt (cierre desencriptado). */
+  function isLikelyCashClosingPayload(o) {
+    return (
+      o &&
+      typeof o === "object" &&
+      ("grandTotal" in o ||
+        "cashTotal" in o ||
+        "vouchersTotal" in o ||
+        "parkingName" in o ||
+        "operatorName" in o)
+    );
+  }
+
+  function shouldAcceptRecaudoAmount(m, inner) {
+    if (typeof m !== "number" || isNaN(m)) return false;
+    if (m > 0) return true;
+    return isLikelyCashClosingPayload(inner);
+  }
+
+  /**
+   * Sin descifrado asíncrono: JSON directo, objeto ya parseado, o base64→UTF-8→JSON.
+   */
+  function tryParseEncryptedPayloadRaw(raw) {
+    if (raw == null) return null;
+    if (typeof raw === "object" && !Array.isArray(raw)) return raw;
+    if (typeof raw !== "string") return null;
+    var s = raw.trim();
+    if (!s) return null;
+    if (s.charAt(0) === "{" || s.charAt(0) === "[") {
+      try {
+        return JSON.parse(s);
+      } catch (e) {}
+    }
+    /* Base64 robusto: la consola/Firestore a veces muestran o guardan espacios/saltos dentro del string */
+    var s64 = s.replace(/\s+/g, "");
+    try {
+      var bin = atob(s64.replace(/-/g, "+").replace(/_/g, "/"));
+      var utf8 = decodeURIComponent(
+        Array.prototype.map
+          .call(bin, function (c) {
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join("")
+      );
+      return JSON.parse(utf8);
+    } catch (e1) {}
+    try {
+      var bin2 = atob(s64.replace(/-/g, "+").replace(/_/g, "/"));
+      return JSON.parse(bin2);
+    } catch (e2) {}
+    return null;
+  }
+
+  function base64ToUint8(str) {
+    var t = String(str).replace(/\s+/g, "");
+    var bin = atob(t.replace(/-/g, "+").replace(/_/g, "/"));
+    var len = bin.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) bytes[i] = bin.charCodeAt(i);
+    return bytes;
+  }
+
+  async function deriveAesKeyFromSecret(secret) {
+    var enc = new TextEncoder().encode(String(secret));
+    var hash = await crypto.subtle.digest("SHA-256", enc);
+    return crypto.subtle.importKey("raw", hash, { name: "AES-GCM" }, false, ["decrypt"]);
+  }
+
+  /**
+   * Igual que CashClosingEncryption.kt: SHA-256(UTF-8(SECRET_KEY + ADDITIONAL_KEY + user.name))
+   * → AES-256-CBC, IV 16 bytes + ciphertext en el buffer Base64.
+   */
+  async function importCashClosingCbcKey(userSuffix) {
+    var a =
+      cfg.cierresCashClosingSecretKey != null
+        ? cfg.cierresCashClosingSecretKey
+        : "CashClosing2024!@#$%^&*()_+Secure";
+    var b =
+      cfg.cierresCashClosingAdditionalKey != null
+        ? cfg.cierresCashClosingAdditionalKey
+        : "LuganoParkingCashClosing2024!Secure";
+    var u = userSuffix != null ? String(userSuffix) : "";
+    var combined = a + b + u;
+    var hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(combined));
+    return crypto.subtle.importKey("raw", hash, { name: "AES-CBC" }, false, ["decrypt"]);
+  }
+
+  async function tryDecryptCashClosingKotlinCompat(base64Str, userSuffix) {
+    if (!base64Str || typeof base64Str !== "string" || !crypto || !crypto.subtle) return null;
+    try {
+      var buf = base64ToUint8(base64Str);
+      if (buf.length < 32) return null;
+      var iv = buf.slice(0, 16);
+      var ciphertext = buf.slice(16);
+      var key = await importCashClosingCbcKey(userSuffix);
+      var plainBuf = await crypto.subtle.decrypt({ name: "AES-CBC", iv: iv }, key, ciphertext);
+      var txt = new TextDecoder().decode(plainBuf);
+      return JSON.parse(txt);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /** Prueba el sufijo configurado y alternativas típicas de Android (user.name). */
+  async function tryDecryptCashClosingAndroidCompat(base64Str) {
+    if (!base64Str || typeof base64Str !== "string") return null;
+    var primary =
+      cfg.cierresCashClosingUserNameSuffix != null ? String(cfg.cierresCashClosingUserNameSuffix) : "";
+    var chain = [primary];
+    ["", "unknown", "root"].forEach(function (s) {
+      if (chain.indexOf(s) === -1) chain.push(s);
+    });
+    var i, parsed;
+    for (i = 0; i < chain.length; i++) {
+      parsed = await tryDecryptCashClosingKotlinCompat(base64Str, chain[i]);
+      if (parsed && typeof parsed === "object") return parsed;
+    }
+    return null;
+  }
+
+  /**
+   * encryptedData: base64. Si ivSeparate es Uint8Array/string base64, ciphertext solo payload GCM.
+   * Si no, primeros 12 bytes del binario decodificado = IV (común en apps móviles).
+   */
+  async function tryDecryptAesGcmPayload(secret, encryptedBase64, ivSeparate, ivPrepended) {
+    if (!secret || !encryptedBase64 || typeof encryptedBase64 !== "string") return null;
+    if (!crypto || !crypto.subtle) return null;
+    try {
+      var key = await deriveAesKeyFromSecret(secret);
+      var iv;
+      var ciphertext;
+      if (ivSeparate != null && ivSeparate !== "") {
+        iv =
+          typeof ivSeparate === "string"
+            ? base64ToUint8(ivSeparate)
+            : ivSeparate instanceof Uint8Array
+              ? ivSeparate
+              : null;
+        ciphertext = base64ToUint8(encryptedBase64.trim());
+      } else if (ivPrepended !== false) {
+        var buf = base64ToUint8(encryptedBase64.trim());
+        if (buf.length < 28) return null;
+        var ivLens = [12, 16];
+        for (var li = 0; li < ivLens.length; li++) {
+          var il = ivLens[li];
+          if (buf.length < il + 16) continue;
+          iv = buf.slice(0, il);
+          ciphertext = buf.slice(il);
+          try {
+            var plainBuf2 = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, ciphertext);
+            var txt2 = new TextDecoder().decode(plainBuf2);
+            try {
+              return JSON.parse(txt2);
+            } catch (eJ2) {}
+          } catch (eDec) {}
+        }
+        return null;
+      } else {
+        return null;
+      }
+      if (!iv || !iv.length || !ciphertext || !ciphertext.length) return null;
+      var plainBuf = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, ciphertext);
+      var txt = new TextDecoder().decode(plainBuf);
+      try {
+        return JSON.parse(txt);
+      } catch (eJ) {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /** Lee montos desde encryptedData (base64/JSON) y opcionalmente AES-GCM con firebase-config. */
+  async function extractRecaudoFromCierreAsync(data) {
+    if (!data || typeof data !== "object") return 0;
+    var encField = cfg.cierresEncryptedField || "encryptedData";
+    var ivSep = pick(data, "iv", "IV", "aesIv", "nonce");
+    var enc = data[encField];
+    if (enc === undefined || enc === null || enc === "") enc = data.encrypted_data;
+    if (enc && typeof enc === "object" && enc.ciphertext != null) {
+      ivSep = ivSep || pick(enc, "iv", "IV", "aesIv", "nonce");
+      enc = enc.ciphertext;
+    }
+
+    if (enc !== undefined && enc !== null && enc !== "") {
+      var inner = tryParseEncryptedPayloadRaw(enc);
+      if (inner) {
+        var m = extractRecaudoNumberPlain(inner);
+        if (shouldAcceptRecaudoAmount(m, inner)) return m;
+      }
+      inner = await tryDecryptCashClosingAndroidCompat(typeof enc === "string" ? enc : "");
+      if (inner && typeof inner === "object") {
+        m = extractRecaudoNumberPlain(inner);
+        if (shouldAcceptRecaudoAmount(m, inner)) return m;
+      }
+      var secret = cfg.cierresPayloadSecret;
+      if (secret) {
+        if (ivSep && typeof ivSep !== "string") ivSep = String(ivSep);
+        inner = await tryDecryptAesGcmPayload(
+          secret,
+          typeof enc === "string" ? enc : "",
+          ivSep || null,
+          cfg.cierresEncryptedIvPrepended !== false
+        );
+        if (inner && typeof inner === "object") {
+          m = extractRecaudoNumberPlain(inner);
+          if (shouldAcceptRecaudoAmount(m, inner)) return m;
+        }
+      }
+    }
+    return extractRecaudoNumberPlain(data);
+  }
+
+  /** Compat: mismos pasos que extractRecaudoFromCierreAsync pero solo síncrono (sin AES). */
+  function extractRecaudoNumber(data) {
+    if (!data || typeof data !== "object") return 0;
+    var encField = cfg.cierresEncryptedField || "encryptedData";
+    var enc = data[encField];
+    if (enc === undefined || enc === null || enc === "") enc = data.encrypted_data;
+    if (enc && typeof enc === "object" && enc.ciphertext != null) {
+      enc = enc.ciphertext;
+    }
+    if (enc !== undefined && enc !== null && enc !== "") {
+      var inner = tryParseEncryptedPayloadRaw(enc);
+      if (inner) {
+        var m = extractRecaudoNumberPlain(inner);
+        if (shouldAcceptRecaudoAmount(m, inner)) return m;
+      }
+    }
+    return extractRecaudoNumberPlain(data);
+  }
+
+  /** Igual que index.html: lista subcolecciones (operarios bajo cada sede en cierres). */
+  function listCollectionIdsRESTForFullPath(fullDocPath) {
+    var projectId = firebaseConfig.projectId;
+    var segments = fullDocPath.split("/").filter(Boolean);
+    var encodedPath = segments.map(encodeURIComponent).join("/");
+    var docResource =
+      "projects/" + projectId + "/databases/(default)/documents/" + encodedPath;
+    var url = "https://firestore.googleapis.com/v1/" + docResource + ":listCollectionIds";
+    return auth.currentUser.getIdToken().then(function (token) {
+      return fetch(url, {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json"
+        },
+        body: "{}"
+      }).then(function (res) {
+        if (!res.ok) {
+          return res.text().then(function (t) {
+            throw new Error(res.status + " " + t);
+          });
+        }
+        return res.json();
+      });
+    });
+  }
+
+  /**
+   * Lista IDs de documentos en una colección raíz (REST documents.list), igual que index/planillado.
+   */
+  function listDocumentsInCollectionREST(collectionId) {
+    var projectId = firebaseConfig.projectId;
+    var collected = [];
+    function fetchPage(pageToken) {
+      var qs =
+        "pageSize=300" +
+        (pageToken ? "&pageToken=" + encodeURIComponent(pageToken) : "");
+      var url =
+        "https://firestore.googleapis.com/v1/projects/" +
+        projectId +
+        "/databases/(default)/documents/" +
+        encodeURIComponent(collectionId) +
+        "?" +
+        qs;
+      return auth.currentUser.getIdToken().then(function (token) {
+        return fetch(url, {
+          headers: { Authorization: "Bearer " + token }
+        }).then(function (res) {
+          if (!res.ok) {
+            return res.text().then(function (t) {
+              throw new Error(res.status + " " + t);
+            });
+          }
+          return res.json();
+        });
+      }).then(function (data) {
+        (data.documents || []).forEach(function (doc) {
+          var name = doc.name || "";
+          var segs = name.split("/");
+          var idRaw = segs.length ? segs[segs.length - 1] : "";
+          try {
+            collected.push(decodeURIComponent(idRaw));
+          } catch (eDec) {
+            collected.push(idRaw);
+          }
+        });
+        if (data.nextPageToken) {
+          return fetchPage(data.nextPageToken);
+        }
+        return collected;
+      });
+    }
+    return fetchPage(null);
+  }
+
+  /**
+   * Descubre IDs de sede bajo «cierres» aunque falte el documento padre (subcolecciones huérfanas).
+   * Repite la idea de CashClosingRepository + collectionGroup(nombreOperador).
+   */
+  async function discoverCierresParkingIdsViaCollectionGroups(operatorSubcollectionNames) {
+    var sedes = {};
+    var names = uniqueStrings(operatorSubcollectionNames || []);
+    await Promise.all(
+      names.map(function (op) {
+        return db
+          .collectionGroup(op)
+          .get()
+          .then(function (snap) {
+            snap.docs.forEach(function (doc) {
+              var parts = doc.ref.path.split("/").filter(Boolean);
+              if (parts[0] !== "cierres" || parts.length < 3) return;
+              sedes[parts[1]] = true;
+            });
+          })
+          .catch(function (err) {
+            console.warn("[estadistico] collectionGroup cierres", op, err.code, err.message);
+          });
+      })
+    );
+    return Object.keys(sedes);
+  }
+
+  function destroyCharts() {
+    chartInstances.forEach(function (c) {
+      try {
+        c.destroy();
+      } catch (e) {}
+    });
+    chartInstances = [];
+  }
+
+  function fmtCop(n) {
+    try {
+      return new Intl.NumberFormat("es-CO", {
+        style: "currency",
+        currency: "COP",
+        maximumFractionDigits: 0
+      }).format(n);
+    } catch (e) {
+      return String(n);
+    }
+  }
+
+  var statusEl = document.getElementById("stats-status");
+  var kpisEl = document.getElementById("stats-kpis");
+  var detailBody = document.getElementById("stats-detail-body");
+
+  function setLoading(msg) {
+    statusEl.textContent = msg || "";
+  }
+
+  async function fetchAllPlanilladoDocs() {
+    var subs = cfg.planilladoDefaultSubcollectionsForAllParkings || ["registros"];
+    var seen = {};
+    var out = [];
+    await Promise.all(
+      subs.map(function (sub) {
+        return db
+          .collectionGroup(sub)
+          .get()
+          .then(function (snap) {
+            snap.docs.forEach(function (doc) {
+              var p = doc.ref.path;
+              if (seen[p]) return;
+              seen[p] = true;
+              out.push(doc);
+            });
+          })
+          .catch(function (err) {
+            console.warn("[estadistico] collectionGroup", sub, err.code, err.message);
+          });
+      })
+    );
+    try {
+      var oldSnap = await db.collection(PLANILLADO_OLD).get();
+      oldSnap.docs.forEach(function (doc) {
+        var p = doc.ref.path;
+        if (seen[p]) return;
+        seen[p] = true;
+        out.push(doc);
+      });
+    } catch (e) {
+      console.warn("[estadistico] planillado_old", e);
+    }
+    return out;
+  }
+
+  function uniqueStrings(arr) {
+    var seen = {};
+    var out = [];
+    (arr || []).forEach(function (x) {
+      var s = String(x == null ? "" : x).trim();
+      if (!s || seen[s]) return;
+      seen[s] = true;
+      out.push(s);
+    });
+    return out;
+  }
+
+  /** Misma regla que Kotlin: operatorName.lowercase() en la ruta cierres/…/operador/… (Unicode + espacios). */
+  function operatorPathSegmentFromDisplayName(name) {
+    if (name == null || name === "") return "";
+    try {
+      return String(name)
+        .normalize("NFC")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+    } catch (e) {
+      return String(name).trim().toLowerCase().replace(/\s+/g, " ");
+    }
+  }
+
+  /**
+   * Nombres de subcolección de operador (minúsculas), como CashClosingRepository + colección operators.
+   */
+  async function fetchOperatorSubcollectionNames() {
+    var names = [];
+    (cfg.cierresOperatorSubcollectionsFallback || []).forEach(function (x) {
+      names.push(operatorPathSegmentFromDisplayName(x));
+    });
+    var opCol = cfg.cierresOperatorsCollection;
+    if (opCol) {
+      try {
+        var snap = await db.collection(opCol).get();
+        snap.docs.forEach(function (d) {
+          var data = d.data() || {};
+          var raw = pick(data, "name", "nombre", "operatorName", "displayName");
+          if (raw) names.push(operatorPathSegmentFromDisplayName(raw));
+        });
+      } catch (e) {
+        console.warn("[estadistico] operators collection", opCol, e.code || e.message);
+      }
+    }
+    return uniqueStrings(names.filter(Boolean));
+  }
+
+  /**
+   * Recaudo por sede: suma documentos en cierres/{sede}/{operario}/{cierreId…}
+   * y opcionalmente números en el doc padre de la sede si existieran.
+   */
+  async function fetchCierresBySede() {
+    var col = cfg.cierresCollection || "cierres";
+    var map = {};
+    var operatorNamesGlobal = await fetchOperatorSubcollectionNames();
+    /** Si «operators» está vacío o sin permiso, igual intentamos nombres típicos de subcolección (Android). */
+    var builtinCgProbes = [
+      "michael eduardo carreño sanchez",
+      "luis jimenez",
+      "administrador",
+      "operario",
+      "admin"
+    ];
+    var probeOps = uniqueStrings(
+      (operatorNamesGlobal || [])
+        .concat(cfg.cierresCollectionGroupProbeOperators || [])
+        .concat(builtinCgProbes)
+    );
+
+    var sedesSnap = { docs: [] };
+    try {
+      sedesSnap = await db.collection(col).get();
+    } catch (e) {
+      console.warn("[estadistico] cierres collection.get", e.code || e.message);
+    }
+
+    var sedeDataById = {};
+    sedesSnap.docs.forEach(function (d) {
+      sedeDataById[d.id] = d.data() || {};
+    });
+
+    var fromSdk = sedesSnap.docs.map(function (d) {
+      return d.id;
+    });
+    var fromRest = [];
+    if (auth.currentUser) {
+      try {
+        fromRest = await listDocumentsInCollectionREST(col);
+      } catch (e) {
+        console.warn("[estadistico] REST documents.list «" + col + "»", e.message || e);
+      }
+    }
+
+    var fromCg = [];
+    if (probeOps.length) {
+      fromCg = await discoverCierresParkingIdsViaCollectionGroups(probeOps);
+    }
+
+    var sedeIds = uniqueStrings(fromSdk.concat(fromRest).concat(fromCg));
+    if (!sedeIds.length) {
+      console.warn(
+        "[estadistico] Sin IDs de sede en «" +
+          col +
+          "» (SDK, REST y collectionGroup). Revise reglas Firestore y/o probe operators."
+      );
+      return map;
+    }
+
+    await Promise.all(
+      sedeIds.map(function (sedeId) {
+        var sedeRef = db.collection(col).doc(sedeId);
+        var baseData = sedeDataById[sedeId] || {};
+
+        return extractRecaudoFromCierreAsync(baseData).then(function (base) {
+          return listCollectionIdsRESTForFullPath(sedeRef.path)
+            .then(function (json) {
+              var fromRestSubs = json.collectionIds || [];
+              var operarios = uniqueStrings(fromRestSubs.concat(probeOps));
+              if (!operarios.length) {
+                map[sedeId] = { id: sedeId, monto: base };
+                return;
+              }
+              return Promise.all(
+                operarios.map(function (opId) {
+                  return sedeRef.collection(opId).get().then(function (snap) {
+                    return Promise.all(
+                      snap.docs.map(function (cierreDoc) {
+                        return extractRecaudoFromCierreAsync(cierreDoc.data() || {});
+                      })
+                    ).then(function (parts) {
+                      return parts.reduce(function (a, n) {
+                        return a + n;
+                      }, 0);
+                    });
+                  });
+                })
+              ).then(function (perOpTotals) {
+                var extra = perOpTotals.reduce(function (a, n) {
+                  return a + n;
+                }, 0);
+                map[sedeId] = { id: sedeId, monto: base + extra };
+              });
+            })
+            .catch(function (err) {
+              console.warn("[estadistico] cierres listSubs", sedeId, err.message || err);
+              if (!probeOps.length) {
+                return extractRecaudoFromCierreAsync(baseData).then(function (m) {
+                  map[sedeId] = { id: sedeId, monto: m };
+                });
+              }
+              return Promise.all(
+                probeOps.map(function (opId) {
+                  return sedeRef.collection(opId).get().then(function (snap) {
+                    return Promise.all(
+                      snap.docs.map(function (cierreDoc) {
+                        return extractRecaudoFromCierreAsync(cierreDoc.data() || {});
+                      })
+                    ).then(function (parts) {
+                      return parts.reduce(function (a, n) {
+                        return a + n;
+                      }, 0);
+                    });
+                  });
+                })
+              ).then(function (perOpTotals) {
+                var extra = perOpTotals.reduce(function (a, n) {
+                  return a + n;
+                }, 0);
+                map[sedeId] = { id: sedeId, monto: base + extra };
+              });
+            });
+        });
+      })
+    );
+
+    return map;
+  }
+
+  async function loadStats() {
+    if (!auth.currentUser) return;
+    setLoading("Cargando datos de Firestore…");
+    destroyCharts();
+
+    var docs;
+    var cierresMap;
+    try {
+      docs = await fetchAllPlanilladoDocs();
+      cierresMap = await fetchCierresBySede();
+    } catch (e) {
+      setLoading("Error: " + (e.message || String(e)));
+      return;
+    }
+
+    var byStation = {};
+    var withPhoto = 0;
+    var withoutPhoto = 0;
+
+    docs.forEach(function (docSnap) {
+      var sede = stationLabelFromDoc(docSnap);
+      if (!byStation[sede]) {
+        byStation[sede] = { total: 0, conFoto: 0, sinFoto: 0 };
+      }
+      byStation[sede].total++;
+      var d = docSnap.data();
+      if (documentHasDisplayablePhoto(d)) {
+        byStation[sede].conFoto++;
+        withPhoto++;
+      } else {
+        byStation[sede].sinFoto++;
+        withoutPhoto++;
+      }
+    });
+
+    var sedesSorted = Object.keys(byStation).sort(function (a, b) {
+      return byStation[b].total - byStation[a].total;
+    });
+
+    var labelsVeh = sedesSorted;
+    var dataVeh = sedesSorted.map(function (s) {
+      return byStation[s].total;
+    });
+
+    var recaudoLabels = Object.keys(cierresMap).sort(function (a, b) {
+      return cierresMap[b].monto - cierresMap[a].monto;
+    });
+    var recaudoData = recaudoLabels.map(function (id) {
+      return cierresMap[id].monto;
+    });
+
+    var totalRecaudoCierres = recaudoLabels.reduce(function (acc, id) {
+      return acc + (cierresMap[id].monto || 0);
+    }, 0);
+
+    Chart.defaults.color = "#9ca3af";
+    Chart.defaults.borderColor = "#333";
+
+    var pink = "rgba(255, 152, 0, 0.85)";
+    var pinkBorder = "#f57c00";
+
+    var ch1 = new Chart(document.getElementById("chart-vehiculos-sede"), {
+      type: "bar",
+      data: {
+        labels: labelsVeh,
+        datasets: [
+          {
+            label: "Registros",
+            data: dataVeh,
+            backgroundColor: pink,
+            borderColor: pinkBorder,
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              title: function (items) {
+                return items[0] ? String(items[0].label) : "";
+              }
+            }
+          }
+        },
+        scales: {
+          x: { ticks: { maxRotation: 45, minRotation: 0 } },
+          y: { beginAtZero: true, ticks: { stepSize: 1 } }
+        }
+      }
+    });
+    chartInstances.push(ch1);
+
+    var ch2 = new Chart(document.getElementById("chart-recaudos-sede"), {
+      type: "bar",
+      data: {
+        labels: recaudoLabels.length ? recaudoLabels : ["(sin documentos en cierres)"],
+        datasets: [
+          {
+            label: "Recaudo",
+            data: recaudoLabels.length ? recaudoData : [0],
+            backgroundColor: "rgba(100, 181, 246, 0.75)",
+            borderColor: "#42a5f5",
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function (ctx) {
+                return fmtCop(ctx.parsed.y || 0);
+              }
+            }
+          }
+        },
+        scales: {
+          x: { ticks: { maxRotation: 45, minRotation: 0 } },
+          y: { beginAtZero: true }
+        }
+      }
+    });
+    chartInstances.push(ch2);
+
+    var ch3 = new Chart(document.getElementById("chart-fotos"), {
+      type: "doughnut",
+      data: {
+        labels: ["Con foto", "Sin foto"],
+        datasets: [
+          {
+            data: [withPhoto, withoutPhoto],
+            backgroundColor: ["rgba(76, 175, 80, 0.75)", "rgba(97, 97, 97, 0.55)"],
+            borderColor: ["#4caf50", "#757575"],
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: "bottom" }
+        }
+      }
+    });
+    chartInstances.push(ch3);
+
+    var ch4 = new Chart(document.getElementById("chart-registros-horizontal"), {
+      type: "bar",
+      data: {
+        labels: labelsVeh.slice(),
+        datasets: [
+          {
+            label: "Registros",
+            data: dataVeh.slice(),
+            backgroundColor: "rgba(255, 183, 77, 0.55)",
+            borderColor: pinkBorder,
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        indexAxis: "y",
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: { beginAtZero: true, ticks: { stepSize: 1 } }
+        }
+      }
+    });
+    chartInstances.push(ch4);
+
+    kpisEl.innerHTML =
+      '<div class="stats-kpi"><span>Total registros</span><strong>' +
+      docs.length +
+      "</strong></div>" +
+      '<div class="stats-kpi"><span>Con foto</span><strong>' +
+      withPhoto +
+      "</strong></div>" +
+      '<div class="stats-kpi"><span>Sin foto</span><strong>' +
+      withoutPhoto +
+      "</strong></div>" +
+      '<div class="stats-kpi"><span>Sedes (planillado)</span><strong>' +
+      sedesSorted.length +
+      "</strong></div>" +
+      '<div class="stats-kpi"><span>Sedes con cierre (Firestore)</span><strong>' +
+      Object.keys(cierresMap).length +
+      "</strong></div>" +
+      '<div class="stats-kpi"><span>Recaudo total (cierres)</span><strong>' +
+      fmtCop(totalRecaudoCierres) +
+      "</strong></div>";
+
+    var allDetailSedes = {};
+    sedesSorted.forEach(function (s) {
+      allDetailSedes[s] = true;
+    });
+    Object.keys(cierresMap).forEach(function (id) {
+      allDetailSedes[id] = true;
+    });
+    var detailSedes = Object.keys(allDetailSedes).sort(function (a, b) {
+      return a.localeCompare(b, "es");
+    });
+
+    detailBody.innerHTML = "";
+    detailSedes.forEach(function (sede) {
+      var row = byStation[sede];
+      var tot = row ? row.total : 0;
+      var cf = row ? row.conFoto : 0;
+      var sf = row ? row.sinFoto : 0;
+      var pct = tot ? Math.round((cf / tot) * 1000) / 10 : 0;
+      var rec = findCierreMontoForStationLabel(cierresMap, sede);
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        "<td>" +
+        escapeHtml(sede) +
+        "</td>" +
+        '<td class="num">' +
+        tot +
+        "</td>" +
+        '<td class="num">' +
+        cf +
+        "</td>" +
+        '<td class="num">' +
+        sf +
+        "</td>" +
+        '<td class="num">' +
+        (tot ? pct + "%" : "—") +
+        "</td>" +
+        '<td class="num">' +
+        (rec != null ? fmtCop(rec) : "—") +
+        "</td>";
+      detailBody.appendChild(tr);
+    });
+
+    var statusExtra = "";
+    if (Object.keys(cierresMap).length && totalRecaudoCierres === 0) {
+      statusExtra =
+        " · Cierres: hay sedes en «cierres» pero recaudo $0 (revisar descifrado AES/CBC o sufijo user.name en firebase-config).";
+    }
+    setLoading(
+      "Actualizado " +
+        new Date().toLocaleString("es-CO") +
+        " · " +
+        docs.length +
+        " documentos planillado · recaudo cierres " +
+        fmtCop(totalRecaudoCierres) +
+        "." +
+        statusExtra
+    );
+  }
+
+  function escapeHtml(s) {
+    var d = document.createElement("div");
+    d.textContent = s == null ? "" : String(s);
+    return d.innerHTML;
+  }
+
+  /** Alinea «E-5 Falabella» con «E-5 - Falabella» para cruzar planillado vs cierres. */
+  function normalizeSedeKey(s) {
+    return String(s || "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .replace(/\s*-\s*/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function findCierreMontoForStationLabel(cierresMap, stationLabel) {
+    if (!cierresMap || !stationLabel) return null;
+    if (cierresMap[stationLabel] != null) return cierresMap[stationLabel].monto;
+    var want = normalizeSedeKey(stationLabel);
+    var k;
+    for (k in cierresMap) {
+      if (!Object.prototype.hasOwnProperty.call(cierresMap, k)) continue;
+      if (normalizeSedeKey(k) === want) return cierresMap[k].monto;
+    }
+    return null;
+  }
+
+  document.getElementById("stats-btn-refresh").addEventListener("click", function () {
+    loadStats();
+  });
+
+  auth.onAuthStateChanged(function (user) {
+    if (user) {
+      loadStats();
+    } else {
+      destroyCharts();
+      setLoading("");
+    }
+  });
+})();
+  </script>
+<script src="lugano-admin-auth.js"></script>
+<script src="lugano-auth-gate.js"></script>
+ 
+<script src="lugano-firestore-alertas.js"></script>
+</body>
+</html>

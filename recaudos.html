@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="logolugano1.jpg">
+  <link rel="apple-touch-icon" href="logolugano1.jpg">
+  <title>Recaudos · S.P.A.C.E</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="help-widget.css">
+  <script src="help-widget.js" defer></script>
+  <script src="lugano-banner-ssr.js"></script>
+  <script src="site-header-toggle.js" defer></script>
+  <script src="lugano-header-alerts.js" defer></script>
+  <link rel="stylesheet" href="lugano-auth-gate.css">
+  <script>
+    window.onload = function () {
+      var el = document.getElementById("rep");
+      if (el) el.style.background = "black";
+    };
+  </script>
+  <style>
+    body.rc-body {
+      margin: 0;
+      background: #0a0a0a;
+      color: #e8eaef;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      text-align: left;
+    }
+    .rc-wrap {
+      max-width: 1325px;
+      margin: 0 auto;
+      padding: 16px 16px 48px;
+      box-sizing: border-box;
+    }
+    .rc-intro {
+      background: linear-gradient(165deg, #161616 0%, #121212 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+    .rc-intro h2 { margin: 0 0 8px; font-size: 20px; color: #f3f4f6; }
+    .rc-intro p { margin: 0; font-size: 13px; color: #9ca3af; line-height: 1.55; max-width: 920px; }
+    .rep-subnav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 18px;
+    }
+    .rep-subnav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #c4c9d4;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      text-decoration: none;
+      box-sizing: border-box;
+    }
+    .rep-subnav-btn:hover {
+      background: #252525;
+      border-color: #555;
+      color: #e8eaef;
+    }
+    .rep-subnav-btn.is-active {
+      border-color: #e65100;
+      background: linear-gradient(180deg, rgba(255, 152, 0, 0.22) 0%, rgba(230, 81, 0, 0.12) 100%);
+      color: #fff3e0;
+      cursor: default;
+      pointer-events: none;
+    }
+    .rc-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-end;
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+    }
+    .rc-field label {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+    .rc-field input,
+    .rc-field select {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #e8eaef;
+      font-size: 13px;
+      font-family: inherit;
+    }
+    .rc-btn {
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #444;
+      background: #252525;
+      color: #eee;
+      font-family: inherit;
+    }
+    .rc-btn--primary {
+      border-color: #e65100;
+      background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+      color: #fff;
+    }
+    .rc-status { font-size: 13px; color: #94a3b8; flex: 1; min-width: 180px; }
+    .rc-status.is-error { color: #ef9a9a; }
+    .rc-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .rc-kpi {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .rc-kpi span {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+    .rc-kpi strong {
+      font-size: 18px;
+      color: #fff3e0;
+      font-variant-numeric: tabular-nums;
+    }
+    .rc-kpi--tax strong { color: #ffcc80; }
+    .rc-kpi--gain strong { color: #a5d6a7; }
+    .rc-panels {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .rc-panel {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .rc-panel h3 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #e8eaef;
+    }
+    .rc-panel dl {
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6px 12px;
+      font-size: 13px;
+    }
+    .rc-panel dt { color: #9ca3af; margin: 0; }
+    .rc-panel dd {
+      margin: 0;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      color: #f3f4f6;
+    }
+    .rc-table-wrap {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      overflow: auto;
+      max-height: min(70vh, 640px);
+    }
+    .rc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .rc-table th,
+    .rc-table td {
+      padding: 9px 10px;
+      border-bottom: 1px solid #2a2a2a;
+      text-align: left;
+      vertical-align: top;
+    }
+    .rc-table th {
+      position: sticky;
+      top: 0;
+      background: #1e1e1e;
+      color: #9ca3af;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      z-index: 1;
+    }
+    .rc-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .rc-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .rc-pill--fe { background: rgba(33, 150, 243, 0.2); color: #90caf9; border: 1px solid rgba(33, 150, 243, 0.4); }
+    .rc-pill--no-fe { background: rgba(97, 97, 97, 0.3); color: #bdbdbd; border: 1px solid #616161; }
+    .rc-pill--dian-ok { background: rgba(46, 125, 50, 0.25); color: #a5d6a7; border: 1px solid rgba(76, 175, 80, 0.45); }
+    .rc-pill--dian-pend { background: rgba(245, 124, 0, 0.2); color: #ffcc80; border: 1px solid rgba(245, 124, 0, 0.45); }
+    .rc-pill--dian-na { background: rgba(97, 97, 97, 0.25); color: #9e9e9e; border: 1px solid #555; }
+    .rc-empty {
+      padding: 32px 16px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    .rc-note {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+    .rc-downloads {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      background: #141414;
+      border: 1px solid #333;
+      border-radius: 10px;
+    }
+    .rc-downloads span {
+      font-size: 12px;
+      font-weight: 600;
+      color: #9ca3af;
+      margin-right: 4px;
+    }
+    .rc-btn-dl {
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #252525;
+      color: #e0e0e0;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .rc-btn-dl:hover {
+      background: #333;
+      border-color: #ff9800;
+    }
+    .rc-num-factura {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      color: #ffe0b2;
+    }
+    .rc-num-tiquete {
+      display: block;
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+    @media print {
+      body.rc-body .auth-gate,
+      body.rc-body header,
+      body.rc-body .rep-subnav,
+      body.rc-body .rc-filters,
+      body.rc-body .rc-downloads,
+      body.rc-body #auth-error-strip,
+      body.rc-body .rc-btn-dl,
+      body.rc-body th:last-child,
+      body.rc-body td:last-child {
+        display: none !important;
+      }
+      body.rc-body {
+        background: #fff;
+        color: #000;
+      }
+      .rc-wrap { max-width: none; padding: 0; }
+      .rc-table-wrap { max-height: none; overflow: visible; border: none; }
+      .rc-table th { background: #eee; color: #000; }
+      .rc-kpi, .rc-panel { break-inside: avoid; border-color: #ccc; }
+    }
+  </style>
+</head>
+
+<body class="rc-body auth-gate-active" bgcolor="black" text="white">
+
+<div id="auth-gate" class="auth-gate" role="dialog" aria-modal="true" aria-labelledby="auth-gate-title">
+  <div class="auth-gate-brand">
+    <img src="logolugano1.jpg" height="88" alt="S.P.A.C.E" />
+  </div>
+  <div id="auth-logged-out" class="auth-panel-inner auth-gate-card">
+    <p class="auth-panel-title" id="auth-gate-title">Bienvenido</p>
+    <p class="auth-panel-desc">
+      Portal corporativo S.P.A.C.E. Inicie sesión para consultar el acumulado de facturas de venta.
+    </p>
+    <button type="button" id="btn-google-signin">Iniciar sesión con Google</button>
+    <p id="auth-domain-hint" class="auth-domain-hint"></p>
+  </div>
+</div>
+
+<div id="main-app" class="main-app" hidden aria-hidden="true">
+
+<header bgcolor="white" text="white">
+  <center>
+    <table border="0" style="
+      background-position: center;
+      background-image: url(banner1.png);" font color="white" text="white" text-align="center" width="1325">
+      <tr>
+        <td rowspan="2" bgcolor="black"><a href="index.html"><img src="logolugano1.jpg" height="120" bgcolor="black" alt="S.P.A.C.E"></a></td>
+        <td text="white" colspan="11" height="120" color="white">
+          <h1 style="color: aliceblue;">Reportes y registros</h1>
+        </td>
+      </tr>
+      <tr>
+        <td width="120"><center><a href="index.html" class="btnmnini"><span style="color: aliceblue;">inicio</span></a></center></td>
+        <td width="120"><center><a href="planillados.html" class="btnmnini"><span style="color: aliceblue;">Planillados</span></a></center></td>
+        <td width="120"><center><a href="mensualidades.html" class="btnmnini"><span style="color: aliceblue;">Mensualidades</span></a></center></td>
+        <td width="120" id="reportes"><center><a href="reportes.html" id="rep" class="btnmnini"><span style="color: aliceblue;">Reportes</span></a></center></td>
+        <td width="120"><center><a href="estadistico.html" class="btnmnini"><span style="color: aliceblue;">Estadístico</span></a></center></td>
+        <td width="120"><center><a href="seguridad.html" class="btnmnini"><span style="color: aliceblue;">Seguridad</span></a></center></td>
+        <td width="120"><center><a href="usuarios.html" class="btnmnini"><span style="color: aliceblue;">Usuarios</span></a></center></td>
+        <td width="120"><center><a href="estacionamientos.html" class="btnmnini"><span style="color: aliceblue;">Estacionamientos</span></a></center></td>
+        <td width="120"><center><a href="programacion.html" class="btnmnini"><span style="color: aliceblue;">Programación</span></a></center></td>
+        <td width="120"><center><a href="ayuda.html" class="btnmnini"><span style="color: aliceblue;">Ayuda</span></a></center></td>
+      </tr>
+    </table>
+  </center>
+</header>
+
+  <div class="rc-wrap">
+    <section class="rc-intro">
+      <h2>Recaudos · facturas de venta</h2>
+      <p>
+        Acumulado desde <code>facturas_de_venta</code> (caja POS). Muestra subtotal, IVA y total; si el documento incluye
+        datos de facturación electrónica o envío DIAN, se reflejan en la tabla. Sin esos campos, el desglose se calcula con IVA
+        <span id="rc-iva-label">19</span>% sobre el monto cobrado (misma lógica que la caja).
+      </p>
+    </section>
+
+    <nav class="rep-subnav" aria-label="Submenú de reportes">
+      <a class="rep-subnav-btn" href="reportes.html">Panel de reportes</a>
+      <a class="rep-subnav-btn" href="planillas-cierres.html">Planillas y cierres</a>
+      <span class="rep-subnav-btn is-active" aria-current="page">Recaudos</span>
+    </nav>
+
+    <div class="rc-filters">
+      <div class="rc-field">
+        <label for="rc-desde">Desde</label>
+        <input type="date" id="rc-desde" />
+      </div>
+      <div class="rc-field">
+        <label for="rc-hasta">Hasta</label>
+        <input type="date" id="rc-hasta" />
+      </div>
+      <div class="rc-field">
+        <label for="rc-sede">Sede</label>
+        <select id="rc-sede">
+          <option value="">Todas las sedes</option>
+        </select>
+      </div>
+      <div class="rc-field">
+        <label for="rc-placa">Placa</label>
+        <input type="text" id="rc-placa" maxlength="16" placeholder="Opcional" autocomplete="off" />
+      </div>
+      <div class="rc-field">
+        <label for="rc-num-factura">Nº factura</label>
+        <input type="text" id="rc-num-factura" maxlength="40" placeholder="Ej. SP-001 o FV_" autocomplete="off" />
+      </div>
+      <button type="button" class="rc-btn rc-btn--primary" id="rc-btn-apply">Aplicar filtros</button>
+      <button type="button" class="rc-btn" id="rc-btn-reload">Recargar</button>
+      <span class="rc-status" id="rc-status" role="status"></span>
+    </div>
+
+    <div class="rc-downloads" aria-label="Opciones de descarga">
+      <span>Descargar:</span>
+      <button type="button" class="rc-btn" id="rc-btn-csv-detalle">CSV detalle</button>
+      <button type="button" class="rc-btn" id="rc-btn-csv-resumen">CSV resumen</button>
+      <button type="button" class="rc-btn" id="rc-btn-json">JSON</button>
+      <button type="button" class="rc-btn rc-btn--primary" id="rc-btn-print">Imprimir / PDF</button>
+    </div>
+
+    <div class="rc-kpis" id="rc-kpis" aria-label="Indicadores de recaudo"></div>
+
+    <div class="rc-panels">
+      <div class="rc-panel">
+        <h3>Totales del período</h3>
+        <dl id="rc-dl-totales">
+          <dt>Subtotal (base gravable)</dt><dd id="rc-sum-sub">$0</dd>
+          <dt>IVA acumulado</dt><dd id="rc-sum-iva">$0</dd>
+          <dt>Total recaudado</dt><dd id="rc-sum-tot">$0</dd>
+        </dl>
+      </div>
+      <div class="rc-panel">
+        <h3>Ganancia e impuestos</h3>
+        <dl>
+          <dt>Ingreso neto (subtotal)</dt><dd id="rc-sum-ganancia" class="rc-sum-gain">$0</dd>
+          <dt>IVA a reportar / pagar</dt><dd id="rc-sum-impuesto" class="rc-sum-tax">$0</dd>
+          <dt>Facturas en vista</dt><dd id="rc-sum-count">0</dd>
+        </dl>
+      </div>
+      <div class="rc-panel">
+        <h3>Facturación electrónica y DIAN</h3>
+        <dl id="rc-dl-fe">
+          <dt>Con factura electrónica</dt><dd id="rc-fe-count">0</dd>
+          <dt>Enviadas a DIAN</dt><dd id="rc-dian-ok">0</dd>
+          <dt>Pendiente / sin envío DIAN</dt><dd id="rc-dian-pend">0</dd>
+          <dt>Sin FE (solo POS)</dt><dd id="rc-fe-none">0</dd>
+        </dl>
+      </div>
+      <div class="rc-panel">
+        <h3>Por forma de pago</h3>
+        <dl id="rc-dl-pago"></dl>
+      </div>
+    </div>
+
+    <div class="rc-table-wrap">
+      <table class="rc-table" id="rc-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Nº factura</th>
+            <th>Placa</th>
+            <th>Sede</th>
+            <th>FE</th>
+            <th>DIAN</th>
+            <th class="num">Subtotal</th>
+            <th class="num">IVA</th>
+            <th class="num">Total</th>
+            <th>Pago</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="rc-tbody"></tbody>
+      </table>
+      <p class="rc-empty" id="rc-empty" hidden>No hay facturas con los filtros actuales.</p>
+    </div>
+    <p class="rc-note" id="rc-note"></p>
+  </div>
+</div>
+
+<div id="auth-error-strip">
+  <p id="auth-banner-detail" style="margin:0;font-family:Consolas,monospace;font-size:12px;"></p>
+</div>
+
+<script src="firebase-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="lugano-admin-auth.js"></script>
+<script src="lugano-auth-gate.js"></script>
+<script>
+(function () {
+  var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
+  var COL = cfg.facturasVentaCollection || "facturas_de_venta";
+  var COL_LEGACY = cfg.facturasVentaCollectionLegacy || "caja_facturas";
+  var SEDES_COL = cfg.sedesCollection || "sedes";
+  var IVA_PCT = Number(cfg.recaudosIvaPorcentajeDefault) || 19;
+  var META_ID = "_CAJA_SPACE_META";
+
+  firebase.initializeApp(typeof firebaseConfig !== "undefined" ? firebaseConfig : {});
+  var auth = firebase.auth();
+  var db = firebase.firestore();
+
+  var todasFacturas = [];
+  var filtradas = [];
+  var statusEl = document.getElementById("rc-status");
+  var tbody = document.getElementById("rc-tbody");
+  var emptyEl = document.getElementById("rc-empty");
+  var noteEl = document.getElementById("rc-note");
+
+  document.getElementById("rc-iva-label").textContent = String(IVA_PCT);
+
+  function setStatus(msg, err) {
+    if (!statusEl) return;
+    statusEl.textContent = msg || "";
+    statusEl.classList.toggle("is-error", !!err);
+  }
+
+  function escapeHtml(s) {
+    return String(s || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function fmtMoney(n) {
+    if (n == null || isNaN(n)) return "—";
+    return (
+      "$" +
+      Math.round(n).toLocaleString("es-CO", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+    );
+  }
+
+  function pickStr(d, keys) {
+    if (!d) return "";
+    for (var i = 0; i < keys.length; i++) {
+      var v = d[keys[i]];
+      if (v == null || v === "") continue;
+      var s = String(v).trim();
+      if (s) return s;
+    }
+    return "";
+  }
+
+  function padTiquete(n) {
+    if (n == null || n === "" || isNaN(n)) return "";
+    var i = parseInt(n, 10);
+    if (isNaN(i)) return String(n);
+    return String(i).padStart(3, "0");
+  }
+
+  function resolverNumeroFactura(d, docId) {
+    var pref = pickStr(d, ["prefijo", "prefijoFactura", "prefijoFE"]);
+    var cons = pickStr(d, [
+      "consecutivo",
+      "numeroConsecutivo",
+      "consecutivoFactura",
+      "consecutivoFE",
+    ]);
+    if (pref && cons) return pref + "-" + cons;
+    var nf = pickStr(d, [
+      "numeroFactura",
+      "numeroFacturaFE",
+      "numeroDocumento",
+      "facturaNumero",
+      "numeroFE",
+      "folio",
+    ]);
+    if (nf) return nf;
+    var npos = pickNum(d, ["numeroFacturaPos"]);
+    if (npos != null && npos > 0) {
+      if (pref) return pref + "-" + padTiquete(npos);
+      return "FV-" + padTiquete(npos);
+    }
+    if (docId && docId.indexOf("FV_") === 0) return docId;
+    if (docId && docId !== META_ID) return docId;
+    return "";
+  }
+
+  /** Parsea montos COP: 300000, "300.000", "$ 300.000", evita 300.0000 → 3000000. */
+  function parseMontoColombia(val) {
+    if (val == null || val === "") return null;
+    if (typeof val === "number" && isFinite(val)) return val;
+    var s = String(val)
+      .trim()
+      .replace(/\$/g, "")
+      .replace(/\s/g, "");
+    if (!s) return null;
+    if (/^\d{1,3}(\.\d{3})+$/.test(s)) {
+      return parseFloat(s.replace(/\./g, ""));
+    }
+    if (/^\d{1,3}(,\d{3})+$/.test(s)) {
+      return parseFloat(s.replace(/,/g, ""));
+    }
+    var m = s.match(/^(\d{1,3})\.(\d{3})(\d*)$/);
+    if (m) {
+      var extra = m[3] || "";
+      if (extra.length > 0 && /^0+$/.test(extra)) {
+        return parseFloat(m[1] + m[2]);
+      }
+    }
+    var n = parseFloat(s.replace(/\./g, "").replace(",", "."));
+    return isNaN(n) ? null : n;
+  }
+
+  function pickNum(d, keys) {
+    if (!d) return null;
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i];
+      if (d[k] == null || d[k] === "") continue;
+      var n = parseMontoColombia(d[k]);
+      if (n != null && !isNaN(n)) return n;
+    }
+    return null;
+  }
+
+  /** Si Firestore guardó un cero de más (300.000 → 3000000), corregir heurísticamente. */
+  function corregirMontoCeroExtra(m) {
+    if (m == null || m <= 0) return { valor: m, corregido: false };
+    if (m >= 100000 && m % 10 === 0) {
+      var div = m / 10;
+      if (div >= 5000 && div <= 50000000 && div % 50 === 0) {
+        return { valor: div, corregido: true };
+      }
+    }
+    return { valor: m, corregido: false };
+  }
+
+  function pickMontoFactura(d) {
+    var keys = [
+      "total",
+      "monto",
+      "montoRecibido",
+      "monto_recibido",
+      "valorTotal",
+      "valorCobrado",
+      "importe",
+      "totalCobrado",
+      "valor",
+    ];
+    var m = pickNum(d, keys);
+    if (m == null || m <= 0) {
+      for (var k in d) {
+        if (!Object.prototype.hasOwnProperty.call(d, k)) continue;
+        if (!/monto|total|valor|importe|recaudo|cobro/i.test(k)) continue;
+        var n = parseMontoColombia(d[k]);
+        if (n != null && n > 0) {
+          m = n;
+          break;
+        }
+      }
+    }
+    if (m != null && m > 0) {
+      var fix = corregirMontoCeroExtra(m);
+      return fix;
+    }
+    var sub = pickNum(d, [
+      "subtotal",
+      "subtotalImpreso",
+      "dSubtotalImpreso",
+      "baseGravable",
+    ]);
+    var iva = pickNum(d, [
+      "iva",
+      "ivaImpreso",
+      "dIvaImpreso",
+      "montoIva",
+      "valorIva",
+    ]);
+    if (sub != null && sub > 0) {
+      var tot = sub + (iva != null && iva > 0 ? iva : 0);
+      return corregirMontoCeroExtra(tot);
+    }
+    return { valor: 0, corregido: false };
+  }
+
+  function redondearPeso(v) {
+    return Math.floor(v + 0.5);
+  }
+
+  function desgloseDesdeTotal(total, ivaPct) {
+    if (total == null || isNaN(total) || total <= 0) {
+      return { subtotal: 0, iva: 0, total: 0, estimado: true };
+    }
+    var f = 1 + ivaPct / 100;
+    var tot = redondearPeso(total);
+    var sub = redondearPeso(tot / f);
+    var iva = tot - sub;
+    return { subtotal: sub, iva: iva, total: tot, estimado: true };
+  }
+
+  function parseFechaFactura(d) {
+    var raw =
+      d.fechaFactura ||
+      d.fecha_factura ||
+      d.fechaSalida ||
+      d.fechaEntrada ||
+      d.createdAt;
+    if (!raw) return null;
+    if (raw.toDate) return raw.toDate();
+    if (raw instanceof Date) return raw;
+    var t = Date.parse(String(raw));
+    return isNaN(t) ? null : new Date(t);
+  }
+
+  function tieneFacturaElectronica(d) {
+    if (
+      d.facturaElectronica === true ||
+      d.tieneFacturaElectronica === true ||
+      d.electronica === true ||
+      d.fe === true
+    ) {
+      return true;
+    }
+    if (String(d.cufe || d.CUFE || d.uuidFe || "").trim()) return true;
+    if (d.hayReceptor === true || d.bHayReceptor === true) return true;
+    if (String(d.receptorNumDoc || d.receptorNombre || "").trim()) return true;
+    return false;
+  }
+
+  function estadoDian(d) {
+    var enviada =
+      d.enviadaDian === true ||
+      d.dianEnviada === true ||
+      d.enviadoDian === true ||
+      d.validadaDian === true;
+    var estado = String(
+      d.estadoDian || d.estadoFE || d.estadoFacturaElectronica || ""
+    )
+      .trim()
+      .toLowerCase();
+    if (enviada) return "enviada";
+    if (
+      estado.indexOf("acept") >= 0 ||
+      estado.indexOf("valid") >= 0 ||
+      estado.indexOf("enviad") >= 0 ||
+      estado === "ok" ||
+      estado === "approved"
+    ) {
+      return "enviada";
+    }
+    if (
+      estado.indexOf("pend") >= 0 ||
+      estado.indexOf("proces") >= 0 ||
+      d.pendienteDian === true
+    ) {
+      return "pendiente";
+    }
+    if (tieneFacturaElectronica(d)) return "pendiente";
+    return "na";
+  }
+
+  function normalizeFacturaDoc(doc) {
+    if (!doc || doc.id === META_ID) return null;
+    var d = doc.data() || {};
+    if (d.tipoDocumento === "meta" || d.esMeta === true) return null;
+
+    var montoFix = pickMontoFactura(d);
+    var total = montoFix.valor || 0;
+    var montoCorregido = montoFix.corregido;
+    var sub = pickNum(d, [
+      "subtotal",
+      "subtotalImpreso",
+      "dSubtotalImpreso",
+      "baseGravable",
+    ]);
+    var iva = pickNum(d, [
+      "iva",
+      "ivaImpreso",
+      "dIvaImpreso",
+      "montoIva",
+      "valorIva",
+    ]);
+    var estimado = false;
+
+    if (sub != null && sub > 0 && iva != null && iva >= 0) {
+      if (total <= 0) {
+        total = sub + iva;
+      }
+      estimado = false;
+    } else if (sub != null && sub > 0 && total > 0) {
+      iva = total - sub;
+    } else if (total > 0) {
+      var calc = desgloseDesdeTotal(total, IVA_PCT);
+      sub = calc.subtotal;
+      iva = calc.iva;
+      total = calc.total;
+      estimado = true;
+    } else {
+      sub = 0;
+      iva = 0;
+    }
+
+    var fe = tieneFacturaElectronica(d);
+    var dian = estadoDian(d);
+    var numeroFactura = resolverNumeroFactura(d, doc.id) || "—";
+    var numeroTiquete = pickNum(d, ["numeroTiquete", "numero_tiquete"]);
+    var numeroFacturaPos = pickNum(d, ["numeroFacturaPos"]);
+
+    return {
+      id: doc.id,
+      placa: String(d.placa || "").trim().toUpperCase(),
+      sede: String(d.sede || "").trim(),
+      numeroFactura: numeroFactura,
+      numeroTiquete: numeroTiquete,
+      numeroFacturaPos: numeroFacturaPos,
+      fecha: parseFechaFactura(d),
+      subtotal: sub,
+      iva: iva,
+      total: total,
+      estimado: estimado,
+      montoCorregido: montoCorregido,
+      modoPago: String(d.modoPago || d.formaPago || "—").trim(),
+      fe: fe,
+      dian: dian,
+      cufe: String(d.cufe || d.CUFE || "").trim(),
+      operario: String(d.operario || d.operarioPos || "").trim(),
+    };
+  }
+
+  function loadCollection(name) {
+    return db
+      .collection(name)
+      .get()
+      .then(function (snap) {
+        var rows = [];
+        snap.docs.forEach(function (doc) {
+          var row = normalizeFacturaDoc(doc);
+          if (row) rows.push(row);
+        });
+        return rows;
+      });
+  }
+
+  function loadFacturas() {
+    if (!auth.currentUser) {
+      setStatus("Inicie sesión.", true);
+      return Promise.resolve();
+    }
+    setStatus("Cargando facturas…");
+    return loadCollection(COL)
+      .then(function (rows) {
+        if (rows.length) return rows;
+        return loadCollection(COL_LEGACY);
+      })
+      .then(function (rows) {
+        todasFacturas = rows;
+        todasFacturas.sort(function (a, b) {
+          var ta = a.fecha ? a.fecha.getTime() : 0;
+          var tb = b.fecha ? b.fecha.getTime() : 0;
+          return tb - ta;
+        });
+        setStatus(todasFacturas.length + " factura(s) cargadas.");
+        applyFilters();
+      })
+      .catch(function (err) {
+        console.error("[recaudos]", err);
+        setStatus("Error al cargar: " + (err.message || err), true);
+      });
+  }
+
+  function loadSedes() {
+    var sel = document.getElementById("rc-sede");
+    if (!sel) return Promise.resolve();
+    return db
+      .collection(SEDES_COL)
+      .where("activo", "==", true)
+      .get()
+      .catch(function () {
+        return db.collection(SEDES_COL).get();
+      })
+      .then(function (snap) {
+        var ids = {};
+        snap.docs.forEach(function (doc) {
+          var n = String((doc.data() || {}).nombre || doc.id).trim();
+          if (n) ids[doc.id] = n;
+        });
+        todasFacturas.forEach(function (f) {
+          if (f.sede) ids[f.sede] = f.sede;
+        });
+        var keys = Object.keys(ids).sort();
+        sel.innerHTML = '<option value="">Todas las sedes</option>';
+        keys.forEach(function (id) {
+          var opt = document.createElement("option");
+          opt.value = id;
+          opt.textContent = ids[id];
+          sel.appendChild(opt);
+        });
+      });
+  }
+
+  function dateInputVal(id) {
+    var el = document.getElementById(id);
+    if (!el || !el.value) return null;
+    var p = el.value.split("-");
+    return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+  }
+
+  function applyFilters() {
+    var desde = dateInputVal("rc-desde");
+    var hasta = dateInputVal("rc-hasta");
+    var sede = (document.getElementById("rc-sede").value || "").trim();
+    var placa = (document.getElementById("rc-placa").value || "")
+      .trim()
+      .toUpperCase()
+      .replace(/\s+/g, "");
+    var numFacturaQ = (document.getElementById("rc-num-factura").value || "")
+      .trim()
+      .toLowerCase();
+
+    if (hasta) {
+      hasta.setHours(23, 59, 59, 999);
+    }
+
+    filtradas = todasFacturas.filter(function (f) {
+      if (sede && f.sede !== sede) return false;
+      if (placa && f.placa.indexOf(placa) < 0) return false;
+      if (numFacturaQ) {
+        var blob = (
+          f.numeroFactura +
+          " " +
+          (f.numeroTiquete != null ? padTiquete(f.numeroTiquete) : "") +
+          " " +
+          (f.numeroFacturaPos != null ? String(f.numeroFacturaPos) : "") +
+          " " +
+          f.id
+        ).toLowerCase();
+        if (blob.indexOf(numFacturaQ) < 0) return false;
+      }
+      if (desde && (!f.fecha || f.fecha < desde)) return false;
+      if (hasta && (!f.fecha || f.fecha > hasta)) return false;
+      return true;
+    });
+
+    render();
+  }
+
+  function render() {
+    var sumSub = 0;
+    var sumIva = 0;
+    var sumTot = 0;
+    var feCount = 0;
+    var dianOk = 0;
+    var dianPend = 0;
+    var feNone = 0;
+    var porPago = {};
+    var estimadas = 0;
+    var corregidas = 0;
+
+    tbody.innerHTML = "";
+    filtradas.forEach(function (f) {
+      sumSub += f.subtotal;
+      sumIva += f.iva;
+      sumTot += f.total;
+      if (f.estimado) estimadas++;
+      if (f.montoCorregido) corregidas++;
+      if (f.fe) feCount++;
+      else feNone++;
+      if (f.dian === "enviada") dianOk++;
+      else if (f.dian === "pendiente") dianPend++;
+      var mp = f.modoPago || "—";
+      porPago[mp] = (porPago[mp] || 0) + f.total;
+
+      var tr = document.createElement("tr");
+      var fePill = f.fe
+        ? '<span class="rc-pill rc-pill--fe">Sí</span>'
+        : '<span class="rc-pill rc-pill--no-fe">No</span>';
+      var dianPill =
+        f.dian === "enviada"
+          ? '<span class="rc-pill rc-pill--dian-ok">Enviada</span>'
+          : f.dian === "pendiente"
+            ? '<span class="rc-pill rc-pill--dian-pend">Pendiente</span>'
+            : '<span class="rc-pill rc-pill--dian-na">N/A</span>';
+      var fechaTxt = f.fecha
+        ? f.fecha.toLocaleString("es-CO", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : "—";
+
+      var tiqueteTxt =
+        f.numeroTiquete != null
+          ? '<span class="rc-num-tiquete">Tiquete ' + escapeHtml(padTiquete(f.numeroTiquete)) + "</span>"
+          : f.numeroFacturaPos != null && f.numeroFacturaPos !== f.numeroTiquete
+            ? '<span class="rc-num-tiquete">POS ' + escapeHtml(String(f.numeroFacturaPos)) + "</span>"
+            : "";
+
+      tr.innerHTML =
+        "<td>" +
+        escapeHtml(fechaTxt) +
+        "</td><td><span class=\"rc-num-factura\">" +
+        escapeHtml(f.numeroFactura || "—") +
+        "</span>" +
+        tiqueteTxt +
+        "</td><td>" +
+        escapeHtml(f.placa || "—") +
+        "</td><td>" +
+        escapeHtml(f.sede || "—") +
+        "</td><td>" +
+        fePill +
+        "</td><td>" +
+        dianPill +
+        (f.cufe ? '<br><small style="color:#6b7280">' + escapeHtml(f.cufe.slice(0, 24)) + "…</small>" : "") +
+        "</td><td class=\"num\">" +
+        fmtMoney(f.subtotal) +
+        (f.estimado ? "*" : "") +
+        (f.montoCorregido ? "†" : "") +
+        "</td><td class=\"num\">" +
+        fmtMoney(f.iva) +
+        "</td><td class=\"num\">" +
+        fmtMoney(f.total) +
+        "</td><td>" +
+        escapeHtml(f.modoPago) +
+        '</td><td><button type="button" class="rc-btn-dl" data-rc-row-csv="' +
+        escapeAttr(f.id) +
+        '" title="Descargar esta factura en CSV">CSV</button></td>';
+      tbody.appendChild(tr);
+    });
+
+    emptyEl.hidden = filtradas.length > 0;
+
+    document.getElementById("rc-sum-sub").textContent = fmtMoney(sumSub);
+    document.getElementById("rc-sum-iva").textContent = fmtMoney(sumIva);
+    document.getElementById("rc-sum-tot").textContent = fmtMoney(sumTot);
+    document.getElementById("rc-sum-ganancia").textContent = fmtMoney(sumSub);
+    document.getElementById("rc-sum-impuesto").textContent = fmtMoney(sumIva);
+    document.getElementById("rc-sum-count").textContent = String(filtradas.length);
+    document.getElementById("rc-fe-count").textContent = String(feCount);
+    document.getElementById("rc-dian-ok").textContent = String(dianOk);
+    document.getElementById("rc-dian-pend").textContent = String(dianPend);
+    document.getElementById("rc-fe-none").textContent = String(feNone);
+
+    var dlPago = document.getElementById("rc-dl-pago");
+    dlPago.innerHTML = "";
+    Object.keys(porPago)
+      .sort(function (a, b) {
+        return porPago[b] - porPago[a];
+      })
+      .forEach(function (k) {
+        var dt = document.createElement("dt");
+        dt.textContent = k;
+        var dd = document.createElement("dd");
+        dd.textContent = fmtMoney(porPago[k]);
+        dlPago.appendChild(dt);
+        dlPago.appendChild(dd);
+      });
+    if (!Object.keys(porPago).length) {
+      dlPago.innerHTML = "<dt>—</dt><dd>0</dd>";
+    }
+
+    var kpis = document.getElementById("rc-kpis");
+    kpis.innerHTML =
+      '<div class="rc-kpi"><span>Facturas</span><strong>' +
+      filtradas.length +
+      "</strong></div>" +
+      '<div class="rc-kpi"><span>Subtotal</span><strong>' +
+      fmtMoney(sumSub) +
+      "</strong></div>" +
+      '<div class="rc-kpi"><span>IVA</span><strong>' +
+      fmtMoney(sumIva) +
+      "</strong></div>" +
+      '<div class="rc-kpi"><span>Total recaudo</span><strong>' +
+      fmtMoney(sumTot) +
+      "</strong></div>" +
+      '<div class="rc-kpi rc-kpi--gain"><span>Ingreso neto</span><strong>' +
+      fmtMoney(sumSub) +
+      "</strong></div>" +
+      '<div class="rc-kpi rc-kpi--tax"><span>IVA a reportar</span><strong>' +
+      fmtMoney(sumIva) +
+      "</strong></div>";
+
+    var noteParts = [];
+    if (estimadas > 0) {
+      noteParts.push(
+        "*" +
+          estimadas +
+          " fila(s): subtotal/IVA calculados al " +
+          IVA_PCT +
+          "% (Firestore sin desglose)."
+      );
+    }
+    if (corregidas > 0) {
+      noteParts.push(
+        "†" +
+          corregidas +
+          " fila(s): monto ajustado (se detectó un cero de más en Firestore, p. ej. 300.000 guardado como 3000000)."
+      );
+    }
+    if (filtradas.length && !noteParts.length) {
+      noteParts.push(
+        "Montos desde campos monto, total, montoRecibido y subtotal/IVA en Firestore."
+      );
+    }
+    noteEl.textContent = noteParts.join(" ");
+
+    setStatus(filtradas.length + " factura(s) en vista · " + todasFacturas.length + " en total.");
+  }
+
+  function escapeAttr(s) {
+    return String(s || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+  }
+
+  function csvCell(val) {
+    var s = val == null ? "" : String(val);
+    if (/[;"\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+
+  function downloadBlob(filename, content, mime) {
+    var blob = new Blob([content], { type: mime || "application/octet-stream" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    setStatus("Descargado: " + filename);
+  }
+
+  function filaToCsvRow(f) {
+    return [
+      f.fecha ? f.fecha.toISOString() : "",
+      f.numeroFactura,
+      f.numeroTiquete != null ? padTiquete(f.numeroTiquete) : "",
+      f.numeroFacturaPos != null ? f.numeroFacturaPos : "",
+      f.id,
+      f.placa,
+      f.sede,
+      f.operario,
+      f.fe ? "si" : "no",
+      f.dian,
+      Math.round(f.subtotal),
+      Math.round(f.iva),
+      Math.round(f.total),
+      f.modoPago,
+      f.cufe,
+      f.estimado ? "si" : "no",
+    ]
+      .map(csvCell)
+      .join(";");
+  }
+
+  var CSV_HEADER =
+    "fecha;numero_factura;numero_tiquete;numero_factura_pos;id_firestore;placa;sede;operario;factura_electronica;estado_dian;subtotal;iva;total;modo_pago;cufe;desglose_estimado";
+
+  function exportCsvDetalle() {
+    if (!filtradas.length) {
+      window.alert("No hay filas para exportar.");
+      return;
+    }
+    var lines = [CSV_HEADER];
+    filtradas.forEach(function (f) {
+      lines.push(filaToCsvRow(f));
+    });
+    downloadBlob(
+      "recaudos_detalle_" + new Date().toISOString().slice(0, 10) + ".csv",
+      "\ufeff" + lines.join("\n"),
+      "text/csv;charset=utf-8"
+    );
+  }
+
+  function exportCsvResumen() {
+    var sumSub = 0;
+    var sumIva = 0;
+    var sumTot = 0;
+    var feCount = 0;
+    var dianOk = 0;
+    filtradas.forEach(function (f) {
+      sumSub += f.subtotal;
+      sumIva += f.iva;
+      sumTot += f.total;
+      if (f.fe) feCount++;
+      if (f.dian === "enviada") dianOk++;
+    });
+    var desde = document.getElementById("rc-desde").value || "";
+    var hasta = document.getElementById("rc-hasta").value || "";
+    var lines = [
+      "tipo;valor",
+      csvCell("periodo_desde") + ";" + csvCell(desde),
+      csvCell("periodo_hasta") + ";" + csvCell(hasta),
+      csvCell("facturas") + ";" + filtradas.length,
+      csvCell("subtotal") + ";" + Math.round(sumSub),
+      csvCell("iva") + ";" + Math.round(sumIva),
+      csvCell("total_recaudo") + ";" + Math.round(sumTot),
+      csvCell("ingreso_neto_subtotal") + ";" + Math.round(sumSub),
+      csvCell("iva_a_reportar") + ";" + Math.round(sumIva),
+      csvCell("con_factura_electronica") + ";" + feCount,
+      csvCell("enviadas_dian") + ";" + dianOk,
+    ];
+    downloadBlob(
+      "recaudos_resumen_" + new Date().toISOString().slice(0, 10) + ".csv",
+      "\ufeff" + lines.join("\n"),
+      "text/csv;charset=utf-8"
+    );
+  }
+
+  function exportJson() {
+    if (!filtradas.length) {
+      window.alert("No hay datos para exportar.");
+      return;
+    }
+    var payload = {
+      exportadoEn: new Date().toISOString(),
+      filtros: {
+        desde: document.getElementById("rc-desde").value,
+        hasta: document.getElementById("rc-hasta").value,
+        sede: document.getElementById("rc-sede").value,
+        placa: document.getElementById("rc-placa").value,
+        numeroFactura: document.getElementById("rc-num-factura").value,
+      },
+      facturas: filtradas.map(function (f) {
+        return {
+          id: f.id,
+          numeroFactura: f.numeroFactura,
+          numeroTiquete: f.numeroTiquete,
+          numeroFacturaPos: f.numeroFacturaPos,
+          fecha: f.fecha ? f.fecha.toISOString() : null,
+          placa: f.placa,
+          sede: f.sede,
+          subtotal: f.subtotal,
+          iva: f.iva,
+          total: f.total,
+          facturaElectronica: f.fe,
+          estadoDian: f.dian,
+          modoPago: f.modoPago,
+          cufe: f.cufe,
+          desgloseEstimado: f.estimado,
+        };
+      }),
+    };
+    downloadBlob(
+      "recaudos_" + new Date().toISOString().slice(0, 10) + ".json",
+      JSON.stringify(payload, null, 2),
+      "application/json"
+    );
+  }
+
+  function exportFilaCsv(docId) {
+    var f = null;
+    for (var i = 0; i < filtradas.length; i++) {
+      if (filtradas[i].id === docId) {
+        f = filtradas[i];
+        break;
+      }
+    }
+    if (!f) return;
+    var safeName = String(f.numeroFactura || f.id).replace(/[^\w\-]+/g, "_");
+    downloadBlob(
+      "factura_" + safeName + ".csv",
+      "\ufeff" + CSV_HEADER + "\n" + filaToCsvRow(f),
+      "text/csv;charset=utf-8"
+    );
+  }
+
+  function exportPrint() {
+    if (!filtradas.length) {
+      window.alert("No hay datos para imprimir. Aplique filtros o recargue.");
+      return;
+    }
+    window.print();
+  }
+
+  function initDates() {
+    var hoy = new Date();
+    var hace30 = new Date(hoy.getTime());
+    hace30.setDate(hace30.getDate() - 30);
+    var fmt = function (d) {
+      return (
+        d.getFullYear() +
+        "-" +
+        String(d.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(d.getDate()).padStart(2, "0")
+      );
+    };
+    document.getElementById("rc-desde").value = fmt(hace30);
+    document.getElementById("rc-hasta").value = fmt(hoy);
+  }
+
+  document.getElementById("rc-btn-apply").addEventListener("click", applyFilters);
+  document.getElementById("rc-btn-reload").addEventListener("click", loadFacturas);
+  document.getElementById("rc-btn-csv-detalle").addEventListener("click", exportCsvDetalle);
+  document.getElementById("rc-btn-csv-resumen").addEventListener("click", exportCsvResumen);
+  document.getElementById("rc-btn-json").addEventListener("click", exportJson);
+  document.getElementById("rc-btn-print").addEventListener("click", exportPrint);
+  tbody.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-rc-row-csv]");
+    if (btn) exportFilaCsv(btn.getAttribute("data-rc-row-csv"));
+  });
+
+  initDates();
+
+  auth.onAuthStateChanged(function (user) {
+    if (user) {
+      loadFacturas().then(loadSedes);
+    } else {
+      todasFacturas = [];
+      filtradas = [];
+      render();
+      setStatus("");
+    }
+  });
+})();
+</script>
+<script src="lugano-firestore-alertas.js"></script>
+</body>
+</html>

@@ -1,0 +1,2967 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="logolugano1.jpg">
+  <link rel="apple-touch-icon" href="logolugano1.jpg">
+  <title>Planillas y cierres · S.P.A.C.E</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="help-widget.css">
+  <script src="help-widget.js" defer></script>
+  <script src="lugano-banner-ssr.js"></script>
+  <script src="site-header-toggle.js" defer></script>
+  <script src="lugano-header-alerts.js" defer></script>
+  <style>
+    body.pc-body {
+      margin: 0;
+      background: #0a0a0a;
+      color: #e8eaef;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      text-align: left;
+      font-size: 14px;
+    }
+    .pc-auth-gate {
+      max-width: 440px;
+      margin: 48px auto;
+      padding: 24px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(165deg, #1a1a1a 0%, #121212 100%);
+      text-align: center;
+    }
+    .pc-auth-gate p { color: #9ca3af; margin: 0 0 16px; }
+    .pc-btn-google {
+      padding: 12px 22px;
+      background: #4285f4;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .pc-wrap {
+      max-width: 1325px;
+      margin: 0 auto;
+      padding: 16px 16px 40px;
+      box-sizing: border-box;
+    }
+    .pc-head {
+      margin-bottom: 16px;
+    }
+    .pc-head h2 { margin: 0 0 8px; font-size: 20px; color: #f3f4f6; }
+    .pc-head p { margin: 0; font-size: 13px; color: #9ca3af; line-height: 1.5; max-width: 800px; }
+    .pc-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .pc-toolbar a,
+    .pc-toolbar button {
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #444;
+      background: #252525;
+      color: #eee;
+      font-family: inherit;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .pc-toolbar a:hover,
+    .pc-toolbar button:hover { background: #333; }
+    .pc-toolbar button.primary {
+      border-color: #e65100;
+      background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+      color: #fff;
+    }
+    #pc-status { font-size: 13px; color: #94a3b8; flex: 1; min-width: 200px; }
+    .rep-subnav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 16px;
+    }
+    .rep-subnav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #c4c9d4;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      text-decoration: none;
+      box-sizing: border-box;
+    }
+    .rep-subnav-btn:hover {
+      background: #252525;
+      border-color: #555;
+      color: #e8eaef;
+    }
+    .rep-subnav-btn.is-active {
+      border-color: #e65100;
+      background: linear-gradient(180deg, rgba(255, 152, 0, 0.22) 0%, rgba(230, 81, 0, 0.12) 100%);
+      color: #fff3e0;
+      cursor: default;
+      pointer-events: none;
+    }
+    .pc-layout {
+      display: grid;
+      grid-template-columns: 260px 280px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) {
+      .pc-layout { grid-template-columns: 1fr; }
+    }
+    .pc-card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .pc-card h3 {
+      margin: 0;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+      border-bottom: 1px solid #333;
+      color: #e8eaef;
+    }
+    .pc-list {
+      list-style: none;
+      margin: 0;
+      padding: 6px;
+      max-height: min(60vh, 480px);
+      overflow-y: auto;
+    }
+    .pc-list button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      margin-bottom: 4px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: #1a1a1a;
+      color: #e0e0e0;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .pc-list button:hover { background: #252525; }
+    .pc-list button.is-active {
+      border-color: #ff9800;
+      background: #2d1f26;
+    }
+    .pc-list .pc-sub { display: block; font-size: 11px; color: #9ca3af; margin-top: 4px; }
+    .pc-placeholder {
+      padding: 20px 14px;
+      color: #6b7280;
+      font-size: 13px;
+    }
+    .pc-detail-header {
+      padding: 12px 14px;
+      border-bottom: 1px solid #2a2a2a;
+      background: #0d0d0d;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .pc-detail-header-main {
+      flex: 1;
+      min-width: 0;
+    }
+    .pc-detail-header-actions {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+      flex-shrink: 0;
+      gap: 8px;
+      margin-top: 2px;
+    }
+    .pc-detail-header .pc-cierre-cal-btn,
+    .pc-detail-header .pc-btn-export-csv,
+    .pc-detail-header .pc-btn-print-cierre {
+      flex-shrink: 0;
+    }
+    .pc-detail-header strong { color: #fff3e0; }
+    .pc-total-pill {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: rgba(255, 152, 0, 0.15);
+      border: 1px solid rgba(255, 152, 0, 0.4);
+      font-weight: 700;
+      color: #ffe0b2;
+    }
+    .pc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .pc-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #2a2a2a;
+      text-align: left;
+      vertical-align: top;
+    }
+    .pc-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    tr.pc-cierre-summary td {
+      vertical-align: middle;
+      padding: 12px 12px;
+      border-bottom: 1px solid #333;
+      background: linear-gradient(180deg, #141418 0%, #0f0f12 100%);
+    }
+    .pc-cierre-cell--idx {
+      width: 52px;
+      text-align: center;
+    }
+    .pc-cierre-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 30px;
+      height: 30px;
+      padding: 0 9px;
+      border-radius: 10px;
+      background: #222228;
+      border: 1px solid #3f3f48;
+      font-weight: 800;
+      font-size: 13px;
+      color: #f3f4f6;
+      font-variant-numeric: tabular-nums;
+    }
+    .pc-cierre-doc {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      align-items: flex-start;
+    }
+    .pc-cierre-doc-date {
+      font-size: 13px;
+      font-weight: 600;
+      color: #eceff4;
+      line-height: 1.3;
+    }
+    .pc-cierre-doc-time {
+      font-size: 12px;
+      font-weight: 500;
+      color: #94a3b8;
+      font-variant-numeric: tabular-nums;
+    }
+    code.pc-cierre-id-raw {
+      font-size: 12px;
+      background: #1a1a1f;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #333;
+      color: #cbd5e1;
+    }
+    .pc-cierre-cell--amt {
+      text-align: right;
+      white-space: normal;
+      max-width: 320px;
+    }
+    .pc-cierre-recaudo-note {
+      margin-top: 8px;
+      font-size: 11px;
+      line-height: 1.35;
+      text-align: right;
+    }
+    .pc-cierre-recaudo-note--ok {
+      color: #a5d6a7;
+      font-weight: 600;
+    }
+    .pc-cierre-recaudo-note--warn {
+      color: #ffab91;
+      font-weight: 600;
+    }
+    .pc-pos-compare {
+      margin: 12px 0 0;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #3d4a5c;
+      background: linear-gradient(145deg, #141a22 0%, #0f1218 100%);
+    }
+    .pc-pos-compare-title {
+      margin: 0 0 10px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #93c5fd;
+    }
+    .pc-pos-compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px 12px;
+    }
+    .pc-pos-compare-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .pc-pos-compare-item span {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #6b7280;
+    }
+    .pc-pos-compare-item strong {
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+      color: #e5e7eb;
+    }
+    .pc-pos-compare-item strong.pc-pos-val--pos {
+      color: #7dd3fc;
+    }
+    .pc-pos-compare-foot {
+      margin: 10px 0 0;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .pc-pos-compare-foot--ok {
+      color: #86efac;
+      font-weight: 600;
+    }
+    .pc-pos-compare-foot--warn {
+      color: #fdba74;
+      font-weight: 600;
+    }
+    .pc-op-pos-pill {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: #bae6fd;
+    }
+    .pc-op-pos-pill--warn {
+      border-color: #7c2d12;
+      background: #2a1810;
+      color: #fdba74;
+    }
+    .pc-cierre-picker-section {
+      margin-bottom: 4px;
+    }
+    button.pc-cierre-cal-btn {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 1px solid #555;
+      background: linear-gradient(180deg, #2a2a32 0%, #1e1e24 100%);
+      color: #c5cae9;
+      font-family: inherit;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+    button.pc-cierre-cal-btn:hover {
+      border-color: #ff9800;
+      color: #fff3e0;
+      background: rgba(255, 152, 0, 0.12);
+    }
+    button.pc-cierre-cal-btn[aria-expanded="true"] {
+      border-color: #ff9800;
+      color: #fff3e0;
+      box-shadow: 0 0 0 1px rgba(255, 152, 0, 0.35);
+    }
+    button.pc-cierre-cal-btn svg {
+      display: block;
+    }
+    .pc-cierre-cal-panel {
+      margin: 0 0 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(100, 120, 180, 0.4);
+      background: #12121a;
+    }
+    .pc-cierre-cal-panel[hidden] {
+      display: none !important;
+    }
+    .pc-cierre-cal-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .pc-cierre-cal-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #c5c8d0;
+    }
+    input.pc-cierre-cal-input {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #0d0d12;
+      color: #eceff4;
+      font-family: inherit;
+      font-size: 14px;
+      min-height: 38px;
+    }
+    button.pc-cierre-cal-go {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid #e65100;
+      background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+      color: #fff;
+      font-family: inherit;
+    }
+    button.pc-cierre-cal-go:hover {
+      filter: brightness(1.06);
+    }
+    .pc-cierre-cal-msg {
+      margin: 10px 0 0;
+      font-size: 12px;
+      color: #ffab91;
+      min-height: 1.2em;
+    }
+    .pc-cierre-cal-msg:empty {
+      display: none;
+    }
+    .pc-cierre-picker {
+      margin-bottom: 12px;
+    }
+    .pc-cierre-select-card {
+      display: flex;
+      align-items: stretch;
+      gap: 12px;
+      padding: 8px 10px 8px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      background: linear-gradient(180deg, #18181d 0%, #121216 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+    .pc-cierre-select-label {
+      flex: 0 0 auto;
+      align-self: center;
+      margin: 0;
+      padding-right: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #a8b0c4;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .pc-cierre-select-inner {
+      flex: 1;
+      min-width: 0;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 152, 0, 0.22);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .pc-cierre-select-inner:focus-within {
+      border-color: rgba(255, 152, 0, 0.55);
+      box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.12);
+    }
+    select.pc-cierre-select {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 9px 38px 9px 11px;
+      border-radius: 7px;
+      border: none;
+      background-color: transparent;
+      color: #f1f5f9;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      line-height: 1.35;
+      font-variant-numeric: tabular-nums;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23eb1064' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 14px;
+    }
+    select.pc-cierre-select:hover {
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+    select.pc-cierre-select:focus {
+      outline: none;
+    }
+    select.pc-cierre-select option {
+      background: #1c1c22;
+      color: #eceff4;
+      font-weight: 500;
+    }
+    @media (max-width: 520px) {
+      .pc-cierre-select-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 10px;
+      }
+      .pc-cierre-select-label {
+        align-self: flex-start;
+      }
+    }
+    .pc-cierre-total {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: linear-gradient(165deg, rgba(46, 125, 50, 0.28) 0%, rgba(27, 94, 32, 0.14) 100%);
+      border: 1px solid rgba(129, 199, 132, 0.45);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+      font-size: 17px;
+      font-weight: 800;
+      color: #e8f5e9;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.03em;
+    }
+    .pc-amounts {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .pc-field {
+      background: #16161a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .pc-field-label {
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+    .pc-field-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: #e8f5e9;
+      font-variant-numeric: tabular-nums;
+    }
+    .pc-no-desglose {
+      font-size: 12px;
+      color: #6b7280;
+      margin: 0 0 8px;
+    }
+    .pc-advances-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9ca3af;
+      margin: 14px 0 8px;
+    }
+    .pc-field--advance-total {
+      grid-column: 1 / -1;
+      border-color: rgba(129, 199, 132, 0.35);
+    }
+    .pc-voucher-check {
+      margin: 14px 0 12px;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(76, 175, 80, 0.35);
+      background: rgba(27, 94, 32, 0.12);
+    }
+    .pc-voucher-check-title {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: #c8e6c9;
+      font-weight: 600;
+    }
+    .pc-voucher-label {
+      display: block;
+      font-size: 11px;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+    textarea.pc-voucher-tally {
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 100px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #0d0d10;
+      color: #eceff4;
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.45;
+      resize: vertical;
+    }
+    textarea.pc-voucher-tally:focus {
+      outline: 2px solid rgba(76, 175, 80, 0.45);
+      outline-offset: 1px;
+    }
+    .pc-voucher-result {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+      border: 1px solid #333;
+      background: #141418;
+    }
+    .pc-voucher-result--ok {
+      border-color: rgba(76, 175, 80, 0.55);
+      background: rgba(46, 125, 50, 0.15);
+    }
+    .pc-voucher-result--bad {
+      border-color: rgba(229, 57, 53, 0.55);
+      background: rgba(183, 28, 28, 0.15);
+    }
+    .pc-voucher-result--neutral {
+      border-color: #444;
+    }
+    .pc-match {
+      color: #a5d6a7;
+      font-weight: 700;
+    }
+    .pc-diff {
+      color: #ffab91;
+      font-weight: 700;
+    }
+    .pc-field-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .pc-field-head .pc-field-label {
+      margin-bottom: 0;
+      flex: 1;
+      min-width: 140px;
+    }
+    button.pc-btn-contar {
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid #e65100;
+      background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+      color: #fff;
+      font-family: inherit;
+      flex-shrink: 0;
+    }
+    button.pc-btn-contar:hover {
+      filter: brightness(1.08);
+    }
+    .pc-voucher-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    button.pc-btn-plus-ins {
+      width: 36px;
+      height: 32px;
+      padding: 0;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1;
+      cursor: pointer;
+      border: 1px solid #555;
+      background: #2a2a30;
+      color: #c5cae9;
+      font-family: inherit;
+    }
+    button.pc-btn-plus-ins:hover {
+      background: #363640;
+      color: #fff;
+    }
+    .pc-voucher-hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin: 0 0 8px;
+      line-height: 1.45;
+    }
+    .pc-vc-wrap {
+      margin: 12px 0 14px;
+      padding: 14px 14px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(100, 120, 180, 0.35);
+      background: linear-gradient(165deg, #12121a 0%, #0c0c10 100%);
+    }
+    .pc-vc-title {
+      margin: 0 0 4px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #e0e7ff;
+    }
+    .pc-vc-sub {
+      margin: 0 0 6px;
+      font-size: 11px;
+      color: #6b7280;
+    }
+    .pc-vc-stacked {
+      display: flex;
+      height: 26px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #2a2a32;
+      margin-bottom: 10px;
+    }
+    .pc-vc-seg {
+      min-width: 2px;
+      height: 100%;
+      transition: width 0.2s ease;
+    }
+    .pc-vc-seg--v {
+      background: linear-gradient(180deg, #5c9c6a 0%, #2e7d32 100%);
+    }
+    .pc-vc-seg--c {
+      background: linear-gradient(180deg, #5c9fd4 0%, #1565c0 100%);
+    }
+    .pc-vc-seg--m {
+      background: linear-gradient(180deg, #d4a574 0%, #bf6c00 100%);
+    }
+    .pc-vc-seg--empty {
+      flex: 1;
+      background: #1e1e24;
+    }
+    .pc-vc-legend {
+      list-style: none;
+      margin: 0 0 12px;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+      font-size: 12px;
+      color: #c5c8d0;
+    }
+    .pc-vc-legend li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pc-vc-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .pc-vc-dot--v { background: #4caf50; }
+    .pc-vc-dot--c { background: #42a5f5; }
+    .pc-vc-dot--m { background: #ff9800; }
+    .pc-vc-legend strong {
+      color: #e8eaef;
+      font-variant-numeric: tabular-nums;
+    }
+    .pc-vc-scale {
+      margin-top: 4px;
+    }
+    .pc-vc-row {
+      display: grid;
+      grid-template-columns: 118px 1fr minmax(7.5em, auto);
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    .pc-vc-row:last-child { margin-bottom: 0; }
+    .pc-vc-lab {
+      color: #9ca3af;
+      font-size: 11px;
+    }
+    .pc-vc-track {
+      height: 18px;
+      background: #1a1a20;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #333;
+    }
+    .pc-vc-fill {
+      height: 100%;
+      border-radius: 5px 0 0 5px;
+      min-width: 0;
+      transition: width 0.2s ease;
+    }
+    .pc-vc-fill--v { background: linear-gradient(90deg, #66bb6a, #2e7d32); }
+    .pc-vc-fill--c { background: linear-gradient(90deg, #64b5f6, #0d47a1); }
+    .pc-vc-fill--m { background: linear-gradient(90deg, #ffb74d, #e65100); }
+    .pc-vc-amt {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      color: #e8f5e9;
+    }
+    .pc-vc-pct {
+      font-size: 10px;
+      color: #6b7280;
+      font-weight: 500;
+      margin-left: 4px;
+    }
+    .pc-vc-foot {
+      margin: 8px 0 0;
+      font-size: 11px;
+      color: #6b7280;
+    }
+    .pc-main[hidden], .pc-auth-gate[hidden] { display: none !important; }
+
+    button.pc-btn-export-csv,
+    button.pc-btn-print-cierre {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 1px solid #555;
+      background: linear-gradient(180deg, #2a2a32 0%, #1e1e24 100%);
+      color: #c5cae9;
+      font-family: inherit;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+    button.pc-btn-export-csv {
+      border-color: #e65100;
+      background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+      color: #fff;
+    }
+    button.pc-btn-export-csv:hover {
+      border-color: #ffb74d;
+      filter: brightness(1.06);
+    }
+    button.pc-btn-print-cierre:hover {
+      border-color: #ff9800;
+      color: #fff3e0;
+      background: rgba(255, 152, 0, 0.12);
+    }
+    button.pc-btn-export-csv svg,
+    button.pc-btn-print-cierre svg {
+      display: block;
+      pointer-events: none;
+    }
+    .pc-print-header {
+      display: none;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid #333;
+    }
+    .pc-print-logo-text {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+    .pc-print-title {
+      margin: 0 0 8px;
+      font-size: 22px;
+      font-weight: 800;
+      color: #111;
+    }
+    .pc-print-meta,
+    .pc-print-date {
+      margin: 6px 0 0;
+      font-size: 12px;
+      color: #374151;
+      line-height: 1.5;
+    }
+    .pc-print-meta code {
+      font-size: 11px;
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    @media print {
+      @page { margin: 14mm; size: A4 portrait; }
+      body.pc-body {
+        background: #fff !important;
+        color: #111 !important;
+      }
+      body.pc-body header,
+      body.pc-body #pc-auth-gate,
+      body.pc-body .pc-no-print,
+      body.pc-body .pc-head,
+      body.pc-body .pc-toolbar,
+      body.pc-body .pc-layout > .pc-card:not(#pc-detail-card) {
+        display: none !important;
+      }
+      body.pc-body #pc-main {
+        display: block !important;
+        padding: 0 !important;
+      }
+      body.pc-body .pc-wrap {
+        max-width: none !important;
+        padding: 0 !important;
+      }
+      body.pc-body .pc-layout {
+        display: block !important;
+      }
+      body.pc-body #pc-detail-card {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        page-break-inside: avoid;
+      }
+      body.pc-body #pc-detail-card > h3 {
+        font-size: 14pt;
+        color: #111 !important;
+      }
+      body.pc-body .pc-print-header {
+        display: block !important;
+      }
+      body.pc-body #pc-detail {
+        font-size: 10pt;
+      }
+      body.pc-body .pc-table,
+      body.pc-body .pc-amounts,
+      body.pc-body .pc-voucher-check,
+      body.pc-body .pc-vc-wrap,
+      body.pc-body .pc-cash-advances-wrap {
+        break-inside: avoid;
+      }
+      body.pc-body .pc-cierre-total {
+        color: #111 !important;
+        background: #f0fdf4 !important;
+        border-color: #86efac !important;
+      }
+      body.pc-body textarea.pc-voucher-tally {
+        border: 1px solid #ccc !important;
+        background: #fafafa !important;
+        color: #111 !important;
+      }
+      body.pc-body .pc-field {
+        background: #f9fafb !important;
+        border-color: #e5e7eb !important;
+      }
+      body.pc-body .pc-field-value {
+        color: #111 !important;
+      }
+    }
+  </style>
+  <script>
+    window.onload = function () {
+      var el = document.getElementById("rep");
+      if (el) el.style.background = "black";
+    };
+  </script>
+</head>
+
+<header bgcolor="white" text="white">
+  <center>
+    <table border="0" style="
+    background-position: center;
+    background: position y 10pt;
+    background-image: url(banner1.png);" font color="white" text="white" text-align="center" width="1325">
+      <tr>
+        <td rowspan="2" bgcolor="black"><a href="index.html"><img src="logolugano1.jpg" height="120" bgcolor="black" alt="S.P.A.C.E"></a></td>
+        <td text="white" colspan="11" height="120" color="white">
+          <h1 style="color: aliceblue;">Planillas y cierres</h1>
+        </td>
+      </tr>
+      <tr>
+        <td width="120"><center><a href="index.html" class="btnmnini"><span style="color: aliceblue;">inicio</span></a></center></td>
+        <td width="120"><center><a href="planillados.html" class="btnmnini"><span style="color: aliceblue;">Planillados</span></a></center></td>
+        <td width="120"><center><a href="mensualidades.html" class="btnmnini"><span style="color: aliceblue;">Mensualidades</span></a></center></td>
+        <td width="120" id="reportes"><center><a href="reportes.html" id="rep" class="btnmnini"><span style="color: aliceblue;">Reportes</span></a></center></td>
+        <td width="120"><center><a href="estadistico.html" class="btnmnini"><span style="color: aliceblue;">Estadístico</span></a></center></td>
+        <td width="120"><center><a href="seguridad.html" class="btnmnini"><span style="color: aliceblue;">Seguridad</span></a></center></td>
+        <td width="120"><center><a href="usuarios.html" class="btnmnini"><span style="color: aliceblue;">Usuarios</span></a></center></td>
+        <td width="120"><center><a href="estacionamientos.html" class="btnmnini"><span style="color: aliceblue;">Estacionamientos</span></a></center></td>
+        <td width="120"><center><a href="programacion.html" class="btnmnini"><span style="color: aliceblue;">Programación</span></a></center></td>
+        <td width="120"><center><a href="ayuda.html" class="btnmnini"><span style="color: aliceblue;">Ayuda</span></a></center></td>
+      </tr>
+    </table>
+  </center>
+</header>
+
+<body class="pc-body" bgcolor="black" text="white">
+
+  <div id="pc-auth-gate" class="pc-auth-gate">
+    <p>Iniciá sesión con Google para listar cierres en <code>cierres/{sede}/{operario}/…</code>.</p>
+    <button type="button" class="pc-btn-google" id="pc-btn-google">Iniciar sesión con Google</button>
+  </div>
+
+  <div id="pc-main" class="pc-wrap" hidden>
+    <div class="pc-head">
+      <h2>Explorar cierres por estacionamiento y operario</h2>
+      <p>
+        Se listan las sedes que tienen al menos un documento de cierre. El total <strong>POS</strong> se toma de la colección
+        <code>CIERRES</code> (<code>totalRecaudo</code>, documentos <code>POS_{sede}_{fecha}_{hora}</code>) y se compara con el recaudo del operario (turno + boletas manuales).
+      </p>
+    </div>
+
+    <nav class="rep-subnav" aria-label="Submenú de reportes">
+      <a class="rep-subnav-btn" href="reportes.html">Panel de reportes</a>
+      <span class="rep-subnav-btn is-active" aria-current="page">Planillas y cierres</span>
+      <a class="rep-subnav-btn" href="recaudos.html">Recaudos</a>
+    </nav>
+
+    <div class="pc-toolbar">
+      <button type="button" class="primary" id="pc-reload">Recargar listado</button>
+      <span id="pc-status"></span>
+    </div>
+
+    <div class="pc-layout">
+      <div class="pc-card">
+        <h3>Estacionamientos con cierre</h3>
+        <ul class="pc-list" id="pc-sedes"></ul>
+        <p class="pc-placeholder" id="pc-sedes-empty" hidden>No hay sedes con documentos de cierre o aún se está cargando.</p>
+      </div>
+      <div class="pc-card">
+        <h3>Operarios (subcolección)</h3>
+        <ul class="pc-list" id="pc-ops"></ul>
+      </div>
+      <div class="pc-card" id="pc-detail-card">
+        <h3>Recaudos del operario</h3>
+        <div id="pc-detail"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script src="cierres-helpers.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script>
+(function () {
+  firebase.initializeApp(typeof firebaseConfig !== "undefined" ? firebaseConfig : {});
+  var db = firebase.firestore();
+  var auth = firebase.auth();
+  var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
+  var api = createLuganoCierresApi(cfg, firebaseConfig);
+
+  var authGate = document.getElementById("pc-auth-gate");
+  var mainEl = document.getElementById("pc-main");
+  var statusEl = document.getElementById("pc-status");
+  var sedesEl = document.getElementById("pc-sedes");
+  var sedesEmpty = document.getElementById("pc-sedes-empty");
+  var opsEl = document.getElementById("pc-ops");
+  var detailEl = document.getElementById("pc-detail");
+
+  var tree = [];
+  /** Documentos CIERRES/POS_* con totalRecaudo (cargados en loadAll / refresh). */
+  var posRecaudosFirestore = [];
+  var posRecaudosById = {};
+  var selectedSedeIdx = -1;
+  var selectedOpIdx = -1;
+  /** Índice del cierre mostrado cuando el operario tiene varios documentos. */
+  var selectedCierreIdx = 0;
+
+  /** Borrador de vouchers por id de documento de cierre (sobrevive a renderDetail y auto-actualización). */
+  var voucherDraftByCierreId = {};
+
+  function setStatus(t) {
+    statusEl.textContent = t || "";
+  }
+
+  function escapeHtml(s) {
+    var d = document.createElement("div");
+    d.textContent = s == null ? "" : String(s);
+    return d.innerHTML;
+  }
+
+  /** IDs tipo 28-01-2026_15-14-45 → fecha y hora legibles (es-CO). */
+  function formatCierreDocIdHtml(id) {
+    var raw = String(id == null ? "" : id).trim();
+    var m = /^(\d{2})-(\d{2})-(\d{4})_(\d{2})-(\d{2})-(\d{2})$/.exec(raw);
+    if (!m) {
+      return '<code class="pc-cierre-id-raw">' + escapeHtml(raw) + "</code>";
+    }
+    var day = parseInt(m[1], 10);
+    var month = parseInt(m[2], 10) - 1;
+    var year = parseInt(m[3], 10);
+    var dt = new Date(year, month, day);
+    if (
+      dt.getFullYear() !== year ||
+      dt.getMonth() !== month ||
+      dt.getDate() !== day
+    ) {
+      return '<code class="pc-cierre-id-raw">' + escapeHtml(raw) + "</code>";
+    }
+    var fechaStr = dt.toLocaleDateString("es-CO", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+    var horaStr = m[4] + ":" + m[5] + ":" + m[6];
+    return (
+      '<div class="pc-cierre-doc">' +
+      '<span class="pc-cierre-doc-date" title="' +
+      escapeHtml(raw) +
+      '">' +
+      escapeHtml(fechaStr) +
+      "</span>" +
+      '<span class="pc-cierre-doc-time">' +
+      escapeHtml(horaStr) +
+      "</span>" +
+      "</div>"
+    );
+  }
+
+  /** Etiqueta corta para botones del selector (fecha + hora). */
+  function formatCierrePickLabel(id) {
+    var raw = String(id == null ? "" : id).trim();
+    var m = /^(\d{2})-(\d{2})-(\d{4})_(\d{2})-(\d{2})-(\d{2})$/.exec(raw);
+    if (!m) {
+      return raw.length > 42 ? raw.slice(0, 39) + "…" : raw;
+    }
+    var day = parseInt(m[1], 10);
+    var month = parseInt(m[2], 10) - 1;
+    var year = parseInt(m[3], 10);
+    var dt = new Date(year, month, day);
+    if (
+      dt.getFullYear() !== year ||
+      dt.getMonth() !== month ||
+      dt.getDate() !== day
+    ) {
+      return raw.length > 42 ? raw.slice(0, 39) + "…" : raw;
+    }
+    var dStr = dt.toLocaleDateString("es-CO", {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    });
+    return dStr + " · " + m[4] + ":" + m[5] + ":" + m[6];
+  }
+
+  function pad2(n) {
+    var s = String(n);
+    return s.length === 1 ? "0" + s : s;
+  }
+
+  function parseDateFromCierreId(id) {
+    var m = /^(\d{2})-(\d{2})-(\d{4})_/.exec(String(id || "").trim());
+    if (!m) return null;
+    var day = parseInt(m[1], 10);
+    var month = parseInt(m[2], 10) - 1;
+    var year = parseInt(m[3], 10);
+    var dt = new Date(year, month, day, 12, 0, 0);
+    if (
+      dt.getFullYear() !== year ||
+      dt.getMonth() !== month ||
+      dt.getDate() !== day
+    ) {
+      return null;
+    }
+    return dt;
+  }
+
+  function dateToInputValue(dt) {
+    if (!dt || !(dt instanceof Date) || isNaN(dt.getTime())) return "";
+    return dt.getFullYear() + "-" + pad2(dt.getMonth() + 1) + "-" + pad2(dt.getDate());
+  }
+
+  function findCierreIndicesForDateStr(op, ymd) {
+    var out = [];
+    if (!ymd || !op || !op.cierres) return out;
+    op.cierres.forEach(function (c, i) {
+      var dt = parseDateFromCierreId(c.id);
+      if (!dt) return;
+      if (dateToInputValue(dt) === ymd) out.push(i);
+    });
+    return out;
+  }
+
+  function getCalendarBoundsForOp(op) {
+    var minT = null;
+    var maxT = null;
+    if (!op || !op.cierres) return { min: "", max: "" };
+    op.cierres.forEach(function (c) {
+      var dt = parseDateFromCierreId(c.id);
+      if (!dt) return;
+      var t = dt.getTime();
+      if (minT == null || t < minT) minT = t;
+      if (maxT == null || t > maxT) maxT = t;
+    });
+    if (minT == null) return { min: "", max: "" };
+    return {
+      min: dateToInputValue(new Date(minT)),
+      max: dateToInputValue(new Date(maxT))
+    };
+  }
+
+  function applyCalendarDateFilter() {
+    var op =
+      selectedSedeIdx >= 0 &&
+      selectedOpIdx >= 0 &&
+      tree[selectedSedeIdx] &&
+      tree[selectedSedeIdx].operarios[selectedOpIdx];
+    if (!op || op.cierres.length <= 1) return;
+    var inp = detailEl.querySelector(".pc-cierre-cal-input");
+    var msgEl = detailEl.querySelector(".pc-cierre-cal-msg");
+    if (!inp || !inp.value) {
+      if (msgEl) msgEl.textContent = "Elegí una fecha en el calendario.";
+      return;
+    }
+    var indices = findCierreIndicesForDateStr(op, inp.value);
+    if (!indices.length) {
+      if (msgEl) {
+        msgEl.textContent =
+          "No hay cierre con esa fecha en el id del documento (formato DD-MM-AAAA_…).";
+      }
+      return;
+    }
+    selectedCierreIdx = indices[0];
+    renderDetail();
+  }
+
+  var DESGLOSE_KEYS = [
+    { key: "turnTotal", label: "Turno (turnTotal)" },
+    { key: "manualTicketsTotal", label: "Boletas manuales (manualTicketsTotal)" },
+    { key: "pcCardReaderTotal", label: "POS / datáfono (pcCardReaderTotal)" },
+    { key: "vouchersTotal", label: "Vouchers (vouchersTotal)" },
+    { key: "grandTotal", label: "Efectivo enviado" },
+    { key: "cashTotal", label: "Efectivo (cashTotal)" }
+  ];
+
+  function parseMoneyVal(v) {
+    if (v === undefined || v === null) return null;
+    if (typeof v === "number" && isFinite(v)) return v;
+    if (typeof v === "string") {
+      var s = String(v).trim();
+      if (s === "") return null;
+      var neg = false;
+      if (/^\(.*\)$/.test(s)) {
+        neg = true;
+        s = s.slice(1, -1).trim();
+      }
+      s = s.replace(/\$/g, "").replace(/\u00a0/g, "");
+      s = s.replace(/cop\.?/gi, "").trim();
+      if (/^[-−–]/.test(s)) {
+        neg = !neg;
+        s = s.replace(/^[-−–]\s*/, "").trim();
+      }
+      s = s.replace(/\s+/g, "");
+      s = s.replace(/\./g, "").replace(",", ".");
+      var n = Number(s);
+      if (isNaN(n)) return null;
+      if (neg) n = -Math.abs(n);
+      return n;
+    }
+    return null;
+  }
+
+  /** Une inner descifrado con campos sueltos en raw si hiciera falta. */
+  function mergedPayload(inner, raw) {
+    var src = {};
+    if (raw && typeof raw === "object") {
+      Object.keys(raw).forEach(function (k) {
+        if (k === "encryptedData" || k === "encrypted_data") return;
+        src[k] = raw[k];
+      });
+    }
+    if (inner && typeof inner === "object") {
+      Object.keys(inner).forEach(function (k) {
+        src[k] = inner[k];
+      });
+    }
+    return src;
+  }
+
+  /** Nombre legible del operario en el documento; si no hay, el label del listado. */
+  function operatorNameForCierreOption(inner, raw, fallbackLabel) {
+    var src = mergedPayload(inner, raw);
+    var cand =
+      src.operatorName ||
+      src.operator_name ||
+      src.nombre ||
+      src.nombreOperario ||
+      src.displayName;
+    if (cand != null && String(cand).trim()) return String(cand).trim();
+    return fallbackLabel != null ? String(fallbackLabel) : "";
+  }
+
+  function parsePosTotal(inner, raw) {
+    var src = mergedPayload(inner, raw);
+    var v = parseMoneyVal(src.pcCardReaderTotal);
+    return v != null && isFinite(v) ? v : 0;
+  }
+
+  function hasPosField(inner, raw) {
+    var src = mergedPayload(inner, raw);
+    return Object.prototype.hasOwnProperty.call(src, "pcCardReaderTotal");
+  }
+
+  function normalizeSedeMatchKey(s) {
+    return String(s || "")
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, "_")
+      .replace(/[^a-z0-9_-]/g, "");
+  }
+
+  function parseCierreIdToYmdHms(cierreId) {
+    var m = /^(\d{1,2})-(\d{1,2})-(\d{4})_(\d{1,2})-(\d{1,2})-(\d{1,2})$/.exec(
+      String(cierreId || "").trim()
+    );
+    if (!m) return null;
+    return {
+      ymd:
+        m[3] +
+        pad2(parseInt(m[2], 10)) +
+        pad2(parseInt(m[1], 10)),
+      hms:
+        pad2(parseInt(m[4], 10)) +
+        pad2(parseInt(m[5], 10)) +
+        pad2(parseInt(m[6], 10))
+    };
+  }
+
+  function parsePosDocId(docId) {
+    var m = /^POS_(.+)_(\d{8})_(\d{6})$/i.exec(String(docId || "").trim());
+    if (!m) return null;
+    return { sedeKey: m[1], ymd: m[2], hms: m[3] };
+  }
+
+  function extractTotalRecaudoFromPosDoc(data) {
+    if (!data || typeof data !== "object") return 0;
+    var keys = [
+      "totalRecaudo",
+      "total_recaudo",
+      "recaudoTotal",
+      "grandTotal",
+      "total"
+    ];
+    var i, v;
+    for (i = 0; i < keys.length; i++) {
+      v = parseMoneyVal(data[keys[i]]);
+      if (v != null && isFinite(v)) return v;
+    }
+    return 0;
+  }
+
+  function indexPosRecaudoEntry(entry) {
+    if (!entry || !entry.id) return;
+    var found = -1;
+    posRecaudosFirestore.forEach(function (p, idx) {
+      if (p.id === entry.id) found = idx;
+    });
+    if (found >= 0) posRecaudosFirestore[found] = entry;
+    else posRecaudosFirestore.push(entry);
+    posRecaudosById[entry.id] = entry;
+  }
+
+  function posSedeKeysFromContext(sedeId, inner, raw) {
+    var keys = [];
+    function add(v) {
+      if (v == null || v === "") return;
+      var s = String(v).trim();
+      if (!s) return;
+      var variants = [
+        s,
+        s.replace(/\s+/g, "_"),
+        s.replace(/\s+/g, "-")
+      ];
+      variants.forEach(function (x) {
+        if (x && keys.indexOf(x) < 0) keys.push(x);
+      });
+    }
+    add(sedeId);
+    if (inner != null || raw != null) {
+      var src = mergedPayload(inner, raw);
+      add(src.parkingId);
+      add(src.parkingName);
+      add(src.parking);
+      add(src.estacionamiento);
+    }
+    return keys;
+  }
+
+  function buildPosDocIdCandidates(sedeId, cierreId, inner, raw) {
+    var dt = parseCierreIdToYmdHms(cierreId);
+    if (!dt) return [];
+    var out = [];
+    posSedeKeysFromContext(sedeId, inner, raw).forEach(function (k) {
+      var id = "POS_" + k + "_" + dt.ymd + "_" + dt.hms;
+      if (out.indexOf(id) < 0) out.push(id);
+    });
+    return out;
+  }
+
+  async function fetchPosDocDirect(docId) {
+    if (!docId || !auth.currentUser) return null;
+    if (posRecaudosById[docId]) return posRecaudosById[docId];
+    var col = cfg.cierresPosCollection || "CIERRES";
+    try {
+      var snap = await db.collection(col).doc(docId).get();
+      if (!snap.exists) return null;
+      var entry = {
+        id: snap.id,
+        parts: parsePosDocId(snap.id),
+        totalRecaudo: extractTotalRecaudoFromPosDoc(snap.data() || {}),
+        raw: snap.data() || {}
+      };
+      indexPosRecaudoEntry(entry);
+      return entry;
+    } catch (e) {
+      console.warn("[planillas-cierres] get " + docId, e.code || e.message || e);
+      return null;
+    }
+  }
+
+  async function ensurePosDocForCierre(sedeId, cierreId, inner, raw) {
+    if (findPosDocForCierre(sedeId, cierreId, inner, raw)) return;
+    var candidates = buildPosDocIdCandidates(sedeId, cierreId, inner, raw);
+    var i;
+    for (i = 0; i < candidates.length; i++) {
+      await fetchPosDocDirect(candidates[i]);
+      if (findPosDocForCierre(sedeId, cierreId, inner, raw)) return;
+    }
+    var dt = parseCierreIdToYmdHms(cierreId);
+    if (!dt) return;
+    var suffix = "_" + dt.ymd + "_" + dt.hms;
+    for (i = 0; i < posRecaudosFirestore.length; i++) {
+      var p = posRecaudosFirestore[i];
+      if (!p.id || p.id.slice(-suffix.length) !== suffix) continue;
+      if (sedeMatchesPosDoc(sedeId, p.parts) || sedeMatchesPosDocId(sedeId, p.id)) {
+        await fetchPosDocDirect(p.id);
+        return;
+      }
+    }
+  }
+
+  async function loadPosRecaudosFirestore() {
+    posRecaudosFirestore = [];
+    posRecaudosById = {};
+    if (!auth.currentUser) return 0;
+    var col = cfg.cierresPosCollection || "CIERRES";
+    try {
+      var snap = await db.collection(col).get();
+      snap.docs.forEach(function (doc) {
+        indexPosRecaudoEntry({
+          id: doc.id,
+          parts: parsePosDocId(doc.id),
+          totalRecaudo: extractTotalRecaudoFromPosDoc(doc.data() || {}),
+          raw: doc.data() || {}
+        });
+      });
+      return snap.size;
+    } catch (e) {
+      console.warn("[planillas-cierres] " + col, e.code || e.message || e);
+      return -1;
+    }
+  }
+
+  function sedeMatchesPosDoc(sedeId, posParts) {
+    if (!posParts) return false;
+    var sk = normalizeSedeMatchKey(posParts.sedeKey);
+    var sid = normalizeSedeMatchKey(sedeId);
+    if (!sk || !sid) return false;
+    if (sk === sid) return true;
+    if (sk.replace(/_/g, "") === sid.replace(/_/g, "")) return true;
+    if (sk.indexOf(sid) >= 0 || sid.indexOf(sk) >= 0) return true;
+    return false;
+  }
+
+  function sedeMatchesPosDocId(sedeId, docId) {
+    var parts = parsePosDocId(docId);
+    return parts ? sedeMatchesPosDoc(sedeId, parts) : false;
+  }
+
+  function findPosDocForCierre(sedeId, cierreId, inner, raw) {
+    var dt = parseCierreIdToYmdHms(cierreId);
+    if (!dt) return null;
+    var candidates = buildPosDocIdCandidates(sedeId, cierreId, inner, raw);
+    var i, doc;
+    for (i = 0; i < candidates.length; i++) {
+      doc = posRecaudosById[candidates[i]];
+      if (doc) return doc;
+    }
+    var suffix = "_" + dt.ymd + "_" + dt.hms;
+    var best = null;
+    var sameTime = [];
+    posRecaudosFirestore.forEach(function (p) {
+      var timeOk =
+        (p.parts && p.parts.ymd === dt.ymd && p.parts.hms === dt.hms) ||
+        (p.id && p.id.slice(-suffix.length) === suffix);
+      if (!timeOk) return;
+      sameTime.push(p);
+      if (
+        sedeMatchesPosDoc(sedeId, p.parts) ||
+        sedeMatchesPosDocId(sedeId, p.id)
+      ) {
+        best = p;
+      }
+    });
+    if (best) return best;
+    if (sameTime.length === 1) return sameTime[0];
+    return null;
+  }
+
+  function sumPosRecaudoCierresForOperator(op, sedeId) {
+    var sum = 0;
+    var matched = 0;
+    var docIds = [];
+    if (!op || !op.cierres) return { sum: 0, matched: 0, docIds: [] };
+    op.cierres.forEach(function (c) {
+      var p = findPosDocForCierre(sedeId, c.id, c.inner, c.raw);
+      if (p) {
+        sum += p.totalRecaudo;
+        matched++;
+        if (docIds.indexOf(p.id) < 0) docIds.push(p.id);
+      }
+    });
+    return { sum: sum, matched: matched, docIds: docIds };
+  }
+
+  /** Total para «Total listado»: prioriza CIERRES del cierre visible, si no la suma del operario. */
+  function getTotalListadoCierres(sedeId, op, cierreId, inner, raw) {
+    if (cierreId) {
+      var one = findPosDocForCierre(sedeId, cierreId, inner, raw);
+      if (one) {
+        return { amount: one.totalRecaudo, docId: one.id, matched: 1 };
+      }
+    }
+    var agg = sumPosRecaudoCierresForOperator(op, sedeId);
+    if (agg.matched > 0) {
+      return { amount: agg.sum, docId: null, matched: agg.matched };
+    }
+    return { amount: null, docId: null, matched: 0 };
+  }
+
+  /**
+   * Recaudo del cierre que carga el operario: turnTotal + manualTicketsTotal.
+   * Debe coincidir con cashTotal del mismo documento.
+   */
+  function computeRecaudoTablaDesglose(inner, raw) {
+    var src = mergedPayload(inner, raw);
+    var turn = parseMoneyVal(src.turnTotal);
+    var manual = parseMoneyVal(src.manualTicketsTotal);
+    var t = turn != null && isFinite(turn) ? turn : 0;
+    var m = manual != null && isFinite(manual) ? manual : 0;
+    var sum = t + m;
+    var cash = parseMoneyVal(src.cashTotal);
+    var cashNum = cash != null && isFinite(cash) ? cash : null;
+    var matches = cashNum != null && Math.abs(sum - cashNum) < 1;
+    var diff = cashNum != null ? sum - cashNum : null;
+    return {
+      sum: sum,
+      cashTotal: cashNum,
+      matches: matches,
+      diff: diff
+    };
+  }
+
+  function computePosVsCierre(inner, raw, sedeId, cierreId) {
+    var rec = computeRecaudoTablaDesglose(inner, raw);
+    var posDoc =
+      sedeId && cierreId
+        ? findPosDocForCierre(sedeId, cierreId, inner, raw)
+        : null;
+    var pos = posDoc ? posDoc.totalRecaudo : parsePosTotal(inner, raw);
+    var posSource = posDoc ? "CIERRES" : hasPosField(inner, raw) ? "cierre" : "none";
+    var cierreOp = rec.sum;
+    var diffPosCierre = pos - cierreOp;
+    var diffPosCash =
+      rec.cashTotal != null ? pos - rec.cashTotal : null;
+    return {
+      pos: pos,
+      posSource: posSource,
+      posDocId: posDoc ? posDoc.id : null,
+      hasPosField: posDoc != null || hasPosField(inner, raw),
+      cierreOperario: cierreOp,
+      cashTotal: rec.cashTotal,
+      matchesPosCierre: Math.abs(diffPosCierre) < 1,
+      diffPosCierre: diffPosCierre,
+      diffPosCash: diffPosCash,
+      rec: rec
+    };
+  }
+
+  function sumPosForOperator(op) {
+    var sum = 0;
+    var count = 0;
+    if (!op || !op.cierres) return { sum: 0, count: 0 };
+    op.cierres.forEach(function (c) {
+      if (!hasPosField(c.inner, c.raw)) return;
+      sum += parsePosTotal(c.inner, c.raw);
+      count++;
+    });
+    return { sum: sum, count: count };
+  }
+
+  function sumRecaudoOperarioForOperator(op) {
+    var sum = 0;
+    if (!op || !op.cierres) return 0;
+    op.cierres.forEach(function (c) {
+      sum += computeRecaudoTablaDesglose(c.inner, c.raw).sum;
+    });
+    return sum;
+  }
+
+  function buildPosCompareHtml(inner, raw, sedeId, cierreId) {
+    var cmp = computePosVsCierre(inner, raw, sedeId, cierreId);
+    if (!cmp.hasPosField && cmp.pos === 0 && cmp.cierreOperario === 0) return "";
+
+    var footCls = cmp.matchesPosCierre
+      ? "pc-pos-compare-foot pc-pos-compare-foot--ok"
+      : "pc-pos-compare-foot pc-pos-compare-foot--warn";
+    var footText;
+    if (cmp.posSource === "CIERRES") {
+      footText =
+        "POS desde colección <code>CIERRES</code> (<code>totalRecaudo</code>)";
+      if (cmp.posDocId) {
+        footText += ", documento <code>" + escapeHtml(cmp.posDocId) + "</code>";
+      }
+      footText += ".";
+      if (cmp.matchesPosCierre) {
+        footText +=
+          " Cuadre: coincide con el recaudo del operario (turno + boletas manuales).";
+      } else {
+        footText +=
+          " Diferencia POS − recaudo operario: " +
+          escapeHtml(api.fmtCop(cmp.diffPosCierre)) +
+          ".";
+        if (cmp.cashTotal != null) {
+          footText +=
+            " Efectivo (<code>cashTotal</code>): " +
+            escapeHtml(api.fmtCop(cmp.cashTotal)) +
+            ".";
+          if (cmp.diffPosCash != null && Math.abs(cmp.diffPosCash) >= 1) {
+            footText +=
+              " POS − efectivo: " + escapeHtml(api.fmtCop(cmp.diffPosCash)) + ".";
+          }
+        }
+      }
+    } else if (!cmp.hasPosField) {
+      footText =
+        "Sin documento enlazado en <code>CIERRES</code> ni campo <code>pcCardReaderTotal</code> en este cierre.";
+    } else if (cmp.matchesPosCierre) {
+      footText =
+        "Cuadre: el total POS (<code>pcCardReaderTotal</code>) coincide con el recaudo del operario.";
+    } else {
+      footText =
+        "Diferencia POS − recaudo operario: " +
+        escapeHtml(api.fmtCop(cmp.diffPosCierre)) +
+        ".";
+      if (cmp.cashTotal != null) {
+        footText +=
+          " Efectivo declarado (<code>cashTotal</code>): " +
+          escapeHtml(api.fmtCop(cmp.cashTotal)) +
+          ".";
+        if (cmp.diffPosCash != null && Math.abs(cmp.diffPosCash) >= 1) {
+          footText +=
+            " POS − efectivo: " + escapeHtml(api.fmtCop(cmp.diffPosCash)) + ".";
+        }
+      }
+    }
+
+    var posLabel =
+      cmp.posSource === "CIERRES"
+        ? "Total POS (CIERRES · totalRecaudo)"
+        : "Total POS";
+
+    return (
+      '<div class="pc-pos-compare">' +
+      '<p class="pc-pos-compare-title">Cuadre POS vs cierre del operario</p>' +
+      '<div class="pc-pos-compare-grid">' +
+      '<div class="pc-pos-compare-item"><span>' +
+      escapeHtml(posLabel) +
+      '</span><strong class="pc-pos-val--pos">' +
+      escapeHtml(api.fmtCop(cmp.pos)) +
+      "</strong></div>" +
+      '<div class="pc-pos-compare-item"><span>Recaudo operario (turno + manuales)</span><strong>' +
+      escapeHtml(api.fmtCop(cmp.cierreOperario)) +
+      "</strong></div>" +
+      (cmp.cashTotal != null
+        ? '<div class="pc-pos-compare-item"><span>Efectivo (cashTotal)</span><strong>' +
+          escapeHtml(api.fmtCop(cmp.cashTotal)) +
+          "</strong></div>"
+        : "") +
+      "</div>" +
+      '<p class="' +
+      footCls +
+      '">' +
+      footText +
+      "</p></div>"
+    );
+  }
+
+  function buildDesgloseHtml(inner, raw, cierreIdx) {
+    var src = mergedPayload(inner, raw);
+    var parts = [];
+    DESGLOSE_KEYS.forEach(function (row) {
+      var parsed = parseMoneyVal(src[row.key]);
+      var n = parsed != null && isFinite(parsed) ? parsed : 0;
+      var isVouchers = row.key === "vouchersTotal";
+      var panelId = "pc-voucher-panel-" + cierreIdx;
+      var head =
+        isVouchers
+          ? '<div class="pc-field-head"><span class="pc-field-label">' +
+            escapeHtml(row.label) +
+            '</span><button type="button" class="pc-btn-contar" data-panel-id="' +
+            escapeHtml(panelId) +
+            '">Contar</button></div>'
+          : '<span class="pc-field-label">' + escapeHtml(row.label) + "</span>";
+      parts.push(
+        '<div class="pc-field' +
+          (isVouchers ? " pc-field--vouchers" : "") +
+          '">' +
+          head +
+          '<span class="pc-field-value">' +
+          escapeHtml(api.fmtCop(n)) +
+          "</span></div>"
+      );
+    });
+    return '<div class="pc-amounts">' + parts.join("") + "</div>";
+  }
+
+  /** Lista <code>cashAdvances</code> del cierre (si viene en el payload). */
+  function buildCashAdvancesHtml(inner, raw) {
+    var src = mergedPayload(inner, raw);
+    var adv = src.cashAdvances;
+    if (!adv || !Array.isArray(adv) || adv.length === 0) return "";
+    var sum = 0;
+    var rows = [];
+    adv.forEach(function (item, idx) {
+      var amt = null;
+      var label = "Ítem " + (idx + 1);
+      if (typeof item === "number" && isFinite(item)) {
+        amt = item;
+      } else if (item && typeof item === "object") {
+        if (item.description != null && String(item.description).trim())
+          label = String(item.description).trim();
+        else if (item.concept != null && String(item.concept).trim())
+          label = String(item.concept).trim();
+        amt = parseMoneyVal(
+          item.amount != null
+            ? item.amount
+            : item.total != null
+              ? item.total
+              : item.value
+        );
+      } else {
+        amt = parseMoneyVal(item);
+      }
+      if (amt != null && isFinite(amt)) sum += amt;
+      var display = amt != null && isFinite(amt) ? amt : 0;
+      rows.push(
+        '<div class="pc-field pc-field--advance"><span class="pc-field-label">' +
+          escapeHtml(label) +
+          '</span><span class="pc-field-value">' +
+          escapeHtml(api.fmtCop(display)) +
+          "</span></div>"
+      );
+    });
+    return (
+      '<div class="pc-cash-advances-wrap">' +
+      '<p class="pc-advances-title">Avances (cashAdvances)</p>' +
+      '<div class="pc-amounts">' +
+      rows.join("") +
+      '<div class="pc-field pc-field--advance-total">' +
+      '<span class="pc-field-label">Total avances</span>' +
+      '<span class="pc-field-value">' +
+      escapeHtml(api.fmtCop(sum)) +
+      "</span></div></div></div>"
+    );
+  }
+
+  /**
+   * Gráficas comparativas: vouchers, boletas manuales y efectivo (mismos campos que el desglose).
+   */
+  function buildVouchersCashCompareHtml(inner, raw) {
+    var src = mergedPayload(inner, raw);
+    var vRaw = parseMoneyVal(src.vouchersTotal);
+    var mRaw = parseMoneyVal(src.manualTicketsTotal);
+    var cRaw = parseMoneyVal(src.cashTotal);
+    if (vRaw == null && mRaw == null && cRaw == null) return "";
+    var v = vRaw != null && isFinite(vRaw) ? Math.max(0, vRaw) : 0;
+    var m = mRaw != null && isFinite(mRaw) ? Math.max(0, mRaw) : 0;
+    var c = cRaw != null && isFinite(cRaw) ? Math.max(0, cRaw) : 0;
+    var sum = v + m + c;
+    var pctV = 0;
+    var pctM = 0;
+    var pctC = 0;
+    if (sum > 0) {
+      pctV = (v / sum) * 100;
+      pctM = (m / sum) * 100;
+      pctC = (c / sum) * 100;
+    }
+    var labelAria =
+      "Vouchers " +
+      api.fmtCop(v) +
+      ", boletas manuales " +
+      api.fmtCop(m) +
+      ", efectivo " +
+      api.fmtCop(c) +
+      (sum > 0 ? "; proporciones sobre la suma de los tres." : ".");
+
+    var stackedInner;
+    if (sum <= 0) {
+      stackedInner =
+        '<div class="pc-vc-seg pc-vc-seg--empty" style="flex:1"></div>';
+    } else {
+      stackedInner =
+        '<div class="pc-vc-seg pc-vc-seg--v" style="width:' +
+        pctV +
+        '%"></div>' +
+        '<div class="pc-vc-seg pc-vc-seg--m" style="width:' +
+        pctM +
+        '%"></div>' +
+        '<div class="pc-vc-seg pc-vc-seg--c" style="width:' +
+        pctC +
+        '%"></div>';
+    }
+
+    var maxScale = Math.max(v, m, c, 1);
+    var scaleV = (v / maxScale) * 100;
+    var scaleM = (m / maxScale) * 100;
+    var scaleC = (c / maxScale) * 100;
+
+    var pctLabelV = sum > 0 ? '<span class="pc-vc-pct">(' + pctV.toFixed(1) + "%)</span>" : "";
+    var pctLabelM = sum > 0 ? '<span class="pc-vc-pct">(' + pctM.toFixed(1) + "%)</span>" : "";
+    var pctLabelC = sum > 0 ? '<span class="pc-vc-pct">(' + pctC.toFixed(1) + "%)</span>" : "";
+
+    var foot = "";
+    var gt = parseMoneyVal(src.grandTotal);
+    if (gt != null && isFinite(gt) && gt > 0 && sum > 0) {
+      var pv = (v / gt) * 100;
+      var pm = (m / gt) * 100;
+      var pc = (c / gt) * 100;
+      foot =
+        '<p class="pc-vc-foot">Sobre efectivo enviado (<code>grandTotal</code> ' +
+        escapeHtml(api.fmtCop(gt)) +
+        "): vouchers ~" +
+        pv.toFixed(1) +
+        "%, boletas manuales ~" +
+        pm.toFixed(1) +
+        "%, efectivo ~" +
+        pc.toFixed(1) +
+        "%.</p>";
+    }
+
+    return (
+      '<div class="pc-vc-wrap">' +
+      '<p class="pc-vc-title">Comparativo: vouchers, boletas manuales y efectivo</p>' +
+      '<p class="pc-vc-sub">Proporción entre los tres montos declarados en este cierre</p>' +
+      '<div class="pc-vc-stacked" role="img" aria-label="' +
+      escapeHtml(labelAria) +
+      '">' +
+      stackedInner +
+      "</div>" +
+      '<ul class="pc-vc-legend">' +
+      '<li><span class="pc-vc-dot pc-vc-dot--v"></span>Vouchers <strong>' +
+      escapeHtml(api.fmtCop(v)) +
+      "</strong>" +
+      pctLabelV +
+      "</li>" +
+      '<li><span class="pc-vc-dot pc-vc-dot--m"></span>Boletas manuales <strong>' +
+      escapeHtml(api.fmtCop(m)) +
+      "</strong>" +
+      pctLabelM +
+      "</li>" +
+      '<li><span class="pc-vc-dot pc-vc-dot--c"></span>Efectivo <strong>' +
+      escapeHtml(api.fmtCop(c)) +
+      "</strong>" +
+      pctLabelC +
+      "</li>" +
+      "</ul>" +
+      '<p class="pc-vc-sub">Misma escala (el mayor de los tres llena la barra)</p>' +
+      '<div class="pc-vc-scale">' +
+      '<div class="pc-vc-row">' +
+      '<span class="pc-vc-lab">Vouchers</span>' +
+      '<div class="pc-vc-track"><div class="pc-vc-fill pc-vc-fill--v" style="width:' +
+      scaleV +
+      '%"></div></div>' +
+      '<span class="pc-vc-amt">' +
+      escapeHtml(api.fmtCop(v)) +
+      "</span>" +
+      "</div>" +
+      '<div class="pc-vc-row">' +
+      '<span class="pc-vc-lab">Boletas manuales</span>' +
+      '<div class="pc-vc-track"><div class="pc-vc-fill pc-vc-fill--m" style="width:' +
+      scaleM +
+      '%"></div></div>' +
+      '<span class="pc-vc-amt">' +
+      escapeHtml(api.fmtCop(m)) +
+      "</span>" +
+      "</div>" +
+      '<div class="pc-vc-row">' +
+      '<span class="pc-vc-lab">Efectivo</span>' +
+      '<div class="pc-vc-track"><div class="pc-vc-fill pc-vc-fill--c" style="width:' +
+      scaleC +
+      '%"></div></div>' +
+      '<span class="pc-vc-amt">' +
+      escapeHtml(api.fmtCop(c)) +
+      "</span>" +
+      "</div>" +
+      "</div>" +
+      foot +
+      "</div>"
+    );
+  }
+
+  /** Corta montos: espacios, saltos, tab, coma, ; , símbolo + . Los puntos dentro del número son miles (CO). */
+  function splitVoucherTokens(text) {
+    if (!text || !String(text).trim()) return [];
+    return String(text)
+      .replace(/\r\n/g, "\n")
+      .trim()
+      .split(/[\s,;+\n\r]+/)
+      .map(function (s) {
+        return s.trim();
+      })
+      .filter(Boolean);
+  }
+
+  function sumVoucherLines(text) {
+    var parts = splitVoucherTokens(text);
+    var sum = 0;
+    parts.forEach(function (p) {
+      var n = parseMoneyVal(p);
+      if (n != null && isFinite(n)) sum += n;
+    });
+    return sum;
+  }
+
+  /** Cantidad de montos reconocidos en el cuadro (misma regla que la suma). */
+  function countVoucherAmounts(text) {
+    var parts = splitVoucherTokens(text);
+    var n = 0;
+    parts.forEach(function (p) {
+      var v = parseMoneyVal(p);
+      if (v != null && isFinite(v)) n++;
+    });
+    return n;
+  }
+
+  /** Formatea cada valor reconocido con separadores de miles (es-CO), unidos por espacio. */
+  function formatAllVoucherNumbers(text) {
+    var tokens = splitVoucherTokens(text);
+    if (!tokens.length) return "";
+    return tokens
+      .map(function (t) {
+        var n = parseMoneyVal(t);
+        if (n != null && isFinite(n) && n >= 0) {
+          return Math.round(n).toLocaleString("es-CO");
+        }
+        return t;
+      })
+      .join(" ");
+  }
+
+  function insertAtCaret(el, insertText) {
+    var start = el.selectionStart != null ? el.selectionStart : el.value.length;
+    var end = el.selectionEnd != null ? el.selectionEnd : start;
+    var val = el.value;
+    el.value = val.slice(0, start) + insertText + val.slice(end);
+    var pos = start + insertText.length;
+    if (el.setSelectionRange) el.setSelectionRange(pos, pos);
+  }
+
+  /** Inserta '+' con espacio delante y detrás cuando hace falta (sin duplicar espacios). */
+  function insertPlusWithSpacesAtCaret(el) {
+    var start = el.selectionStart != null ? el.selectionStart : el.value.length;
+    var end = el.selectionEnd != null ? el.selectionEnd : start;
+    var before = el.value.slice(0, start);
+    var after = el.value.slice(end);
+    var needSpaceBefore = before.length > 0 && !/\s$/.test(before);
+    var needSpaceAfter = after.length === 0 || !/^\s/.test(after);
+    var ins = "";
+    if (needSpaceBefore) ins += " ";
+    ins += "+";
+    if (needSpaceAfter) ins += " ";
+    el.value = before + ins + after;
+    var pos = before.length + ins.length;
+    if (el.setSelectionRange) el.setSelectionRange(pos, pos);
+  }
+
+  function buildVoucherTallyHtml(inner, raw, cierreIdx, cierreDocId) {
+    var src = mergedPayload(inner, raw);
+    var vt = parseMoneyVal(src.vouchersTotal);
+    var hasVtKey = Object.prototype.hasOwnProperty.call(src, "vouchersTotal");
+    if (vt == null && !hasVtKey) return "";
+    var expected = vt != null && isFinite(vt) ? vt : 0;
+    var attr = String(expected);
+    var panelId = "pc-voucher-panel-" + cierreIdx;
+    var cid = cierreDocId != null ? String(cierreDocId) : "";
+    var draft = cid && voucherDraftByCierreId[cid];
+    var savedText = draft && draft.text != null ? String(draft.text) : "";
+    var panelOpen = !!(draft && draft.open);
+    var hiddenAttr = panelOpen ? "" : " hidden";
+    return (
+      '<div id="' +
+      escapeHtml(panelId) +
+      '" class="pc-voucher-check" data-cierre-id="' +
+      escapeHtml(cid) +
+      '"' +
+      hiddenAttr +
+      ">" +
+      '<p class="pc-voucher-check-title">Conciliar vouchers con el valor del operario</p>' +
+      '<p class="pc-voucher-hint"><strong>Espacio</strong> y <strong>Enter</strong> insertan <strong>+</strong> entre montos (con espacios). También podés usar <strong>coma</strong>, <strong>punto y coma</strong> o la tecla <strong>+</strong>. Al salir del cuadro o al pegar texto se aplican miles (ej. 197.800).</p>' +
+      '<div class="pc-voucher-tools">' +
+      '<span class="pc-voucher-label" style="margin:0;">Montos</span>' +
+      '<button type="button" class="pc-btn-plus-ins" title="Insertar signo + entre montos">+</button>' +
+      "</div>" +
+      '<textarea class="pc-voucher-tally" rows="6" autocomplete="off" spellcheck="false" placeholder="Ej: 53661 + 511 + 131600 (Espacio o Enter entre montos) o pegá una lista con comas" data-expected="' +
+      escapeHtml(attr) +
+      '">' +
+      escapeHtml(savedText) +
+      "</textarea>" +
+      '<div class="pc-voucher-result pc-voucher-result--neutral"><span class="pc-voucher-result-inner"></span></div>' +
+      "</div>"
+    );
+  }
+
+  function updateVoucherResult(textarea) {
+    var wrap = textarea.closest(".pc-voucher-check");
+    if (!wrap) return;
+    var innerEl = wrap.querySelector(".pc-voucher-result-inner");
+    var bar = wrap.querySelector(".pc-voucher-result");
+    if (!innerEl || !bar) return;
+    var expStr = textarea.getAttribute("data-expected");
+    var expected =
+      expStr !== "" && expStr != null && expStr !== undefined ? parseFloat(expStr, 10) : NaN;
+    var sum = sumVoucherLines(textarea.value);
+    var sumTxt = api.fmtCop(sum);
+    var cnt = countVoucherAmounts(textarea.value);
+    var countHtml =
+      'Conteo de vouchers: <strong>' + escapeHtml(String(cnt)) + "</strong>";
+    if (!isFinite(expected)) {
+      innerEl.innerHTML =
+        "Suma ingresada: <strong>" +
+        escapeHtml(sumTxt) +
+        "</strong> · " +
+        countHtml +
+        " · En este documento no hay <code>vouchersTotal</code> para comparar.";
+      bar.className = "pc-voucher-result pc-voucher-result--neutral";
+      return;
+    }
+    var diff = sum - expected;
+    var ok = Math.abs(diff) < 1;
+    var base =
+      "Suma ingresada: <strong>" +
+      escapeHtml(sumTxt) +
+      "</strong> · " +
+      countHtml +
+      " · Declarado (<code>vouchersTotal</code>): <strong>" +
+      escapeHtml(api.fmtCop(expected)) +
+      "</strong> · ";
+    if (ok) {
+      innerEl.innerHTML = base + '<span class="pc-match">Coincide con el cierre</span>';
+      bar.className = "pc-voucher-result pc-voucher-result--ok";
+    } else {
+      innerEl.innerHTML =
+        base +
+        '<span class="pc-diff">Diferencia: ' +
+        escapeHtml(api.fmtCop(diff)) +
+        "</span> (revisá montos o redondeos)";
+      bar.className = "pc-voucher-result pc-voucher-result--bad";
+    }
+  }
+
+  function persistVoucherDraftFromTextarea(ta) {
+    if (!ta || !ta.classList || !ta.classList.contains("pc-voucher-tally")) return;
+    var wrap = ta.closest(".pc-voucher-check");
+    var cid = wrap && wrap.getAttribute("data-cierre-id");
+    if (!cid) return;
+    if (!voucherDraftByCierreId[cid]) voucherDraftByCierreId[cid] = {};
+    voucherDraftByCierreId[cid].text = ta.value;
+    voucherDraftByCierreId[cid].open = !!(wrap && !wrap.hidden);
+  }
+
+  detailEl.addEventListener("input", function (e) {
+    if (e.target && e.target.classList && e.target.classList.contains("pc-voucher-tally")) {
+      persistVoucherDraftFromTextarea(e.target);
+      updateVoucherResult(e.target);
+    }
+  });
+
+  detailEl.addEventListener("mousedown", function (e) {
+    if (e.target.closest(".pc-btn-plus-ins")) {
+      e.preventDefault();
+    }
+  });
+
+  detailEl.addEventListener("keydown", function (e) {
+    if (!e.target.classList || !e.target.classList.contains("pc-voucher-tally")) return;
+    if (e.isComposing) return;
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      insertPlusWithSpacesAtCaret(e.target);
+      updateVoucherResult(e.target);
+      persistVoucherDraftFromTextarea(e.target);
+      return;
+    }
+    if (e.key === "+" || e.code === "NumpadAdd") {
+      e.preventDefault();
+      insertPlusWithSpacesAtCaret(e.target);
+      updateVoucherResult(e.target);
+      persistVoucherDraftFromTextarea(e.target);
+    }
+  });
+
+  detailEl.addEventListener("focusout", function (e) {
+    if (!e.target.classList || !e.target.classList.contains("pc-voucher-tally")) return;
+    var ta = e.target;
+    var fmt = formatAllVoucherNumbers(ta.value);
+    if (fmt && fmt !== ta.value.replace(/\s+/g, " ").trim()) {
+      ta.value = fmt;
+    }
+    updateVoucherResult(ta);
+    persistVoucherDraftFromTextarea(ta);
+  });
+
+  detailEl.addEventListener("paste", function (e) {
+    var ta = e.target;
+    if (!ta.classList || !ta.classList.contains("pc-voucher-tally")) return;
+    setTimeout(function () {
+      var fmt = formatAllVoucherNumbers(ta.value);
+      if (fmt) ta.value = fmt;
+      updateVoucherResult(ta);
+      persistVoucherDraftFromTextarea(ta);
+    }, 0);
+  });
+
+  detailEl.addEventListener("change", function (e) {
+    if (e.target.classList && e.target.classList.contains("pc-cierre-cal-input")) {
+      applyCalendarDateFilter();
+      return;
+    }
+    if (e.target.classList && e.target.classList.contains("pc-cierre-select")) {
+      var ix = parseInt(e.target.value, 10);
+      if (isNaN(ix)) return;
+      var opSel =
+        selectedSedeIdx >= 0 &&
+        selectedOpIdx >= 0 &&
+        tree[selectedSedeIdx] &&
+        tree[selectedSedeIdx].operarios[selectedOpIdx];
+      if (!opSel || !opSel.cierres.length) return;
+      if (ix < 0 || ix >= opSel.cierres.length) return;
+      selectedCierreIdx = ix;
+      renderDetail();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    var panel = detailEl.querySelector(".pc-cierre-cal-panel");
+    var btn = detailEl.querySelector(".pc-cierre-cal-btn");
+    if (!panel || !btn || panel.hidden) return;
+    if (btn.contains(e.target) || panel.contains(e.target)) return;
+    panel.hidden = true;
+    btn.setAttribute("aria-expanded", "false");
+  });
+
+  detailEl.addEventListener("click", function (e) {
+    if (e.target.closest(".pc-btn-export-csv")) {
+      e.preventDefault();
+      exportCurrentCierreCsv();
+      return;
+    }
+    if (e.target.closest(".pc-btn-print-cierre")) {
+      e.preventDefault();
+      window.print();
+      return;
+    }
+    var calBtn = e.target.closest(".pc-cierre-cal-btn");
+    if (calBtn && detailEl.contains(calBtn)) {
+      e.preventDefault();
+      e.stopPropagation();
+      var panel = detailEl.querySelector(".pc-cierre-cal-panel");
+      if (!panel) return;
+      var willShow = panel.hidden;
+      panel.hidden = !willShow;
+      calBtn.setAttribute("aria-expanded", willShow ? "true" : "false");
+      return;
+    }
+    var calGo = e.target.closest(".pc-cierre-cal-go");
+    if (calGo && detailEl.contains(calGo)) {
+      e.preventDefault();
+      applyCalendarDateFilter();
+      return;
+    }
+    var plusBtn = e.target.closest(".pc-btn-plus-ins");
+    if (plusBtn && detailEl.contains(plusBtn)) {
+      e.preventDefault();
+      var panel = plusBtn.closest(".pc-voucher-check");
+      var ta = panel ? panel.querySelector("textarea.pc-voucher-tally") : null;
+      if (ta) {
+        insertPlusWithSpacesAtCaret(ta);
+        updateVoucherResult(ta);
+        persistVoucherDraftFromTextarea(ta);
+        ta.focus();
+      }
+      return;
+    }
+    var btn = e.target.closest(".pc-btn-contar");
+    if (!btn || !detailEl.contains(btn)) return;
+    e.preventDefault();
+    var pid = btn.getAttribute("data-panel-id");
+    if (!pid) return;
+    var panel = document.getElementById(pid);
+    if (!panel) return;
+    var show = panel.hidden;
+    panel.hidden = !show;
+    var cid = panel.getAttribute("data-cierre-id");
+    if (cid) {
+      if (!voucherDraftByCierreId[cid]) voucherDraftByCierreId[cid] = {};
+      voucherDraftByCierreId[cid].open = !panel.hidden;
+      var ta0 = panel.querySelector("textarea.pc-voucher-tally");
+      if (ta0) voucherDraftByCierreId[cid].text = ta0.value;
+    }
+    if (!panel.hidden) {
+      var ta = panel.querySelector("textarea.pc-voucher-tally");
+      if (ta) {
+        updateVoucherResult(ta);
+        ta.focus();
+      }
+    }
+  });
+
+  function renderSedes() {
+    sedesEl.innerHTML = "";
+    if (!tree.length) {
+      sedesEmpty.hidden = false;
+      return;
+    }
+    sedesEmpty.hidden = true;
+    tree.forEach(function (sede, idx) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.innerHTML =
+        "<span>" +
+        escapeHtml(sede.displayLabel) +
+        '</span><span class="pc-sub">' +
+        sede.operarios.length +
+        " operario(s) · " +
+        escapeHtml(api.fmtCop(sede.total)) +
+        "</span>";
+      if (idx === selectedSedeIdx) btn.classList.add("is-active");
+      btn.addEventListener("click", function () {
+        selectedSedeIdx = idx;
+        selectedOpIdx = -1;
+        renderSedes();
+        renderOps();
+        detailEl.innerHTML =
+          '<p class="pc-placeholder">Seleccioná un operario para ver los cierres.</p>';
+      });
+      sedesEl.appendChild(btn);
+    });
+  }
+
+  function renderOps() {
+    opsEl.innerHTML = "";
+    if (selectedSedeIdx < 0 || !tree[selectedSedeIdx]) {
+      return;
+    }
+    var sede = tree[selectedSedeIdx];
+    var ops = sede.operarios;
+    ops.forEach(function (op, idx) {
+      var listadoOp = sumPosRecaudoCierresForOperator(op, sede.sedeId);
+      var listadoSub =
+        listadoOp.matched > 0
+          ? api.fmtCop(listadoOp.sum)
+          : "—";
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.innerHTML =
+        "<span>" +
+        escapeHtml(op.displayLabel) +
+        '</span><span class="pc-sub">' +
+        op.cierres.length +
+        " cierre(s) · CIERRES: " +
+        escapeHtml(listadoSub) +
+        "</span>";
+      if (idx === selectedOpIdx) btn.classList.add("is-active");
+      btn.addEventListener("click", function () {
+        selectedOpIdx = idx;
+        selectedCierreIdx = 0;
+        renderOps();
+        renderDetail();
+      });
+      opsEl.appendChild(btn);
+    });
+  }
+
+  function renderOneCierreRowAndDetail(c, displayIdx, cierreIdx, sedeId) {
+    var desg = buildDesgloseHtml(c.inner, c.raw, cierreIdx);
+    var voucherTally = buildVoucherTallyHtml(c.inner, c.raw, cierreIdx, c.id);
+    var compareVc = buildVouchersCashCompareHtml(c.inner, c.raw);
+    var posCompare = buildPosCompareHtml(c.inner, c.raw, sedeId, c.id);
+    var cashAdv = buildCashAdvancesHtml(c.inner, c.raw);
+    var srcQuick = mergedPayload(c.inner, c.raw);
+    var noMoneyKeys =
+      !DESGLOSE_KEYS.some(function (row) {
+        return Object.prototype.hasOwnProperty.call(srcQuick, row.key);
+      }) && !Object.prototype.hasOwnProperty.call(srcQuick, "cashAdvances");
+    var bloqueDesg =
+      posCompare +
+      desg +
+      voucherTally +
+      compareVc +
+      cashAdv +
+      (noMoneyKeys
+        ? '<p class="pc-no-desglose">No se encontraron campos de desglose en el documento (¿inner vacío o payload cifrado?).</p>'
+        : "");
+    var rec = computeRecaudoTablaDesglose(c.inner, c.raw);
+    var noteHtml = "";
+    if (rec.cashTotal != null) {
+      if (rec.matches) {
+        noteHtml =
+          '<div class="pc-cierre-recaudo-note pc-cierre-recaudo-note--ok">Igual a efectivo (<code>cashTotal</code>): ' +
+          escapeHtml(api.fmtCop(rec.cashTotal)) +
+          "</div>";
+      } else {
+        noteHtml =
+          '<div class="pc-cierre-recaudo-note pc-cierre-recaudo-note--warn">Efectivo (<code>cashTotal</code>): ' +
+          escapeHtml(api.fmtCop(rec.cashTotal)) +
+          " · Diferencia: " +
+          escapeHtml(api.fmtCop(rec.diff)) +
+          "</div>";
+      }
+    }
+    return (
+      '<tr class="pc-cierre-summary">' +
+      '<td class="pc-cierre-cell pc-cierre-cell--idx"><span class="pc-cierre-badge">' +
+      escapeHtml(String(displayIdx)) +
+      "</span></td>" +
+      '<td class="pc-cierre-cell pc-cierre-cell--doc">' +
+      formatCierreDocIdHtml(c.id) +
+      "</td>" +
+      '<td class="pc-cierre-cell pc-cierre-cell--amt">' +
+      '<span class="pc-cierre-total">' +
+      escapeHtml(api.fmtCop(rec.sum)) +
+      "</span>" +
+      noteHtml +
+      "</td></tr>" +
+      '<tr><td colspan="3">' +
+      bloqueDesg +
+      "</td></tr>"
+    );
+  }
+
+  function sanitizeFilePart(s) {
+    return String(s == null ? "" : s)
+      .replace(/[/\\:*?"<>|]/g, "_")
+      .replace(/\s+/g, "_")
+      .slice(0, 120);
+  }
+
+  function csvEscapeField(val) {
+    var s = val == null ? "" : String(val);
+    if (/[",\r\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+
+  function csvNum(n) {
+    if (n == null || !isFinite(Number(n))) return "";
+    return String(Number(n));
+  }
+
+  function csvRow(cells) {
+    return cells.map(csvEscapeField).join(",") + "\r\n";
+  }
+
+  function buildCierreCsvBlob(sede, op, c) {
+    var src = mergedPayload(c.inner, c.raw);
+    var rec = computeRecaudoTablaDesglose(c.inner, c.raw);
+    var opDocName = operatorNameForCierreOption(c.inner, c.raw, op.displayLabel);
+    var lines = [];
+    lines.push(csvRow(["# S.P.A.C.E — Cierre de caja"]));
+    lines.push(csvRow(["# Generado (ISO)", new Date().toISOString()]));
+    lines.push(csvRow([]));
+    lines.push(csvRow(["Sección", "Campo", "Valor texto", "Valor numerico"]));
+
+    lines.push(csvRow(["META", "Estacionamiento (listado)", sede.displayLabel, ""]));
+    lines.push(csvRow(["META", "ID estacionamiento (Firestore)", sede.sedeId || "", ""]));
+    lines.push(csvRow(["META", "Operario (listado)", op.displayLabel, ""]));
+    lines.push(csvRow(["META", "ID operario (doc)", op.opId || "", ""]));
+    lines.push(csvRow(["META", "Documento cierre (id)", c.id, ""]));
+    lines.push(csvRow(["META", "Operario en documento", opDocName, ""]));
+
+    var pn = src.parkingName != null ? String(src.parkingName).trim() : "";
+    if (pn) lines.push(csvRow(["META", "Nombre sede en payload", pn, ""]));
+    var pid = src.parkingId != null ? String(src.parkingId).trim() : "";
+    if (pid) lines.push(csvRow(["META", "ID sede en payload", pid, ""]));
+
+    lines.push(csvRow([]));
+    lines.push(csvRow(["# Desglose (mismos campos que la pantalla)"]));
+    DESGLOSE_KEYS.forEach(function (row) {
+      var parsed = parseMoneyVal(src[row.key]);
+      var n = parsed != null && isFinite(parsed) ? parsed : null;
+      lines.push(csvRow(["DESGLOSE", row.label, "", csvNum(n)]));
+    });
+
+    lines.push(csvRow([]));
+    lines.push(csvRow(["# Control recaudo y POS"]));
+    var posCmp = computePosVsCierre(c.inner, c.raw, sede.sedeId, c.id);
+    lines.push(csvRow([
+      "CONTROL",
+      posCmp.posSource === "CIERRES"
+        ? "Total POS (CIERRES totalRecaudo)"
+        : "Total POS (pcCardReaderTotal)",
+      posCmp.posDocId || "",
+      csvNum(posCmp.pos)
+    ]));
+    lines.push(csvRow(["CONTROL", "Recaudo operario (turno + manuales)", "", csvNum(rec.sum)]));
+    lines.push(csvRow(["CONTROL", "Efectivo declarado (cashTotal)", "", csvNum(rec.cashTotal)]));
+    lines.push(csvRow([
+      "CONTROL",
+      "Cuadre recaudo vs cashTotal",
+      rec.matches ? "SI" : rec.cashTotal == null ? "Sin cashTotal" : "NO",
+      csvNum(rec.diff)
+    ]));
+    lines.push(csvRow([
+      "CONTROL",
+      "Cuadre POS vs recaudo operario",
+      posCmp.matchesPosCierre ? "SI" : "NO",
+      csvNum(posCmp.diffPosCierre)
+    ]));
+    if (posCmp.diffPosCash != null) {
+      lines.push(csvRow([
+        "CONTROL",
+        "Diferencia POS vs cashTotal",
+        "",
+        csvNum(posCmp.diffPosCash)
+      ]));
+    }
+
+    var adv = src.cashAdvances;
+    if (adv && Array.isArray(adv) && adv.length) {
+      lines.push(csvRow([]));
+      lines.push(csvRow(["# Avances de efectivo (cashAdvances)"]));
+      var sumAdv = 0;
+      adv.forEach(function (item, idx) {
+        var amt = null;
+        var label = "Item " + (idx + 1);
+        if (typeof item === "number" && isFinite(item)) {
+          amt = item;
+        } else if (item && typeof item === "object") {
+          if (item.description != null && String(item.description).trim())
+            label = String(item.description).trim();
+          else if (item.concept != null && String(item.concept).trim())
+            label = String(item.concept).trim();
+          amt = parseMoneyVal(
+            item.amount != null
+              ? item.amount
+              : item.total != null
+                ? item.total
+                : item.value
+          );
+        } else {
+          amt = parseMoneyVal(item);
+        }
+        if (amt != null && isFinite(amt)) sumAdv += amt;
+        var display = amt != null && isFinite(amt) ? amt : 0;
+        lines.push(csvRow(["AVANCE", label, "", csvNum(display)]));
+      });
+      lines.push(csvRow(["AVANCE", "Total avances", "", csvNum(sumAdv)]));
+    }
+
+    var vRaw = parseMoneyVal(src.vouchersTotal);
+    var mRaw = parseMoneyVal(src.manualTicketsTotal);
+    var cRaw = parseMoneyVal(src.cashTotal);
+    if (
+      (vRaw != null && isFinite(vRaw)) ||
+      (mRaw != null && isFinite(mRaw)) ||
+      (cRaw != null && isFinite(cRaw))
+    ) {
+      lines.push(csvRow([]));
+      lines.push(csvRow(["# Referencia comparativa (vouchers / manuales / efectivo declarado)"]));
+      lines.push(csvRow(["REF", "Vouchers", "", csvNum(vRaw)]));
+      lines.push(csvRow(["REF", "Boletas manuales", "", csvNum(mRaw)]));
+      lines.push(csvRow(["REF", "Efectivo (cashTotal)", "", csvNum(cRaw)]));
+    }
+
+    var text = lines.join("");
+    return new Blob(["\ufeff" + text], {
+      type: "text/csv;charset=utf-8;"
+    });
+  }
+
+  function exportCurrentCierreCsv() {
+    if (
+      selectedSedeIdx < 0 ||
+      selectedOpIdx < 0 ||
+      !tree[selectedSedeIdx] ||
+      !tree[selectedSedeIdx].operarios[selectedOpIdx]
+    ) {
+      return;
+    }
+    var sede = tree[selectedSedeIdx];
+    var op = sede.operarios[selectedOpIdx];
+    if (!op.cierres || !op.cierres.length) return;
+    var c = op.cierres[selectedCierreIdx];
+    if (!c) return;
+
+    var blob = buildCierreCsvBlob(sede, op, c);
+    var fname =
+      "cierre_" +
+      sanitizeFilePart(sede.sedeId || "sede") +
+      "_" +
+      sanitizeFilePart(op.opId || "op") +
+      "_" +
+      sanitizeFilePart(c.id) +
+      ".csv";
+
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = fname;
+    a.rel = "noopener";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setStatus("CSV descargado: " + fname);
+  }
+
+  async function renderDetail() {
+    if (selectedSedeIdx < 0 || selectedOpIdx < 0) {
+      detailEl.innerHTML = "";
+      return;
+    }
+    var sede = tree[selectedSedeIdx];
+    var op = sede.operarios[selectedOpIdx];
+    var nCierres = op.cierres.length;
+
+    if (!nCierres) {
+      detailEl.innerHTML =
+        '<div class="pc-detail-header">' +
+        '<div class="pc-detail-header-main">' +
+        "<strong>" +
+        escapeHtml(sede.displayLabel) +
+        "</strong> · " +
+        escapeHtml(op.displayLabel) +
+        "</div></div>" +
+        '<p class="pc-placeholder">No hay documentos de cierre para este operario.</p>';
+      return;
+    }
+
+    if (selectedCierreIdx >= nCierres) selectedCierreIdx = 0;
+
+    var c = op.cierres[selectedCierreIdx];
+    await ensurePosDocForCierre(sede.sedeId, c.id, c.inner, c.raw);
+
+    var calBtnHtml =
+      nCierres > 1
+        ? '<button type="button" class="pc-cierre-cal-btn" title="Calendario por fecha" aria-expanded="false" aria-label="Calendario por fecha">' +
+          '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>' +
+          "</button>"
+        : "";
+
+    var btnCsvIcon =
+      '<button type="button" class="pc-btn-export-csv" title="CSV UTF-8 listo para Excel (columna «Valor numerico» como número). Doble clic o importar datos." aria-label="Descargar CSV del cierre">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
+      "</button>";
+
+    var btnPrintIcon =
+      '<button type="button" class="pc-btn-print-cierre" title="Imprimir o elegir «Guardar como PDF» en el cuadro de impresión" aria-label="Imprimir o guardar PDF">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>' +
+      "</button>";
+
+    var headerActions =
+      '<div class="pc-detail-header-actions pc-no-print">' +
+      btnCsvIcon +
+      btnPrintIcon +
+      calBtnHtml +
+      "</div>";
+
+    var listadoCi = getTotalListadoCierres(
+      sede.sedeId,
+      op,
+      c.id,
+      c.inner,
+      c.raw
+    );
+    var posCi = sumPosRecaudoCierresForOperator(op, sede.sedeId);
+    var recOpSum = sumRecaudoOperarioForOperator(op);
+    var posOpDiff = posCi.sum - recOpSum;
+    var posOpPill = "";
+    if (posCi.matched > 0) {
+      var pillCls =
+        Math.abs(posOpDiff) < 1
+          ? "pc-op-pos-pill"
+          : "pc-op-pos-pill pc-op-pos-pill--warn";
+      posOpPill =
+        '<div class="' +
+        pillCls +
+        '">POS CIERRES · totalRecaudo (' +
+        posCi.matched +
+        " cierre(s)): " +
+        escapeHtml(api.fmtCop(posCi.sum)) +
+        " · Recaudo operario: " +
+        escapeHtml(api.fmtCop(recOpSum)) +
+        (Math.abs(posOpDiff) >= 1
+          ? " · Dif. " + escapeHtml(api.fmtCop(posOpDiff))
+          : " · Cuadrado") +
+        "</div>";
+    } else if (op.cierres && op.cierres.length && listadoCi.amount == null) {
+      var posHint = buildPosDocIdCandidates(sede.sedeId, c.id, c.inner, c.raw);
+      posOpPill =
+        '<div class="pc-op-pos-pill pc-op-pos-pill--warn">Sin planilla <code>CIERRES</code> enlazada' +
+        (posHint.length
+          ? " (esperado: <code>" + escapeHtml(posHint[0]) + "</code>)"
+          : "") +
+        " · Recaudo operario: " +
+        escapeHtml(api.fmtCop(recOpSum)) +
+        "</div>";
+    }
+
+    var head =
+      '<div class="pc-detail-header">' +
+      '<div class="pc-detail-header-main">' +
+      "<strong>" +
+      escapeHtml(sede.displayLabel) +
+      "</strong> · " +
+      escapeHtml(op.displayLabel) +
+      '<div class="pc-total-pill">Total listado (CIERRES · totalRecaudo): ' +
+      escapeHtml(
+        listadoCi.amount != null ? api.fmtCop(listadoCi.amount) : "—"
+      ) +
+      (listadoCi.docId
+        ? ' <span class="pc-total-pill-doc">(<code>' +
+          escapeHtml(listadoCi.docId) +
+          "</code>)</span>"
+        : listadoCi.matched > 1
+          ? ' <span class="pc-total-pill-doc">(' +
+            listadoCi.matched +
+            " documentos)</span>"
+          : listadoCi.amount == null
+            ? (function () {
+                var h = buildPosDocIdCandidates(
+                  sede.sedeId,
+                  c.id,
+                  c.inner,
+                  c.raw
+                );
+                return h.length
+                  ? ' <span class="pc-total-pill-doc">(buscado: <code>' +
+                      escapeHtml(h[0]) +
+                      "</code>)</span>"
+                  : "";
+              })()
+            : "") +
+      "</div>" +
+      posOpPill +
+      "</div>" +
+      headerActions +
+      "</div>";
+
+    var printBanner =
+      '<div class="pc-print-header">' +
+      '<div class="pc-print-logo-text">S.P.A.C.E</div>' +
+      '<h1 class="pc-print-title">Cierre de caja</h1>' +
+      '<p class="pc-print-meta">' +
+      escapeHtml(sede.displayLabel) +
+      " · " +
+      escapeHtml(op.displayLabel) +
+      "<br/>Documento: <code>" +
+      escapeHtml(c.id) +
+      "</code></p>" +
+      '<p class="pc-print-date">Impreso: ' +
+      escapeHtml(new Date().toLocaleString("es-CO")) +
+      "</p>" +
+      "</div>";
+
+    var pickerHtml = "";
+    if (nCierres > 1) {
+      var opts = [];
+      var ci;
+      for (ci = 0; ci < nCierres; ci++) {
+        var cc = op.cierres[ci];
+        var recPick = computeRecaudoTablaDesglose(cc.inner, cc.raw);
+        var opName = operatorNameForCierreOption(cc.inner, cc.raw, op.displayLabel);
+        var optLabel =
+          opName +
+          " · " +
+          formatCierrePickLabel(cc.id) +
+          " · " +
+          api.fmtCop(recPick.sum);
+        var sel = ci === selectedCierreIdx ? " selected" : "";
+        opts.push(
+          '<option value="' +
+            ci +
+            '"' +
+            sel +
+            ">" +
+            escapeHtml(optLabel) +
+            "</option>"
+        );
+      }
+      var bounds = getCalendarBoundsForOp(op);
+      var curDt = parseDateFromCierreId(op.cierres[selectedCierreIdx].id);
+      var curVal = curDt ? dateToInputValue(curDt) : "";
+      pickerHtml =
+        '<div class="pc-cierre-picker-section">' +
+        '<div class="pc-cierre-cal-panel" hidden>' +
+        '<div class="pc-cierre-cal-row">' +
+        '<label class="pc-cierre-cal-label" for="pc-cierre-cal-input">Día del cierre</label>' +
+        '<input type="date" id="pc-cierre-cal-input" class="pc-cierre-cal-input" lang="es-CO"' +
+        (bounds.min ? ' min="' + escapeHtml(bounds.min) + '"' : "") +
+        (bounds.max ? ' max="' + escapeHtml(bounds.max) + '"' : "") +
+        (curVal ? ' value="' + escapeHtml(curVal) + '"' : "") +
+        " />" +
+        '<button type="button" class="pc-cierre-cal-go">Ir a la fecha</button>' +
+        "</div>" +
+        '<p class="pc-cierre-cal-msg"></p>' +
+        "</div>" +
+        '<div class="pc-cierre-picker">' +
+        '<div class="pc-cierre-select-card">' +
+        '<label class="pc-cierre-select-label" for="pc-cierre-select">Cierre</label>' +
+        '<div class="pc-cierre-select-inner">' +
+        '<select id="pc-cierre-select" class="pc-cierre-select" autocomplete="off">' +
+        opts.join("") +
+        "</select></div></div></div></div>";
+    }
+
+    var rowNum = nCierres > 1 ? selectedCierreIdx + 1 : 1;
+    var rows = renderOneCierreRowAndDetail(c, rowNum, selectedCierreIdx, sede.sedeId);
+
+    detailEl.innerHTML =
+      printBanner +
+      head +
+      pickerHtml +
+      '<table class="pc-table"><tbody>' +
+      rows +
+      "</tbody></table>";
+    var tallies = detailEl.querySelectorAll("textarea.pc-voucher-tally");
+    for (var ti = 0; ti < tallies.length; ti++) {
+      updateVoucherResult(tallies[ti]);
+    }
+  }
+
+  /** Intervalo de sincronización en segundo plano (ms). */
+  var REALTIME_REFRESH_MS = 30000;
+  var realtimeRefreshTimer = null;
+  var refreshTreeInFlight = false;
+
+  function stopRealtimeRefresh() {
+    if (realtimeRefreshTimer) {
+      clearInterval(realtimeRefreshTimer);
+      realtimeRefreshTimer = null;
+    }
+  }
+
+  function startRealtimeRefresh() {
+    stopRealtimeRefresh();
+    if (!auth.currentUser) return;
+    realtimeRefreshTimer = setInterval(function () {
+      if (!auth.currentUser || document.visibilityState !== "visible") return;
+      refreshTreePreservingSelection();
+    }, REALTIME_REFRESH_MS);
+  }
+
+  async function refreshTreePreservingSelection() {
+    if (!auth.currentUser || refreshTreeInFlight) return;
+    refreshTreeInFlight = true;
+    var prevSedeId = null;
+    var prevOpId = null;
+    var prevCierreId = null;
+    if (selectedSedeIdx >= 0 && tree[selectedSedeIdx]) {
+      prevSedeId = tree[selectedSedeIdx].sedeId;
+      if (selectedOpIdx >= 0 && tree[selectedSedeIdx].operarios[selectedOpIdx]) {
+        prevOpId = tree[selectedSedeIdx].operarios[selectedOpIdx].opId;
+        var opc = tree[selectedSedeIdx].operarios[selectedOpIdx];
+        if (selectedCierreIdx >= 0 && opc.cierres && opc.cierres[selectedCierreIdx]) {
+          prevCierreId = opc.cierres[selectedCierreIdx].id;
+        }
+      }
+    }
+    try {
+      var fetched = await Promise.all([
+        api.fetchCierresTree(db, auth),
+        loadPosRecaudosFirestore()
+      ]);
+      var newTree = fetched[0];
+      newTree = newTree.filter(function (s) {
+        return s.operarios && s.operarios.length;
+      });
+      tree = newTree;
+      selectedSedeIdx = -1;
+      selectedOpIdx = -1;
+      selectedCierreIdx = 0;
+
+      if (prevSedeId) {
+        tree.forEach(function (s, i) {
+          if (s.sedeId === prevSedeId) selectedSedeIdx = i;
+        });
+      }
+      if (selectedSedeIdx >= 0 && prevOpId) {
+        selectedOpIdx = -1;
+        tree[selectedSedeIdx].operarios.forEach(function (o, j) {
+          if (o.opId === prevOpId) selectedOpIdx = j;
+        });
+      }
+      if (selectedOpIdx >= 0 && prevCierreId) {
+        var cirs = tree[selectedSedeIdx].operarios[selectedOpIdx].cierres;
+        selectedCierreIdx = 0;
+        var found = false;
+        cirs.forEach(function (c, k) {
+          if (c.id === prevCierreId) {
+            selectedCierreIdx = k;
+            found = true;
+          }
+        });
+        if (!found && cirs.length) {
+          selectedCierreIdx = Math.min(selectedCierreIdx, cirs.length - 1);
+        }
+      }
+
+      setStatus(
+        tree.length
+          ? tree.length +
+            " estacionamiento(s) · Auto-actualizado " +
+            new Date().toLocaleTimeString("es-CO")
+          : "Sin datos de cierres o revisá reglas/colección «cierres»."
+      );
+      renderSedes();
+      renderOps();
+      if (selectedSedeIdx >= 0 && selectedOpIdx >= 0) {
+        renderDetail();
+      } else if (selectedSedeIdx >= 0) {
+        detailEl.innerHTML =
+          '<p class="pc-placeholder">Seleccioná un operario para ver los cierres.</p>';
+      } else {
+        detailEl.innerHTML =
+          '<p class="pc-placeholder">Seleccioná sede y operario.</p>';
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      refreshTreeInFlight = false;
+    }
+  }
+
+  async function loadAll() {
+    if (!auth.currentUser) return;
+    stopRealtimeRefresh();
+    setStatus("Cargando árbol de cierres…");
+    tree = [];
+    selectedSedeIdx = -1;
+    selectedOpIdx = -1;
+    selectedCierreIdx = 0;
+    try {
+      var loaded = await Promise.all([
+        api.fetchCierresTree(db, auth),
+        loadPosRecaudosFirestore()
+      ]);
+      tree = loaded[0];
+      var posCount = loaded[1];
+      tree = tree.filter(function (s) {
+        return s.operarios && s.operarios.length;
+      });
+      var posNote =
+        posCount < 0
+          ? " · CIERRES: sin permiso (desplegá firestore.rules)"
+          : posCount === 0
+            ? " · CIERRES: 0 documentos"
+            : " · CIERRES: " + posCount + " doc(s)";
+      setStatus(
+        tree.length
+          ? tree.length +
+            " estacionamiento(s) con cierres" +
+            posNote +
+            " · " +
+            new Date().toLocaleString("es-CO") +
+            " · Actualización automática cada " +
+            REALTIME_REFRESH_MS / 1000 +
+            " s"
+          : "Sin datos de cierres o revisá reglas/colección «cierres»." + posNote
+      );
+    } catch (e) {
+      setStatus("Error: " + (e.code || "") + " " + (e.message || e));
+      console.error(e);
+    }
+    renderSedes();
+    opsEl.innerHTML = "";
+    detailEl.innerHTML = '<p class="pc-placeholder">Seleccioná sede y operario.</p>';
+    startRealtimeRefresh();
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (
+      document.visibilityState === "visible" &&
+      auth.currentUser &&
+      mainEl &&
+      !mainEl.hidden
+    ) {
+      refreshTreePreservingSelection();
+    }
+  });
+
+  document.getElementById("pc-reload").addEventListener("click", loadAll);
+
+  document.getElementById("pc-btn-google").addEventListener("click", function () {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope("profile");
+    provider.addScope("email");
+    auth.signInWithPopup(provider).catch(function (e) {
+      if (e.code === "auth/popup-blocked") {
+        return auth.signInWithRedirect(provider);
+      }
+      alert(e.message || String(e));
+    });
+  });
+
+  var authBootFallbackPc = window.setTimeout(function () {
+    if (!document.documentElement.classList.contains("auth-session-ready")) {
+      document.documentElement.classList.add("auth-session-ready");
+      var u = auth.currentUser;
+      if (u) {
+        authGate.hidden = true;
+        mainEl.hidden = false;
+        loadAll();
+      } else {
+        stopRealtimeRefresh();
+        voucherDraftByCierreId = {};
+        authGate.hidden = false;
+        mainEl.hidden = true;
+        setStatus("");
+      }
+    }
+  }, 12000);
+
+  auth.onAuthStateChanged(function (user) {
+    window.clearTimeout(authBootFallbackPc);
+    document.documentElement.classList.add("auth-session-ready");
+    if (user) {
+      authGate.hidden = true;
+      mainEl.hidden = false;
+      loadAll();
+    } else {
+      stopRealtimeRefresh();
+      voucherDraftByCierreId = {};
+      authGate.hidden = false;
+      mainEl.hidden = true;
+      setStatus("");
+    }
+  });
+
+  auth.getRedirectResult().catch(function () {});
+})();
+  </script>
+<script src="lugano-firestore-alertas.js"></script>
+</body>
+</html>

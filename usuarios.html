@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="logolugano1.jpg">
+    <link rel="apple-touch-icon" href="logolugano1.jpg">
+  <title>Usuarios · Operadores · S.P.A.C.E</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="help-widget.css">
+    <script src="help-widget.js" defer></script>
+    <script src="lugano-banner-ssr.js"></script>
+    <script src="site-header-toggle.js" defer></script>
+  <script src="lugano-header-alerts.js" defer></script>
+    <link rel="stylesheet" href="lugano-auth-gate.css">
+    <script>
+    window.onload = function () {
+      var el = document.getElementById("usu");
+      if (el) el.style.background = "black";
+    };
+    </script>
+            <style>
+    body.u-body {
+      margin: 0;
+      background: #0a0a0a;
+      color: #e8eaef;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      text-align: left;
+      font-size: 14px;
+    }
+    .u-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 16px 40px;
+      box-sizing: border-box;
+    }
+    .u-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .u-toolbar button {
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+            cursor: pointer;
+      border: 1px solid #444;
+      background: #252525;
+      color: #eee;
+      font-family: inherit;
+    }
+    .u-toolbar button:hover {
+      background: #333;
+    }
+    .u-toolbar button.primary {
+      border-color: #e65100;
+      background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+      color: #fff;
+    }
+    .u-toolbar button.danger {
+      border-color: #b71c1c;
+      background: #3e1616;
+      color: #ffcdd2;
+    }
+    #u-status {
+      font-size: 13px;
+      color: #94a3b8;
+      flex: 1;
+      min-width: 180px;
+    }
+    .u-layout {
+      display: grid;
+      grid-template-columns: minmax(220px, 280px) 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .u-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .u-list-card,
+    .u-form-card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .u-list-card h3,
+    .u-form-card h3 {
+      margin: 0;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+      border-bottom: 1px solid #333;
+      color: #e8eaef;
+    }
+    .u-search {
+      padding: 10px 12px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .u-search input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #eee;
+      font-size: 13px;
+    }
+    .u-list {
+      max-height: min(70vh, 520px);
+      overflow-y: auto;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .u-list button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 10px 14px;
+      border: none;
+      border-bottom: 1px solid #2a2a2a;
+      background: transparent;
+      color: #e0e0e0;
+      font-size: 13px;
+            cursor: pointer;
+      font-family: inherit;
+    }
+    .u-list button:hover {
+      background: #1f1f1f;
+    }
+    .u-list button.is-active {
+      background: #2d1f26;
+      border-left: 3px solid #ff9800;
+      padding-left: 11px;
+    }
+    .u-list .u-li-sub {
+      display: block;
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .u-li-badge {
+      display: inline-block;
+      margin-left: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      vertical-align: middle;
+    }
+    .u-li-badge--blocked {
+      background: rgba(183, 28, 28, 0.35);
+      color: #ffcdd2;
+      border: 1px solid #c62828;
+    }
+    .u-list button.u-li-inactive {
+      opacity: 0.72;
+    }
+    .u-form-card form {
+      padding: 14px 16px 18px;
+    }
+    .u-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px 16px;
+    }
+    .u-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .u-field span {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #9ca3af;
+    }
+    .u-field input[type="text"],
+    .u-field input[type="number"],
+    .u-field input[type="datetime-local"],
+    .u-field input[type="password"],
+    .u-field select,
+    .u-field textarea {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #eee;
+      font-size: 13px;
+      font-family: inherit;
+    }
+    .u-field textarea {
+      min-height: 56px;
+      resize: vertical;
+    }
+    .u-field-full {
+      grid-column: 1 / -1;
+    }
+    .u-check {
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+    }
+    .u-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: #ff9800;
+    }
+    .u-main[hidden] {
+      display: none !important;
+    }
+    .u-doc-id-row input[readonly],
+    .u-doc-id-display {
+      opacity: 0.92;
+      cursor: default;
+      font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+      letter-spacing: 0.03em;
+    }
+    .u-field-hint {
+      font-size: 11px;
+      color: #6b7280;
+      text-transform: none;
+      letter-spacing: normal;
+      line-height: 1.45;
+      margin: 6px 0 0;
+    }
+
+    /* Contraseña operador (misma lógica que la app: SHA-256 + salt) */
+    .u-password-panel {
+      grid-column: 1 / -1;
+      background: #151518;
+      border: 1px solid #3d3442;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-top: 4px;
+    }
+    .u-password-panel header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .u-password-panel header .u-pass-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e8eaef;
+      margin: 0;
+    }
+    .u-pass-badge {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .u-pass-badge.ok {
+      background: rgba(76, 175, 80, 0.2);
+      color: #a5d6a7;
+      border: 1px solid #4caf50;
+    }
+    .u-pass-badge.no {
+      background: rgba(158, 158, 158, 0.15);
+      color: #bdbdbd;
+      border: 1px solid #616161;
+    }
+    .u-pass-hint {
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.45;
+      margin: 0 0 14px;
+    }
+    .u-pass-row {
+      display: flex;
+      align-items: stretch;
+      gap: 8px;
+      margin-bottom: 10px;
+      max-width: 520px;
+    }
+    .u-pass-row input[type="password"],
+    .u-pass-row input[type="text"] {
+      flex: 1;
+      min-height: 44px;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      font-size: 15px;
+      letter-spacing: 0.02em;
+    }
+    .u-pass-toggle {
+      flex-shrink: 0;
+      min-width: 96px;
+      padding: 0 12px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: #2a2a2e;
+      color: #cbd5e1;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .u-pass-toggle:hover {
+      background: #38383f;
+    }
+    details.u-pass-advanced {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #333;
+    }
+    details.u-pass-advanced summary {
+      cursor: pointer;
+      font-size: 12px;
+      color: #94a3b8;
+      user-select: none;
+    }
+    details.u-pass-advanced summary:hover {
+      color: #cbd5e1;
+    }
+    .u-pass-advanced textarea {
+      width: 100%;
+      max-width: 520px;
+      box-sizing: border-box;
+      margin-top: 10px;
+      min-height: 72px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #fda4af;
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 12px;
+    }
+    </style>
+</head>
+
+<body class="u-body auth-gate-active" bgcolor="black" text="white">
+
+<div id="auth-gate" class="auth-gate" role="dialog" aria-modal="true" aria-labelledby="auth-gate-title">
+  <div class="auth-gate-brand">
+    <img src="logolugano1.jpg" height="88" alt="S.P.A.C.E" />
+  </div>
+  <div id="auth-logged-out" class="auth-panel-inner auth-gate-card">
+    <p class="auth-panel-title" id="auth-gate-title">Bienvenido</p>
+    <p class="auth-panel-desc">
+      Portal corporativo para la <strong>gestión y administración</strong> del planillado S.P.A.C.E.
+      Use su cuenta institucional para acceder de forma segura, supervisar la operación en tiempo real y consultar la información consolidada del negocio desde un solo lugar.
+    </p>
+    <button type="button" id="btn-google-signin">Iniciar sesión con Google</button>
+    <p id="auth-domain-hint" class="auth-domain-hint"></p>
+  </div>
+</div>
+
+<div id="main-app" class="main-app" hidden aria-hidden="true">
+
+<header bgcolor="white" text="white">
+  <center>
+    <table border="0" style="
+    background-position: center;
+    background: position y 10pt;
+      background-image: url(banner1.png);" font color="white" text="white" text-align="center" width="1325">
+<tr>
+        <td rowspan="2" bgcolor="black"><a href="index.html"><img src="logolugano1.jpg" height="120" bgcolor="black" alt="S.P.A.C.E"></a></td>
+<td text="white" colspan="11" height="120" color="white">
+          <h1 style="color: aliceblue;">Usuarios y permisos</h1>
+</td>
+</tr>
+      <tr>
+        <td width="120"><center><a href="index.html" id="index" class="btnmnini"><span style="color: aliceblue;">inicio</span></a></center></td>
+        <td width="120" id="planillados"><center><a href="planillados.html" id="pln" class="btnmnini"><span style="color: aliceblue;">Planillados</span></a></center></td>
+        <td width="120" id="mensualidades"><center><a href="mensualidades.html" id="mes" class="btnmnini"><span style="color: aliceblue;">Mensualidades</span></a></center></td>
+        <td width="120" id="reportes"><center><a href="reportes.html" id="rep" class="btnmnini"><span style="color: aliceblue;">Reportes</span></a></center></td>
+        <td width="120" id="estadistico"><center><a href="estadistico.html" id="est" class="btnmnini"><span style="color: aliceblue;">Estadístico</span></a></center></td>
+        <td width="120" id="seguridad"><center><a href="seguridad.html" id="seg" class="btnmnini"><span style="color: aliceblue;">Seguridad</span></a></center></td>
+        <td width="120" id="usuarios"><center><a href="usuarios.html" id="usu" class="btnmnini"><span style="color: aliceblue;">Usuarios</span></a></center></td>
+        <td width="120" id="estacionamientos"><center><a href="estacionamientos.html" id="esta" class="btnmnini"><span style="color: aliceblue;">Estacionamientos</span></a></center></td>
+        <td width="120" id="programacion"><center><a href="programacion.html" id="prog" class="btnmnini"><span style="color: aliceblue;">Programación</span></a></center></td>
+        <td width="120" id="ayuda"><center><a href="ayuda.html" id="ayu" class="btnmnini"><span style="color: aliceblue;">Ayuda</span></a></center></td>
+      </tr>
+    </table>
+  </center>
+ </header>
+ 
+  <div id="u-main" class="u-wrap">
+    <div class="u-toolbar">
+      <button type="button" class="primary" id="u-btn-new">Nuevo operador</button>
+      <button type="button" id="u-btn-reload">Recargar lista</button>
+      <button type="button" class="danger" id="u-btn-delete">Eliminar documento</button>
+      <span id="u-status"></span>
+    </div>
+
+    <div class="u-layout">
+      <div class="u-list-card">
+        <h3>Operadores (<span id="u-count">0</span>)</h3>
+        <div class="u-search">
+          <input type="search" id="u-filter" placeholder="Filtrar por ID o nombre…" autocomplete="off" />
+        </div>
+        <ul class="u-list" id="u-list"></ul>
+      </div>
+
+      <div class="u-form-card">
+        <h3 id="u-form-title">Datos del operador</h3>
+        <form id="u-form" autocomplete="off">
+          <div class="u-grid">
+            <div class="u-field u-field-full">
+              <span>name</span>
+              <input type="text" id="f-name" placeholder="Nombre y apellido (ej. Mauricio Rojas)" autocomplete="off" />
+            </div>
+            <div class="u-field">
+              <span>documentNumber</span>
+              <input type="text" id="f-documentNumber" placeholder="Cédula (se usan los 3 últimos dígitos)" autocomplete="off" />
+            </div>
+            <div class="u-field u-doc-id-row u-field-full">
+              <span>Nombre de Usuario</span>
+              <input
+                type="text"
+                id="f-docId-display"
+                class="u-doc-id-display"
+                readonly
+                tabindex="-1"
+                placeholder="Completa nombre y cédula; se genera automáticamente"
+                aria-readonly="true"
+              />
+              <input type="hidden" id="f-docId" />
+              <p class="u-field-hint">
+                Generado solo lectura desde <strong>name</strong>: prefijo <code id="u-prefix-hint">Pes</code>, primera letra del nombre,
+                primera letra del apellido y los tres últimos dígitos de la cédula.
+                Ej. <code>Mauricio Rojas</code> con cédula terminada en <code>…421</code> → <code id="u-prefix-example">PesMR421</code>.
+              </p>
+            </div>
+            <div class="u-field">
+              <span>id (campo)</span>
+              <input type="text" id="f-id" placeholder="Coincide con el código operador" />
+            </div>
+            <div class="u-field">
+              <span>userId (Firebase Auth)</span>
+              <input type="text" id="f-userId" placeholder="UID de Auth" />
+            </div>
+            <div class="u-field">
+              <span>email</span>
+              <input type="text" id="f-email" />
+            </div>
+            <div class="u-field">
+              <span>phone</span>
+              <input type="text" id="f-phone" />
+            </div>
+            <div class="u-field">
+              <span>role</span>
+              <select id="f-role">
+                <option value="operator">operator</option>
+                <option value="admin">admin</option>
+                <option value="supervisor">supervisor</option>
+                <option value="">(otro)</option>
+              </select>
+            </div>
+            <div class="u-field" id="f-role-other-wrap" hidden>
+              <span>role (texto)</span>
+              <input type="text" id="f-role-other" />
+            </div>
+            <div class="u-field u-field-full">
+              <span>Acceso app móvil</span>
+              <label class="u-check" style="margin-top: 4px;">
+                <input type="checkbox" id="f-activo" checked />
+                <span style="text-transform: none">Permitir inicio de sesión</span>
+              </label>
+              <span style="font-size: 11px; color: #6b7280; text-transform: none; letter-spacing: normal; margin-top: 6px; line-height: 1.35;">
+                Se guarda como <code style="font-size: 11px">activo</code> (booleano) en Firestore. Desmarcar bloquea el acceso si la app comprueba este campo.
+              </span>
+            </div>
+            <div class="u-field">
+              <span>parkingId</span>
+              <input type="text" id="f-parkingId" />
+            </div>
+            <div class="u-field">
+              <span>parkingLot</span>
+              <input type="text" id="f-parkingLot" />
+            </div>
+            <div class="u-field">
+              <span>profileImageUrl</span>
+              <input type="text" id="f-profileImageUrl" />
+            </div>
+            <div class="u-field">
+              <span>createdAt</span>
+              <input type="datetime-local" id="f-createdAt" step="1" />
+            </div>
+            <div class="u-field">
+              <span>lastLogin</span>
+              <input type="datetime-local" id="f-lastLogin" step="1" />
+            </div>
+            <div class="u-field">
+              <span>lastSeen</span>
+              <input type="datetime-local" id="f-lastSeen" step="1" />
+            </div>
+            <div class="u-field">
+              <span>lastSyncTimestamp (ms, 0 si no aplica)</span>
+              <input type="number" id="f-lastSyncTimestamp" step="1" />
+            </div>
+            <div class="u-field u-check">
+              <input type="checkbox" id="f-offline" />
+              <span style="text-transform:none">offline</span>
+            </div>
+            <div class="u-field u-check">
+              <input type="checkbox" id="f-online" />
+              <span style="text-transform:none">online</span>
+            </div>
+            <div class="u-password-panel">
+              <header>
+                <p class="u-pass-title">Contraseña de acceso del operador</p>
+                <span id="u-pass-status" class="u-pass-badge no" role="status"></span>
+              </header>
+              <p class="u-pass-hint">
+                Escribí la nueva contraseña dos veces. Al guardar se calcula el mismo formato que usa la app móvil (<code>hash:salt</code>) y la sesión de esta página solo conserva el resultado en Firestore, no la contraseña en claro.
+              </p>
+              <div class="u-pass-row">
+                <input
+                  type="password"
+                  id="f-password-plain"
+                  autocomplete="new-password"
+                  placeholder="Nueva contraseña"
+                  aria-label="Nueva contraseña"
+                />
+                <button type="button" class="u-pass-toggle" id="u-toggle-pass1" aria-label="Mostrar u ocultar">Mostrar</button>
+              </div>
+              <div class="u-pass-row">
+                <input
+                  type="password"
+                  id="f-password-plain2"
+                  autocomplete="new-password"
+                  placeholder="Confirmar contraseña"
+                  aria-label="Confirmar contraseña"
+                />
+                <button type="button" class="u-pass-toggle" id="u-toggle-pass2" aria-label="Mostrar u ocultar confirmación">Mostrar</button>
+              </div>
+              <details class="u-pass-advanced">
+                <summary>Opciones avanzadas — pegar hash manualmente</summary>
+                <textarea id="f-password-advanced" spellcheck="false" placeholder="Solo si migrás desde otro sistema; formato hash:salt"></textarea>
+              </details>
+            </div>
+          </div>
+          <div class="u-toolbar" style="margin-top:16px;margin-bottom:0;">
+            <button type="submit" class="primary" id="u-btn-save">Guardar en Firestore</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="auth-error-strip">
+  <p id="auth-banner-detail" style="margin:0;font-family:Consolas,monospace;font-size:12px;"></p>
+</div>
+
+  <script src="firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script>
+(function () {
+  firebase.initializeApp(typeof firebaseConfig !== "undefined" ? firebaseConfig : {});
+  var db = firebase.firestore();
+  var auth = firebase.auth();
+  var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
+  var COL = cfg.operatorsCollection || cfg.cierresOperatorsCollection || "operators";
+
+  var statusEl = document.getElementById("u-status");
+  var listEl = document.getElementById("u-list");
+  var countEl = document.getElementById("u-count");
+  var filterEl = document.getElementById("u-filter");
+  var formEl = document.getElementById("u-form");
+
+  var allDocs = [];
+  var selectedId = null;
+  var isNewMode = false;
+
+  /** Igual que Operator.encriptarContraseña en Kotlin: SHA-256(UTF-8(password + saltHex)), salt 16 bytes en hex. */
+  async function hashPasswordLikeOperatorKotlin(plain) {
+    if (!crypto || !crypto.subtle) {
+      throw new Error("El navegador no puede cifrar (use HTTPS o otro navegador).");
+    }
+    var salt = new Uint8Array(16);
+    crypto.getRandomValues(salt);
+    var saltHex = Array.from(salt).map(function (b) {
+      return ("0" + b.toString(16)).slice(-2);
+    }).join("");
+    var combined = plain + saltHex;
+    var enc = new TextEncoder().encode(combined);
+    var buf = await crypto.subtle.digest("SHA-256", enc);
+    var hashHex = Array.from(new Uint8Array(buf)).map(function (b) {
+      return ("0" + b.toString(16)).slice(-2);
+    }).join("");
+    return hashHex + ":" + saltHex;
+  }
+
+  function clearPasswordInputs() {
+    var a = document.getElementById("f-password-plain");
+    var b = document.getElementById("f-password-plain2");
+    var c = document.getElementById("f-password-advanced");
+    if (a) a.value = "";
+    if (b) b.value = "";
+    if (c) c.value = "";
+  }
+
+  function updatePasswordBadge(hasStoredHash) {
+    var el = document.getElementById("u-pass-status");
+    if (!el) return;
+    if (hasStoredHash) {
+      el.textContent = "Acceso configurado";
+      el.className = "u-pass-badge ok";
+    } else {
+      el.textContent = "Sin contraseña en base";
+      el.className = "u-pass-badge no";
+    }
+  }
+
+  function bindPasswordToggle(buttonId, inputId) {
+    var btn = document.getElementById(buttonId);
+    var inp = document.getElementById(inputId);
+    if (!btn || !inp) return;
+    btn.addEventListener("click", function () {
+      inp.type = inp.type === "password" ? "text" : "password";
+      btn.textContent = inp.type === "password" ? "Mostrar" : "Ocultar";
+    });
+  }
+  bindPasswordToggle("u-toggle-pass1", "f-password-plain");
+  bindPasswordToggle("u-toggle-pass2", "f-password-plain2");
+
+  function setStatus(msg) {
+    statusEl.textContent = msg || "";
+  }
+
+  function msToDatetimeLocal(ms) {
+    if (ms == null || ms === "" || !isFinite(Number(ms))) return "";
+    var d = new Date(Number(ms));
+    if (isNaN(d.getTime())) return "";
+    var pad = function (n) {
+      return (n < 10 ? "0" : "") + n;
+    };
+    return (
+      d.getFullYear() +
+      "-" +
+      pad(d.getMonth() + 1) +
+      "-" +
+      pad(d.getDate()) +
+      "T" +
+      pad(d.getHours()) +
+      ":" +
+      pad(d.getMinutes()) +
+      ":" +
+      pad(d.getSeconds())
+    );
+  }
+
+  function datetimeLocalToMs(str) {
+    if (!str || !String(str).trim()) return null;
+    var t = new Date(str).getTime();
+    return isNaN(t) ? null : t;
+  }
+
+  function escapeHtml(s) {
+    var d = document.createElement("div");
+    d.textContent = s == null ? "" : String(s);
+    return d.innerHTML;
+  }
+
+  var OPERATOR_USERNAME_PREFIX =
+    cfg.operatorUsernamePrefix != null && String(cfg.operatorUsernamePrefix).trim()
+      ? String(cfg.operatorUsernamePrefix).trim()
+      : "Pes";
+
+  /**
+   * ID de documento en Firestore: prefijo + inicial nombre + inicial apellido + 3 últimos dígitos de la cédula.
+   * Ej. "Mauricio Rojas" + cédula …421 → PesMR421
+   */
+  function computeOperatorUsername(name, documentNumber) {
+    var raw = String(name || "").trim();
+    var parts = raw.split(/\s+/).filter(Boolean);
+    if (!parts.length) return "";
+    var firstW = parts[0];
+    var lastW = parts.length > 1 ? parts[parts.length - 1] : "";
+    var c1 = firstW.charAt(0).toUpperCase();
+    var c2 = lastW
+      ? lastW.charAt(0).toUpperCase()
+      : firstW.length > 1
+        ? firstW.charAt(1).toUpperCase()
+        : "X";
+    var digits = String(documentNumber || "").replace(/\D/g, "");
+    if (!digits.length) return "";
+    var tail = digits.slice(-3);
+    if (tail.length < 3) tail = ("000" + tail).slice(-3);
+    return OPERATOR_USERNAME_PREFIX + c1 + c2 + tail;
+  }
+
+  (function syncOperatorPrefixHintUi() {
+    var hint = document.getElementById("u-prefix-hint");
+    var ex = document.getElementById("u-prefix-example");
+    if (hint) hint.textContent = OPERATOR_USERNAME_PREFIX;
+    if (ex) ex.textContent = OPERATOR_USERNAME_PREFIX + "MR421";
+  })();
+
+  function syncDocIdUi() {
+    var hid = document.getElementById("f-docId");
+    var disp = document.getElementById("f-docId-display");
+    if (!hid || !disp) return;
+    if (isNewMode) {
+      var gen = computeOperatorUsername(
+        document.getElementById("f-name").value,
+        document.getElementById("f-documentNumber").value
+      );
+      hid.value = gen;
+      disp.value = gen;
+    } else {
+      var id = String(selectedId || hid.value || "").trim();
+      hid.value = id;
+      disp.value = id;
+    }
+  }
+
+  function fillFormFromData(data, docId) {
+    data = data || {};
+    document.getElementById("f-docId").value = docId || "";
+    document.getElementById("f-id").value = data.id != null ? String(data.id) : docId || "";
+    document.getElementById("f-userId").value = data.userId != null ? String(data.userId) : "";
+    document.getElementById("f-name").value = data.name != null ? String(data.name) : "";
+    document.getElementById("f-documentNumber").value =
+      data.documentNumber != null ? String(data.documentNumber) : "";
+    document.getElementById("f-email").value = data.email != null ? String(data.email) : "";
+    document.getElementById("f-phone").value = data.phone != null ? String(data.phone) : "";
+    var role = data.role != null ? String(data.role) : "operator";
+    var sel = document.getElementById("f-role");
+    var ro = document.getElementById("f-role-other");
+    var row = document.getElementById("f-role-other-wrap");
+    var preset = ["operator", "admin", "supervisor"];
+    if (preset.indexOf(role) >= 0) {
+      sel.value = role;
+      row.hidden = true;
+      ro.value = "";
+    } else {
+      sel.value = "";
+      row.hidden = false;
+      ro.value = role;
+    }
+    document.getElementById("f-parkingId").value =
+      data.parkingId != null ? String(data.parkingId) : "";
+    document.getElementById("f-parkingLot").value =
+      data.parkingLot != null ? String(data.parkingLot) : "";
+    document.getElementById("f-profileImageUrl").value =
+      data.profileImageUrl != null ? String(data.profileImageUrl) : "";
+    document.getElementById("f-createdAt").value = msToDatetimeLocal(data.createdAt);
+    document.getElementById("f-lastLogin").value = msToDatetimeLocal(data.lastLogin);
+    document.getElementById("f-lastSeen").value = msToDatetimeLocal(data.lastSeen);
+    document.getElementById("f-lastSyncTimestamp").value =
+      data.lastSyncTimestamp != null ? String(data.lastSyncTimestamp) : "0";
+    document.getElementById("f-offline").checked = !!data.offline;
+    document.getElementById("f-online").checked = !!data.online;
+    document.getElementById("f-activo").checked = data.activo !== false;
+    clearPasswordInputs();
+    updatePasswordBadge(!!(data.password && String(data.password).trim()));
+    syncDocIdUi();
+  }
+
+  /** Formulario vacío, sin operario seleccionado en la lista (tras cargar, guardar, recargar, etc.). */
+  function clearForm() {
+    isNewMode = true;
+    selectedId = null;
+    document.getElementById("u-form-title").textContent = "Datos del operador";
+    fillFormFromData({}, "");
+    document.getElementById("f-createdAt").value = "";
+    document.getElementById("f-lastSyncTimestamp").value = "";
+    clearPasswordInputs();
+    updatePasswordBadge(false);
+    document.getElementById("f-role-other-wrap").hidden = !!document.getElementById("f-role").value;
+    renderList(filterEl.value);
+  }
+
+  function getRoleValue() {
+    var sel = document.getElementById("f-role").value;
+    if (sel) return sel;
+    return String(document.getElementById("f-role-other").value || "").trim() || "operator";
+  }
+
+  function buildPayloadFromForm(existingData) {
+    existingData = existingData || {};
+    var docId = String(document.getElementById("f-docId").value || "").trim();
+    var payload = {
+      id: String(document.getElementById("f-id").value || "").trim() || docId,
+      userId: String(document.getElementById("f-userId").value || "").trim(),
+      name: String(document.getElementById("f-name").value || "").trim(),
+      documentNumber: String(document.getElementById("f-documentNumber").value || "").trim(),
+      email: String(document.getElementById("f-email").value || "").trim(),
+      phone: String(document.getElementById("f-phone").value || "").trim(),
+      role: getRoleValue(),
+      parkingId: String(document.getElementById("f-parkingId").value || "").trim(),
+      parkingLot: String(document.getElementById("f-parkingLot").value || "").trim(),
+      profileImageUrl: String(document.getElementById("f-profileImageUrl").value || "").trim(),
+      offline: !!document.getElementById("f-offline").checked,
+      online: !!document.getElementById("f-online").checked,
+      activo: !!document.getElementById("f-activo").checked
+    };
+
+    var ca = datetimeLocalToMs(document.getElementById("f-createdAt").value);
+    if (ca != null) payload.createdAt = ca;
+    else if (isNewMode) payload.createdAt = Date.now();
+
+    var ll = datetimeLocalToMs(document.getElementById("f-lastLogin").value);
+    if (ll != null) payload.lastLogin = ll;
+    else if (existingData.lastLogin != null) payload.lastLogin = existingData.lastLogin;
+
+    var ls = datetimeLocalToMs(document.getElementById("f-lastSeen").value);
+    if (ls != null) payload.lastSeen = ls;
+    else if (existingData.lastSeen != null) payload.lastSeen = existingData.lastSeen;
+
+    var lst = document.getElementById("f-lastSyncTimestamp").value;
+    if (lst !== "" && lst != null) payload.lastSyncTimestamp = parseInt(lst, 10) || 0;
+    else payload.lastSyncTimestamp = 0;
+
+    return payload;
+  }
+
+  function renderList(filter) {
+    var q = String(filter || "")
+      .trim()
+      .toLowerCase();
+    listEl.innerHTML = "";
+    var n = 0;
+    allDocs.forEach(function (item) {
+      var id = item.id;
+      var name = (item.data && item.data.name) || "";
+      if (q && id.toLowerCase().indexOf(q) < 0 && String(name).toLowerCase().indexOf(q) < 0) {
+        return;
+      }
+      n++;
+      var li = document.createElement("li");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      var blocked = item.data && item.data.activo === false;
+      btn.innerHTML =
+        "<strong>" +
+        escapeHtml(id) +
+        "</strong>" +
+        (blocked
+          ? '<span class="u-li-badge u-li-badge--blocked" title="Inicio de sesión deshabilitado">Bloqueado</span>'
+          : "") +
+        '<span class="u-li-sub">' +
+        escapeHtml(name || "sin nombre") +
+        "</span>";
+      if (blocked) btn.classList.add("u-li-inactive");
+      if (selectedId === id) btn.classList.add("is-active");
+      btn.addEventListener("click", function () {
+        selectDoc(id);
+      });
+      li.appendChild(btn);
+      listEl.appendChild(li);
+    });
+    countEl.textContent = String(n);
+  }
+
+  function selectDoc(id) {
+    var found = allDocs.filter(function (x) {
+      return x.id === id;
+    })[0];
+    if (!found) return;
+    isNewMode = false;
+    selectedId = id;
+    document.getElementById("u-form-title").textContent = "Editar · " + id;
+    fillFormFromData(found.data, id);
+    renderList(filterEl.value);
+  }
+
+  async function loadOperators() {
+    if (!auth.currentUser) return;
+    setStatus("Cargando «" + COL + "»…");
+    try {
+      var snap = await db.collection(COL).get();
+      allDocs = snap.docs.map(function (d) {
+        return { id: d.id, data: d.data() || {} };
+      });
+      allDocs.sort(function (a, b) {
+        return a.id.localeCompare(b.id, "es");
+      });
+      if (selectedId && !allDocs.some(function (x) { return x.id === selectedId; })) {
+        selectedId = null;
+      }
+      setStatus(allDocs.length + " documento(s) · " + COL);
+      clearForm();
+    } catch (e) {
+      setStatus("Error: " + (e.code || "") + " " + (e.message || e));
+      console.error(e);
+    }
+  }
+
+  document.getElementById("f-role").addEventListener("change", function () {
+    document.getElementById("f-role-other-wrap").hidden = !!document.getElementById("f-role").value;
+  });
+
+  document.getElementById("f-name").addEventListener("input", function () {
+    if (isNewMode) syncDocIdUi();
+  });
+  document.getElementById("f-documentNumber").addEventListener("input", function () {
+    if (isNewMode) syncDocIdUi();
+  });
+
+  filterEl.addEventListener("input", function () {
+    renderList(filterEl.value);
+  });
+
+  document.getElementById("u-btn-new").addEventListener("click", function () {
+    isNewMode = true;
+    selectedId = null;
+    document.getElementById("u-form-title").textContent = "Nuevo operador";
+    fillFormFromData({}, "");
+    document.getElementById("f-createdAt").value = msToDatetimeLocal(Date.now());
+    document.getElementById("f-lastSyncTimestamp").value = "0";
+    clearPasswordInputs();
+    updatePasswordBadge(false);
+    renderList(filterEl.value);
+    document.getElementById("f-name").focus();
+  });
+
+  document.getElementById("u-btn-reload").addEventListener("click", function () {
+    loadOperators();
+  });
+
+  document.getElementById("u-btn-delete").addEventListener("click", async function () {
+    var docId = String(document.getElementById("f-docId").value || "").trim();
+    if (!docId || isNewMode) {
+      setStatus("Seleccioná un documento existente para eliminar.");
+      return;
+    }
+    if (!confirm('¿Eliminar permanentemente el documento operators/' + docId + "?")) return;
+    setStatus("Eliminando…");
+    try {
+      await db.collection(COL).doc(docId).delete();
+      await loadOperators();
+      setStatus("Documento eliminado.");
+    } catch (e) {
+      setStatus("Error al eliminar: " + (e.message || e));
+    }
+  });
+
+  formEl.addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    syncDocIdUi();
+    var docId = String(document.getElementById("f-docId").value || "").trim();
+    if (!docId) {
+      setStatus(
+        "Completá nombre (name) y cédula (documentNumber); el nombre de usuario se genera solo (ej. " +
+          OPERATOR_USERNAME_PREFIX +
+          "MR421)."
+      );
+      return;
+    }
+    var existing = allDocs.filter(function (x) {
+      return x.id === docId;
+    })[0];
+    var existingData = existing ? existing.data : {};
+    var payload = buildPayloadFromForm(existingData);
+
+    var p1 = String(document.getElementById("f-password-plain").value || "");
+    var p2 = String(document.getElementById("f-password-plain2").value || "");
+    var adv = String(document.getElementById("f-password-advanced").value || "").trim();
+
+    if (p1.length || p2.length) {
+      if (p1 !== p2) {
+        setStatus("Las contraseñas no coinciden.");
+        return;
+      }
+      if (p1.length < 6) {
+        setStatus("La contraseña debe tener al menos 6 caracteres (igual que en la app).");
+        return;
+      }
+      try {
+        payload.password = await hashPasswordLikeOperatorKotlin(p1);
+      } catch (err) {
+        setStatus(err.message || String(err));
+        return;
+      }
+    } else if (adv.length) {
+      if (!/^[a-fA-F0-9]+:[a-fA-F0-9]+$/.test(adv)) {
+        setStatus("El hash manual debe ser solo hex con un «:» (ej. hash:salt como en Firebase).");
+        return;
+      }
+      payload.password = adv;
+    }
+
+    setStatus("Guardando…");
+    try {
+      await db
+        .collection(COL)
+        .doc(docId)
+        .set(payload, { merge: true });
+      await loadOperators();
+      setStatus("Guardado correctamente. · " + allDocs.length + " documento(s) · " + COL);
+    } catch (e) {
+      setStatus("Error al guardar: " + (e.code || "") + " " + (e.message || e));
+      console.error(e);
+    }
+  });
+
+  auth.onAuthStateChanged(function (user) {
+    if (user) {
+      loadOperators();
+    } else {
+      allDocs = [];
+      selectedId = null;
+      listEl.innerHTML = "";
+      countEl.textContent = "0";
+      setStatus("");
+      clearForm();
+    }
+  });
+})();
+  </script>
+<script src="lugano-admin-auth.js"></script>
+<script src="lugano-auth-gate.js"></script>
+<script src="lugano-firestore-alertas.js"></script>
+</body>
+</html>

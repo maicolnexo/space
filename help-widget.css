@@ -1,0 +1,450 @@
+/* Widget global del asistente (todas las pantallas excepto ayuda.html) */
+.lp-help-widget {
+  position: fixed;
+  right: 0;
+  bottom: 18px;
+  z-index: 10050;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.lp-help-widget > * {
+  pointer-events: auto;
+}
+
+/* Fila de botones redondos (aparece al desplegar) */
+.lp-help-fab-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+.lp-help-widget.is-peek .lp-help-fab-row {
+  pointer-events: auto;
+}
+
+/* “Cuadro pegado al borde” (handle) */
+.lp-help-dock {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.lp-help-handle {
+  position: relative;
+  margin-right: 0;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-right: none;
+  background: rgba(10, 10, 14, 0.92);
+  color: #e8eaef;
+  border-top-left-radius: 14px;
+  border-bottom-left-radius: 14px;
+  padding: 10px 12px 10px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  transform: translateX(0);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.lp-help-handle:hover {
+  background: rgba(16, 16, 22, 0.95);
+  border-color: rgba(255, 183, 77, 0.55);
+}
+.lp-help-handle:focus-visible {
+  outline: 3px solid rgba(255, 183, 77, 0.75);
+  outline-offset: 3px;
+}
+
+.lp-help-handle img {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 4px;
+  display: block;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+}
+.lp-help-handle span {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* Botón redondo de Gemini (aparece al lado del botón del oso) */
+.lp-gemini-fab {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  background: linear-gradient(165deg, #0f1a2a 0%, #070b12 100%);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(10px) scale(0.92);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.lp-help-widget.is-peek .lp-gemini-fab {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.lp-gemini-fab:hover {
+  filter: brightness(1.06);
+}
+.lp-gemini-fab:focus-visible {
+  outline: 3px solid rgba(255, 183, 77, 0.75);
+  outline-offset: 3px;
+}
+.lp-gemini-fab svg {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+
+.lp-gemini-panel {
+  width: min(320px, calc(100vw - 26px));
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(165deg, #141420 0%, #0b0b12 100%);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+  padding: 12px 12px 10px;
+  transform-origin: bottom right;
+  transform: translateY(10px) scale(0.98);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.18s ease, visibility 0.18s;
+}
+.lp-gemini-panel.is-open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  visibility: visible;
+}
+.lp-gemini-title {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #dbeafe;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.lp-gemini-close {
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e0e0e0;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+.lp-gemini-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.lp-gemini-actions button {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e8eaef;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 9px 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.lp-gemini-actions button:hover {
+  border-color: rgba(255, 183, 77, 0.6);
+  background: rgba(255, 183, 77, 0.12);
+}
+.lp-gemini-note {
+  margin: 10px 0 0;
+  font-size: 10px;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
+/* FAB (aparece tras tocar el handle) */
+.lp-help-fab {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  background: linear-gradient(165deg, #12121a 0%, #08080d 100%);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(10px) scale(0.92);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.lp-help-widget.is-peek .lp-help-fab {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.lp-help-fab img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 50%;
+  display: block;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+}
+.lp-help-fab:focus-visible {
+  outline: 3px solid rgba(255, 183, 77, 0.75);
+  outline-offset: 3px;
+}
+
+/* Panel chat */
+.lp-help-panel {
+  width: min(392px, calc(100vw - 26px));
+  max-height: min(560px, 82vh);
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(165deg, #1a1820 0%, #0e0d11 100%);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+  transform-origin: bottom right;
+  transform: translateY(12px) scale(0.96);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s ease, visibility 0.22s;
+}
+.lp-help-panel.is-open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  visibility: visible;
+}
+.lp-help-panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 152, 0, 0.08);
+}
+.lp-help-panel h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff3e0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lp-help-panel h3 img {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 8px;
+  background: #121018;
+  box-sizing: border-box;
+}
+.lp-help-close {
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e0e0e0;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lp-help-close:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.lp-help-shell {
+  display: flex;
+  flex-direction: column;
+}
+.lp-help-messages {
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.48;
+  background: rgba(0, 0, 0, 0.25);
+}
+.lp-help-msg {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+.lp-help-msg--user {
+  justify-content: flex-end;
+}
+.lp-help-msg--bot {
+  justify-content: flex-start;
+}
+.lp-help-avatar {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(255, 152, 0, 0.35) 0%, rgba(70, 50, 80, 0.5) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-sizing: border-box;
+}
+.lp-help-avatar img {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 50%;
+  display: block;
+}
+.lp-help-bubble {
+  padding: 10px 12px;
+  border-radius: 14px;
+  max-width: 92%;
+}
+.lp-help-msg--user .lp-help-bubble {
+  background: linear-gradient(135deg, #f57c00 0%, #bf360c 100%);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.lp-help-msg--bot .lp-help-bubble {
+  background: #252530;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #d5d8e3;
+  border-bottom-left-radius: 4px;
+}
+.lp-help-bubble p {
+  margin: 0 0 8px;
+}
+.lp-help-bubble p:last-child {
+  margin-bottom: 0;
+}
+.lp-help-meta {
+  font-size: 11px;
+  color: #9ca3af;
+  font-style: italic;
+  margin-bottom: 6px;
+}
+.lp-help-hit-meta {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af !important;
+  margin-bottom: 6px !important;
+}
+.lp-help-hit-q {
+  font-weight: 700 !important;
+  color: #f3f4f6 !important;
+}
+.lp-help-hit-a {
+  font-size: 12px !important;
+  color: #c4c9d4 !important;
+  white-space: pre-wrap;
+}
+.lp-help-hit-divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 12px 0;
+}
+.lp-help-anchor a {
+  color: #ffb74d;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.lp-help-composer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(10, 10, 12, 0.6);
+}
+.lp-help-composer textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 44px;
+  max-height: 120px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #444;
+  background: #141418;
+  color: #e8eaef;
+  font-size: 13px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.lp-help-composer textarea:focus {
+  outline: none;
+  border-color: rgba(255, 152, 0, 0.55);
+}
+.lp-help-send {
+  align-self: flex-end;
+  padding: 9px 18px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  background: linear-gradient(180deg, #ff9800 0%, #e65100 100%);
+  color: #fff;
+}
+.lp-help-send:hover {
+  filter: brightness(1.06);
+}
+.lp-help-disclaimer {
+  margin: 0;
+  padding: 8px 14px 10px;
+  font-size: 10px;
+  color: #6b7280;
+  text-align: center;
+  line-height: 1.4;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media print {
+  .lp-help-widget {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-help-fab,
+  .lp-help-panel,
+  .lp-help-handle {
+    transition: none;
+  }
+}
+

@@ -1,0 +1,385 @@
+@import url("lugano-alerts.css");
+
+/**
+ * Navegación superior compartida · S.P.A.C.E
+ * (botones uniformes + logo con borde redondeado)
+ */
+
+/**
+ * Sin «flash» del login al cambiar de página: Firebase restaura la sesión unos ms después.
+ * Los scripts añaden la clase auth-session-ready en <html> al primer onAuthStateChanged.
+ */
+html:not(.auth-session-ready) #auth-gate.auth-gate,
+html:not(.auth-session-ready) #pc-auth-gate.pc-auth-gate {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+.btnmnini {
+    color: aliceblue;
+    background-color: #ff9800;
+    border: 1px solid #81797c;
+    padding: 1px 20px;
+    border-radius: 0;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: 36px;
+    width: 100%;
+    max-width: 112px;
+    font-size: 13px;
+    line-height: 1.2;
+    text-align: center;
+    transition:
+        background 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+        border-radius 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.28s ease,
+        letter-spacing 0.35s ease,
+        font-weight 0.35s ease;
+}
+
+.btnmnini span {
+    transition: color 0.42s cubic-bezier(0.22, 1, 0.36, 1), text-shadow 0.42s ease;
+}
+
+header table tr:last-child td[width="120"] {
+    vertical-align: middle;
+}
+
+header table td[rowspan="2"] img {
+    display: block;
+}
+
+/**
+ * Logo con cabecera desplegada: marco refinado.
+ * - La celda rowspan es más alta que la foto: centrado con position + translate (más fiable que vertical-align).
+ * - object-fit: cover recorta bandas negras típicas del JPG en bordes superior/inferior.
+ */
+header:not(.site-header--compact) table td[rowspan="2"] {
+    position: relative;
+    padding: 0 !important;
+    vertical-align: middle;
+    text-align: center;
+    /* Ancho estable para que la columna no colapse al sacar el enlace del flujo */
+    width: 152px;
+    min-width: 152px;
+    max-width: 152px;
+    /* Anula bgcolor="black" del HTML: deja ver el fondo del banner de la tabla (sin marco negro) */
+    background: transparent !important;
+}
+
+header:not(.site-header--compact) table td[rowspan="2"] > a {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    padding: 5px;
+    border-radius: 18px;
+    line-height: 0;
+    text-decoration: none;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    /* Fondo oscuro en todo el cuadro (mismo tamaño que el marco: padding + imagen 120×120) */
+    background-color: #121018;
+    background-image: linear-gradient(
+        155deg,
+        #1c1a22 0%,
+        #0e0d11 55%,
+        #08070a 100%
+    );
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transition:
+        border-color 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+        background-color 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+        background-image 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.28s ease;
+}
+
+header:not(.site-header--compact) table td[rowspan="2"] > a:hover {
+    border-color: rgba(255, 152, 0, 0.55);
+    background-color: #181410;
+    background-image: linear-gradient(
+        155deg,
+        #252018 0%,
+        #161410 45%,
+        #100d0a 100%
+    );
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 0 0 1px rgba(255, 152, 0, 0.15);
+}
+
+@media (pointer: fine) {
+    header:not(.site-header--compact) table td[rowspan="2"] > a:hover {
+        transform: translate(-50%, calc(-50% - 2px));
+    }
+}
+
+header:not(.site-header--compact) table td[rowspan="2"] img {
+    display: block;
+    border-radius: 0;
+    vertical-align: top;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    object-position: center center;
+    background: transparent !important;
+    /* Ligero zoom para recortar bandas oscuras pegadas al borde en el archivo de imagen */
+    transform: scale(1.06);
+    transform-origin: center center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    header:not(.site-header--compact) table td[rowspan="2"] > a {
+        transition: none;
+    }
+
+    header:not(.site-header--compact) table td[rowspan="2"] > a:hover {
+        transform: translate(-50%, -50%);
+    }
+}
+
+/**
+ * Cabecera del sitio (banner + menú): permanece visible al desplazar la página.
+ * (#main-app: páginas con auth gate; :has(table .btnmnini): incluye layouts donde el header no está dentro de #main-app)
+ */
+#main-app > header,
+header:has(table .btnmnini) {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #000;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55);
+}
+
+/**
+ * Banner logo+título: fundido en las celdas (más estable que opacity en <tr>).
+ */
+header:has(table .btnmnini) table tr:first-child td,
+#main-app > header table tr:first-child td {
+    transition: opacity 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/**
+ * Ocultando: fundido a invisible (la fila sigue en layout hasta aplicar .compact).
+ */
+header.site-header--banner-hiding table tr:first-child td {
+    opacity: 0;
+}
+
+/**
+ * Cabecera contraída: oculta la primera fila del banner; queda solo el menú.
+ */
+header.site-header--compact table tr:first-child {
+    display: none !important;
+}
+
+/**
+ * Menú con cabecera expandida (banner visible): botones con acabado más profesional.
+ */
+header:not(.site-header--compact) table tr:last-child .btnmnini {
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: linear-gradient(
+        180deg,
+        #ffa726 0%,
+        #fb8c00 45%,
+        #e65100 100%
+    );
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+    letter-spacing: 0.03em;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+header:not(.site-header--compact) table tr:last-child .btnmnini span {
+    color: #ffffff !important;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.28);
+}
+
+header:not(.site-header--compact) table tr:last-child .btnmnini:hover {
+    border-color: rgba(255, 255, 255, 0.38);
+    background: linear-gradient(
+        180deg,
+        #ffb74d 0%,
+        #ff9800 48%,
+        #f57c00 100%
+    );
+    box-shadow:
+        0 5px 16px rgba(245, 124, 0, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+}
+
+@media (pointer: fine) {
+    header:not(.site-header--compact) table tr:last-child .btnmnini:hover {
+        transform: translateY(-1px);
+    }
+}
+
+/**
+ * Menú con cabecera recogida: pastillas redondeadas + gradiente (otro estilo que el modo expandido).
+ */
+#main-app > header.site-header--compact,
+header.site-header--compact {
+    box-shadow:
+        0 2px 0 rgba(255, 152, 0, 0.22),
+        0 12px 32px rgba(0, 0, 0, 0.65);
+}
+
+header.site-header--compact table tr:last-child .btnmnini {
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: linear-gradient(
+        165deg,
+        #ffa726 0%,
+        #f57c00 42%,
+        #e65100 100%
+    );
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+header.site-header--compact table tr:last-child .btnmnini span {
+    color: #fff8f0 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+header.site-header--compact table tr:last-child .btnmnini:hover {
+    border-color: rgba(255, 255, 255, 0.38);
+    background: linear-gradient(
+        165deg,
+        #ffb74d 0%,
+        #fb8c00 45%,
+        #e65100 100%
+    );
+    box-shadow:
+        0 6px 20px rgba(230, 81, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+@media (pointer: fine) {
+    header.site-header--compact table tr:last-child .btnmnini:hover {
+        transform: translateY(-1px);
+    }
+}
+
+/**
+ * Antes de cargar site-header-toggle.js: si la preferencia guardada es cabecera oculta,
+ * no pintar la fila del banner (evita el «salto» de un segundo).
+ * La clase se quita al hidratar el script principal.
+ */
+html.lugano-banner-hidden-ssr header:has(table .btnmnini) table tr:first-child,
+html.lugano-banner-hidden-ssr #main-app > header table tr:first-child {
+    display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btnmnini,
+    .btnmnini span {
+        transition: none;
+    }
+
+    header:not(.site-header--compact) table tr:last-child .btnmnini:hover,
+    header.site-header--compact table tr:last-child .btnmnini:hover {
+        transform: none;
+    }
+
+    header:has(table .btnmnini) table tr:first-child td,
+    #main-app > header table tr:first-child td {
+        transition: none;
+    }
+}
+
+.site-header-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.site-header-collapse-cell {
+    vertical-align: middle;
+    text-align: center;
+    padding: 4px 4px 4px 6px;
+    width: 52px;
+}
+
+.site-header-controls--floating {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    z-index: 1002;
+    max-width: min(440px, calc(100vw - 20px));
+}
+
+.site-header-collapse-toggle {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin: 0;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: transparent;
+    color: #f3f4f6;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Banner visible (expandido): botón discreto / transparente */
+.site-header-collapse-toggle:not(.site-header-collapse-toggle--banner-hidden) {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.site-header-collapse-toggle:not(.site-header-collapse-toggle--banner-hidden):hover {
+    background: rgba(255, 152, 0, 0.18);
+    border-color: rgba(255, 152, 0, 0.45);
+}
+
+/* Cabecera oculta (compacto): naranja fuerte */
+.site-header-collapse-toggle.site-header-collapse-toggle--banner-hidden {
+    background: #f57c00;
+    border-color: #ff9800;
+    color: #fff;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+}
+
+.site-header-collapse-toggle.site-header-collapse-toggle--banner-hidden:hover {
+    background: #e65100;
+    border-color: #ffb74d;
+}
+
+.site-header-collapse-toggle:focus-visible {
+    outline: 2px solid #ff9800;
+    outline-offset: 2px;
+}
+
+@media print {
+    .site-header-controls,
+    .site-header-collapse-cell {
+        display: none !important;
+    }
+}

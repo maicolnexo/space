@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="logolugano1.jpg">
+  <link rel="apple-touch-icon" href="logolugano1.jpg">
+  <meta name="description" content="Protocolos de seguridad S.P.A.C.E — Firebase, app móvil y sitio web.">
+  <title>Seguridad y datos · S.P.A.C.E</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="help-widget.css">
+  <script src="help-widget.js" defer></script>
+  <script src="lugano-banner-ssr.js"></script>
+  <script src="site-header-toggle.js" defer></script>
+  <script src="lugano-header-alerts.js" defer></script>
+  <link rel="stylesheet" href="lugano-auth-gate.css">
+  <script>
+    window.onload = function () {
+      var el = document.getElementById("seg");
+      if (el) el.style.background = "black";
+    };
+  </script>
+  <style>
+    .sec-page {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+      box-sizing: border-box;
+      background: #0a0a0a;
+      color: #e8eaef;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      text-align: left;
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    .sec-page h1 {
+      margin: 0 0 8px;
+      font-size: 1.45rem;
+      color: #fff3e0;
+      font-weight: 700;
+    }
+    .sec-page .sec-lead {
+      margin: 0 0 16px;
+      color: #9ca3af;
+      font-size: 0.95rem;
+    }
+    .sec-page h2 {
+      margin: 22px 0 12px;
+      font-size: 1.1rem;
+      color: #ff9800;
+      font-weight: 600;
+      border-bottom: 1px solid #333;
+      padding-bottom: 6px;
+    }
+    .sec-page h3 {
+      margin: 16px 0 8px;
+      font-size: 1rem;
+      color: #e0e0e0;
+      font-weight: 600;
+    }
+    .sec-page p {
+      margin: 0 0 12px;
+    }
+    .sec-page ul {
+      margin: 8px 0 16px;
+      padding-left: 1.25rem;
+    }
+    .sec-page li {
+      margin-bottom: 8px;
+    }
+    .sec-page .sec-note {
+      background: #141414;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin: 16px 0;
+      font-size: 0.9rem;
+      color: #c4c9d4;
+    }
+    .sec-page .sec-note strong {
+      color: #f3f4f6;
+    }
+    .sec-page table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 12px 0 20px;
+    }
+    .sec-page th,
+    .sec-page td {
+      border: 1px solid #333;
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .sec-page th {
+      background: #1a1a1a;
+      color: #9ca3af;
+      font-weight: 600;
+    }
+    .sec-page td:first-child {
+      white-space: nowrap;
+      color: #94a3b8;
+      width: 7rem;
+    }
+    .sec-priority-high {
+      color: #f87171;
+      font-weight: 600;
+    }
+    .sec-priority-med {
+      color: #fbbf24;
+    }
+    .sec-priority-low {
+      color: #86efac;
+    }
+    .sec-page code {
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 0.84em;
+      background: #1f1f1f;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #fda4af;
+    }
+
+    /* Barra de protocolos (pestañas) */
+    .sec-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 20px;
+      padding: 12px;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+    }
+    .sec-tab {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #252525;
+      color: #e8eaef;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .sec-tab:hover {
+      background: #333;
+      border-color: #666;
+    }
+    .sec-tab.is-active {
+      background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+      border-color: #e65100;
+      color: #fff;
+    }
+
+    /* Accesos rápidos */
+    .sec-quick {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 20px;
+    }
+    .sec-quick a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #3d6fd9;
+      background: rgba(66, 133, 244, 0.12);
+      color: #8ab4f8;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .sec-quick a:hover {
+      background: rgba(66, 133, 244, 0.22);
+      border-color: #8ab4f8;
+    }
+
+    /* Checklist + puntuación */
+    .sec-score-card {
+      background: linear-gradient(165deg, #1a1520 0%, #12121a 100%);
+      border: 1px solid #4a1942;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+    }
+    .sec-score-card h2 {
+      margin-top: 0;
+      border: none;
+      padding: 0;
+    }
+    .sec-score-bar {
+      height: 10px;
+      background: #2a2a2a;
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 10px 0 8px;
+    }
+    .sec-score-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #f57c00, #42a5f5, #66bb6a);
+      transition: width 0.35s ease;
+    }
+    .sec-score-label {
+      margin: 0;
+      font-size: 14px;
+      color: #a7f3d0;
+      font-variant-numeric: tabular-nums;
+    }
+    .sec-check-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 16px;
+    }
+    .sec-check-actions button {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: #2a2a2a;
+      color: #eee;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sec-check-actions button:hover {
+      background: #383838;
+    }
+    .sec-check-actions button.sec-btn-accent {
+      border-color: #e65100;
+      background: #3a1a2a;
+      color: #fff3e0;
+    }
+    .sec-check-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sec-check-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      margin-bottom: 6px;
+      background: #141414;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+    }
+    .sec-check-list input[type="checkbox"] {
+      margin-top: 4px;
+      width: 18px;
+      height: 18px;
+      accent-color: #ff9800;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .sec-check-list label {
+      cursor: pointer;
+      flex: 1;
+      margin: 0;
+      font-size: 14px;
+      color: #d1d5db;
+    }
+    .sec-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      padding: 10px 18px;
+      background: #1e4620;
+      border: 1px solid #4caf50;
+      border-radius: 8px;
+      color: #c8e6c9;
+      font-size: 13px;
+      opacity: 0;
+      transition: transform 0.25s, opacity 0.25s;
+      z-index: 99;
+      pointer-events: none;
+    }
+    .sec-toast.is-visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body bgcolor="black" text="white" class="auth-gate-active">
+
+<div id="auth-gate" class="auth-gate" role="dialog" aria-modal="true" aria-labelledby="auth-gate-title">
+  <div class="auth-gate-brand">
+    <img src="logolugano1.jpg" height="88" alt="S.P.A.C.E" />
+  </div>
+  <div id="auth-logged-out" class="auth-panel-inner auth-gate-card">
+    <p class="auth-panel-title" id="auth-gate-title">Bienvenido</p>
+    <p class="auth-panel-desc">
+      Portal corporativo para la <strong>gestión y administración</strong> del planillado S.P.A.C.E.
+      Use su cuenta institucional para acceder de forma segura, supervisar la operación en tiempo real y consultar la información consolidada del negocio desde un solo lugar.
+    </p>
+    <button type="button" id="btn-google-signin">Iniciar sesión con Google</button>
+    <p id="auth-domain-hint" class="auth-domain-hint"></p>
+  </div>
+</div>
+
+<div id="main-app" class="main-app" hidden aria-hidden="true">
+
+<header bgcolor="white" text="white">
+  <center>
+    <table border="0" style="
+      background-position: center;
+      background: position y 10pt;
+      background-image: url(banner1.png);" font color="white" text="white" text-align="center" width="1325">
+      <tr>
+        <td rowspan="2" bgcolor="black"><a href="index.html"><img src="logolugano1.jpg" height="120" bgcolor="black" alt="S.P.A.C.E"></a></td>
+        <td text="white" colspan="11" height="120" color="white">
+          <h1 style="color: aliceblue;">Seguridad y datos</h1>
+        </td>
+      </tr>
+      <tr>
+        <td width="120"><center><a href="index.html" id="index" class="btnmnini"><span style="color: aliceblue;">inicio</span></a></center></td>
+        <td width="120" id="planillados"><center><a href="planillados.html" id="pln" class="btnmnini"><span style="color: aliceblue;">Planillados</span></a></center></td>
+        <td width="120" id="mensualidades"><center><a href="mensualidades.html" id="mes" class="btnmnini"><span style="color: aliceblue;">Mensualidades</span></a></center></td>
+        <td width="120" id="reportes"><center><a href="reportes.html" id="rep" class="btnmnini"><span style="color: aliceblue;">Reportes</span></a></center></td>
+        <td width="120" id="estadistico"><center><a href="estadistico.html" id="est" class="btnmnini"><span style="color: aliceblue;">Estadístico</span></a></center></td>
+        <td width="120" id="seguridad"><center><a href="seguridad.html" id="seg" class="btnmnini"><span style="color: aliceblue;">Seguridad</span></a></center></td>
+        <td width="120" id="usuarios"><center><a href="usuarios.html" id="usu" class="btnmnini"><span style="color: aliceblue;">Usuarios</span></a></center></td>
+        <td width="120" id="estacionamientos"><center><a href="estacionamientos.html" id="esta" class="btnmnini"><span style="color: aliceblue;">Estacionamientos</span></a></center></td>
+        <td width="120" id="programacion"><center><a href="programacion.html" id="prog" class="btnmnini"><span style="color: aliceblue;">Programación</span></a></center></td>
+        <td width="120" id="ayuda"><center><a href="ayuda.html" id="ayu" class="btnmnini"><span style="color: aliceblue;">Ayuda</span></a></center></td>
+      </tr>
+    </table>
+  </center>
+</header>
+
+  <main class="sec-page">
+    <h1>Protocolos de seguridad</h1>
+    <p class="sec-lead">
+      Elegí un ámbito con los botones inferiores, completá el checklist (se guarda en este navegador) y usá los accesos rápidos a la documentación oficial.
+    </p>
+
+    <div class="sec-toolbar" role="tablist" aria-label="Ámbitos de seguridad">
+      <button type="button" class="sec-tab is-active" role="tab" aria-selected="true" data-sec-tab="overview">Visión general</button>
+      <button type="button" class="sec-tab" role="tab" aria-selected="false" data-sec-tab="firebase">Firebase</button>
+      <button type="button" class="sec-tab" role="tab" aria-selected="false" data-sec-tab="web">Sitio web</button>
+      <button type="button" class="sec-tab" role="tab" aria-selected="false" data-sec-tab="android">App Android</button>
+      <button type="button" class="sec-tab" role="tab" aria-selected="false" data-sec-tab="roadmap">Prioridades</button>
+      <button type="button" class="sec-tab" role="tab" aria-selected="false" data-sec-tab="checklist">Checklist interactivo</button>
+    </div>
+
+    <div class="sec-quick">
+      <a href="https://firebase.google.com/docs/rules" target="_blank" rel="noopener noreferrer">Docs · Security Rules</a>
+      <a href="https://firebase.google.com/docs/rules/simulator" target="_blank" rel="noopener noreferrer">Simulador de reglas</a>
+      <a href="https://firebase.google.com/docs/auth" target="_blank" rel="noopener noreferrer">Firebase Authentication</a>
+      <a href="https://firebase.google.com/docs/app-check" target="_blank" rel="noopener noreferrer">App Check</a>
+      <a href="https://developer.android.com/topic/security/best-practices" target="_blank" rel="noopener noreferrer">Android · Buenas prácticas</a>
+    </div>
+
+    <!-- Paneles -->
+    <section class="sec-panel" data-sec-panel="overview" id="panel-overview">
+      <h2>Principios (orden de impacto)</h2>
+      <ul>
+        <li><strong>Mínimo privilegio:</strong> cada usuario solo lee o escribe lo que necesita (por rol, sede u operador).</li>
+        <li><strong>Confiar en el backend:</strong> Firebase Security Rules y Cloud Functions validan datos; el HTML/JS de la web es visible para cualquiera.</li>
+        <li><strong>Cifrado en tránsito:</strong> HTTPS obligatorio (Firebase y hosting ya lo usan); no mezclar contenido HTTP en páginas HTTPS.</li>
+        <li><strong>Secretos fuera del cliente:</strong> claves de APIs, saltos de cifrado sensibles y lógica crítica deben vivir en Cloud Functions o en entorno servidor, no en <code>firebase-config.js</code> ni en strings del APK.</li>
+      </ul>
+      <div class="sec-note">
+        <strong>Importante.</strong> La API key de Firebase en la web es pública por diseño; la seguridad depende de <strong>reglas de Firestore/Storage</strong>, <strong>dominios autorizados</strong> en Authentication y <strong>App Check</strong> si lo activan.
+      </div>
+    </section>
+
+    <section class="sec-panel" data-sec-panel="firebase" id="panel-firebase" hidden>
+      <h2>Firebase y Firestore</h2>
+      <h3>Reglas</h3>
+      <ul>
+        <li>Sustituir reglas abiertas (<code>allow read, write: if true</code>) por condiciones con <code>request.auth</code>, roles en custom claims o documentos de perfil.</li>
+        <li>Limitar rutas: por ejemplo que un operador solo escriba bajo su sede o su código <code>Lug…</code>, según su modelo de datos.</li>
+        <li>Validar forma de los datos con <code>request.resource.data</code> (campos obligatorios, tipos, rangos).</li>
+        <li>Probar reglas con el simulador de la consola y, si pueden, con la Rules Unit Testing suite.</li>
+      </ul>
+      <h3>Authentication</h3>
+      <ul>
+        <li>Mantener lista de <strong>dominios autorizados</strong> solo con sus sitios reales (Firebase Console → Authentication → Settings).</li>
+        <li>Para cuentas administrativas: <strong>verificación en dos pasos</strong> en Google y políticas de contraseña si usan email/contraseña.</li>
+        <li>Evaluar <strong>Firebase App Check</strong> (Play Integrity / reCAPTCHA) para reducir abuso de APIs desde apps y bots.</li>
+      </ul>
+      <h3>Storage y datos sensibles</h3>
+      <ul>
+        <li>Reglas de Storage alineadas con Firestore (misma idea de identidad y rutas).</li>
+        <li>Los datos “encriptados” en el cliente (p. ej. cierres) no sustituyen reglas: quien tenga el secreto en el APK o en la web puede descifrar; para secreto real hace falta servidor o gestión de claves.</li>
+      </ul>
+    </section>
+
+    <section class="sec-panel" data-sec-panel="web" id="panel-web" hidden>
+      <h2>Sitio web (HTML estático)</h2>
+      <ul>
+        <li><strong>Hosting:</strong> solo HTTPS; si usan CDN (Firebase Hosting, Cloudflare), activar “Always HTTPS” y redirecciones 301.</li>
+        <li><strong>Cabeceras</strong> (según el proveedor): Content-Security-Policy restrictiva, <code>X-Content-Type-Options: nosniff</code>, <code>Referrer-Policy</code>. Firebase Hosting permite configurar cabeceras en <code>firebase.json</code>.</li>
+        <li>No guardar tokens o datos sensibles en <code>localStorage</code> sin criterio; preferir sesión de Firebase Auth gestionada por el SDK.</li>
+        <li>Revisar que enlaces externos usen <code>rel="noopener noreferrer"</code> cuando abran en nueva pestaña.</li>
+      </ul>
+    </section>
+
+    <section class="sec-panel" data-sec-panel="android" id="panel-android" hidden>
+      <h2>App Android</h2>
+      <ul>
+        <li><strong>Firma y distribución:</strong> Play App Signing; subir solo AAB firmado; no commitear keystores ni contraseñas al repositorio.</li>
+        <li><strong>Ofuscación:</strong> R8/ProGuard activado en release para dificultar ingeniería inversa (no es cifrado absoluto).</li>
+        <li><strong>Network Security Config:</strong> solo confiar en certificados válidos; valorar certificate pinning solo si tienen equipo para mantenerlo.</li>
+        <li><strong>Datos locales:</strong> EncryptedSharedPreferences / Android Keystore para tokens si deben persistir.</li>
+        <li><strong>Actualizaciones:</strong> mantener dependencias (Firebase BOM, OkHttp, etc.) y revisar avisos de Play Console.</li>
+      </ul>
+    </section>
+
+    <section class="sec-panel" data-sec-panel="roadmap" id="panel-roadmap" hidden>
+      <h2>Prioridades sugeridas</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Prioridad</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="sec-priority-high">Alta</td>
+            <td>Endurecer reglas de Firestore y Storage; dominios autorizados correctos; revisar índices y consultas expuestas.</td>
+          </tr>
+          <tr>
+            <td class="sec-priority-high">Alta</td>
+            <td>Definir roles (claims o colección <code>users</code>) y reflejarlos en las reglas.</td>
+          </tr>
+          <tr>
+            <td class="sec-priority-med">Media</td>
+            <td>Activar App Check; MFA para administradores; cabeceras HTTP en hosting.</td>
+          </tr>
+          <tr>
+            <td class="sec-priority-med">Media</td>
+            <td>Mover lógica sensible a Cloud Functions (validaciones, sumarios, reportes críticos).</td>
+          </tr>
+          <tr>
+            <td class="sec-priority-low">Continua</td>
+            <td>Auditoría periódica de la consola Firebase, backups/exportaciones según política de retención, rotación de cuentas de servicio.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>Responsables y revisión</h2>
+      <p>
+        Designar una persona o rol que revise trimestralmente: reglas desplegadas, usuarios con acceso a la consola, listado de apps OAuth y dependencias del proyecto Android.
+        Tras cada incidente o cambio grande en datos, actualizar esta página o un documento interno con la fecha y el alcance del cambio.
+      </p>
+    </section>
+
+    <section class="sec-panel" data-sec-panel="checklist" id="panel-checklist" hidden>
+      <div class="sec-score-card">
+        <h2>Progreso del endurecimiento</h2>
+        <p style="margin:0 0 6px; font-size:13px; color:#9ca3af;">
+          Marcá lo ya aplicado en tu proyecto. El porcentaje se guarda solo en este equipo (localStorage).
+        </p>
+        <div class="sec-score-bar" aria-hidden="true">
+          <div id="sec-score-fill" class="sec-score-fill"></div>
+        </div>
+        <p id="sec-score-label" class="sec-score-label" aria-live="polite">0% · 0/0 ítems</p>
+        <div class="sec-check-actions">
+          <button type="button" class="sec-btn-accent" id="sec-btn-all">Marcar todo revisado</button>
+          <button type="button" id="sec-btn-clear">Borrar progreso</button>
+          <button type="button" id="sec-btn-copy">Copiar resumen al portapapeles</button>
+        </div>
+      </div>
+      <ul class="sec-check-list">
+        <li>
+          <input type="checkbox" id="chk-rules" data-sec-check />
+          <label for="chk-rules">Reglas de Firestore sin <code>if true</code> para todo; probadas en el simulador.</label>
+        </li>
+        <li>
+          <input type="checkbox" id="chk-storage" data-sec-check />
+          <label for="chk-storage">Reglas de Storage alineadas con identidad y rutas de negocio.</label>
+        </li>
+        <li>
+          <input type="checkbox" id="chk-domains" data-sec-check />
+          <label for="chk-domains">Dominios autorizados en Authentication solo incluyen sitios propios.</label>
+        </li>
+        <li>
+          <input type="checkbox" id="chk-mfa" data-sec-check />
+          <label for="chk-mfa">MFA o políticas fuertes en cuentas de administración de Firebase/Google.</label>
+        </li>
+        <li>
+          <input type="checkbox" id="chk-appcheck" data-sec-check />
+          <label for="chk-appcheck">App Check evaluado o activado para app y/o web.</label>
+        </li>
+        <li>
+          <input type="checkbox" id="chk-https" data-sec-check />
+          <label for="chk-https">Sitio web servido solo por HTTPS y sin contenido mixto.</label>
+        </li>
+        <li>
+          <input type="checkbox" id="chk-headers" data-sec-check />
+          <label for="chk-headers">Cabeceras de seguridad (CSP u otras) configuradas en hosting/CDN.</label>
+        </li>
+        <li>
+          <input type="checkbox" id="chk-secrets" data-sec-check />
+          <label for="chk-secrets">Sin secretos críticos solo en cliente; lo sensible en Functions o backend.</label>
+        </li>
+        <li>
+          <input type="checkbox" id="chk-android-sign" data-sec-check />
+          <label for="chk-android-sign">AAB release firmado; keystores fuera del repositorio.</label>
+        </li>
+        <li>
+          <input type="checkbox" id="chk-android-r8" data-sec-check />
+          <label for="chk-android-r8">R8/ProGuard activo en release.</label>
+        </li>
+        <li>
+          <input type="checkbox" id="chk-android-deps" data-sec-check />
+          <label for="chk-android-deps">Dependencias Firebase/Android revisadas en los últimos meses.</label>
+        </li>
+        <li>
+          <input type="checkbox" id="chk-audit" data-sec-check />
+          <label for="chk-audit">Revisión trimestral de consola Firebase y accesos documentada.</label>
+        </li>
+      </ul>
+    </section>
+
+    <div id="sec-toast" class="sec-toast" role="status"></div>
+  </main>
+
+  <script>
+(function () {
+  var STORAGE_CHECK = "lugano_seg_checklist_v1";
+  var STORAGE_TAB = "lugano_seg_last_tab";
+
+  var tabs = document.querySelectorAll("[data-sec-tab]");
+  var panels = document.querySelectorAll("[data-sec-panel]");
+  var checks = document.querySelectorAll("[data-sec-check]");
+
+  function showPanel(id) {
+    panels.forEach(function (p) {
+      p.hidden = p.getAttribute("data-sec-panel") !== id;
+    });
+    tabs.forEach(function (b) {
+      var on = b.getAttribute("data-sec-tab") === id;
+      b.classList.toggle("is-active", on);
+      b.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    try {
+      localStorage.setItem(STORAGE_TAB, id);
+    } catch (e) {}
+    if (id === "checklist") updateScore();
+  }
+
+  tabs.forEach(function (b) {
+    b.addEventListener("click", function () {
+      showPanel(b.getAttribute("data-sec-tab"));
+    });
+  });
+
+  try {
+    var last = localStorage.getItem(STORAGE_TAB);
+    if (last && document.querySelector('[data-sec-panel="' + last + '"]')) {
+      showPanel(last);
+    }
+  } catch (e) {}
+
+  function loadChecks() {
+    var state = {};
+    try {
+      state = JSON.parse(localStorage.getItem(STORAGE_CHECK) || "{}");
+    } catch (e) {}
+    checks.forEach(function (cb) {
+      cb.checked = !!state[cb.id];
+      cb.addEventListener("change", saveChecks);
+    });
+    updateScore();
+  }
+
+  function saveChecks() {
+    var state = {};
+    checks.forEach(function (cb) {
+      state[cb.id] = cb.checked;
+    });
+    try {
+      localStorage.setItem(STORAGE_CHECK, JSON.stringify(state));
+    } catch (e) {}
+    updateScore();
+  }
+
+  function updateScore() {
+    var total = checks.length;
+    var done = 0;
+    checks.forEach(function (c) {
+      if (c.checked) done++;
+    });
+    var pct = total ? Math.round((100 * done) / total) : 0;
+    var fill = document.getElementById("sec-score-fill");
+    var label = document.getElementById("sec-score-label");
+    if (fill) fill.style.width = pct + "%";
+    if (label) label.textContent = pct + "% · " + done + "/" + total + " ítems";
+  }
+
+  function toast(msg) {
+    var el = document.getElementById("sec-toast");
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add("is-visible");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () {
+      el.classList.remove("is-visible");
+    }, 2200);
+  }
+
+  document.getElementById("sec-btn-all").addEventListener("click", function () {
+    checks.forEach(function (cb) {
+      cb.checked = true;
+    });
+    saveChecks();
+    toast("Todo marcado como revisado.");
+  });
+
+  document.getElementById("sec-btn-clear").addEventListener("click", function () {
+    checks.forEach(function (cb) {
+      cb.checked = false;
+    });
+    try {
+      localStorage.removeItem(STORAGE_CHECK);
+    } catch (e) {}
+    updateScore();
+    toast("Progreso borrado en este navegador.");
+  });
+
+  document.getElementById("sec-btn-copy").addEventListener("click", function () {
+    var lines = ["S.P.A.C.E — Checklist de seguridad (" + new Date().toLocaleDateString("es-CO") + ")"];
+    checks.forEach(function (cb) {
+      var lab = document.querySelector('label[for="' + cb.id + '"]');
+      var text = lab ? lab.textContent.trim() : cb.id;
+      lines.push((cb.checked ? "[x] " : "[ ] ") + text);
+    });
+    var blob = lines.join("\n");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(blob).then(
+        function () {
+          toast("Resumen copiado al portapapeles.");
+        },
+        function () {
+          toast("No se pudo copiar (permiso del navegador).");
+        }
+      );
+    } else {
+      toast("Este navegador no permite copiar automáticamente.");
+    }
+  });
+
+  loadChecks();
+})();
+  </script>
+
+</div>
+
+<div id="auth-error-strip">
+  <p id="auth-banner-detail" style="margin:0;font-family:Consolas,monospace;font-size:12px;"></p>
+</div>
+
+<script src="firebase-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="lugano-admin-auth.js"></script>
+<script src="lugano-auth-gate.js"></script>
+
+<script src="lugano-firestore-alertas.js"></script>
+</body>
+</html>

@@ -1,0 +1,3171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="logolugano1.jpg">
+    <link rel="apple-touch-icon" href="logolugano1.jpg">
+    <title>Planillado S.P.A.C.E</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lugano-auth-gate.css">
+    <link rel="stylesheet" href="help-widget.css">
+    <script src="help-widget.js" defer></script>
+    <script src="lugano-banner-ssr.js"></script>
+    <script src="site-header-toggle.js" defer></script>
+  <script src="lugano-header-alerts.js" defer></script>
+    <script>
+        window.onload=function(){
+            document.getElementById("index").style.background="black"
+        }
+        
+    </script>
+    <style>
+        .stations-grid-wrap {
+            margin-top: 14px;
+            border-top: 1px solid #333;
+            padding-top: 12px;
+        }
+        .stations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
+            gap: 10px;
+            align-items: start;
+            max-height: 440px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 4px 2px 8px;
+        }
+        .station-card {
+            border: 1px solid #333;
+            border-radius: 10px;
+            background: #141414;
+            overflow: hidden;
+            min-width: 0;
+        }
+        .station-card h4 {
+            margin: 0;
+            padding: 8px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffb74d;
+            background: linear-gradient(180deg, #1e1e1e 0%, #181818 100%);
+            border-bottom: 1px solid #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .station-scroll {
+            max-height: 148px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 8px 8px 10px;
+            line-height: 1.55;
+        }
+        /** Base común: estilo placa CO (amarillo, negro, borde negro semiredondeado) */
+        #listado-placas .placa-chip-glob,
+        .tabla-vehiculos-wrap .placa-chip-tabla,
+        .station-chip,
+        .placa-multifoto-btn {
+            background: #ffdd00;
+            color: #111111;
+            border: 3px solid #000000;
+            border-radius: 10px;
+            font-family: Consolas, "Courier New", monospace;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+        .station-chip {
+            display: inline-block;
+            margin: 2px 4px 2px 0;
+            padding: 5px 10px;
+            font-size: 12px;
+            vertical-align: middle;
+        }
+        .stations-grid-note {
+            font-size: 12px;
+            color: #777;
+            margin: 0 0 8px;
+        }
+        /** ~2 filas de chips; el resto con scroll vertical */
+        #listado-placas {
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            align-items: center;
+            gap: 6px 8px;
+            max-height: 78px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 8px 10px;
+            box-sizing: border-box;
+            border: 1px solid #333;
+            border-radius: 10px;
+            background: #101010;
+            text-align: left;
+            line-height: 1.35;
+        }
+        #listado-placas .placa-chip-glob {
+            display: inline-block;
+            flex-shrink: 0;
+            margin: 0;
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+        /** Misma placa que arriba / por sede, dentro de la tabla detalle */
+        .tabla-vehiculos-wrap .placa-chip-tabla {
+            display: inline-block;
+            margin: 0;
+            padding: 6px 12px;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+        .tabla-vehiculos-wrap {
+            max-height: min(65vh, 520px);
+            overflow: auto;
+            width: 100%;
+            max-width: 1325px;
+            margin: 0 auto 12px;
+            border: 1px solid #3a3a3a;
+            border-radius: 10px;
+            background: #0a0a0a;
+            -webkit-overflow-scrolling: touch;
+        }
+        .tabla-vehiculos-wrap table {
+            margin: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+        /** Primera fila (encabezados) fija al hacer scroll dentro del panel */
+        .tabla-vehiculos-wrap thead tr.tabla-vehiculos-head td {
+            position: sticky;
+            top: 0;
+            z-index: 4;
+            background: linear-gradient(180deg, #8a8a8a 0%, #6d6d6d 100%);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
+        }
+        .tabla-vehiculos-wrap thead tr.tabla-vehiculos-head td a {
+            color: aliceblue !important;
+        }
+        /** Pantalla de acceso: cubre la app hasta iniciar sesión */
+        .auth-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+            box-sizing: border-box;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background:
+                radial-gradient(ellipse 90% 55% at 50% -10%, rgba(255, 152, 0, 0.14) 0%, transparent 55%),
+                linear-gradient(180deg, #141018 0%, #08080a 55%, #050506 100%);
+        }
+        .auth-gate[hidden] {
+            display: none !important;
+        }
+        body.auth-gate-active {
+            overflow: hidden;
+        }
+        .main-app[hidden] {
+            display: none !important;
+        }
+        .auth-gate-brand {
+            text-align: center;
+        }
+        .auth-gate-brand img {
+            display: inline-block;
+            width: 88px;
+            height: 88px;
+            object-fit: cover;
+            object-position: center center;
+            border-radius: 10px;
+            background: #121018;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        .auth-gate-card {
+            max-width: 460px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        #auth-error-strip {
+            display: none;
+            position: fixed;
+            top: max(12px, env(safe-area-inset-top));
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10001;
+            max-width: min(560px, calc(100vw - 24px));
+            margin: 0;
+            padding: 12px 16px;
+            background: #3d2020;
+            border: 1px solid #c62828;
+            border-radius: 10px;
+            color: #ffcdd2;
+            font-size: 13px;
+            text-align: left;
+            font-family: system-ui, -apple-system, sans-serif;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+        }
+        .site-header-auth-wrap {
+            max-width: 1325px;
+            margin: 0 auto;
+            padding: 12px 16px 16px;
+            box-sizing: border-box;
+        }
+        #auth-panel.auth-panel--card {
+            margin: 0 auto;
+            padding: 0;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            text-align: left;
+        }
+        #auth-panel .auth-panel-inner {
+            background: linear-gradient(145deg, #1c1f26 0%, #12141a 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            padding: 18px 22px;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+        }
+        #auth-logged-out .auth-panel-title {
+            margin: 0 0 8px;
+            color: #e8edf5;
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+        #auth-logged-out .auth-panel-desc {
+            margin: 0 0 14px;
+            color: #9ca3af;
+            font-size: 14px;
+            line-height: 1.55;
+            max-width: 62ch;
+        }
+        #auth-logged-out .auth-domain-hint {
+            margin: 16px 0 0;
+            font-size: 12px;
+            color: #9ca3af;
+            line-height: 1.5;
+        }
+        #auth-domain-hint.auth-domain-hint--technical {
+            color: #9ca3af;
+        }
+        .auth-gate-footer-brand {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            text-align: left;
+        }
+        .auth-gate-footer-logo {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+        }
+        .auth-gate-footer-text {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 0;
+        }
+        .auth-gate-footer-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e8edf5;
+            letter-spacing: -0.01em;
+        }
+        .auth-reg-mark {
+            font-size: 0.72em;
+            vertical-align: super;
+            color: #94a3b8;
+            font-weight: 600;
+            margin-left: 1px;
+        }
+        .auth-gate-footer-sub {
+            font-size: 11px;
+            font-weight: 400;
+            color: #9ca3af;
+            line-height: 1.45;
+        }
+        .auth-gate-footer-author {
+            font-size: 11px;
+            font-weight: 500;
+            color: #c4cad4;
+            line-height: 1.45;
+            padding-top: 8px;
+            margin-top: 4px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        .auth-gate-footer-author-label {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        #auth-logged-in {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        .auth-session-text {
+            flex: 1;
+            min-width: min(100%, 240px);
+        }
+        .auth-session-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        #auth-user-name {
+            display: block;
+            font-size: 18px;
+            font-weight: 600;
+            color: #f3f4f6;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+        }
+        #auth-user-email {
+            display: block;
+            margin-top: 6px;
+            font-size: 13px;
+            font-weight: 400;
+            color: #9ca3af;
+            word-break: break-all;
+        }
+        #auth-user-email[hidden] {
+            display: none !important;
+        }
+        #auth-session-started {
+            display: block;
+            margin-top: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #94a3b8;
+            letter-spacing: 0.01em;
+        }
+        #auth-session-started:empty {
+            display: none;
+        }
+        .auth-session-actions {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        #btn-google-signin {
+            padding: 12px 22px;
+            background: #4285f4;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            font-family: inherit;
+        }
+        #btn-google-signin:hover {
+            background: #3367d6;
+        }
+        #btn-signout {
+            padding: 10px 18px;
+            background: transparent;
+            color: #e5e7eb;
+            border: 1px solid rgba(255, 152, 0, 0.45);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            white-space: nowrap;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        #btn-signout:hover {
+            background: rgba(255, 152, 0, 0.12);
+            border-color: #ff9800;
+            color: #fff;
+        }
+        .fotos-cell-btn {
+            background: #1e3a1e;
+            color: #b8e994;
+            border: 1px solid #3d6b3d;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .fotos-cell-btn:hover {
+            background: #2a4a2a;
+        }
+        .fotos-cell-muted {
+            color: #666;
+            font-size: 11px;
+        }
+        .placas-multifotos-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 10px;
+            justify-content: center;
+            align-items: center;
+            align-content: flex-start;
+            max-height: 120px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 10px 8px;
+            margin: 0 auto;
+            max-width: 1280px;
+            box-sizing: border-box;
+        }
+        .placa-multifoto-btn {
+            flex-shrink: 0;
+            padding: 8px 16px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .placa-multifoto-btn:hover {
+            background: #f0d500;
+            border-color: #000000;
+        }
+        .placa-multifotos-lead {
+            color: #aaa;
+            font-size: 13px;
+            margin: 0 0 8px;
+        }
+        .fotos-lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+        .fotos-lightbox[hidden] {
+            display: none !important;
+        }
+        .fotos-lightbox-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            cursor: pointer;
+        }
+        .fotos-lightbox-inner {
+            position: relative;
+            z-index: 1;
+            max-width: min(96vw, 1100px);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .fotos-lightbox-stage {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+        .fotos-lightbox-close {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            z-index: 2;
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 50%;
+            background: #333;
+            color: #fff;
+            font-size: 26px;
+            line-height: 1;
+            cursor: pointer;
+        }
+        .fotos-lightbox-close:hover {
+            background: #555;
+        }
+        .fotos-lightbox-prev,
+        .fotos-lightbox-next {
+            flex-shrink: 0;
+            min-width: 48px;
+            height: 56px;
+            border: 1px solid #444;
+            border-radius: 10px;
+            background: #222;
+            color: #eee;
+            font-size: 28px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0 12px;
+        }
+        .fotos-lightbox-prev:hover,
+        .fotos-lightbox-next:hover {
+            background: #333;
+        }
+        .fotos-lightbox-prev:disabled,
+        .fotos-lightbox-next:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+        .fotos-lightbox-counter {
+            margin: 0;
+            color: #ccc;
+            font-size: 14px;
+            text-align: center;
+        }
+        .fotos-lightbox-plate {
+            margin: 0;
+            color: #ffb74d;
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .fotos-lightbox-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px 14px;
+            width: 100%;
+            padding: 8px 12px;
+            background: rgba(22, 22, 22, 0.96);
+            border-radius: 10px;
+            border: 1px solid #3a3a3a;
+            box-sizing: border-box;
+        }
+        .fotos-zoom-btn {
+            min-width: 40px;
+            height: 38px;
+            padding: 0 12px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background: #2a2a2a;
+            color: #eee;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .fotos-zoom-btn:hover {
+            background: #383838;
+        }
+        .fotos-zoom-label {
+            min-width: 52px;
+            text-align: center;
+            font-size: 14px;
+            color: #b8e994;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+        .fotos-zoom-reset {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background: #333;
+            color: #ddd;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .fotos-zoom-reset:hover {
+            background: #444;
+        }
+        .fotos-enhance-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #ccc;
+            cursor: pointer;
+            user-select: none;
+        }
+        .fotos-enhance-label input {
+            width: 18px;
+            height: 18px;
+            accent-color: #ffb74d;
+            cursor: pointer;
+        }
+        .fotos-zoom-toolbar-group {
+            display: inline-flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 14px;
+        }
+        .fotos-lightbox-video {
+            display: block;
+            max-height: min(78vh, 720px);
+            max-width: min(88vw, 1000px);
+            width: auto;
+            height: auto;
+            border-radius: 8px;
+            background: #111;
+            margin: 0 auto;
+        }
+        .fotos-lightbox-video[hidden] {
+            display: none !important;
+        }
+        .fotos-lightbox-viewport {
+            overflow: hidden;
+            max-height: min(78vh, 720px);
+            max-width: min(88vw, 1000px);
+            width: 100%;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            touch-action: none;
+            border-radius: 8px;
+            background: #111;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+        .fotos-lightbox-viewport:active {
+            cursor: grabbing;
+        }
+        .fotos-lightbox-zoom-layer {
+            position: relative;
+            transform-origin: center center;
+            will-change: transform;
+        }
+        .fotos-lightbox-img {
+            display: block;
+            max-height: min(78vh, 720px);
+            max-width: min(88vw, 1000px);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #111;
+            margin: 0 auto;
+        }
+        .fotos-lightbox-canvas {
+            display: block;
+            max-height: min(78vh, 720px);
+            max-width: min(88vw, 1000px);
+            width: auto;
+            height: auto;
+            margin: 0 auto;
+            border-radius: 8px;
+            background: #111;
+        }
+        /** Sin esto, «display: block» del canvas gana al atributo hidden y queda montado encima del img (mitad y mitad). */
+        .fotos-lightbox-canvas[hidden] {
+            display: none !important;
+        }
+        .fotos-lightbox-hint {
+            margin: 0;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+            max-width: 520px;
+            line-height: 1.45;
+        }
+        @media (max-width: 600px) {
+            .fotos-lightbox-prev,
+            .fotos-lightbox-next {
+                min-width: 40px;
+                height: 48px;
+                font-size: 22px;
+            }
+            .fotos-lightbox-toolbar {
+                gap: 8px;
+            }
+        }
+    </style>
+
+   
+</head>
+
+<body bgcolor="black" text="white" text-align="center" class="auth-gate-active">
+
+<div id="auth-gate" class="auth-gate" role="dialog" aria-modal="true" aria-labelledby="auth-gate-title">
+  <div class="auth-gate-brand">
+    <img src="logolugano1.jpg" height="88" alt="S.P.A.C.E" />
+  </div>
+  <div id="auth-logged-out" class="auth-panel-inner auth-gate-card">
+    <p class="auth-panel-title" id="auth-gate-title">Bienvenido</p>
+    <p class="auth-panel-desc">
+      Portal corporativo para la <strong>gestión y administración</strong> del planillado S.P.A.C.E.
+      Use su cuenta institucional para acceder de forma segura, supervisar la operación en tiempo real y consultar la información consolidada del negocio desde un solo lugar.
+    </p>
+    <button type="button" id="btn-google-signin">Iniciar sesión con Google</button>
+    <p id="auth-domain-hint" class="auth-domain-hint"></p>
+  </div>
+</div>
+
+<div id="main-app" class="main-app" hidden aria-hidden="true">
+
+<header bgcolor="black" text="white">
+ <center><table border="0" style="
+    background-position: center;
+    background: position y 10pt;
+    background-image: url(banner1.png);" font color="white" text="white" text-align="center" width="1325">
+<tr>
+<td rowspan="2" bgcolor="black"><a href="index.html"><img src="logolugano1.jpg" height="120" bgcolor="black" alt="S.P.A.C.E"></a></td>
+<td text="white" colspan="11" height="120" color="white">
+    <center><h1 style="color: aliceblue;">S.P.A.C.E</h1>
+            <h2 style="color: aliceblue;">Nit:123456789</h2>
+    </center>
+</td>
+</tr>
+<tr>
+<td width="120"><center>
+    <a href="index.html" id="index" class="btnmnini"><span style="color: aliceblue;">inicio</span></a></center></td>
+<td width="120" id="planillados"><center>
+    <a href="planillados.html" id="pln" class="btnmnini"><span style="color: aliceblue;">Planillados</span></a></center></td>
+<td width="120" id="mensualidades"><center>
+    <a href="mensualidades.html" id="mes" class="btnmnini"><span style="color: aliceblue;">Mensualidades</span></a></center></td>
+<td width="120" id="reportes"><center>
+    <a href="reportes.html" id="rep" class="btnmnini"><span style="color: aliceblue;">Reportes</span></a></center></td>
+<td width="120" id="estadistico"><center>
+    <a href="estadistico.html" id="est" class="btnmnini"><span style="color: aliceblue;">Estadístico</span></a></center></td>
+<td width="120" id="seguridad"><center>
+    <a href="seguridad.html" id="seg" class="btnmnini"><span style="color: aliceblue;">Seguridad</span></a></center></td>
+<td width="120" id="usuarios"><center>
+    <a href="usuarios.html" id="usu" class="btnmnini"><span style="color: aliceblue;">Usuarios</span></a></center></td>
+<td width="120" id="estacionamientos"><center>
+    <a href="estacionamientos.html" id="esta" class="btnmnini"><span style="color: aliceblue;">Estacionamientos</span></a></center></td>
+<td width="120" id="programacion"><center>
+    <a href="programacion.html" id="prog" class="btnmnini"><span style="color: aliceblue;">Programación</span></a></center></td>
+<td width="120" id="ayuda"><center>
+    <a href="ayuda.html" id="ayu" class="btnmnini"><span style="color: aliceblue;">Ayuda</span></a></center></td>
+</tr>
+</table></center>
+    <div class="site-header-auth-wrap">
+      <div id="auth-panel" class="auth-panel auth-panel--card">
+        <div class="auth-panel-inner">
+          <div id="auth-logged-in">
+            <div class="auth-session-text">
+              <span class="auth-session-label">Usuario autenticado</span>
+              <strong id="auth-user-name"></strong>
+              <span id="auth-user-email" hidden></span>
+              <span id="auth-session-started" class="auth-session-started" aria-live="polite"></span>
+            </div>
+            <div class="auth-session-actions">
+              <button type="button" id="btn-signout">Cerrar sesión</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <center>
+
+<table border="1" bgcolor="#111" width="1325" style="margin-bottom:12px;">
+    <tr>
+        <td colspan="10" style="padding:14px;text-align:left;vertical-align:top;">
+            <h2 style="color:aliceblue;margin:0 0 8px;font-size:18px;">Resumen de placas · tiempo real</h2>
+            <p id="placas-resumen" style="color:#aaa;font-size:13px;margin:0 0 12px;">Sincronizando datos…</p>
+            <div id="listado-placas" aria-label="Listado de placas"></div>
+            <div class="stations-grid-wrap">
+                <h3 style="color:#ddd;font-size:15px;margin:0 0 6px;font-weight:600;">Placas por estacionamiento</h3>
+                <p class="stations-grid-note">Vista agrupada por sede según la ruta de datos (<strong>planillado</strong> / identificador de sede / …). Se listan las sedes configuradas; el recuento puede ser (0) si no hay registros. Actualización automática.</p>
+                <div id="listado-por-estacionamiento" class="stations-grid" aria-live="polite" aria-label="Placas agrupadas por estacionamiento"></div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div class="tabla-vehiculos-wrap" role="region" aria-label="Tabla de vehículos planillado con scroll">
+<table border = "1" bgcolor="black" font color="white" text="white" text-align="center" width="1325">
+
+        <thead>
+        <tr class="tabla-vehiculos-head">
+            <td bgcolor= "gray" width="120"><center>
+                <a href="oops.html"><text style="color: aliceblue;">Placa</a></td></center>
+            <td bgcolor= "gray" width="120"><center>
+                <a href="oops.html"><text style="color: aliceblue;">Id Operario</a></td></center>
+            <td bgcolor= "gray" width="120"><center>
+                <a href="oops.html"><text style="color: aliceblue;">Estacionamiento</a></td></center>
+            <td bgcolor= "gray" width="120"><center>
+                <a href="oops.html"><text style="color: aliceblue;">Fecha</a></td></center>
+            <td bgcolor= "gray" width="120"><center>
+                <a href="oops.html"><text style="color: aliceblue;">Hora</a></td></center>
+            <td bgcolor= "gray" width="120"><center>
+                <a href="oops.html"><text style="color: aliceblue;">Llave no°</a></td></center>
+            <td bgcolor= "gray" width="120"><center>
+                <a href="oops.html"><text style="color: aliceblue;">Celda no°</a></td></center>
+            <td bgcolor= "gray" width="120"><center>
+                <a href="oops.html"><text style="color: aliceblue;">Tipo de vehículo</a></td></center>
+            <td bgcolor= "gray" width="140"><center>
+                <a href="oops.html"><text style="color: aliceblue;">Observaciones</a></td></center>
+            <td bgcolor= "gray" width="120"><center>
+                <a href="oops.html"><text style="color: aliceblue;">Último uso</a></td></center>
+            <td bgcolor= "gray" width="120"><center>
+                <a href="oops.html"><text style="color: aliceblue;">Fotos</a></td></center>
+
+        </tr>
+        </thead>
+        <tbody id="vehiculos-live-body"></tbody>
+</table>
+</div>
+
+<div id="fotos-lightbox" class="fotos-lightbox" hidden aria-hidden="true">
+    <div class="fotos-lightbox-backdrop" tabindex="-1"></div>
+    <div class="fotos-lightbox-inner" role="dialog" aria-modal="true" aria-label="Visor de fotos y vídeos del planillado">
+        <button type="button" class="fotos-lightbox-close" aria-label="Cerrar visor">×</button>
+        <p class="fotos-lightbox-plate" id="fotos-lightbox-plate"></p>
+        <div class="fotos-lightbox-toolbar">
+            <span id="fotos-zoom-toolbar" class="fotos-zoom-toolbar-group">
+                <button type="button" class="fotos-zoom-btn" id="fotos-zoom-out" aria-label="Alejar">−</button>
+                <span class="fotos-zoom-label" id="fotos-zoom-label">100%</span>
+                <button type="button" class="fotos-zoom-btn" id="fotos-zoom-in" aria-label="Acercar">+</button>
+                <button type="button" class="fotos-zoom-reset" id="fotos-zoom-reset">Restablecer vista</button>
+            </span>
+            <label id="fotos-enhance-wrap" class="fotos-enhance-label" title="Realza contraste, saturación y brillo solo en tu navegador (sin subir archivos). Fotos: una pasada en canvas; vídeo: filtros en tiempo real. No usa servicios de IA en la nube.">
+                <input type="checkbox" id="fotos-enhance-clarity" />
+                Mejorar calidad (realce local)
+            </label>
+        </div>
+        <div class="fotos-lightbox-stage">
+            <button type="button" class="fotos-lightbox-prev" aria-label="Anterior">‹</button>
+            <div class="fotos-lightbox-viewport" id="fotos-lightbox-viewport">
+                <div class="fotos-lightbox-zoom-layer" id="fotos-lightbox-zoom-layer">
+                    <img class="fotos-lightbox-img" id="fotos-lightbox-img" alt="" decoding="async" />
+                    <canvas class="fotos-lightbox-canvas" id="fotos-lightbox-canvas" hidden></canvas>
+                </div>
+                <video id="fotos-lightbox-video" class="fotos-lightbox-video" controls playsinline preload="metadata" hidden></video>
+            </div>
+            <button type="button" class="fotos-lightbox-next" aria-label="Siguiente">›</button>
+        </div>
+        <p class="fotos-lightbox-counter" id="fotos-lightbox-counter"></p>
+        <p class="fotos-lightbox-hint" id="fotos-lightbox-hint">Arrastra para mover cuando hay zoom. Rueda o pellizco para ampliar en fotos. «Mejorar calidad» mejora contraste/saturación/brillo solo aquí (sin subir archivos).</p>
+    </div>
+</div>
+
+<table border = "1" bgcolor="black" font color="white" text="white" text-align="center" width="1325">
+
+    
+    <tr>
+        <td colspan="10" style="padding:16px 12px;text-align:center;vertical-align:top;background:#0d0d0d;">
+            <p class="placa-multifotos-lead">Atajo: placas con <strong>más de una foto</strong> (toca para abrir el visor)</p>
+            <div id="placas-multifotos-wrap" class="placas-multifotos-wrap" aria-live="polite" aria-label="Placas con varias fotos"></div>
+        </td>
+    </tr>
+    
+</table>
+
+<footer>
+    <center>
+    <a href="oops.html">Inicio</a></td>
+    <a href="oops.html">Nosotros</a></td>
+    <a href="oops.html">Conocenos</a></td>
+    <a href="oops.html">Ayuda</a></td></center>
+    <center>© 2025 Michael Carreño. Todos los derechos reservados.</td></center>
+</footer>
+
+</div>
+
+<div id="auth-error-strip">
+  <p id="auth-banner-detail" style="margin:0;font-family:Consolas,monospace;font-size:12px;"></p>
+</div>
+
+<script src="firebase-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="lugano-admin-auth.js"></script>
+<script>window.LUGANO_AUTH_GATE_MANUAL = true;</script>
+<script src="lugano-auth-gate.js"></script>
+<script>
+(function () {
+  var SUB_REGISTROS = "registros";
+  var PLANILLADO_OLD = "planillado_old";
+  /** Colecciones raíz equivalentes (Firestore distingue mayúsculas). No filtramos por correo: se muestran todos los docs que permitan las reglas. */
+  var PLANILLADO_ROOT_COLS = ["planillado", "Planillado", "planillados"];
+
+  firebase.initializeApp(typeof firebaseConfig !== "undefined" ? firebaseConfig : {});
+  /** Base «(default)». Para otra base hay que usar SDK modular (getFirestore(app, id)); firestoreDatabaseId en firebase-config.js solo documenta el ID. */
+  var db = firebase.firestore();
+  var auth = firebase.auth();
+  var storage = firebase.storage && firebase.storage();
+
+  function isPlanilladoRootName(seg) {
+    var l = String(seg || "").toLowerCase();
+    return l === "planillado" || l === "planillados";
+  }
+
+  function pathUnderPlanilladoTree(fullPath) {
+    return isPlanilladoRootName(fullPath.split("/")[0]);
+  }
+
+  function parkingStorageKey(rootCol, parkingId) {
+    return rootCol + "\0" + parkingId;
+  }
+
+  var tbody = document.getElementById("vehiculos-live-body");
+  /** fullPath Firestore → { urls: string[], plate: string } para la columna Fotos */
+  var fotoGalleryRegistry = new Map();
+
+  var rows = new Map();
+  /** parkingId → Map(subcollectionId → unsubscribe) */
+  var parkingListeners = new Map();
+  /** documento padre + "\0" + nombre subcolección → unsubscribe (árbol anidado como en la consola) */
+  var docNestedListeners = new Map();
+  /** Rutas de documento ya exploradas con listCollectionIds (evita REST duplicado) */
+  var nestedDiscoveredPaths = new Set();
+  var discoverIntervalId = null;
+  var firestoreListenersStarted = false;
+  var firestoreBootPending = false;
+  var collectionGroupUnsubs = [];
+  var collectionGroupInitialLogged = false;
+  /** Evita repetir refreshParkingSubcollections al inferir sede desde rutas */
+  var planilladoParkingsFromPathsAttached = new Set();
+  /** Subcolección ya enganchada al ver una ruta planillado/sede/subcol/… */
+  var discoveredSubcolFromPath = new Set();
+  /** Sedes vistas por REST documents.list sobre la colección raíz planillado / Planillado / planillados */
+  var restPlanilladoSedeKeys = new Set();
+
+  var authErrorStrip = document.getElementById("auth-error-strip");
+  var authBannerDetail = document.getElementById("auth-banner-detail");
+  var authDomainHint = document.getElementById("auth-domain-hint");
+  var btnGoogleSignin = document.getElementById("btn-google-signin");
+  var btnSignOut = document.getElementById("btn-signout");
+
+  function setAuthGateRightsFooter() {
+    if (!authDomainHint) return;
+    authDomainHint.classList.remove("auth-domain-hint--technical");
+    authDomainHint.innerHTML =
+      '<span class="auth-gate-footer-brand">' +
+      '<img src="logolugano1.jpg" width="36" height="36" alt="" class="auth-gate-footer-logo" loading="lazy" decoding="async" />' +
+      '<span class="auth-gate-footer-text">' +
+      '<span class="auth-gate-footer-title">S.P.A.C.E<span class="auth-reg-mark" title="Marca registrada">®</span></span>' +
+      '<span class="auth-gate-footer-sub">Titular de los derechos de esta aplicación y del sistema de gestión y administración. Marca y software de uso corporativo reservado.</span>' +
+      '<span class="auth-gate-footer-author"><span class="auth-gate-footer-author-label">Desarrollo y representación</span>Michael Eduardo Carreño Sánchez</span>' +
+      "</span></span>";
+  }
+
+  function updateAuthDomainHint(err) {
+    if (!authDomainHint) return;
+    var proto = window.location.protocol;
+    var host = window.location.hostname || "";
+
+    if (proto === "file:") {
+      authDomainHint.classList.add("auth-domain-hint--technical");
+      authDomainHint.textContent =
+        "Para un acceso estable, abra esta aplicación desde la red interna o un servidor web (http/https), no como archivo guardado en el equipo.";
+      return;
+    }
+
+    if (err && err.code === "auth/unauthorized-domain") {
+      authDomainHint.classList.add("auth-domain-hint--technical");
+      authDomainHint.textContent =
+        "Este sitio no está autorizado para el inicio de sesión. Solicite al administrador de sistemas que registre el dominio «" +
+        host +
+        "» (sin puerto) entre los dominios permitidos. Si también entra por «localhost», debe indicarse aparte. Espere un momento y vuelva a intentarlo.";
+      return;
+    }
+
+    setAuthGateRightsFooter();
+  }
+
+  function formatAuthError(err) {
+    if (!err) return "";
+    var code = err.code || "";
+    var msg = err.message || "";
+    if (code === "auth/popup-closed-by-user") {
+      return code + " — La ventana de Google se cerró antes de finalizar el inicio de sesión.";
+    }
+    if (code === "auth/unauthorized-domain") {
+      return (
+        code +
+        " — El dominio «" +
+        (window.location.hostname || "") +
+        "» debe estar autorizado para el acceso. Consulte a administración de sistemas o el aviso en pantalla."
+      );
+    }
+    return code + (msg ? " — " + msg : "");
+  }
+
+  function showAuthError(err) {
+    if (authErrorStrip) authErrorStrip.style.display = "block";
+    if (authBannerDetail && err) {
+      authBannerDetail.textContent = formatAuthError(err);
+    }
+    updateAuthDomainHint(err);
+  }
+
+  function hideAuthError() {
+    if (authErrorStrip) authErrorStrip.style.display = "none";
+  }
+
+  var AUTH_SESSION_START_KEY = "lugano-auth-session-start-ms";
+
+  function ensureAuthSessionTimestamp() {
+    try {
+      if (!sessionStorage.getItem(AUTH_SESSION_START_KEY)) {
+        sessionStorage.setItem(AUTH_SESSION_START_KEY, String(Date.now()));
+      }
+    } catch (e) {}
+  }
+
+  function clearAuthSessionTimestamp() {
+    try {
+      sessionStorage.removeItem(AUTH_SESSION_START_KEY);
+    } catch (e) {}
+  }
+
+  function formatAuthSessionStarted(isoOrMs) {
+    if (!isoOrMs) return "";
+    var d =
+      typeof isoOrMs === "number" ? new Date(isoOrMs) : new Date(isoOrMs);
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleString("es-CO", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+  }
+
+  function onIndexSignedOut() {
+    if (renderRafId) {
+      cancelAnimationFrame(renderRafId);
+      renderRafId = 0;
+    }
+    firestoreListenersStarted = false;
+    firestoreBootPending = false;
+    collectionGroupUnsubs.forEach(function (u) {
+      if (typeof u === "function") u();
+    });
+    collectionGroupUnsubs = [];
+    collectionGroupInitialLogged = false;
+    parkingListeners.forEach(function (m) {
+      m.forEach(function (u) {
+        if (typeof u === "function") u();
+      });
+    });
+    parkingListeners.clear();
+    docNestedListeners.forEach(function (u) {
+      if (typeof u === "function") {
+        try {
+          u();
+        } catch (eOut) {}
+      }
+    });
+    docNestedListeners.clear();
+    nestedDiscoveredPaths.clear();
+    planilladoParkingsFromPathsAttached.clear();
+    discoveredSubcolFromPath.clear();
+    restPlanilladoSedeKeys.clear();
+    if (discoverIntervalId) {
+      clearInterval(discoverIntervalId);
+      discoverIntervalId = null;
+    }
+    var pr = document.getElementById("placas-resumen");
+    if (pr) {
+      pr.textContent = "Inicie sesión para ver placas y datos del planillado.";
+    }
+  }
+
+  if (window.LuganoAuthGate) {
+    LuganoAuthGate.init({
+      hooks: {
+        onFullyAuthed: function (user) {
+          logLine(
+            "Google · uid=" +
+              user.uid +
+              (user.email ? " · " + user.email : "")
+          );
+          tryStartFirestoreListenersOnce();
+        },
+        onSignedOut: onIndexSignedOut,
+      },
+    });
+  }
+
+  if (window.location.protocol === "file:") {
+    console.warn(
+      "Abrir index.html como archivo (file://) a veces falla con Firebase. Usa un servidor local, por ejemplo: npx --yes serve ."
+    );
+  }
+
+  function logLine() {}
+
+  function fmtTs(v) {
+    if (v == null || v === "") return "";
+    try {
+      if (typeof v.toDate === "function") return v.toDate().toLocaleString("es-CO");
+      if (v.seconds != null) return new Date(v.seconds * 1000).toLocaleString("es-CO");
+    } catch (e) {}
+    return String(v);
+  }
+
+  function pick(data) {
+    if (!data) return "";
+    var keys = Array.prototype.slice.call(arguments, 1);
+    var k, i, m;
+    for (i = 0; i < keys.length; i++) {
+      k = keys[i];
+      if (data[k] !== undefined && data[k] !== null && data[k] !== "") return data[k];
+    }
+    var lower = Object.keys(data);
+    var want;
+    for (i = 0; i < keys.length; i++) {
+      want = keys[i];
+      for (k = 0; k < lower.length; k++) {
+        if (lower[k].toLowerCase() === String(want).toLowerCase()) {
+          if (data[lower[k]] !== undefined && data[lower[k]] !== null) return data[lower[k]];
+        }
+      }
+    }
+    return "";
+  }
+
+  function esc(s) {
+    var d = document.createElement("div");
+    d.textContent = s == null ? "" : String(s);
+    return d.innerHTML;
+  }
+
+  function escAttr(s) {
+    if (s == null) return "";
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  /** URLs sin extensión (.mp4) en Firebase/Storage suelen cargarse como imagen y fallar: img → fallback a vídeo. */
+  var fotoLightboxForceVideo = Object.create(null);
+
+  function urlLooksLikeVideo(url) {
+    if (!url || typeof url !== "string") return false;
+    var pathRaw = url.split(/[?#]/)[0];
+    var pathTry = pathRaw;
+    try {
+      pathTry = decodeURIComponent(pathRaw);
+    } catch (e) {}
+    var pathLow = pathTry.toLowerCase();
+    if (/\.(mp4|webm|ogg|ogv|mov|m4v|mkv|3gp)(\b|$)/i.test(pathLow)) return true;
+    if (/\/videos?\//i.test(pathLow)) return true;
+    var lowFull = url.toLowerCase();
+    if (/[?&](content[_-]?type|mime|format)=(video\/|[^&]*mp4|[^&]*webm)/i.test(lowFull)) return true;
+    return false;
+  }
+
+  function urlCountsAsVideo(url) {
+    return urlLooksLikeVideo(url) || !!fotoLightboxForceVideo[url];
+  }
+
+  function summarizeMediaButtonLabel(urls) {
+    if (!urls || !urls.length) return "";
+    var v = 0;
+    var i;
+    for (i = 0; i < urls.length; i++) {
+      if (urlLooksLikeVideo(urls[i])) v++;
+    }
+    var n = urls.length;
+    var p = n - v;
+    if (n === 1) return urlLooksLikeVideo(urls[0]) ? "Ver vídeo" : "Ver foto";
+    if (v && p) return "Ver " + n + " archivos (" + p + " foto(s), " + v + " vídeo(s))";
+    if (v === n) return "Ver " + n + " vídeos";
+    return "Ver " + n + " fotos";
+  }
+
+  function formatQuickBarMediaWord(urls) {
+    if (!urls || !urls.length) return "fotos";
+    var v = 0;
+    var i;
+    for (i = 0; i < urls.length; i++) {
+      if (urlLooksLikeVideo(urls[i])) v++;
+    }
+    var n = urls.length;
+    if (v === n) return n === 1 ? "vídeo" : "vídeos";
+    if (v === 0) return n === 1 ? "foto" : "fotos";
+    return "archivos";
+  }
+
+  function formatLightboxCounter(urls, index) {
+    if (!urls || !urls.length) return "";
+    var total = urls.length;
+    var curVid = urlCountsAsVideo(urls[index]);
+    var i = index + 1;
+    var v = 0;
+    var k;
+    for (k = 0; k < urls.length; k++) {
+      if (urlCountsAsVideo(urls[k])) v++;
+    }
+    var p = total - v;
+    if (total === 1) return curVid ? "1 vídeo" : "1 foto";
+    if (v && p) return "Archivo " + i + " de " + total;
+    if (v === total) return "Vídeo " + i + " de " + total;
+    return "Foto " + i + " de " + total;
+  }
+
+  /**
+   * URLs que el navegador puede cargar en <img> (no file:/ ni gs:/).
+   * Recorre todo el documento Firestore: cualquier campo anidado cuenta.
+   * Si la cadena es larga o va entrecomillada en JSON, también busca https://… por regex.
+   */
+  function collectHttpPhotoUrls(data) {
+    if (!data) return [];
+    var out = [];
+    var seen = {};
+
+    function normalizeHttpString(s) {
+      if (typeof s !== "string") return null;
+      var t = String(s)
+        .replace(/^\uFEFF/, "")
+        .trim()
+        .replace(/^["']+|["']+$/g, "");
+      if (!t) return null;
+      var low = t.toLowerCase();
+      if (low.indexOf("file:") === 0 || low.indexOf("gs:") === 0 || low.indexOf("content:") === 0) {
+        return null;
+      }
+      if (low.indexOf("http://") === 0 || low.indexOf("https://") === 0) return t;
+      if (t.indexOf("//") === 0 && t.indexOf("///") !== 0) return "https:" + t;
+      if (
+        /^[\w.-]+\.(googleapis\.com|googleusercontent\.com|gstatic\.com)\b/i.test(t) &&
+        low.indexOf("http") !== 0 &&
+        low.indexOf("//") !== 0
+      ) {
+        return "https://" + t.replace(/^\/+/, "");
+      }
+      return null;
+    }
+
+    function recordUrl(norm) {
+      if (!norm || seen[norm]) return;
+      seen[norm] = true;
+      out.push(norm);
+    }
+
+    function harvestStringsFromText(s) {
+      if (typeof s !== "string" || !s) return;
+      var found = s.match(/https?:\/\/[^\s"'<>|\\[\]{}]+/gi);
+      if (found && found.length) {
+        var i, chunk, norm;
+        for (i = 0; i < found.length; i++) {
+          chunk = found[i].replace(/[,;.)\]}'"´`]+$/g, "");
+          norm = normalizeHttpString(chunk);
+          if (norm) recordUrl(norm);
+        }
+        return;
+      }
+      var norm = normalizeHttpString(s);
+      if (norm) recordUrl(norm);
+    }
+
+    function walk(v, depth) {
+      if (v == null || depth > 22) return;
+      var t = typeof v;
+      if (t === "string") {
+        harvestStringsFromText(v);
+        return;
+      }
+      if (t === "number" || t === "boolean") return;
+      if (t !== "object") return;
+
+      if (typeof v.toDate === "function") return;
+
+      if (Array.isArray(v)) {
+        var i;
+        for (i = 0; i < v.length; i++) walk(v[i], depth + 1);
+        return;
+      }
+
+      harvestStringsFromText(v.url);
+      harvestStringsFromText(v.downloadURL);
+      harvestStringsFromText(v.downloadUrl);
+      harvestStringsFromText(v.uri);
+      harvestStringsFromText(v.photoUrl);
+      harvestStringsFromText(v.secureUrl);
+
+      var k;
+      for (k in v) {
+        if (!Object.prototype.hasOwnProperty.call(v, k)) continue;
+        walk(v[k], depth + 1);
+      }
+    }
+
+    walk(data, 0);
+    return out;
+  }
+
+  /** gs://… o ruta dentro del bucket (p. ej. inspection_photos/…); no http ni file: */
+  function collectStorageCandidates(data) {
+    if (!data) return [];
+    var seen = {};
+    var out = [];
+
+    function isHttpLike(s) {
+      var low = String(s).toLowerCase();
+      return (
+        low.indexOf("http://") === 0 ||
+        low.indexOf("https://") === 0 ||
+        (low.indexOf("//") === 0 && low.indexOf("///") !== 0)
+      );
+    }
+
+    function couldBeStorageRef(s) {
+      if (typeof s !== "string") return false;
+      var t = s.trim().replace(/^\uFEFF/, "");
+      if (!t || t.length > 1500) return false;
+      var low = t.toLowerCase();
+      if (low.indexOf("file:") === 0 || low.indexOf("content:") === 0 || low.indexOf("blob:") === 0)
+        return false;
+      if (isHttpLike(t)) return false;
+      if (low.indexOf("gs://") === 0) return true;
+      if (/^inspection_photos\//i.test(t)) return true;
+      if (
+        t.indexOf("/") !== -1 &&
+        t.indexOf(":") === -1 &&
+        /\.(jpe?g|png|webp|gif)(\?.*)?$/i.test(t)
+      )
+        return true;
+      return false;
+    }
+
+    function walk(v, depth) {
+      if (v == null || depth > 22) return;
+      if (typeof v === "string") {
+        if (couldBeStorageRef(v) && !seen[v]) {
+          seen[v] = true;
+          out.push(v);
+        }
+        return;
+      }
+      if (typeof v !== "object") return;
+      if (typeof v.toDate === "function") return;
+      if (Array.isArray(v)) {
+        v.forEach(function (x) {
+          walk(x, depth + 1);
+        });
+        return;
+      }
+      var k;
+      for (k in v) {
+        if (Object.prototype.hasOwnProperty.call(v, k)) walk(v[k], depth + 1);
+      }
+    }
+
+    walk(data, 0);
+    return out;
+  }
+
+  function resolveStorageCandidates(candidates) {
+    if (!storage) {
+      return Promise.reject(new Error("Firebase Storage no está cargado."));
+    }
+    if (!auth.currentUser) {
+      return Promise.reject(new Error("Inicia sesión con Google para cargar fotos desde Storage."));
+    }
+    return Promise.all(
+      candidates.map(function (raw) {
+        var s = String(raw).trim();
+        if (s.toLowerCase().indexOf("gs://") === 0) {
+          return storage.refFromURL(s).getDownloadURL();
+        }
+        return storage.ref(s.replace(/^\/+/, "")).getDownloadURL();
+      })
+    );
+  }
+
+  var fotosLightbox = document.getElementById("fotos-lightbox");
+  var fotosLightboxImg = document.getElementById("fotos-lightbox-img");
+  var fotosLightboxCounter = document.getElementById("fotos-lightbox-counter");
+  var fotosLightboxPlate = document.getElementById("fotos-lightbox-plate");
+  var fotosLightboxBackdrop = fotosLightbox
+    ? fotosLightbox.querySelector(".fotos-lightbox-backdrop")
+    : null;
+  var fotosLightboxPrev = fotosLightbox
+    ? fotosLightbox.querySelector(".fotos-lightbox-prev")
+    : null;
+  var fotosLightboxNext = fotosLightbox
+    ? fotosLightbox.querySelector(".fotos-lightbox-next")
+    : null;
+  var fotosLightboxClose = fotosLightbox
+    ? fotosLightbox.querySelector(".fotos-lightbox-close")
+    : null;
+  var fotoLightboxUrls = [];
+  var fotoLightboxIndex = 0;
+  var fotoZoomScale = 1;
+  var fotoPanX = 0;
+  var fotoPanY = 0;
+  var fotoPanDragging = false;
+  var fotoPanLastX = 0;
+  var fotoPanLastY = 0;
+  var fotoPinchStartDist = 0;
+  var fotoPinchStartScale = 1;
+
+  var fotosLightboxViewport = document.getElementById("fotos-lightbox-viewport");
+  var fotosLightboxZoomLayer = document.getElementById("fotos-lightbox-zoom-layer");
+  var fotosLightboxCanvas = document.getElementById("fotos-lightbox-canvas");
+  var fotosZoomInBtn = document.getElementById("fotos-zoom-in");
+  var fotosZoomOutBtn = document.getElementById("fotos-zoom-out");
+  var fotosZoomResetBtn = document.getElementById("fotos-zoom-reset");
+  var fotosZoomLabel = document.getElementById("fotos-zoom-label");
+  var fotosEnhanceClarity = document.getElementById("fotos-enhance-clarity");
+  var fotosLightboxVideo = document.getElementById("fotos-lightbox-video");
+  var fotosLightboxHint = document.getElementById("fotos-lightbox-hint");
+  var fotosZoomToolbar = document.getElementById("fotos-zoom-toolbar");
+  var fotosEnhanceWrap = document.getElementById("fotos-enhance-wrap");
+
+  function fotoLightboxCurrentIsVideo() {
+    if (!fotoLightboxUrls.length || fotoLightboxIndex < 0) return false;
+    return urlCountsAsVideo(fotoLightboxUrls[fotoLightboxIndex]);
+  }
+
+  function pauseFotoLightboxVideo() {
+    if (!fotosLightboxVideo) return;
+    try {
+      fotosLightboxVideo.pause();
+    } catch (e) {}
+    fotosLightboxVideo.style.filter = "";
+    fotosLightboxVideo.removeAttribute("src");
+    try {
+      fotosLightboxVideo.load();
+    } catch (e2) {}
+  }
+
+  function clampNum(v, lo, hi) {
+    return Math.min(hi, Math.max(lo, v));
+  }
+
+  function resetFotoLightboxZoomPan() {
+    fotoZoomScale = 1;
+    fotoPanX = 0;
+    fotoPanY = 0;
+    applyFotoLightboxZoomTransform();
+  }
+
+  function applyFotoLightboxZoomTransform() {
+    if (!fotosLightboxZoomLayer) return;
+    fotosLightboxZoomLayer.style.transform =
+      "translate(" + fotoPanX + "px," + fotoPanY + "px) scale(" + fotoZoomScale + ")";
+    if (fotosZoomLabel) {
+      fotosZoomLabel.textContent = Math.round(fotoZoomScale * 100) + "%";
+    }
+  }
+
+  function touchDistance(a, b) {
+    var dx = a.clientX - b.clientX;
+    var dy = a.clientY - b.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  /**
+   * Realce sin getImageData: un solo dibujado con filtros CSS en canvas (sin costuras ni “mitades”).
+   */
+  function applyLocalClarityEnhancement(canvas, img) {
+    var maxW = 2400;
+    var nw = img.naturalWidth;
+    var nh = img.naturalHeight;
+    if (!nw || !nh) return;
+    var rw = nw;
+    var rh = nh;
+    if (nw > maxW) {
+      rw = maxW;
+      rh = Math.round(nh * (maxW / nw));
+    }
+    canvas.width = rw;
+    canvas.height = rh;
+    var ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.filter = "contrast(1.09) saturate(1.06) brightness(1.02)";
+    ctx.drawImage(img, 0, 0, rw, rh);
+    ctx.filter = "none";
+  }
+
+  function syncEnhanceDisplay() {
+    if (!fotosLightboxImg || !fotosLightboxCanvas) return;
+    if (
+      fotoLightboxUrls.length &&
+      urlCountsAsVideo(fotoLightboxUrls[fotoLightboxIndex])
+    ) {
+      return;
+    }
+    if (!fotosEnhanceClarity || !fotosEnhanceClarity.checked) {
+      fotosLightboxCanvas.hidden = true;
+      fotosLightboxCanvas.style.display = "none";
+      fotosLightboxImg.style.display = "block";
+      fotosLightboxImg.style.visibility = "";
+      fotosLightboxImg.style.position = "";
+      fotosLightboxImg.style.left = "";
+      return;
+    }
+    if (!fotosLightboxImg.complete || fotosLightboxImg.naturalWidth === 0) return;
+    try {
+      applyLocalClarityEnhancement(fotosLightboxCanvas, fotosLightboxImg);
+      fotosLightboxCanvas.hidden = false;
+      fotosLightboxCanvas.style.display = "block";
+      fotosLightboxImg.style.display = "none";
+    } catch (err) {
+      window.alert(
+        "No se pudo aplicar el realce. Desactiva «Mejorar calidad» y usa solo zoom."
+      );
+      fotosEnhanceClarity.checked = false;
+      fotosLightboxCanvas.hidden = true;
+      fotosLightboxCanvas.style.display = "none";
+      fotosLightboxImg.style.display = "block";
+    }
+  }
+
+  function syncVideoEnhanceDisplay() {
+    if (!fotosLightboxVideo || !fotoLightboxUrls.length) return;
+    if (!urlCountsAsVideo(fotoLightboxUrls[fotoLightboxIndex])) return;
+    if (!fotosEnhanceClarity || !fotosEnhanceClarity.checked) {
+      fotosLightboxVideo.style.filter = "";
+      return;
+    }
+    fotosLightboxVideo.style.filter =
+      "contrast(1.09) saturate(1.06) brightness(1.02)";
+  }
+
+  function updateFotoLightboxView() {
+    if (!fotoLightboxUrls.length) return;
+    var url = fotoLightboxUrls[fotoLightboxIndex];
+    var isVid = urlCountsAsVideo(url);
+
+    pauseFotoLightboxVideo();
+
+    resetFotoLightboxZoomPan();
+
+    if (fotosLightboxCanvas) {
+      fotosLightboxCanvas.hidden = true;
+      fotosLightboxCanvas.style.display = "none";
+      fotosLightboxCanvas.width = 0;
+      fotosLightboxCanvas.height = 0;
+    }
+
+    if (isVid) {
+      if (!fotosLightboxVideo) return;
+      if (fotosLightboxZoomLayer) fotosLightboxZoomLayer.style.display = "none";
+      if (fotosLightboxImg) {
+        fotosLightboxImg.removeAttribute("src");
+        fotosLightboxImg.style.display = "none";
+        fotosLightboxImg.alt = "";
+      }
+      fotosLightboxVideo.hidden = false;
+      fotosLightboxVideo.src = url;
+      try {
+        fotosLightboxVideo.load();
+      } catch (e) {}
+      if (fotosZoomToolbar) fotosZoomToolbar.hidden = true;
+      if (fotosEnhanceWrap) fotosEnhanceWrap.hidden = false;
+      if (fotosEnhanceClarity) fotosEnhanceClarity.disabled = false;
+      if (fotosLightboxHint) {
+        fotosLightboxHint.textContent =
+          "Reproductor integrado. «Mejorar calidad» aplica contraste/saturación/brillo en tiempo real (solo en tu equipo). Usa ‹ › o las flechas para cambiar de archivo.";
+      }
+      syncVideoEnhanceDisplay();
+    } else {
+      if (!fotosLightboxImg) return;
+      if (fotosLightboxVideo) {
+        fotosLightboxVideo.hidden = true;
+      }
+      if (fotosLightboxZoomLayer) fotosLightboxZoomLayer.style.display = "";
+      fotosLightboxImg.style.display = "block";
+      fotosLightboxImg.src = url;
+      if (fotosZoomToolbar) fotosZoomToolbar.hidden = false;
+      if (fotosEnhanceWrap) fotosEnhanceWrap.hidden = false;
+      if (fotosEnhanceClarity) fotosEnhanceClarity.disabled = false;
+      if (fotosLightboxHint) {
+        fotosLightboxHint.textContent =
+          'Arrastra para mover cuando hay zoom. Rueda o pellizco para ampliar. «Mejorar calidad» usa una pasada en canvas para fotos (sin subir archivos).';
+      }
+    }
+
+    var altText = formatLightboxCounter(fotoLightboxUrls, fotoLightboxIndex);
+    if (!isVid && fotosLightboxImg) {
+      fotosLightboxImg.alt = altText;
+    }
+
+    if (fotosLightboxCounter) {
+      fotosLightboxCounter.textContent = altText;
+    }
+    if (fotosLightboxPrev) {
+      fotosLightboxPrev.disabled = fotoLightboxIndex <= 0;
+      fotosLightboxPrev.style.visibility = fotoLightboxUrls.length <= 1 ? "hidden" : "visible";
+    }
+    if (fotosLightboxNext) {
+      fotosLightboxNext.disabled = fotoLightboxIndex >= fotoLightboxUrls.length - 1;
+      fotosLightboxNext.style.visibility = fotoLightboxUrls.length <= 1 ? "hidden" : "visible";
+    }
+  }
+
+  function openFotoLightbox(urls, plateLabel) {
+    if (!fotosLightbox || !urls || !urls.length) return;
+    fotoLightboxUrls = urls.slice();
+    fotoLightboxIndex = 0;
+    fotoLightboxForceVideo = Object.create(null);
+    if (fotosLightboxPlate) {
+      var pl = String(plateLabel || "").trim();
+      fotosLightboxPlate.textContent = pl ? "Placa: " + pl : "";
+      fotosLightboxPlate.style.display = pl ? "block" : "none";
+    }
+    fotosLightbox.hidden = false;
+    fotosLightbox.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    updateFotoLightboxView();
+  }
+
+  function closeFotoLightbox() {
+    if (!fotosLightbox) return;
+    fotosLightbox.hidden = true;
+    fotosLightbox.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    resetFotoLightboxZoomPan();
+    if (fotosEnhanceClarity) fotosEnhanceClarity.checked = false;
+    if (fotosLightboxCanvas) {
+      fotosLightboxCanvas.hidden = true;
+      fotosLightboxCanvas.style.display = "none";
+      fotosLightboxCanvas.width = 0;
+      fotosLightboxCanvas.height = 0;
+    }
+    if (fotosLightboxImg) {
+      fotosLightboxImg.removeAttribute("src");
+      fotosLightboxImg.alt = "";
+      fotosLightboxImg.style.display = "";
+      fotosLightboxImg.style.visibility = "";
+      fotosLightboxImg.style.position = "";
+      fotosLightboxImg.style.left = "";
+    }
+    pauseFotoLightboxVideo();
+    if (fotosLightboxVideo) {
+      fotosLightboxVideo.hidden = true;
+    }
+    if (fotosLightboxZoomLayer) fotosLightboxZoomLayer.style.display = "";
+    if (fotosZoomToolbar) fotosZoomToolbar.hidden = false;
+    if (fotosEnhanceWrap) fotosEnhanceWrap.hidden = false;
+    if (fotosEnhanceClarity) fotosEnhanceClarity.disabled = false;
+    fotoLightboxUrls = [];
+    fotoLightboxForceVideo = Object.create(null);
+  }
+
+  function fotoLightboxStep(delta) {
+    var n = fotoLightboxUrls.length;
+    if (n < 2) return;
+    var next = fotoLightboxIndex + delta;
+    if (next < 0 || next >= n) return;
+    fotoLightboxIndex = next;
+    updateFotoLightboxView();
+  }
+
+  if (fotosLightboxImg) {
+    fotosLightboxImg.addEventListener("load", function () {
+      syncEnhanceDisplay();
+    });
+    fotosLightboxImg.addEventListener("error", function () {
+      var url = fotoLightboxUrls[fotoLightboxIndex];
+      if (!url || !fotoLightboxUrls.length) return;
+      if (urlCountsAsVideo(url)) return;
+      if (fotoLightboxForceVideo[url]) return;
+      fotoLightboxForceVideo[url] = true;
+      updateFotoLightboxView();
+    });
+  }
+  if (fotosLightboxVideo) {
+    fotosLightboxVideo.addEventListener("loadedmetadata", function () {
+      syncVideoEnhanceDisplay();
+    });
+    fotosLightboxVideo.addEventListener("error", function () {
+      if (fotosLightboxCounter && fotoLightboxUrls.length) {
+        fotosLightboxCounter.textContent =
+          "No se pudo cargar este vídeo (formato, URL o red). Revisa la consola de red.";
+      }
+    });
+  }
+  if (fotosEnhanceClarity) {
+    fotosEnhanceClarity.addEventListener("change", function () {
+      syncEnhanceDisplay();
+      syncVideoEnhanceDisplay();
+    });
+  }
+  if (fotosZoomInBtn) {
+    fotosZoomInBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      fotoZoomScale = clampNum(fotoZoomScale * 1.2, 1, 5);
+      if (fotoZoomScale === 1) {
+        fotoPanX = 0;
+        fotoPanY = 0;
+      }
+      applyFotoLightboxZoomTransform();
+    });
+  }
+  if (fotosZoomOutBtn) {
+    fotosZoomOutBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      fotoZoomScale = clampNum(fotoZoomScale / 1.2, 1, 5);
+      if (fotoZoomScale === 1) {
+        fotoPanX = 0;
+        fotoPanY = 0;
+      }
+      applyFotoLightboxZoomTransform();
+    });
+  }
+  if (fotosZoomResetBtn) {
+    fotosZoomResetBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      resetFotoLightboxZoomPan();
+    });
+  }
+  if (fotosLightboxViewport) {
+    fotosLightboxViewport.addEventListener(
+      "wheel",
+      function (e) {
+        if (!fotosLightbox || fotosLightbox.hidden) return;
+        if (fotoLightboxCurrentIsVideo()) return;
+        e.preventDefault();
+        var factor = e.deltaY > 0 ? 0.9 : 1.1;
+        fotoZoomScale = clampNum(fotoZoomScale * factor, 1, 5);
+        if (fotoZoomScale === 1) {
+          fotoPanX = 0;
+          fotoPanY = 0;
+        }
+        applyFotoLightboxZoomTransform();
+      },
+      { passive: false }
+    );
+    fotosLightboxViewport.addEventListener("dblclick", function (e) {
+      e.stopPropagation();
+      if (fotoLightboxCurrentIsVideo()) return;
+      resetFotoLightboxZoomPan();
+    });
+    fotosLightboxViewport.addEventListener("pointerdown", function (e) {
+      if (fotoLightboxCurrentIsVideo()) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      if (fotoZoomScale <= 1) return;
+      fotoPanDragging = true;
+      fotoPanLastX = e.clientX;
+      fotoPanLastY = e.clientY;
+      try {
+        fotosLightboxViewport.setPointerCapture(e.pointerId);
+      } catch (err) {}
+    });
+    fotosLightboxViewport.addEventListener("pointermove", function (e) {
+      if (fotoLightboxCurrentIsVideo()) return;
+      if (!fotoPanDragging) return;
+      fotoPanX += e.clientX - fotoPanLastX;
+      fotoPanY += e.clientY - fotoPanLastY;
+      fotoPanLastX = e.clientX;
+      fotoPanLastY = e.clientY;
+      applyFotoLightboxZoomTransform();
+    });
+    fotosLightboxViewport.addEventListener("pointerup", function (e) {
+      fotoPanDragging = false;
+    });
+    fotosLightboxViewport.addEventListener("pointercancel", function (e) {
+      fotoPanDragging = false;
+    });
+    fotosLightboxViewport.addEventListener(
+      "touchstart",
+      function (e) {
+        if (fotoLightboxCurrentIsVideo()) return;
+        if (e.touches.length === 2) {
+          fotoPinchStartDist = touchDistance(e.touches[0], e.touches[1]);
+          fotoPinchStartScale = fotoZoomScale;
+        }
+      },
+      { passive: true }
+    );
+    fotosLightboxViewport.addEventListener(
+      "touchmove",
+      function (e) {
+        if (fotoLightboxCurrentIsVideo()) return;
+        if (e.touches.length === 2 && fotoPinchStartDist > 0) {
+          e.preventDefault();
+          var d = touchDistance(e.touches[0], e.touches[1]);
+          fotoZoomScale = clampNum((fotoPinchStartScale * d) / fotoPinchStartDist, 1, 5);
+          if (fotoZoomScale === 1) {
+            fotoPanX = 0;
+            fotoPanY = 0;
+          }
+          applyFotoLightboxZoomTransform();
+        }
+      },
+      { passive: false }
+    );
+    fotosLightboxViewport.addEventListener("touchend", function (e) {
+      if (e.touches.length < 2) {
+        fotoPinchStartDist = 0;
+      }
+    });
+  }
+
+  if (fotosLightboxClose) {
+    fotosLightboxClose.addEventListener("click", function (e) {
+      e.stopPropagation();
+      closeFotoLightbox();
+    });
+  }
+  if (fotosLightboxBackdrop) {
+    fotosLightboxBackdrop.addEventListener("click", closeFotoLightbox);
+  }
+  if (fotosLightboxPrev) {
+    fotosLightboxPrev.addEventListener("click", function (e) {
+      e.stopPropagation();
+      fotoLightboxStep(-1);
+    });
+  }
+  if (fotosLightboxNext) {
+    fotosLightboxNext.addEventListener("click", function (e) {
+      e.stopPropagation();
+      fotoLightboxStep(1);
+    });
+  }
+  document.addEventListener("keydown", function (e) {
+    if (!fotosLightbox || fotosLightbox.hidden) return;
+    if (e.key === "Escape") {
+      closeFotoLightbox();
+    } else if (e.key === "ArrowRight") {
+      fotoLightboxStep(1);
+    } else if (e.key === "ArrowLeft") {
+      fotoLightboxStep(-1);
+    } else if (e.key === "+" || e.key === "=") {
+      if (fotoLightboxCurrentIsVideo()) return;
+      e.preventDefault();
+      fotoZoomScale = clampNum(fotoZoomScale * 1.15, 1, 5);
+      applyFotoLightboxZoomTransform();
+    } else if (e.key === "-" || e.key === "_") {
+      if (fotoLightboxCurrentIsVideo()) return;
+      e.preventDefault();
+      fotoZoomScale = clampNum(fotoZoomScale / 1.15, 1, 5);
+      if (fotoZoomScale === 1) {
+        fotoPanX = 0;
+        fotoPanY = 0;
+      }
+      applyFotoLightboxZoomTransform();
+    } else if (e.key === "0") {
+      if (fotoLightboxCurrentIsVideo()) return;
+      e.preventDefault();
+      resetFotoLightboxZoomPan();
+    }
+  });
+
+  function photoSlotsForRegistryEntry(entry) {
+    if (!entry) return 0;
+    if (entry.urls && entry.urls.length) return entry.urls.length;
+    if (entry.storageCandidates && entry.storageCandidates.length) {
+      return entry.storageCandidates.length;
+    }
+    return 0;
+  }
+
+  function openFotoGalleryForPath(path, buttonEl) {
+    var entry = fotoGalleryRegistry.get(path);
+    if (!entry) return;
+
+    if (entry.urls && entry.urls.length) {
+      openFotoLightbox(entry.urls, entry.plate);
+      return;
+    }
+
+    if (entry.storageCandidates && entry.storageCandidates.length) {
+      var btn = buttonEl;
+      var prevText = btn ? btn.textContent : "";
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Cargando…";
+      }
+      resolveStorageCandidates(entry.storageCandidates)
+        .then(function (urls) {
+          entry.urls = urls;
+          fotoGalleryRegistry.set(path, entry);
+          openFotoLightbox(urls, entry.plate);
+        })
+        .catch(function (err) {
+          window.alert(
+            "No se pudieron obtener las URLs de Storage (¿sesión y reglas de lectura?). " +
+              (err && err.message ? err.message : String(err))
+          );
+        })
+        .finally(function () {
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = prevText;
+          }
+        });
+    }
+  }
+
+  function renderPlacasMultifotoQuickBar() {
+    var wrap = document.getElementById("placas-multifotos-wrap");
+    if (!wrap) return;
+    wrap.innerHTML = "";
+    var items = [];
+    fotoGalleryRegistry.forEach(function (entry, path) {
+      var n = photoSlotsForRegistryEntry(entry);
+      if (n < 2) return;
+      items.push({
+        path: path,
+        plate: String(entry.plate || "").trim(),
+        n: n
+      });
+    });
+    items.sort(function (a, b) {
+      var pa = a.plate || a.path;
+      var pb = b.plate || b.path;
+      return String(pa).localeCompare(String(pb), "es");
+    });
+    if (!items.length) {
+      wrap.innerHTML =
+        '<span style="color:#666;font-size:13px;line-height:1.5;">Aún no hay registros con 2+ fotos por URL o Storage. Cuando existan, aparecerán aquí como botones.</span>';
+      return;
+    }
+    items.forEach(function (it) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "placa-multifoto-btn";
+      btn.setAttribute("data-foto-path", it.path);
+      var entry = fotoGalleryRegistry.get(it.path);
+      var mediaWord = formatQuickBarMediaWord(entry && entry.urls ? entry.urls : null);
+      btn.textContent = (it.plate || "Sin placa") + " · " + it.n + " " + mediaWord;
+      btn.title = "Abrir visor · " + it.path;
+      wrap.appendChild(btn);
+    });
+  }
+
+  if (tbody) {
+    tbody.addEventListener("click", function (e) {
+      var btn = e.target.closest(".fotos-cell-btn");
+      if (!btn) return;
+      e.preventDefault();
+      var path = btn.getAttribute("data-foto-path");
+      if (!path) return;
+      openFotoGalleryForPath(path, btn);
+    });
+  }
+
+  var placasMultifotosWrap = document.getElementById("placas-multifotos-wrap");
+  if (placasMultifotosWrap) {
+    placasMultifotosWrap.addEventListener("click", function (e) {
+      var btn = e.target.closest(".placa-multifoto-btn");
+      if (!btn) return;
+      e.preventDefault();
+      var path = btn.getAttribute("data-foto-path");
+      if (!path) return;
+      openFotoGalleryForPath(path, btn);
+    });
+  }
+
+  function plateLabel(r) {
+    var d = r.data || {};
+    return String(pick(d, "licensePlate", "placa", "Placa") || r.docId || "").trim();
+  }
+
+  function stationLabelForRow(r) {
+    var d = r.data || {};
+    var label =
+      pick(d, "parking", "parkingName", "estacionamiento", "sede") ||
+      r.stationId ||
+      "";
+    label = String(label).trim();
+    if (label) return label;
+    var parsed = parseFromFullPath(r.fullPath || "");
+    if (parsed.stationId && parsed.stationId !== "(legacy)") return parsed.stationId;
+    return "(sin sede)";
+  }
+
+  function attachDiscoveredSubcollectionsFromPaths() {
+    rows.forEach(function (r, fullPath) {
+      var parts = fullPath.split("/").filter(Boolean);
+      if (parts.length < 4 || !isPlanilladoRootName(parts[0])) return;
+      var rootCol = parts[0];
+      var parkingId = decodeId(parts[1]);
+      var subColId = parts[2];
+      if (!subColId || String(subColId).indexOf("/") !== -1) return;
+      var dk = parkingStorageKey(rootCol, parkingId) + "\0" + subColId;
+      if (discoveredSubcolFromPath.has(dk)) return;
+      discoveredSubcolFromPath.add(dk);
+      attachSubcollectionListener(rootCol, parkingId, subColId);
+      logLine(
+        "Subcolección vista en datos → «" +
+          rootCol +
+          "/" +
+          parkingId +
+          "/" +
+          subColId +
+          "»"
+      );
+    });
+  }
+
+  function attachPlanilladoParkingsDiscoveredFromRows() {
+    rows.forEach(function (r, fullPath) {
+      var parts = fullPath.split("/").filter(Boolean);
+      if (parts.length < 2 || !isPlanilladoRootName(parts[0])) return;
+      var rootCol = parts[0];
+      var parkingId = decodeId(parts[1]);
+      var pk = parkingStorageKey(rootCol, parkingId);
+      if (planilladoParkingsFromPathsAttached.has(pk)) return;
+      planilladoParkingsFromPathsAttached.add(pk);
+      logLine(
+        'Sede «planillado» inferida por ruta → «' +
+          rootCol +
+          "/" +
+          parkingId +
+          "» (listeners como Fonade)"
+      );
+      refreshParkingSubcollections(rootCol, parkingId);
+    });
+  }
+
+  function renderPlacasPorEstacionamiento() {
+    var grid = document.getElementById("listado-por-estacionamiento");
+    if (!grid) return;
+
+    var soloPlanillado = Array.from(rows.values()).filter(function (r) {
+      return r.fullPath && pathUnderPlanilladoTree(r.fullPath);
+    });
+
+    /** Placas agrupadas por ID del doc de sede en Firestore: planillado/{esteId}/… */
+    var byParkingDocId = new Map();
+    soloPlanillado.forEach(function (r) {
+      var parts = (r.fullPath || "").split("/").filter(Boolean);
+      if (parts.length < 2 || !isPlanilladoRootName(parts[0])) return;
+      var sedeId = decodeId(parts[1]);
+      var pl = plateLabel(r);
+      if (!pl) return;
+      if (!byParkingDocId.has(sedeId)) byParkingDocId.set(sedeId, new Map());
+      var platesMap = byParkingDocId.get(sedeId);
+      platesMap.set(pl, (platesMap.get(pl) || 0) + 1);
+    });
+
+    var cfgFb = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
+    var fallbackRaw = cfgFb.planilladoParkingIdsFallback || [];
+    var fallbackList = [];
+    var seenFallback = new Set();
+    fallbackRaw.forEach(function (x) {
+      var id = String(x).trim();
+      if (!id || seenFallback.has(id)) return;
+      seenFallback.add(id);
+      fallbackList.push(id);
+    });
+    var inFallbackSet = new Set(fallbackList);
+    var orderedSedeIds = fallbackList.slice();
+    var extraSedeIds = [];
+    byParkingDocId.forEach(function (_, sedeId) {
+      if (!inFallbackSet.has(sedeId)) extraSedeIds.push(sedeId);
+    });
+    extraSedeIds.sort(function (a, b) {
+      return a.localeCompare(b, "es");
+    });
+    extraSedeIds.forEach(function (id) {
+      orderedSedeIds.push(id);
+    });
+
+    var otros = Array.from(rows.values()).filter(function (r) {
+      if (!r.fullPath) return false;
+      if (pathUnderPlanilladoTree(r.fullPath)) return false;
+      if (r.fullPath.indexOf(PLANILLADO_OLD + "/") === 0) return false;
+      return plateLabel(r).length > 0;
+    });
+    var byStationOtros = new Map();
+    otros.forEach(function (r) {
+      var st = stationLabelForRow(r) + " · otros";
+      var pl = plateLabel(r);
+      if (!byStationOtros.has(st)) byStationOtros.set(st, new Map());
+      var pm = byStationOtros.get(st);
+      pm.set(pl, (pm.get(pl) || 0) + 1);
+    });
+
+    function renderStationCardsOrdered(sedeIdsOrdered, getPlateMap) {
+      if (!sedeIdsOrdered.length) return "";
+      return sedeIdsOrdered
+        .map(function (st) {
+          var plateMap = getPlateMap(st) || new Map();
+          var plates = Array.from(plateMap.keys()).sort(function (a, b) {
+            return a.localeCompare(b, "es");
+          });
+          var count = plates.length;
+          var chips = plates
+            .map(function (p) {
+              var n = plateMap.get(p);
+              var dup =
+                n > 1
+                  ? ' <span style="opacity:.65;font-size:10px;font-weight:400;">×' +
+                    n +
+                    "</span>"
+                  : "";
+              return (
+                '<span class="station-chip" title="' +
+                escAttr(st + " · " + p) +
+                '">' +
+                esc(p) +
+                dup +
+                "</span>"
+              );
+            })
+            .join("");
+          return (
+            '<div class="station-card">' +
+            '<h4 title="' +
+            escAttr(st) +
+            '">' +
+            esc(st) +
+            ' <span style="color:#888;font-weight:400;font-size:11px;">(' +
+            count +
+            ")</span></h4>" +
+            '<div class="station-scroll">' +
+            chips +
+            "</div>" +
+            "</div>"
+          );
+        })
+        .join("");
+    }
+
+    var htmlMain = renderStationCardsOrdered(orderedSedeIds, function (sid) {
+      return byParkingDocId.get(sid);
+    });
+    var htmlOtros = byStationOtros.size
+      ? '<div style="grid-column:1/-1;margin:6px 0 4px;font-size:12px;color:#999;">Registros fuera del árbol «planillado» (misma base)</div>' +
+        renderStationCardsOrdered(
+          Array.from(byStationOtros.keys()).sort(function (a, b) {
+            return a.localeCompare(b, "es");
+          }),
+          function (k) {
+            return byStationOtros.get(k);
+          }
+        )
+      : "";
+
+    if (!htmlMain && !htmlOtros) {
+      grid.innerHTML =
+        '<p style="color:#666;font-size:13px;margin:0;padding:8px 0;">No hay placas agrupadas por estacionamiento por el momento.</p>';
+      return;
+    }
+
+    grid.innerHTML = htmlMain + htmlOtros;
+  }
+
+  function renderPlacasList() {
+    var resumen = document.getElementById("placas-resumen");
+    var box = document.getElementById("listado-placas");
+    if (!resumen || !box) return;
+
+    var all = Array.from(rows.values());
+    var soloPlanillado = all.filter(function (r) {
+      return r.fullPath && pathUnderPlanilladoTree(r.fullPath);
+    });
+    var legacy = all.filter(function (r) {
+      return r.fullPath && r.fullPath.indexOf(PLANILLADO_OLD + "/") === 0;
+    });
+
+    var byPlate = new Map();
+    soloPlanillado.forEach(function (r) {
+      var p = plateLabel(r);
+      if (!p) return;
+      var est =
+        pick(r.data || {}, "parking", "parkingName") || r.stationId || "";
+      var prev = byPlate.get(p);
+      if (!prev) {
+        byPlate.set(p, est);
+      } else if (est && prev.indexOf(est) === -1) {
+        byPlate.set(p, prev + " · " + est);
+      }
+    });
+
+    var plates = Array.from(byPlate.keys()).sort(function (a, b) {
+      return a.localeCompare(b, "es");
+    });
+
+    var msg = "";
+    if (!all.length) {
+      if (planilladoRootDocCount === 0) {
+        msg =
+          'Proyecto «' +
+          firebaseConfig.projectId +
+          '»: no hay sedes en «planillado» ni registros visibles. Confirme el ID del proyecto en firebase-config.js, la base de datos activa y las reglas de lectura si en la consola de Firebase sí aparecen datos.';
+      } else if (planilladoRootDocCount === null) {
+        msg = "Conectando con Firestore…";
+      } else {
+        msg =
+          "Hay " +
+          planilladoRootDocCount +
+          " sede(s) en «planillado», pero aún no se detectan placas en las subcolecciones. Verifique la aplicación de campo o los datos en Firebase.";
+      }
+    } else {
+      msg =
+        plates.length +
+        " placa(s) distinta(s) · vista sincronizada con el proyecto";
+      if (planilladoRootDocCount === 0 && soloPlanillado.length) {
+        msg +=
+          " · los datos llegan por subcolecciones aunque la raíz «planillado» esté vacía";
+      }
+      if (soloPlanillado.length !== plates.length) {
+        msg += " · " + soloPlanillado.length + " registro(s) en total";
+      }
+      if (legacy.length) {
+        msg +=
+          " · +" +
+          legacy.length +
+          " en «" +
+          PLANILLADO_OLD +
+          "» (detalle en la tabla inferior)";
+      }
+    }
+    resumen.textContent = msg;
+
+    box.innerHTML = plates
+      .map(function (p) {
+        var where = byPlate.get(p);
+        var title = where ? ' title="' + escAttr(where) + '"' : "";
+        return (
+          '<span class="placa-chip-glob"' +
+          title +
+          ">" +
+          esc(p) +
+          "</span>"
+        );
+      })
+      .join("");
+
+    renderPlacasPorEstacionamiento();
+  }
+
+  function decodeId(seg) {
+    try {
+      return decodeURIComponent(seg);
+    } catch (e) {
+      return seg;
+    }
+  }
+
+  /**
+   * Rutas:
+   * · planillado/{estacionamiento}/{operarioId}/{placaDocId} — ej. …/LugMC421/BIC-90
+   * · planillado/{estacionamiento}/registros/{placaDocId}
+   * · planillado_old/{licensePlate}
+   */
+  function parseFromFullPath(fullPath) {
+    var parts = fullPath.split("/").filter(Boolean);
+    var out = {
+      stationId: "",
+      operarioId: "",
+      docId: parts.length ? parts[parts.length - 1] : "",
+      fullPath: fullPath
+    };
+    if (parts[0] === PLANILLADO_OLD && parts[1]) {
+      out.docId = decodeId(parts[1]);
+      out.stationId = "(legacy)";
+      return out;
+    }
+    if (parts.length >= 4 && isPlanilladoRootName(parts[0])) {
+      out.stationId = decodeId(parts[1]);
+      out.operarioId = decodeId(parts[2]);
+      out.docId = decodeId(parts[parts.length - 1]);
+      return out;
+    }
+    var pi = parts.map(function (s) {
+      return s.toLowerCase();
+    }).indexOf("planillado");
+    if (pi >= 0 && parts[pi + 1]) out.stationId = decodeId(parts[pi + 1]);
+    return out;
+  }
+
+  /** Convierte timestamps de Firestore o números a ms (evita mezclar segundos con ms en el sort). */
+  function timestampToMillis(v) {
+    if (v == null || v === "") return null;
+    if (typeof v === "number" && !isNaN(v)) {
+      if (v > 1e12) return v;
+      if (v > 1e9) return v * 1000;
+      return v;
+    }
+    if (typeof v === "object") {
+      if (typeof v.toDate === "function") {
+        try {
+          return v.toDate().getTime();
+        } catch (e) {
+          return null;
+        }
+      }
+      if (v.seconds != null) {
+        var ns = v.nanoseconds || 0;
+        return v.seconds * 1000 + Math.floor(ns / 1e6);
+      }
+    }
+    return null;
+  }
+
+  /** Momento más reciente asociado al registro (tabla: más nuevo arriba). */
+  function recencyMillis(data) {
+    if (!data) return 0;
+    var keys = [
+      "lastCheckDateTime",
+      "lastCheckTimestamp",
+      "dateTime",
+      "updatedAt",
+      "createdAt",
+      "ultimoUso",
+      "fecha"
+    ];
+    var best = 0;
+    var i, k, ms;
+    for (i = 0; i < keys.length; i++) {
+      k = keys[i];
+      ms = timestampToMillis(data[k]);
+      if (ms == null) ms = timestampToMillis(pick(data, k));
+      if (ms != null && ms > best) best = ms;
+    }
+    return best;
+  }
+
+  /** Una sola repintada por fotograma ante ráfagas de cambios Firestore (antes: un render completo por cada doc). */
+  var renderRafId = 0;
+  function scheduleRender() {
+    if (renderRafId) return;
+    renderRafId = requestAnimationFrame(function () {
+      renderRafId = 0;
+      render();
+    });
+  }
+  function flushRender() {
+    if (renderRafId) {
+      cancelAnimationFrame(renderRafId);
+      renderRafId = 0;
+    }
+    render();
+  }
+
+  function render() {
+    fotoGalleryRegistry.clear();
+    attachDiscoveredSubcollectionsFromPaths();
+    attachPlanilladoParkingsDiscoveredFromRows();
+    var list = Array.from(rows.values());
+    list.sort(function (a, b) {
+      var tb = recencyMillis(b.data);
+      var ta = recencyMillis(a.data);
+      if (tb !== ta) return tb - ta;
+      return String(b.fullPath || "").localeCompare(String(a.fullPath || ""));
+    });
+
+    tbody.innerHTML = "";
+    list.forEach(function (r) {
+      var d = r.data || {};
+      var placa = pick(d, "licensePlate", "placa", "Placa") || r.docId;
+      var idOp =
+        pick(d, "lastOperator", "user", "idOperario", "operarioId", "id_operario", "operatorName") ||
+        r.operarioId;
+      var est = pick(d, "parking", "parkingName", "estacionamiento", "sede") || r.stationId;
+
+      var fechaVal = pick(d, "dateTime", "fecha", "lastCheckDateTime", "createdAt");
+      var horaVal = pick(d, "hora");
+      var fechaFull = fmtTs(fechaVal);
+      var fechaCol = fechaFull;
+      var horaCol = "";
+      if (typeof horaVal === "string" && horaVal) horaCol = horaVal;
+      else if (horaVal && horaVal.seconds != null) horaCol = fmtTs(horaVal);
+      if (!horaCol && fechaFull.indexOf(",") !== -1) {
+        var p2 = fechaFull.split(",");
+        fechaCol = p2[0].trim();
+        horaCol = p2.slice(1).join(",").trim();
+      }
+
+      var ticket = pick(d, "keysNumber", "ticket", "tipoTicket", "ticketTarjeta");
+      var idTicket = pick(
+        d,
+        "cellNumber",
+        "idTicket",
+        "id_ticket",
+        "idTarjeta",
+        "id"
+      );
+      var tipoVeh = pick(d, "tipoVehiculo", "tipo", "clase");
+      if (!tipoVeh) {
+        var ic = pick(d, "isCar");
+        var im = pick(d, "isMotorcycle");
+        if (ic === true || ic === "true") tipoVeh = "Auto";
+        else if (im === true || im === "true") tipoVeh = "Moto";
+      }
+      var observaciones = pick(
+        d,
+        "description",
+        "Description",
+        "observaciones",
+        "Observaciones",
+        "observacion",
+        "Observacion",
+        "observation",
+        "observations",
+        "notes",
+        "notas",
+        "comentarios",
+        "comments",
+        "remarks",
+        "remark",
+        "mensaje",
+        "detalle"
+      );
+      if (observaciones != null && typeof observaciones === "object") {
+        try {
+          observaciones = JSON.stringify(observaciones);
+        } catch (e2) {
+          observaciones = String(observaciones);
+        }
+      } else if (observaciones != null && observaciones !== "") {
+        observaciones = String(observaciones).trim();
+      } else {
+        observaciones = "";
+      }
+      var ultimo = fmtTs(pick(d, "lastCheckDateTime", "ultimoUso", "updatedAt"));
+
+      var fotos = pick(d, "photosPaths", "fotos", "foto", "urlsFotos");
+      var urlsHttp = collectHttpPhotoUrls(d);
+      var storageCands = collectStorageCandidates(d);
+      var fotoHtml = "";
+      if (urlsHttp.length) {
+        fotoGalleryRegistry.set(r.fullPath, {
+          urls: urlsHttp,
+          storageCandidates: [],
+          plate: String(placa || "").trim()
+        });
+        fotoHtml =
+          '<button type="button" class="fotos-cell-btn" data-foto-path="' +
+          escAttr(r.fullPath) +
+          '">' +
+          esc(summarizeMediaButtonLabel(urlsHttp)) +
+          "</button>";
+      } else if (storageCands.length) {
+        fotoGalleryRegistry.set(r.fullPath, {
+          urls: [],
+          storageCandidates: storageCands,
+          plate: String(placa || "").trim()
+        });
+        fotoHtml =
+          '<button type="button" class="fotos-cell-btn" data-foto-path="' +
+          escAttr(r.fullPath) +
+          '">' +
+          esc(
+            storageCands.length === 1
+              ? "Ver foto (Storage)"
+              : "Ver " + storageCands.length + " fotos (Storage)"
+          ) +
+          "</button>";
+      } else if (Array.isArray(fotos) && fotos.length) {
+        fotoHtml =
+          '<span class="fotos-cell-muted" title="Solo hay rutas locales file:// u otros formatos sin URL https ni ruta gs:// / Storage. Esta página no puede abrir archivos del teléfono; actualiza la app para guardar URL de descarga o subir a Storage.">' +
+          esc(fotos.length + " ruta(s) · sin URL web") +
+          "</span>";
+      } else if (fotos) {
+        fotoHtml = esc(String(fotos).slice(0, 48));
+      }
+
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        '<td bgcolor="black" width="120"><center><span class="placa-chip-tabla">' +
+        esc(placa) +
+        "</span></center></td>" +
+        '<td bgcolor="black" width="120"><center>' + esc(idOp) + "</center></td>" +
+        '<td bgcolor="black" width="120"><center>' + esc(est) + "</center></td>" +
+        '<td bgcolor="black" width="120"><center>' + esc(fechaCol) + "</center></td>" +
+        '<td bgcolor="black" width="120"><center>' + esc(horaCol) + "</center></td>" +
+        '<td bgcolor="black" width="120"><center>' + esc(ticket) + "</center></td>" +
+        '<td bgcolor="black" width="120"><center>' + esc(idTicket) + "</center></td>" +
+        '<td bgcolor="black" width="120"><center>' + esc(tipoVeh) + "</center></td>" +
+        '<td bgcolor="black" width="140" style="max-width:140px;word-break:break-word;"><center>' +
+        esc(observaciones) +
+        "</center></td>" +
+        '<td bgcolor="black" width="120"><center>' + esc(ultimo) + "</center></td>" +
+        '<td bgcolor="black" width="120"><center>' + fotoHtml + "</center></td>";
+      tbody.appendChild(tr);
+    });
+    renderPlacasList();
+    renderPlacasMultifotoQuickBar();
+  }
+
+  function updateRowForDoc(docRef, data, changeType, quiet) {
+    var key = docRef.path;
+    var parsed = parseFromFullPath(key);
+    if (changeType === "removed") {
+      rows.delete(key);
+      nestedDiscoveredPaths.delete(key);
+    } else {
+      rows.set(key, {
+        stationId: parsed.stationId,
+        operarioId: parsed.operarioId,
+        docId: parsed.docId,
+        data: data,
+        fullPath: key
+      });
+    }
+    if (!quiet) {
+      try {
+        logLine(
+          changeType +
+            " [" +
+            key +
+            "] → " +
+            JSON.stringify(data || {}).slice(0, 140)
+        );
+      } catch (e) {
+        logLine(changeType + " " + key);
+      }
+    }
+    scheduleRender();
+  }
+
+  function removeRowsForParking(rootCol, parkingId) {
+    var prefix = rootCol + "/" + parkingId + "/";
+    Array.from(rows.keys()).forEach(function (key) {
+      if (key.indexOf(prefix) === 0) rows.delete(key);
+    });
+  }
+
+  function detachNestedListenersUnderPrefix(prefix) {
+    docNestedListeners.forEach(function (unsub, key) {
+      var parentPath = key.split("\0")[0];
+      if (parentPath.indexOf(prefix) === 0) {
+        try {
+          unsub();
+        } catch (e0) {}
+        docNestedListeners.delete(key);
+      }
+    });
+    Array.from(nestedDiscoveredPaths).forEach(function (p) {
+      if (p.indexOf(prefix) === 0) nestedDiscoveredPaths.delete(p);
+    });
+  }
+
+  function detachParkingListeners(rootCol, parkingId) {
+    detachNestedListenersUnderPrefix(rootCol + "/" + parkingId + "/");
+    var inner = parkingListeners.get(parkingStorageKey(rootCol, parkingId));
+    if (inner) {
+      inner.forEach(function (unsub) {
+        unsub();
+      });
+      parkingListeners.delete(parkingStorageKey(rootCol, parkingId));
+    }
+    removeRowsForParking(rootCol, parkingId);
+    flushRender();
+  }
+
+  function attachNestedCollectionListeners(docRef) {
+    if (!docRef || !auth.currentUser) return;
+    var parentPath = docRef.path;
+    if (nestedDiscoveredPaths.has(parentPath)) return;
+    nestedDiscoveredPaths.add(parentPath);
+    listCollectionIdsRESTForFullPath(parentPath)
+      .then(function (data) {
+        var ids = data.collectionIds || [];
+        if (!ids.length) return;
+        logLine(
+          "Subcolecciones anidadas «" +
+            parentPath +
+            "»: " +
+            ids.join(", ")
+        );
+        ids.forEach(function (cid) {
+          var mapKey = parentPath + "\0" + cid;
+          if (docNestedListeners.has(mapKey)) return;
+          var firstSnapNested = true;
+          var unsub = docRef.collection(cid).onSnapshot(
+            function (snap) {
+              logLine(
+                "«" +
+                  parentPath +
+                  "» / «" +
+                  cid +
+                  "»: docs=" +
+                  snap.size +
+                  " · Δ=" +
+                  snap.docChanges().length
+              );
+              snap.docChanges().forEach(function (ch) {
+                updateRowForDoc(ch.doc.ref, ch.doc.data(), ch.type, false);
+                if (ch.type !== "removed") {
+                  attachNestedCollectionListeners(ch.doc.ref);
+                }
+              });
+              if (firstSnapNested) {
+                firstSnapNested = false;
+                if (snap.docChanges().length === 0 && snap.size > 0) {
+                  snap.docs.forEach(function (doc) {
+                    updateRowForDoc(doc.ref, doc.data(), "added", true);
+                    attachNestedCollectionListeners(doc.ref);
+                  });
+                }
+              }
+            },
+            function (err) {
+              logLine(
+                "ERROR anidado «" +
+                  parentPath +
+                  "»/«" +
+                  cid +
+                  "»: " +
+                  (err.code || "") +
+                  " — " +
+                  err.message
+              );
+            }
+          );
+          docNestedListeners.set(mapKey, unsub);
+        });
+      })
+      .catch(function () {
+        nestedDiscoveredPaths.delete(parentPath);
+      });
+  }
+
+
+  function attachSubcollectionListener(rootCol, parkingId, subColId) {
+    var pk = parkingStorageKey(rootCol, parkingId);
+    var inner = parkingListeners.get(pk);
+    if (!inner) {
+      inner = new Map();
+      parkingListeners.set(pk, inner);
+    }
+    if (inner.has(subColId)) return;
+
+    var firstSnap = true;
+    var unsub = db
+      .collection(rootCol)
+      .doc(parkingId)
+      .collection(subColId)
+      .onSnapshot(
+        function (snap) {
+          logLine(
+            "«" +
+              rootCol +
+              "/" +
+              parkingId +
+              "» / «" +
+              subColId +
+              "»: docs=" +
+              snap.size +
+              " · cambios=" +
+              snap.docChanges().length
+          );
+          snap.docChanges().forEach(function (ch) {
+            updateRowForDoc(ch.doc.ref, ch.doc.data(), ch.type, false);
+            if (ch.type !== "removed") {
+              attachNestedCollectionListeners(ch.doc.ref);
+            }
+          });
+          if (firstSnap) {
+            firstSnap = false;
+            if (snap.docChanges().length === 0 && snap.size > 0) {
+              snap.docs.forEach(function (doc) {
+                updateRowForDoc(doc.ref, doc.data(), "added", true);
+                attachNestedCollectionListeners(doc.ref);
+              });
+              logLine(
+                "«" +
+                  parkingId +
+                  "»/«" +
+                  subColId +
+                  "»: sync inicial " +
+                  snap.size +
+                  " doc(s)."
+              );
+            }
+          }
+        },
+        function (err) {
+          logLine(
+            "ERROR «" +
+              parkingId +
+              "»/«" +
+              subColId +
+              "»: " +
+              err.code +
+              " — " +
+              err.message
+          );
+        }
+      );
+    inner.set(subColId, unsub);
+  }
+
+  function listCollectionIdsRESTForFullPath(fullDocPath) {
+    var projectId = firebaseConfig.projectId;
+    var segments = fullDocPath.split("/").filter(Boolean);
+    var encodedPath = segments.map(encodeURIComponent).join("/");
+    var docResource =
+      "projects/" +
+      projectId +
+      "/databases/(default)/documents/" +
+      encodedPath;
+    var url = "https://firestore.googleapis.com/v1/" + docResource + ":listCollectionIds";
+    return auth.currentUser.getIdToken().then(function (token) {
+      return fetch(url, {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json"
+        },
+        body: "{}"
+      }).then(function (res) {
+        if (!res.ok) {
+          return res.text().then(function (t) {
+            throw new Error(res.status + " " + t);
+          });
+        }
+        return res.json();
+      });
+    });
+  }
+
+  function listCollectionIdsREST(rootCol, parkingId) {
+    return listCollectionIdsRESTForFullPath(rootCol + "/" + parkingId);
+  }
+
+  /**
+   * Lista IDs de documentos en una colección raíz (planillado, Planillado, planillados).
+   * Igual que ver la lista de sedes en la consola Firebase → documents.list
+   */
+  function listDocumentsInPlanilladoRootREST(rootCollectionId) {
+    var projectId = firebaseConfig.projectId;
+    var collected = [];
+    function fetchPage(pageToken) {
+      var qs =
+        "pageSize=300" +
+        (pageToken ? "&pageToken=" + encodeURIComponent(pageToken) : "");
+      var url =
+        "https://firestore.googleapis.com/v1/projects/" +
+        projectId +
+        "/databases/(default)/documents/" +
+        encodeURIComponent(rootCollectionId) +
+        "?" +
+        qs;
+      return auth.currentUser.getIdToken().then(function (token) {
+        return fetch(url, {
+          headers: { Authorization: "Bearer " + token }
+        }).then(function (res) {
+          if (!res.ok) {
+            return res.text().then(function (t) {
+              throw new Error(res.status + " " + t);
+            });
+          }
+          return res.json();
+        });
+      }).then(function (data) {
+        (data.documents || []).forEach(function (doc) {
+          var name = doc.name || "";
+          var segs = name.split("/");
+          var idRaw = segs.length ? segs[segs.length - 1] : "";
+          try {
+            collected.push(decodeURIComponent(idRaw));
+          } catch (eDec) {
+            collected.push(idRaw);
+          }
+        });
+        if (data.nextPageToken) {
+          return fetchPage(data.nextPageToken);
+        }
+        return collected;
+      });
+    }
+    return fetchPage(null);
+  }
+
+  function discoverPlanilladoSedesViaREST() {
+    return Promise.all(
+      PLANILLADO_ROOT_COLS.map(function (rootCol) {
+        return listDocumentsInPlanilladoRootREST(rootCol)
+          .then(function (ids) {
+            logLine(
+              "REST documents.list «" +
+                rootCol +
+                "»: " +
+                ids.length +
+                " sede(s) — mismos listeners/subcolecciones que Fonade"
+            );
+            ids.forEach(function (parkingId) {
+              var pid = String(parkingId).trim();
+              restPlanilladoSedeKeys.add(
+                parkingStorageKey(rootCol, pid)
+              );
+              refreshParkingSubcollections(rootCol, pid);
+            });
+            return ids.length;
+          })
+          .catch(function (err) {
+            logLine(
+              "REST documents.list «" +
+                rootCol +
+                "» falló: " +
+                err.message +
+                " · Permite en reglas «list» sobre la colección «" +
+                rootCol +
+                "» para usuarios autenticados."
+            );
+            return 0;
+          });
+      })
+    ).then(function () {
+      scheduleRender();
+    });
+  }
+
+  function subcollectionsFallbackForParking(parkingId) {
+    var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
+    var pid = String(parkingId || "").trim();
+    var out = [];
+    var byPark = cfg.planilladoParkingSubcollectionsFallback;
+    if (byPark && typeof byPark === "object" && byPark[pid]) {
+      out = out.concat(byPark[pid]);
+    }
+    var perSede = cfg.planilladoParkingOperarios;
+    if (perSede && typeof perSede === "object" && perSede[pid]) {
+      out = out.concat(perSede[pid]);
+    }
+    var forAll = cfg.planilladoDefaultSubcollectionsForAllParkings;
+    if (Array.isArray(forAll)) {
+      forAll.forEach(function (cid) {
+        if (cid && out.indexOf(cid) === -1) out.push(cid);
+      });
+    }
+    var globalFb = cfg.planilladoSubcollectionsFallback;
+    if (Array.isArray(globalFb)) {
+      globalFb.forEach(function (cid) {
+        if (cid && out.indexOf(cid) === -1) out.push(cid);
+      });
+    }
+    return out.filter(Boolean);
+  }
+
+  function uniqueAttachSubcollections(rootCol, parkingId, collectionIds) {
+    var seen = {};
+    collectionIds.forEach(function (cid) {
+      if (!cid || seen[cid]) return;
+      seen[cid] = true;
+      attachSubcollectionListener(rootCol, parkingId, cid);
+    });
+    if (!seen[SUB_REGISTROS]) {
+      attachSubcollectionListener(rootCol, parkingId, SUB_REGISTROS);
+    }
+  }
+
+  function refreshParkingSubcollections(rootCol, parkingId) {
+    var manualSubs = subcollectionsFallbackForParking(parkingId);
+    listCollectionIdsREST(rootCol, parkingId)
+      .then(function (data) {
+        var ids = [].concat(data.collectionIds || []);
+        manualSubs.forEach(function (cid) {
+          if (cid && ids.indexOf(cid) === -1) ids.push(cid);
+        });
+        logLine(
+          'Subcolecciones «' +
+            rootCol +
+            "/" +
+            parkingId +
+            '»: ' +
+            (ids.length ? ids.join(", ") : "(ninguna)") +
+            (manualSubs.length ? " · +fallback config" : "")
+        );
+        uniqueAttachSubcollections(rootCol, parkingId, ids);
+        if (!ids.length) scheduleRender();
+      })
+      .catch(function (err) {
+        var is403 = String(err.message).indexOf("403") !== -1;
+        logLine(
+          "listCollectionIds REST falló («" +
+            rootCol +
+            "/" +
+            parkingId +
+            "»): " +
+            err.message +
+            (is403
+              ? " → Sin permiso para listar subcolecciones (reglas). Usa planilladoParkingSubcollectionsFallback en firebase-config.js o permite list en el documento de sede."
+              : "") +
+            " · Enganchando fallback manual + «" +
+            SUB_REGISTROS +
+            "»."
+        );
+        var merged = [SUB_REGISTROS].concat(manualSubs);
+        uniqueAttachSubcollections(rootCol, parkingId, merged);
+      });
+  }
+
+  function attachCollectionGroupBackup() {
+    var unsub = db.collectionGroup(SUB_REGISTROS).onSnapshot(
+      function (snap) {
+        if (!collectionGroupInitialLogged) {
+          collectionGroupInitialLogged = true;
+          var underTree = 0;
+          var samples = [];
+          snap.docs.forEach(function (doc) {
+            if (pathUnderPlanilladoTree(doc.ref.path)) underTree++;
+            if (samples.length < 6) samples.push(doc.ref.path);
+          });
+          logLine(
+            "collectionGroup(registros): total documentos=" +
+              snap.size +
+              " · con raíz planillado/Planillado/planillados=" +
+              underTree +
+              " (las demás rutas también se muestran en la tabla)"
+          );
+          if (snap.size && samples.length) {
+            logLine("Ejemplos de rutas:");
+            samples.forEach(function (p) {
+              logLine("  · " + p);
+            });
+          }
+          if (!snap.size) {
+            logLine(
+              "Diagnóstico: 0 docs en «registros» en esta base de datos. Confirma en Firebase Console → Ajustes del proyecto que el projectId sea «" +
+                firebaseConfig.projectId +
+                "» y que estés viendo la misma base (no solo «default» si creaste otra). Si las reglas bloquean query group, verás error arriba."
+            );
+          }
+        }
+        snap.docChanges().forEach(function (ch) {
+          updateRowForDoc(ch.doc.ref, ch.doc.data(), ch.type, false);
+          if (ch.type !== "removed") {
+            attachNestedCollectionListeners(ch.doc.ref);
+          }
+        });
+        if (snap.docChanges().length === 0 && snap.size > 0) {
+          snap.docs.forEach(function (doc) {
+            updateRowForDoc(doc.ref, doc.data(), "added", true);
+            attachNestedCollectionListeners(doc.ref);
+          });
+        }
+      },
+      function (err) {
+        logLine(
+          "collectionGroup(registros) ERROR: " +
+            err.code +
+            " — " +
+            err.message +
+            " · Suele ser reglas: permite leer consultas sobre collectionGroup «registros» para usuarios autenticados."
+        );
+      }
+    );
+    collectionGroupUnsubs.push(unsub);
+  }
+
+  /**
+   * Escucha collectionGroup para cada subcolección tipo Lug… en firebase-config.
+   * Cubre rutas como planillado/E-56 Bog Americas/LugMC421/BOG-123 aunque NO exista
+   * el documento padre de la sede ni figure en planilladoParkingIdsFallback.
+   */
+  function attachPlanilladoOperatorCollectionGroups() {
+    var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
+    var subs = cfg.planilladoDefaultSubcollectionsForAllParkings || [];
+    var seen = {};
+    subs.forEach(function (cidRaw) {
+      var cid = String(cidRaw).trim();
+      if (!cid || seen[cid]) return;
+      seen[cid] = true;
+      if (cid === SUB_REGISTROS) return;
+      var unsub = db.collectionGroup(cid).onSnapshot(
+        function (snap) {
+          snap.docChanges().forEach(function (ch) {
+            updateRowForDoc(ch.doc.ref, ch.doc.data(), ch.type, false);
+            if (ch.type !== "removed") {
+              attachNestedCollectionListeners(ch.doc.ref);
+            }
+          });
+          if (snap.docChanges().length === 0 && snap.size > 0) {
+            snap.docs.forEach(function (doc) {
+              updateRowForDoc(doc.ref, doc.data(), "added", true);
+              attachNestedCollectionListeners(doc.ref);
+            });
+          }
+        },
+        function (err) {
+          logLine(
+            "collectionGroup(" +
+              cid +
+              ") ERROR: " +
+              err.code +
+              " — " +
+              err.message +
+              " · Reglas/index: permite leer collectionGroup «" +
+              cid +
+              "» (Firestore puede pedir crear índice compuesto en el enlace del error)."
+          );
+        }
+      );
+      collectionGroupUnsubs.push(unsub);
+    });
+  }
+
+  var stationsSeen = [];
+  var stationsSeenPairs = [];
+  var rootSnapCounts = {};
+  var planilladoRootDocCount = null;
+
+  function startFirestoreListeners() {
+    attachCollectionGroupBackup();
+    attachPlanilladoOperatorCollectionGroups();
+
+    PLANILLADO_ROOT_COLS.forEach(function (rootCol) {
+      db.collection(rootCol).onSnapshot(
+        function (snap) {
+          rootSnapCounts[rootCol] = snap.size;
+
+          snap.docChanges().forEach(function (ch) {
+            if (ch.type === "removed") {
+              detachParkingListeners(rootCol, ch.doc.id);
+            } else {
+              refreshParkingSubcollections(rootCol, ch.doc.id);
+            }
+          });
+          snap.docs.forEach(function (d) {
+            refreshParkingSubcollections(rootCol, d.id);
+          });
+
+          stationsSeenPairs = stationsSeenPairs.filter(function (p) {
+            return p.rootCol !== rootCol;
+          });
+          snap.docs.forEach(function (d) {
+            stationsSeenPairs.push({ rootCol: rootCol, id: d.id });
+          });
+
+          stationsSeen = [];
+          stationsSeenPairs.forEach(function (p) {
+            if (stationsSeen.indexOf(p.id) === -1) stationsSeen.push(p.id);
+          });
+
+          var total = PLANILLADO_ROOT_COLS.reduce(function (sum, rc) {
+            return sum + (rootSnapCounts[rc] !== undefined ? rootSnapCounts[rc] : 0);
+          }, 0);
+          planilladoRootDocCount = total;
+
+          logLine(
+            'Raíz «' +
+              rootCol +
+              "»: " +
+              snap.size +
+              " documento(s). Acumulado en todas las raíces: " +
+              total
+          );
+          if (total === 0) {
+            logLine(
+              "Diagnóstico: raíces vacías (" +
+                PLANILLADO_ROOT_COLS.join(", ") +
+                ") en «" +
+                firebaseConfig.projectId +
+                "». Los datos deben existir en Firestore en este proyecto (app móvil mismo firebase-config)."
+            );
+          }
+          snap.docs.forEach(function (d) {
+            logLine(
+              '  · «' + rootCol + "/" + d.id + '» → subcolecciones operario / registros'
+            );
+          });
+          scheduleRender();
+        },
+        function (err) {
+          logLine(
+            "ERROR raíz «" + rootCol + "»: " + err.code + " " + err.message
+          );
+        }
+      );
+    });
+
+    var fb = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
+    var fallbackIds = fb.planilladoParkingIdsFallback;
+    if (Array.isArray(fallbackIds) && fallbackIds.length) {
+      logLine(
+        "Sedes fallback (firebase-config planilladoParkingIdsFallback): " +
+          fallbackIds.join(", ")
+      );
+      PLANILLADO_ROOT_COLS.forEach(function (rootCol) {
+        fallbackIds.forEach(function (parkingId) {
+          var pid = String(parkingId).trim();
+          if (!pid) return;
+          refreshParkingSubcollections(rootCol, pid);
+        });
+      });
+    }
+
+    db.collection(PLANILLADO_OLD).onSnapshot(
+      function (snap) {
+        logLine("planillado_old: docs=" + snap.size);
+        snap.docChanges().forEach(function (ch) {
+          updateRowForDoc(ch.doc.ref, ch.doc.data(), ch.type, false);
+          if (ch.type !== "removed") {
+            attachNestedCollectionListeners(ch.doc.ref);
+          }
+        });
+        if (snap.docChanges().length === 0 && snap.size > 0) {
+          snap.docs.forEach(function (doc) {
+            updateRowForDoc(doc.ref, doc.data(), "added", true);
+            attachNestedCollectionListeners(doc.ref);
+          });
+        }
+      },
+      function (err) {
+        logLine(
+          "ERROR planillado_old: " + err.code + " — " + err.message
+        );
+      }
+    );
+
+    discoverPlanilladoSedesViaREST();
+
+    if (discoverIntervalId) {
+      clearInterval(discoverIntervalId);
+      discoverIntervalId = null;
+    }
+    discoverIntervalId = setInterval(function () {
+      discoverPlanilladoSedesViaREST();
+      stationsSeenPairs.forEach(function (p) {
+        refreshParkingSubcollections(p.rootCol, p.id);
+      });
+      restPlanilladoSedeKeys.forEach(function (keyStr) {
+        var ix = keyStr.indexOf("\0");
+        if (ix === -1) return;
+        refreshParkingSubcollections(
+          keyStr.slice(0, ix),
+          keyStr.slice(ix + 1)
+        );
+      });
+    }, 60000);
+  }
+
+  function tryStartFirestoreListenersOnce() {
+    if (firestoreListenersStarted || firestoreBootPending) return;
+    if (!auth.currentUser) return;
+    if (window.LuganoAuthGate && !LuganoAuthGate.isFullyAuthenticated()) return;
+    firestoreBootPending = true;
+    hideAuthError();
+    auth.currentUser
+      .getIdToken(true)
+      .then(function () {
+        firestoreBootPending = false;
+        if (firestoreListenersStarted) return;
+        firestoreListenersStarted = true;
+        logLine(
+          "Sesión activa · uid=" +
+            auth.currentUser.uid +
+            (auth.currentUser.email ? " · " + auth.currentUser.email : "") +
+            " · Firestore con token"
+        );
+        startFirestoreListeners();
+      })
+      .catch(function (e) {
+        firestoreBootPending = false;
+        logLine("No se pudo obtener token para Firestore: " + e.message);
+        showAuthError({ code: "token", message: e.message || String(e) });
+      });
+  }
+
+})();
+</script>
+
+<script src="lugano-firestore-alertas.js"></script>
+</body>
+</html>

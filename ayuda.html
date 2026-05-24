@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="logolugano1.jpg">
+  <link rel="apple-touch-icon" href="logolugano1.jpg">
+  <title>Ayuda · S.P.A.C.E</title>
+    <link rel="stylesheet" href="style.css">
+  <script src="lugano-banner-ssr.js"></script>
+  <script src="site-header-toggle.js" defer></script>
+  <script src="lugano-header-alerts.js" defer></script>
+  <link rel="stylesheet" href="lugano-auth-gate.css">
+    <script>
+    window.onload = function () {
+      var el = document.getElementById("ayu");
+      if (el) el.style.background = "black";
+    };
+    </script>
+        <style>
+    body.help-body {
+      margin: 0;
+      background: #0a0a0a;
+      color: #e8eaef;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      text-align: left;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .help-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 18px 56px;
+      box-sizing: border-box;
+    }
+    .help-wrap > h1 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      color: #f5f5f5;
+    }
+    .help-lead {
+      margin: 0 0 24px;
+      font-size: 14px;
+      color: #9ca3af;
+      max-width: 720px;
+    }
+    .help-nav {
+      background: #141418;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 28px;
+    }
+    .help-nav strong {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #94a3b8;
+      margin-bottom: 10px;
+    }
+    .help-nav ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+    }
+    .help-nav a {
+      color: #ffb74d;
+            text-decoration: none;
+      font-size: 13px;
+    }
+    .help-nav a:hover {
+      text-decoration: underline;
+    }
+    .help-section {
+      margin-bottom: 28px;
+      scroll-margin-top: 16px;
+    }
+    .help-section h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff3e0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 152, 0, 0.35);
+    }
+    .help-faq {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .help-faq details {
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      padding: 0 14px;
+    }
+    .help-faq summary {
+            cursor: pointer;
+      padding: 12px 4px;
+      font-weight: 600;
+      color: #e0e0e0;
+      list-style: none;
+    }
+    .help-faq summary::-webkit-details-marker {
+      display: none;
+    }
+    .help-faq details[open] summary {
+      border-bottom: 1px solid #2a2a2a;
+      margin-bottom: 10px;
+    }
+    .help-faq .help-answer {
+      padding: 0 4px 14px;
+      font-size: 13px;
+      color: #c4c9d4;
+    }
+    .help-faq .help-answer p {
+      margin: 0 0 10px;
+    }
+    .help-faq .help-answer p:last-child {
+      margin-bottom: 0;
+    }
+    .help-faq code {
+      font-size: 12px;
+      background: #1e1e24;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #444;
+    }
+    .help-answer a {
+      color: #ffb74d;
+      text-underline-offset: 2px;
+    }
+    .help-answer a:hover {
+      color: #fbcfe8;
+    }
+    .help-note {
+      margin-top: 32px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #151518;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .help-custom-editor-wrap {
+      background: #16161c;
+      border: 1px solid rgba(255, 152, 0, 0.35);
+      border-radius: 12px;
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+    .help-custom-editor-wrap > summary {
+            cursor: pointer;
+      padding: 12px 16px;
+      font-weight: 650;
+      color: #fff3e0;
+      list-style: none;
+      background: rgba(255, 152, 0, 0.12);
+    }
+    .help-custom-editor-wrap > summary::-webkit-details-marker {
+      display: none;
+    }
+    .help-custom-editor-inner {
+      padding: 14px 16px 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .help-custom-editor-note {
+      font-size: 12px;
+      color: #8892a8;
+      margin: 0 0 14px;
+    }
+    .help-custom-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #bdc3cf;
+      margin-bottom: 4px;
+    }
+    .help-custom-field input,
+    .help-custom-field textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 8px;
+      border: 1px solid #3a3a44;
+      background: #0f0f12;
+      color: #e8eaef;
+      font-size: 13px;
+      font-family: inherit;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+    }
+    .help-custom-field textarea {
+      min-height: 72px;
+      resize: vertical;
+    }
+    .help-custom-field textarea.help-custom-json {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 11px;
+      min-height: 88px;
+    }
+    .help-custom-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .help-custom-buttons button {
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: linear-gradient(180deg, #2a2830 0%, #1a1820 100%);
+      color: #e8eaef;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .help-custom-buttons button:hover {
+      border-color: rgba(255, 152, 0, 0.45);
+      color: #fff;
+    }
+    .help-custom-buttons button.help-custom-btn-primary {
+      border: none;
+      background: linear-gradient(180deg, #ff9800 0%, #e65100 100%);
+      color: #fff;
+    }
+    .help-custom-list {
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 12px;
+    }
+    .help-custom-list-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 8px 0;
+      border-bottom: 1px solid #2a2a2a;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    .help-custom-list-item:last-child {
+      border-bottom: none;
+    }
+    .help-custom-list-item-text {
+      flex: 1;
+      min-width: 0;
+    }
+    .help-custom-list-item-text strong {
+      color: #e0e0e0;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .help-custom-list-remove {
+      flex-shrink: 0;
+      padding: 4px 10px !important;
+      font-size: 11px !important;
+    }
+    .help-section--custom h2 span.help-custom-tag {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: rgba(255, 183, 77, 0.95);
+      margin-left: 8px;
+    }
+    .help-custom-topicline {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+    .help-custom-empty {
+      font-size: 13px;
+      color: #7a8496;
+      margin: 0;
+    }
+
+    /* Asistente flotante (solo ayuda) */
+    .help-bot-root {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 1002;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+      pointer-events: none;
+    }
+    .help-bot-root > * {
+      pointer-events: auto;
+    }
+    .help-bot-fab {
+      position: relative;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.55);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(165deg, #12121a 0%, #08080d 100%);
+      color: #fff;
+      box-shadow:
+        0 10px 32px rgba(0, 0, 0, 0.65),
+        0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .help-bot-fab:hover {
+      transform: scale(1.06);
+      box-shadow:
+        0 14px 40px rgba(0, 0, 0, 0.72),
+        0 0 0 1px rgba(255, 255, 255, 0.16) inset;
+    }
+    .help-bot-fab:focus-visible {
+      outline: 3px solid #ffb74d;
+      outline-offset: 3px;
+    }
+    .help-bot-fab .help-bot-fab-icon {
+      width: 34px;
+      height: 34px;
+      display: block;
+      object-fit: cover;
+      object-position: center center;
+      border-radius: 50%;
+      filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+      pointer-events: none;
+    }
+    .help-bot-fab::after {
+      content: "";
+      position: absolute;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 183, 77, 0.38);
+      animation: help-bot-pulse 2.4s ease-out infinite;
+      pointer-events: none;
+    }
+
+    .help-bot-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      pointer-events: auto;
+    }
+
+    .help-gemini-fab {
+      position: relative;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.55);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(165deg, #0f1a2a 0%, #070b12 100%);
+      box-shadow:
+        0 10px 32px rgba(0, 0, 0, 0.65),
+        0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .help-gemini-fab:hover {
+      transform: scale(1.06);
+      box-shadow:
+        0 14px 40px rgba(0, 0, 0, 0.72),
+        0 0 0 1px rgba(255, 255, 255, 0.16) inset;
+    }
+    .help-gemini-fab:focus-visible {
+      outline: 3px solid rgba(255, 183, 77, 0.75);
+      outline-offset: 3px;
+    }
+    .help-gemini-fab svg {
+      width: 28px;
+      height: 28px;
+      display: block;
+    }
+    @keyframes help-bot-pulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.65;
+      }
+      100% {
+        transform: scale(1.35);
+        opacity: 0;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .help-bot-fab {
+        transition: none;
+      }
+      .help-bot-fab::after {
+        animation: none;
+        opacity: 0;
+      }
+    }
+    .help-bot-panel {
+      display: flex;
+      flex-direction: column;
+      width: min(392px, calc(100vw - 40px));
+      max-height: min(560px, 82vh);
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: linear-gradient(165deg, #1a1820 0%, #0e0d11 100%);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+      padding: 0;
+      transform-origin: bottom right;
+      transform: translateY(12px) scale(0.96);
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.28s ease,
+        visibility 0.28s;
+    }
+    .help-bot-panel.is-open {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      visibility: visible;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .help-bot-panel {
+        transition: none;
+      }
+    }
+    .help-bot-panel header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 152, 0, 0.08);
+    }
+    .help-bot-panel h3 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff3e0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .help-bot-panel h3 .help-bot-header-icon {
+      width: 26px;
+      height: 26px;
+      flex-shrink: 0;
+      display: block;
+      object-fit: cover;
+      object-position: center center;
+      border-radius: 8px;
+      background: #121018;
+      box-sizing: border-box;
+    }
+    .help-bot-panel h3 .help-bot-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255, 152, 0, 0.35);
+      color: #fff;
+    }
+    .help-bot-close {
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      color: #e0e0e0;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .help-bot-close:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+    .help-bot-chat-shell {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+    .help-bot-messages {
+      flex: 1;
+      min-height: 200px;
+      max-height: 360px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.48;
+      background: rgba(0, 0, 0, 0.25);
+      scroll-behavior: smooth;
+    }
+    .help-bot-msg {
+      display: flex;
+      margin-bottom: 10px;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    .help-bot-msg--user {
+      justify-content: flex-end;
+    }
+    .help-bot-msg--user .help-bot-msg-inner {
+      max-width: 92%;
+    }
+    .help-bot-msg--bot {
+      justify-content: flex-start;
+    }
+    .help-bot-msg--bot .help-bot-msg-inner {
+      flex: 1;
+      min-width: 0;
+      max-width: calc(92% - 36px);
+    }
+    .help-bot-avatar {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, rgba(255, 152, 0, 0.35) 0%, rgba(70, 50, 80, 0.5) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-sizing: border-box;
+    }
+    .help-bot-avatar img {
+      width: 28px;
+      height: 28px;
+      display: block;
+      object-fit: cover;
+      object-position: center center;
+      border-radius: 50%;
+    }
+    .help-bot-msg-inner {
+      padding: 10px 12px;
+      border-radius: 14px;
+    }
+    .help-bot-msg--user .help-bot-msg-inner {
+      background: linear-gradient(135deg, #f57c00 0%, #bf360c 100%);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .help-bot-msg--bot .help-bot-msg-inner {
+      background: #252530;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #d5d8e3;
+      border-bottom-left-radius: 4px;
+    }
+    .help-bot-msg--bot .help-bot-msg-inner p {
+      margin: 0 0 8px;
+    }
+    .help-bot-msg--bot .help-bot-msg-inner p:last-child {
+      margin-bottom: 0;
+    }
+    .help-bot-hit-meta {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9ca3af !important;
+      margin-bottom: 6px !important;
+    }
+    .help-bot-hit-q {
+      font-weight: 600 !important;
+      color: #f3f4f6 !important;
+    }
+    .help-bot-hit-a {
+      font-size: 12px !important;
+      color: #c4c9d4 !important;
+      white-space: pre-wrap;
+    }
+    .help-bot-hit-divider {
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin: 12px 0;
+    }
+    .help-bot-msg-anchor a {
+      color: #ffb74d;
+      font-weight: 500;
+      font-size: 12px;
+    }
+    .help-bot-lead-in {
+      color: #e8e8ef !important;
+      margin-bottom: 10px !important;
+    }
+    .help-bot-follow {
+      margin-top: 12px !important;
+      padding-top: 10px !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px !important;
+      color: #9ca3af !important;
+    }
+    .help-bot-chips-strip {
+      margin: 4px 0 12px 40px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    @media (max-width: 420px) {
+      .help-bot-chips-strip {
+        margin-left: 10px;
+      }
+    }
+    .help-bot-chip {
+      appearance: none;
+      border: 1px solid rgba(255, 152, 0, 0.45);
+      background: rgba(255, 152, 0, 0.12);
+      color: #fff3e0;
+      font-size: 12px;
+      font-family: inherit;
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.12s ease;
+      text-align: left;
+      max-width: 100%;
+      line-height: 1.3;
+    }
+    .help-bot-chip:hover {
+      background: rgba(255, 152, 0, 0.22);
+      transform: translateY(-1px);
+    }
+    .help-bot-chip:focus-visible {
+      outline: 2px solid #ffb74d;
+      outline-offset: 2px;
+    }
+    .help-bot-chip-hint {
+      width: 100%;
+      flex-basis: 100%;
+      font-size: 11px;
+      color: #6b7280;
+      margin: 0;
+      padding: 2px 0 0;
+    }
+    .help-bot-thinking-meta {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-bottom: 6px;
+      font-style: italic;
+    }
+    .help-bot-composer {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px 14px 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(10, 10, 12, 0.6);
+    }
+    .help-bot-composer label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    #help-bot-input {
+      width: 100%;
+      resize: vertical;
+      min-height: 44px;
+      max-height: 120px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #141418;
+      color: #e8eaef;
+      font-size: 13px;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+    #help-bot-input::placeholder {
+      color: #6b7280;
+    }
+    #help-bot-input:focus {
+      outline: none;
+      border-color: rgba(255, 152, 0, 0.55);
+    }
+    .help-bot-send {
+      align-self: flex-end;
+      padding: 9px 18px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      background: linear-gradient(180deg, #ff9800 0%, #e65100 100%);
+      color: #fff;
+    }
+    .help-bot-send:hover {
+      filter: brightness(1.06);
+    }
+    .help-bot-send:focus-visible {
+      outline: 2px solid #ffb74d;
+      outline-offset: 2px;
+    }
+    .help-bot-disclaimer {
+      margin: 0;
+      padding: 8px 14px 10px;
+      font-size: 10px;
+      color: #6b7280;
+      text-align: center;
+      line-height: 1.4;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .help-bot-dots span {
+      display: inline-block;
+      animation: help-bot-dot 1.1s infinite ease-in-out;
+      font-weight: 700;
+      color: #ffb74d;
+    }
+    .help-bot-dots span:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+    .help-bot-dots span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+    @keyframes help-bot-dot {
+      0%,
+      60%,
+      100% {
+        opacity: 0.35;
+      }
+      30% {
+        opacity: 1;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .help-bot-dots span {
+        animation: none;
+        opacity: 0.7;
+      }
+    }
+    @media print {
+      .help-bot-root {
+        display: none !important;
+      }
+    }
+    </style>
+</head>
+
+<body class="help-body auth-gate-active" bgcolor="black" text="white">
+
+<div id="auth-gate" class="auth-gate" role="dialog" aria-modal="true" aria-labelledby="auth-gate-title">
+  <div class="auth-gate-brand">
+    <img src="logolugano1.jpg" height="88" alt="S.P.A.C.E" />
+  </div>
+  <div id="auth-logged-out" class="auth-panel-inner auth-gate-card">
+    <p class="auth-panel-title" id="auth-gate-title">Bienvenido</p>
+    <p class="auth-panel-desc">
+      Portal corporativo para la <strong>gestión y administración</strong> del planillado S.P.A.C.E.
+      Use su cuenta institucional para acceder de forma segura, supervisar la operación en tiempo real y consultar la información consolidada del negocio desde un solo lugar.
+    </p>
+    <button type="button" id="btn-google-signin">Iniciar sesión con Google</button>
+    <p id="auth-domain-hint" class="auth-domain-hint"></p>
+  </div>
+</div>
+
+<div id="main-app" class="main-app" hidden aria-hidden="true">
+
+<header bgcolor="white" text="white">
+  <center>
+    <table border="0" style="
+    background-position: center;
+    background: position y 10pt;
+    background-image: url(banner1.png);" font color="white" text="white" text-align="center" width="1325">
+<tr>
+        <td rowspan="2" bgcolor="black"><a href="index.html"><img src="logolugano1.jpg" height="120" bgcolor="black" alt="S.P.A.C.E"></a></td>
+        <td text="white" colspan="11" height="120" color="white">
+    <h1 style="color: aliceblue;">Ayuda</h1>
+</td>
+</tr>
+      <tr>
+        <td width="120"><center><a href="index.html" id="index" class="btnmnini"><span style="color: aliceblue;">inicio</span></a></center></td>
+        <td width="120" id="planillados"><center><a href="planillados.html" id="pln" class="btnmnini"><span style="color: aliceblue;">Planillados</span></a></center></td>
+        <td width="120" id="mensualidades"><center><a href="mensualidades.html" id="mes" class="btnmnini"><span style="color: aliceblue;">Mensualidades</span></a></center></td>
+        <td width="120" id="reportes"><center><a href="reportes.html" id="rep" class="btnmnini"><span style="color: aliceblue;">Reportes</span></a></center></td>
+        <td width="120" id="estadistico"><center><a href="estadistico.html" id="est" class="btnmnini"><span style="color: aliceblue;">Estadístico</span></a></center></td>
+        <td width="120" id="seguridad"><center><a href="seguridad.html" id="seg" class="btnmnini"><span style="color: aliceblue;">Seguridad</span></a></center></td>
+        <td width="120" id="usuarios"><center><a href="usuarios.html" id="usu" class="btnmnini"><span style="color: aliceblue;">Usuarios</span></a></center></td>
+        <td width="120" id="estacionamientos"><center><a href="estacionamientos.html" id="esta" class="btnmnini"><span style="color: aliceblue;">Estacionamientos</span></a></center></td>
+        <td width="120" id="programacion"><center><a href="programacion.html" id="prog" class="btnmnini"><span style="color: aliceblue;">Programación</span></a></center></td>
+        <td width="120" id="ayuda"><center><a href="ayuda.html" id="ayu" class="btnmnini"><span style="color: aliceblue;">Ayuda</span></a></center></td>
+      </tr>
+    </table>
+  </center>
+</header>
+
+  <div class="help-wrap">
+    <h1>Centro de ayuda</h1>
+    <p class="help-lead">
+      Guía ampliada para el <strong>uso diario</strong> del portal S.P.A.C.E: navegación por el menú,
+      <strong>planilla y cierres de caja</strong>, tablero en vivo, planillados, mensualidades, reportes,
+      estadísticas, paneles por estacionamiento, usuarios y operadores, programación del personal y buenas prácticas.
+      Está redactada para quien <strong>opera o supervisa</strong> el negocio; los temas de instalación o administración
+      de sistemas corresponden al área técnica y no se detallan aquí. Para leer cada respuesta, despliegue la pregunta correspondiente.
+    </p>
+
+    <nav class="help-nav" aria-label="Índice de ayuda">
+      <strong>Ir a la sección</strong>
+      <ul>
+        <li><a href="#ayuda-navegacion">Navegación y cierres</a></li>
+        <li><a href="#ayuda-acceso">Acceso al sitio</a></li>
+        <li><a href="#ayuda-inicio">Inicio / tablero</a></li>
+        <li><a href="#ayuda-planillados">Planillados</a></li>
+        <li><a href="#ayuda-operadores">Usuarios y operadores</a></li>
+        <li><a href="#ayuda-estacionamientos">Estacionamientos</a></li>
+        <li><a href="#ayuda-programacion">Programación del personal</a></li>
+        <li><a href="#ayuda-mensualidades">Mensualidades</a></li>
+        <li><a href="#ayuda-reportes">Reportes</a></li>
+        <li><a href="#ayuda-estadistico">Estadístico</a></li>
+        <li><a href="#ayuda-seguridad">Seguridad y datos</a></li>
+        <li><a href="#ayuda-otras">Otras secciones y glosario</a></li>
+        <li><a href="#ayuda-personalizada">Entradas propias</a></li>
+      </ul>
+    </nav>
+
+    <details class="help-custom-editor-wrap" id="help-custom-editor-wrap">
+      <summary>Añadir o administrar entradas de ayuda</summary>
+      <div class="help-custom-editor-inner">
+        <p class="help-custom-editor-note">
+          Las entradas se guardan <strong>sólo en este navegador</strong> (<code>almacenamiento local</code>).
+          Sirven para ampliar el índice, las preguntas desplegables y el asistente de ayuda sin editar código.
+        </p>
+        <div class="help-custom-field">
+          <label for="help-custom-topic">Tema / sección (opcional)</label>
+          <input type="text" id="help-custom-topic" maxlength="140" placeholder="Ej.: Cierre de caja · sede norte" autocomplete="off" />
+        </div>
+        <div class="help-custom-field">
+          <label for="help-custom-question">Pregunta que aparecerá como título</label>
+          <input type="text" id="help-custom-question" maxlength="260" placeholder="Ej.: ¿Cómo registrar un ajuste de turno?" autocomplete="off" />
+        </div>
+        <div class="help-custom-field">
+          <label for="help-custom-answer">Respuesta visible al desplegar</label>
+          <textarea id="help-custom-answer" maxlength="16000" rows="5" placeholder="Pasos claros para el equipo; puede usar varias líneas."></textarea>
+        </div>
+        <div class="help-custom-buttons">
+          <button type="button" class="help-custom-btn-primary" id="help-custom-save">Guardar entrada</button>
+          <button type="button" id="help-custom-export">Exportar JSON</button>
+          <button type="button" id="help-custom-import-trigger">Importar desde JSON</button>
+        </div>
+        <div class="help-custom-field" id="help-custom-import-box" hidden>
+          <label for="help-custom-import-text">JSON (matriz de objetos con <code>tema</code>, <code>pregunta</code>, <code>respuesta</code>)</label>
+          <textarea id="help-custom-import-text" class="help-custom-json" placeholder='[{"tema":"","pregunta":"","respuesta":""}]'></textarea>
+          <div class="help-custom-buttons">
+            <button type="button" class="help-custom-btn-primary" id="help-custom-import-apply">Aplicar importación</button>
+          </div>
+        </div>
+        <ul class="help-custom-list" id="help-custom-list" aria-label="Entradas guardadas manualmente"></ul>
+      </div>
+    </details>
+
+    <div id="help-custom-faq-root" aria-live="polite"></div>
+
+    <section class="help-section" id="ayuda-navegacion">
+      <h2>Navegación en el sitio y cierres de caja</h2>
+      <div class="help-faq">
+        <details open>
+          <summary>¿Cómo acceder a planillas y cierres (cierre de caja) desde la web?</summary>
+          <div class="help-answer">
+            <p>
+              La pantalla dedicada es <strong>Planillas y cierres</strong>: <a href="planillas-cierres.html">planillas-cierres.html</a>.
+              La ruta habitual es: pulse <strong>Reportes</strong> en la barra superior → en esa página utilice el botón
+              <strong>«Abrir planillas y cierres»</strong>. Allí encontrará el listado de períodos o cierres y el panel de detalle
+              para revisar montos, medios de pago, vouchers u observaciones según las opciones disponibles para su cuenta.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Qué pasos debe seguir para consultar un cierre concreto?</summary>
+          <div class="help-answer">
+            <p>
+              <strong>1)</strong> Asegúrese de haber iniciado sesión cuando el sitio se lo solicite.<br />
+              <strong>2)</strong> Vaya a <a href="reportes.html">Reportes</a> y abra planillas y cierres (o entre directamente desde
+              <a href="planillas-cierres.html">planillas-cierres</a> si conoce el enlace).<br />
+              <strong>3)</strong> Seleccione en el listado la <strong>fecha</strong>, la <strong>sede</strong> o el registro que corresponda
+              según cómo esté ordenada la tabla en su empresa.<br />
+              <strong>4)</strong> Revise el detalle: suele poder ampliar filas, abrir vouchers o usar acciones como exportar o imprimir si su perfil las incluye.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Puede usar un acceso directo sin pasar por Reportes?</summary>
+          <div class="help-answer">
+            <p>
+              Sí. Si su organización le comparte el enlace completo dentro del mismo sitio, puede guardar en favoritos
+              <a href="planillas-cierres.html">planillas y cierres</a>. En el menú superior no aparece un botón exclusivo por diseño del portal;
+              por eso el acceso habitual pasa por <strong>Reportes</strong> o por un marcador autorizado por su equipo.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Qué representa el cierre de caja frente al planillado?</summary>
+          <div class="help-answer">
+            <p>
+              El <strong>planillado</strong> muestra cada servicio registrado durante el día (entradas, salidas, medios de pago, fotos cuando apliquen).
+              El <strong>cierre</strong> concentra el resumen económico y operativo al cierre del turno o del día para una sede o caja:
+              totales esperados versus lo registrado en movilidad, descuentos, observaciones del operador responsable y trazabilidad para auditoría.
+              Use el cierre para conciliaciones; use el planillado para revisar caso por caso ante una incongruencia.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Para qué sirve cada ítem del menú superior?</summary>
+          <div class="help-answer">
+            <p>
+              <strong>Inicio</strong> — tablero en vivo del planillado: sedes, placas activas y enlace rápido al detalle.<br />
+              <strong>Planillados</strong> — búsqueda, revisión y carga masiva según políticas locales de la empresa.<br />
+              <strong>Mensualidades</strong> — contratos recurrentes y estados de pago mensual.<br />
+              <strong>Reportes</strong> — accesos a informes específicos y a <strong>planillas y cierres</strong>.<br />
+              <strong>Estadístico</strong> — gráficas y tabla resumen de comportamiento histórico.<br />
+              <strong>Seguridad</strong> — lineamientos de uso responsable del portal y datos personales.<br />
+              <strong>Usuarios</strong> — alta y mantenimiento de operadores autorizados a trabajar el negocio.<br />
+              <strong>Estacionamientos</strong> — tableros por sede (intensidad, recaudación agregada, fotos si aplica).<br />
+              <strong>Programación</strong> — grilla semanal de turnos, roles y texto de apoyo (inactividades, noche, autorizados).<br />
+              <strong>Ayuda</strong> — este centro de documentación.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿El cierre existe solo si lo veo en web?</summary>
+          <div class="help-answer">
+            <p>
+              En muchos despliegues el primer registro ocurre desde la <strong>aplicación móvil corporativa</strong> durante el cambio de turno;
+              la web centraliza consulta consolidada para supervisión, contabilidad y gerencia.
+              Si un cierre <strong>no aparece</strong>, compruebe que la fecha sea la correcta, que la sede coincida con la operación física,
+              espere algunos segundos y actualice la página. Si tras eso falta información que debería existir según campo,
+              registre fecha, sede y operador esperado y remítalo a su supervisor o al equipo de sistemas mediante el canal formal de la empresa.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Consejos para lectura rápida de un cierre</summary>
+          <div class="help-answer">
+            <p>
+              Verifique la <strong>cabeza</strong> del cierre (sede, operador principal, período temporal). Contraste efectivo/transferencias
+              con políticas locales. Si hay campo de notas internas del turno, revíselo antes de abrir auditoría técnica. Guarde pantallazos autorizados
+              solo dentro de políticas corporativas de confidencialidad y retención.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="help-section" id="ayuda-acceso">
+      <h2>Acceso al sitio y sesión</h2>
+      <div class="help-faq">
+        <details>
+          <summary>¿Por qué debo iniciar sesión con Google?</summary>
+          <div class="help-answer">
+            <p>
+              El portal está restringido a <strong>cuentas corporativas autorizadas</strong>. La identificación mediante Google garantiza que solo
+              quienes tienen derecho revisen información sensible (ventas, operadores, cierres y datos de clientes abonados).
+              Cada cargable del sitio puede pedir nuevamente el inicio de sesión hasta que ya esté dentro del mismo servidor y dominio;
+              si sigue apareciendo la pantalla de bienvenida, revise que no bloquee cookies de terceros para ese dominio o que no esté en modo privado muy restrictivo sin que su TI lo recomiende.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Puede iniciar sesión una sola vez y recorrer todo el portal?</summary>
+          <div class="help-answer">
+            <p>
+              Cuando todas las páginas se cargan desde el <strong>mismo sitio corporativo publicado correctamente</strong>, la mayoría conserva la sesión
+              navegación tras navegación. Si desde su dispositivo se cierra el navegador, limpian cookies cada hora o existe un tiempo de espera muy prolongado sin actividad, es posible que deba iniciar nuevamente. No comparta pantallas públicas antes de cerrar sesión cuando finalice la jornada.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Abro el archivo directamente desde carpeta/disco y aparece comportamiento extraño.</summary>
+          <div class="help-answer">
+            <p>
+              El funcionamiento estable del portal requiere abrir las páginas a través del <strong>enlace institucional</strong> proporcionado
+              (<code>https://…</code> de su empresa o servidor interno autorizado).
+              Doble clic sobre el archivo local (<code>file://</code>) suele producir errores en el login o vistas incompletas. Si para pruebas técnicas
+              usa un equipo de desarrollo, siga rigurosamente la URL que le indiquen ingeniería; el personal operativo no debe usar copias dispersas fuera del canal oficial.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Mensajes sobre dominio no autorizado al intentar iniciar sesión.</summary>
+          <div class="help-answer">
+            <p>
+              Ese aviso aparece cuando se intenta abrir la aplicación desde una dirección web que la organización no ha habilitado aún junto al proveedor
+              del acceso institucional. Anote textualmente la <strong>URL de la barra del navegador</strong>,
+              fecha y pantallazo si la política de la empresa lo permite, y remítalo a <strong>soporte o sistemas</strong>. Quien debe corregirlo es personal técnico; no existe un comando en las pantallas de negocio para resolverlo desde aquí.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Qué navegador y equipo conviene usar?</summary>
+          <div class="help-answer">
+            <p>
+              Se recomienda un navegador actualizado (<strong>Chrome, Edge</strong> o <strong>Firefox</strong>). Mantenga el equipo con hora sincronizada
+              y conexión estable; informes económicos con marcas temporales erroneas pueden confundir al compararlos contra el libro de campo o el banco corporativo.
+              En la página <a href="usuarios.html">Usuarios</a>, algunas operaciones matemáticas de seguridad requieren un entorno navegador moderno; si una función no responda, intente desde otro canal homologado antes de crear incidencias.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Hay permisos distintos según persona?</summary>
+          <div class="help-answer">
+            <p>
+              Dependiendo del despliegue, ciertas funciones pueden no mostrarse o devolver errores cuando su perfil no incluye ese derecho por política gerencial,
+              seguridad física del estacionamiento o rol en la empresa. Si cree que debe ver opciones ocultas, consulte jerárquicamente antes de escalar técnico.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="help-section" id="ayuda-inicio">
+      <h2>Inicio · tablero del planillado en vivo</h2>
+      <div class="help-faq">
+        <details>
+          <summary>¿Para qué sirve la página de inicio?</summary>
+          <div class="help-answer">
+            <p>
+              Es el <strong>tablero operativo principal</strong>: agrupa sedes donde hay actividad, placas dentro del estacionamiento y accesos al detalle sin salir del control diario del negocio.
+              Desde cada fila o tarjeta suele llegar directamente al registro granular (tiempos en sitio, medios abonados, fotos cargadas cuando el procedimiento así lo establece).
+              Úselo para anticipar sobrecupo aparente, detectar inconsistencias visibles rápidamente o coordinar comunicación con seguridad física ante vehículos con permanencia muy prolongada fuera del patrón habitual.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Cómo se interpretan sedes «activas» y listas cortas?</summary>
+          <div class="help-answer">
+            <p>
+              Cada empresa define qué muestra cuando no hay ocupación declarada electrónicamente o cuando el operador tiene la sede en pausa técnica.
+              Si aparece texto de advertencia o un contador muy bajo pese al tránsito real, antes de crear alarma registre foto del estacionamiento (si procede políticamente) y contacte campo y supervisión porque podrían existir registros retardados tras caídas de datos móvil en calle.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>No ve registros después de iniciar sesión.</summary>
+          <div class="help-answer">
+            <p>
+              Pulse <strong>actualizar la página</strong> (evite múltiples recargadas agresivas en segundos). Verifique fecha y horario del equipo.
+              Espere algunos instantes porque el contenido llega continuamente cuando hay trabajo en paralelo desde operadores de terreno y administración sede simultáneas.
+              Si la pantalla queda indefinidamente sin datos en turnos habitualmente ocupados por su negocio, documente día, hora, sedes donde sí hubo operación física evidenciada en terreno y notifíquelo mediante el proceso interno; no debe intentar ajustar infraestructura desde aquí.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Qué reflejan fotos enlazadas a un registro?</summary>
+          <div class="help-answer">
+            <p>
+              Donde el procedimiento institucional exige archivo visual (vehículo, ticket, placas ilegibles, daños antes del servicio),
+              esa evidencia permite acelerar resoluciones con clientes recurrentes sin depender sólo del relato textual.
+              No descargue ni comparta archivos multimedia fuera de canales autorizados: son parte del paquete de cumplimiento y privacidad.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Puede tener varias personas viendo simultáneamente el mismo tablero?</summary>
+          <div class="help-answer">
+            <p>
+              El diseño habitual contempla multiples supervisores; los datos se ordenan igual para todos dentro de permisos.
+              Evite filtros locales heredados de una sesión vieja tras largas reuniones multitab: cuando una pestaña muestra vistas filtradas, la otra podría no coincidir.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="help-section" id="ayuda-planillados">
+      <h2>Planillados (<a href="planillados.html">planillados.html</a>)</h2>
+      <div class="help-faq">
+        <details>
+          <summary>¿Cuál es el rol del módulo de planillados en la operación diaria?</summary>
+          <div class="help-answer">
+            <p>
+              Es el <strong>corazón operativo después del tablero inicio</strong>: permite buscar placas específicas, revisar historia reciente dentro de filtros institucionalmente permitidos,
+              validar cargas efectuadas desde app móvil y, donde la política autorice funciones extras, efectuar cargas locales o auditorías rápidas.
+              El responsable debe contrastar físicamente anomalías (placas con permanencia muy larga vs ingreso económico) antes de comunicar inconsistencias económicas serias contra contabilidad.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Cómo localizar rápidamente un vehículo o ticket?</summary>
+          <div class="help-answer">
+            <p>
+              Dependiendo del despliegue de su empresa, suele poder filtrar por <strong>sede</strong>, <strong>operador</strong>, <strong>rango de fecha</strong> o texto visible en tabla.
+              Combine filtros antes de recurrir solo a memoria porque tablas masivas cargan páginadamente ante miles de registros por sede grandes.
+              Al escribir identificadores parciales (últimos tres caracteres por ejemplo) algunos buscadores responden a coincidencias no exactas: confirme en detalle antes de tomar decisión económica.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Qué implica usar exportaciones o vistas detalladas que ofrezca esa pantalla?</summary>
+          <div class="help-answer">
+            <p>
+              Las exportaciones (CSV u otros formatos donde existan botones instituciones aprobadas) deben tratarse igual que datos confidenciales:
+              archivo cifrado al enviar fuera servidor interno donde norma así lo establezca, sin almacenar copias locales permanentes sobre equipos domésticos de operadores externos.
+              Compruebe cabeceras de fecha generación para relacionar archivo descargado con la consulta ejecutada ese momento concreta.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Interpretación cuando una fila marca falta foto exigida.</summary>
+          <div class="help-answer">
+            <p>
+              Primero revise si ese turno aplica efectivamente política foto obligatoria (no todas las zonas igual).
+              Posteriormente converse con supervisor de sede ese mismo período porque podrían existir <strong>cortes puntual de datos móviles</strong> físicos ante basamento subterráneo señal malo repetida.
+              Registre acta antes de iniciar proceso disciplinaria automática porque podrían existir excepciones aprobadas localmente antes no reflejadas electrónicamente todavía.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Qué considerar ante lectura de valores monetarios dentro del detalle?</summary>
+          <div class="help-answer">
+            <p>
+              Trate valores netos efectivos igual que papel arqueado: descuentos institucionalmente válidos pueden venir cargados después del primer registro rápido.
+              Ante valores negativos inesperados o total cero ante presencia física ocupada repetidamente ese día, revise cierre del turno porque podrían existir ajustes tardíos acumulándose después del snapshot que usted revisa en pantalla inmediato.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Diferencia práctica versus ver solo el tablero inicio superficial?</summary>
+          <div class="help-answer">
+            <p>
+              Tablero inicio permite <strong>panorama rápido</strong> multisede ante crisis operativa.
+              Planillados permite <strong>hondura documental granular</strong> por registro ante disputa cliente recurrente, tarifa corporativa especial o eventual reclamo vinculado al servicio ese mismo período.
+              Use siempre combinación vista macro + vista micro granular para decisiones ejecutivas financieramente significativas.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Comportamiento responsable ante listado gigante muy lento momentáneo?</summary>
+          <div class="help-answer">
+            <p>
+              Achique rango fecha visible. Evite abrir tres pestañas idénticas con mismos filtros masivos porque multiplica trabajo navegador.
+              Si trabajo recurrente estadísticos masivos grandes deba automatizarse, coordine con equipo analíticos corporativos mediante pipeline formal porque esta interfaz existe primero trabajo humano táctico no big data repetitivo automatizado nightly.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="help-section" id="ayuda-operadores">
+      <h2>Usuarios y operadores (<a href="usuarios.html">usuarios.html</a>)</h2>
+      <div class="help-faq">
+        <details>
+          <summary>¿Para qué existe la pantalla de usuarios?</summary>
+          <div class="help-answer">
+            <p>
+              Centraliza los <strong>perfiles de campo</strong>: quienes efectivamente reciben clientes, registra entradas/salidas desde dispositivos autorizados,
+              asume turnos y en muchos casos responsabilizará cierres.
+              Un operador mal gestionado repercute en indisponibilidad de app móvil, reportes incoherentes o accesos fuera de alcance.
+              Reserve altas y bajas a personal con competencia para verificar identidad y documentos (cédula vigente, contrato vigente, código de ética firmado).
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Cómo se obtiene el código de usuario tipo Pes…?</summary>
+          <div class="help-answer">
+            <p>
+              Al preparar un <strong>nuevo operador</strong> y completar nombre junto con <strong>número de cédula</strong>, el sistema genera un código abreviado
+              (usualmente <strong>Pes</strong> + inicial de nombres/apellidos relevantes + últimos tres dígitos de la cédula) que servirá como identificador estable
+              en dispositivos corporativos sin divulgar el número de identificación completo ante terceros cuando el menú esté limitado.
+              No edite manualmente el patrón si su procedimiento lo prohíbe: use el flujo oficial de «Nuevo operador» desde cero.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Cómo funciona la contraseña del operador frente a pantallas web y móvil?</summary>
+          <div class="help-answer">
+            <p>
+              En esta web <strong>no se almacena texto plano</strong> de la clave: cuando usted ingresa una contraseña nueva, el sistema construye un formato resumido
+              y seguro que debe coincidir con el esquema esperado por los dispositivos móviles entrenados de la organización.
+              Tras guardar, sólo quien conoce la nueva clave debería iniciar en app; no comparta temporalmente la clave por chats no cifrados fuera de política.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Qué significa desmarcar «Permitir inicio de sesión»?</summary>
+          <div class="help-answer">
+            <p>
+              El operador <strong>conserva su ficha</strong> para historial o reactivación pero <strong>ya no debería completar acceso</strong> al software de turno.
+              Úselo en desvinculaciones, licencias largas o sanciones internas mientras se esclarece el caso. Documente la decisión en el expediente interno de la persona.
+              Para reabrir acceso, vueva a marcar la casilla y comunicue la contraseña o procedimiento institucional con la persona antes de esperar trabajo productivo ese mismo día.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Por qué el formulario se vacía después de guardar?</summary>
+          <div class="help-answer">
+            <p>
+              Reduce el riesgo de seguir modificando inadvertidamente al mismo fichero después de pulsarse guardar accidentalmente repetido.
+              Para ajustes finos, seleccione de nuevo la persona en la <strong>lista lateral</strong> y repita la edición.
+              Si perdió trabajo no guardado porque cerró navegador, no hay recuperación automática garantizada desde aquí: vuelva a ingresar los datos conscientemente.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Buenas prácticas ante rotación rápida de personal</summary>
+          <div class="help-answer">
+            <p>
+              Agrupe altas antes del arribo a turno efectivo donde sea viable. Verifique cada sede y rol asociado porque esto impacta vistas de planillado posterior.
+              Comunique al responsable financiero antes de crear supernumerarios sin plaza presupuestal para evitar cierres con operadores fantasmas.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>No logra guardar un operador o aparece error genérico.</summary>
+          <div class="help-answer">
+            <p>
+              Revise que la sesión web siga activa (reintente login). Compruebe campos obligatorios (nombre, cédula, rol). Si el mensaje persiste pese a datos consistentes,
+              capture exactamente el texto mostrado y hora; remítalo a sistemas vía proceso formal. Quien soporte infraestructura investigará causa sin que usted ejecute comandos técnicos.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="help-section" id="ayuda-estacionamientos">
+      <h2>Estacionamientos (<a href="estacionamientos.html">estacionamientos.html</a>)</h2>
+      <div class="help-faq">
+        <details>
+          <summary>¿Cuál es el alcance conceptual de estos paneles?</summary>
+          <div class="help-answer">
+            <p>
+              Concentra <strong>métricas agregadas por sede física</strong> cruzando el volumen declarado electrónicamente en planillados con información del cierre
+              económico asociado a esa misma unidad donde el negocio haya parametrizado el portal.
+              Está pensado para gerencia territorial: comparaciones entre sedes, picos recurrentes por horarios y adhesión fotográfica a procedimientos.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Qué significa «recaudo» en las gráficas?</summary>
+          <div class="help-answer">
+            <p>
+              Es una <strong>interpretación económica resumida</strong> desde los datos de los cierres consolidados hasta el momento disponible sobre cada sede.
+              Si aparece muy distinto respecto lo que muestra papel contable ese mismo período cronológico, priorice chequear filtros temporal en pantalla antes de cualquier comunicación urgente porque podrían existir zonas horarias diferentes entre reporte y facturador antiguo.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Qué indican barras divididas entre «con foto» y «sin foto»?</summary>
+          <div class="help-answer">
+            <p>
+              Muestran el <strong>porcentaje aproximado</strong> de registros donde el proceso capturó soporte fotográfico (donde institucionalmente aplica frente aquellos no detectados igual por el software).
+              Útiles para evaluar supervisión territorial y políticas QA de turno noche.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Interpretación del gráfico horario distribuido en el día?</summary>
+          <div class="help-answer">
+            <p>
+              Intenta ubicar volumen típico de entradas <strong>cada hora</strong>; separaciones adicionales señalan presencia fotográfica u otras banderas que el equipo de analítica haya decidido destacar visiblemente sobre planillados alimentados ese mismo período observable.
+              Registros con horarios inconsistentes pueden caer agrupados en segmentos marcados especialmente porque no pueden ordenarse estadístico fino dentro del día natural mostrado.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿«Aforo relativo» indica ocupación física real?</summary>
+          <div class="help-answer">
+            <p>
+              No. Es sólo una <strong>referencia proporcional</strong>: cada sede se compara con la que más registros muestra dentro del período cargado en la pantalla
+              (un valor cercano al 100&nbsp;% indica la sede relativamente más activa <em>en ese conjunto de datos</em>, no el cupo legal ni físico disponible sobre el predio).
+            </p>
+            <p>
+              No debe basarse únicamente en esta vista para ordenar límites de ingreso físico sin confirmación en sede ni sin las normas locales de ocupación aplicables.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Recaudación visible en gráficas distinta versus operación real?</summary>
+          <div class="help-answer">
+            <p>
+              Suele corresponder a <strong>sincronización tardía desde el trabajo en campo</strong>, períodos aún incompletos en la pantalla o cortes locales de internet o electricidad ese mismo día de operación.
+            </p>
+            <p>
+              Si las cifras en la gráfica difieren mucho de su arqueo en papel cuando la norma obliga cruzarlo, documente fecha y sede.
+              Si la diferencia grave se repite varios días, abra proceso de incidente con su gerencia técnica: puede haber ajustes pendientes sólo tratables desde el equipo de sistemas corporativo.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Puede usar gráficas en reuniones con franquicias?</summary>
+          <div class="help-answer">
+            <p>
+              Sí, siempre con <strong>marcas watermark corporativos</strong>, sin datos personales excesivos proyectados públicamente ante terceros cuya confidencialidad contractual no permite ver operadores nominados granularmente dentro conversación salvo contrato bilateral explícito.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="help-section" id="ayuda-programacion">
+      <h2>Programación del personal (<a href="programacion.html">programacion.html</a>)</h2>
+      <div class="help-faq">
+        <details>
+          <summary>¿Cómo se guardan los cambios de la cuadrilla semanal?</summary>
+          <div class="help-answer">
+            <p>
+              Cada <strong>calendario semanal observado desde un lunes concreto</strong> tiene su conjunto persistente dentro del portal.
+              Tras editar texto en celdas o pestañas auxiliares, utilice siempre la acción <strong>Guardar</strong> visible en esa pantalla antes de cambiar de semana o cerrar el navegador.
+              Evite editar simultáneamente la misma semana desde dos equipos distintos sin coordinación explícita porque quien guarde más tarde podría sobrescribir cambios recientes no comunicados.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Qué significa la fila de columnas similares a Excel?</summary>
+          <div class="help-answer">
+            <p>
+              Usualmente verá <strong>SEDE</strong>, <strong>TURNO</strong>, <strong>ROL DESARROLLADO</strong>, <strong>HORARIOS</strong> y luego siete columnas con nombres de días (lunes a domingo).
+              En cada intersección puede escribir nombres de operadores, observaciones de cobertura o referencias a relevos.
+              Campos multilínea permiten notas largas (por ejemplo horas exactas partidas o contacto de suplente).
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Para qué sirven las pestañas Inactividades, Noche y Autorizados?</summary>
+          <div class="help-answer">
+            <p>
+              Almacenan el tipo de <strong>texto libre</strong> que antes podría vivir en hojas separadas de una hoja de cálculo masiva: permisos administrativos,
+              franjas nocturnas especiales, ausencias justificadas con documento y listas de autorizados frente a horas extra.
+              Manténgalas legibles: use viñetas simples o una línea por evento para que supervisión remota entienda sin llamada telefónica adicional.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Cambio de semana y veo la plantilla vacía.</summary>
+          <div class="help-answer">
+            <p>
+              Cada semana es un <strong>bloque propio</strong>: si todavía no hubo guardado oficial heredado de periodo pasado, verá celdas limpias listas para llenar.
+              Use selectores de fecha o botones <strong>anterior / siguiente</strong> para desplazarse sin brincar semanas ignoradas involuntariamente.
+              Si cree que debería existir histórico copiado automáticamente cada lunes y no ocurre, verifique procedimiento interno antes de abrir incidencia técnica (algunas empresas arrastran manualmente plantilla base).
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Buenas prácticas de comunicación con RR. HH. y campo</summary>
+          <div class="help-answer">
+            <p>
+              Publique versión final temprano el viernes anterior cuando norma lo exija. Marque claramente relevos frontera noche-día y contacto de coordinación.
+              Si un operador declina turno asignado digitalmente, documente el cambio en pestaña de inactividades con referencia a acta o correo aprobado.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="help-section" id="ayuda-mensualidades">
+      <h2>Mensualidades (<a href="mensualidades.html">mensualidades.html</a>)</h2>
+      <div class="help-faq">
+        <details>
+          <summary>¿En qué se diferencia una mensualidad del cargo diario en planilla?</summary>
+          <div class="help-answer">
+            <p>
+              Las <strong>mensualidades</strong> cubren abonos o contratos que se renuevan por períodos (habitualmente mes a mes o según convenio).
+              El <strong>planillado</strong> refleja el servicio instantáneo de entrada y salida. Un mismo cliente puede tener mensualidad activa y,
+              además, consumos puntuales si la política comercial de su empresa lo permite; la coherencia entre ambos debe validarse contra reglas locales y contratos físicos cuando haya discrepancias visibles en pantalla.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Cómo organizar consultas cuando existen muchos abonados a la vez?</summary>
+          <div class="help-answer">
+            <p>
+              Trabaje por <strong>sede</strong> y, cuando aplique, por <strong>empresa cliente</strong> o bloque contractual: reduce errores en auditorías y acelera llamadas desde contabilidad.
+              Use etiquetas breves en notas internas (fecha de próxima renovación, medio de pago pactado), evitando escribir números de identificación completos donde otras personas no autorizadas puedan visualizarlos.
+              Si filtra por rango de fechas, revise que coincida el calendario corporativo (cierre contable del mes) y no solo el calendario civil que usted tenga en mente.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>El cliente afirma que su abono está vigente, pero en pantalla aparece distinto.</summary>
+          <div class="help-answer">
+            <p>
+              Confirme en terreno si existe <strong>documento o comprobante</strong> de compra o renovación no registrado aún en el portal.
+              Verifique filtros de vigencia, sede y nombre (errores de tipeo en la carga inicial son frecuentes).
+              Si tras revisar ambos lados la diferencia continúa, documente placa o identificador del abonado, sede, captura si procede y escale a supervisión o finanzas según el protocolo interno; no altere datos sin respaldo aprobado.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Renovaciones, moras y cortesías promocionales</summary>
+          <div class="help-answer">
+            <p>
+              Los períodos de gracia o promociones deberían quedar reflejados en notas o en el propio contrato digital según defina su gerencia.
+              Cuando un abono vence, el operador de sede debe saber si el cliente pasa automáticamente a tarifa de visitante o debe bloquearse el acceso: esa decisión es <strong>comercial-operativa</strong>, no automática sólo porque cambie una fecha en el sistema.
+              Evite cargar datos sensibles fuera del formulario destinado si el proceso regulador de la empresa exige trazabilidad en campos específicos.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Cómo alinear mensualidades con el cierre o el reporte contable?</summary>
+          <div class="help-answer">
+            <p>
+              Al cierre mensual compare totales esperados desde mensualidades con lo que muestran los <strong>cierres de caja diarios acumulados</strong>
+              cuando la política económica vincula ambos. Si existe facturador externo (ERP o papel), lleve ambas fuentes lado a lado en una hoja de trabajo interna sólo dentro de políticas de confidencialidad aprobadas.
+              Mantenga fecha y usuario que autorizó ajustes manuales, por si auditoría revisa discrepancias semestrales posteriores.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Privacidad y listados imprimibles</summary>
+          <div class="help-answer">
+            <p>
+              Las listas de abonados contienen datos personales y patrimoniales sensibles para el cliente.
+              Impresiones masivas sólo mediante procedimiento institucional; destruya copias obsoletas según política documental corporativa local.
+              No envíe archivos sin cifrado por correos personales externos.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="help-section" id="ayuda-reportes">
+      <h2>Reportes (<a href="reportes.html">reportes.html</a>)</h2>
+      <div class="help-faq">
+        <details>
+          <summary>¿Qué encuentra en esta sección?</summary>
+          <div class="help-answer">
+            <p>
+              Concentra <strong>salidas rápidas hacia otros informes</strong> configurados por el negocio: normalmente vistas agregativas menos urgentes que el tablero de inicio, pero indispensables sobre el cierre económico o control interno.
+              El acceso destacado va a <strong><a href="planillas-cierres.html">planillas y cierres</a></strong>, punto clave cuando el día exige revisar efectivo contra movimientos.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Puede ejecutar cualquier botón nuevo que aparezca en Reportes?</summary>
+          <div class="help-answer">
+            <p>
+              Sólo después de conocer para qué sirve ese informe ante <strong>finanzas o gerencia regional</strong>. Ciertos extractos económicos pueden implicar cláusulas de confidencialidad ante acreedores, franquiciados o organismos tributarios externos.
+              Ante botones desconocidos, solicite antes la hoja técnico-funcional o el correo institucional que los respalde.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Combinar tablero en vivo frente a reportes de fin de período</summary>
+          <div class="help-answer">
+            <p>
+              Durante horas pico, el tablero de <strong>Inicio</strong> y el módulo de <strong>Planillados</strong> corrigen inconsistencias operativas inmediatas.
+              Los informes dentro de Reportes muestran <strong>tendencias y totales cerrados</strong> que pueden detectar defraudaciones repetidas muy lentamente (por ejemplo cargos omitidos día tras día ante turno muy similar).
+              La supervisión efectiva alterna vistas rápidas con lecturas lentas cada fin de mes o cuando la empresa esté ante auditorías programadas declaradas formalmente ese mismo período económico.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Qué documentar después de usar un informe crítico?</summary>
+          <div class="help-answer">
+            <p>
+              Anote quién generó o descargó el informe, el <strong>motivo de reunión o auditoría</strong> vinculado, la fecha exacta de generación del archivo
+              y una referencia breve (por ejemplo código de ticket interno) si su empresa exige trazabilidad. Así se evitan versiones confusas cuando se vuelve al tema semanas después.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="help-section" id="ayuda-estadistico">
+      <h2>Estadístico (<a href="estadistico.html">estadistico.html</a>)</h2>
+      <div class="help-faq">
+        <details>
+          <summary>¿Cuándo debe abrir estadístico en lugar del resto?</summary>
+          <div class="help-answer">
+            <p>
+              Para <strong>tendencias y comparativas históricas</strong>: variaciones semanales o mensuales, comparación entre sedes, efectos de campañas de precios
+              o de cambios físicos en una sede (por ejemplo ampliación de plazas).
+            </p>
+            <p>
+              Para el <strong>caso puntual de una sola entrada o salida</strong> use <strong>Planillados</strong> o el detalle desde <strong>Inicio</strong>:
+              el estadístico agrega muchos movimientos y no sustituye ese nivel de detalle.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Cómo presentar estos números en comité de gerencia?</summary>
+          <div class="help-answer">
+            <p>
+              Incluya, como mínimo: <strong>gráficas</strong> del período pedido por la gerencia;
+              una <strong>narrativa de campo</strong> muy breve (eventos locales que expliquen picos o valles que la curva por sí sola no revela); y una
+              <strong>tabla simple</strong> que compare contra el período anterior inmediato usando la misma metodología de filtrado que en pantalla.
+            </p>
+            <p>
+              Si fusiona datos de libros externos (ERP, banca, papel), aclare cuál fuente prevalece cuando aparezcan diferencias antes de proyectar números a terceros.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Lectura cuando una gráfica muestra períodos muy similares consecutivamente</summary>
+          <div class="help-answer">
+            <p>
+              Una serie horizontal puede significar tanto <strong>estabilización saludable</strong> como <strong>estancamiento sin crecimiento</strong>.
+              Compare esos datos con otros indicadores del sector que su empresa autorice y consulte en sede si hubo interrupciones de registro electrónico que no reflejen bien la operación física real.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Qué hacer si un indicador contradice el planillado detallado?</summary>
+          <div class="help-answer">
+            <p>
+              Verifique que los <strong>filtros de fecha y sede</strong> sean idénticos en ambas pantallas. Los agregados pueden excluir registros que aún no han sincronizado desde dispositivos móviles de turno nocturno previo.
+              Si la brecha es grande y persistente, documente y escale; no ajuste manualmente totales agregados fuera de procedimiento aprobado.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="help-section" id="ayuda-seguridad">
+      <h2>Seguridad y datos (<a href="seguridad.html">seguridad.html</a>)</h2>
+      <div class="help-faq">
+        <details>
+          <summary>Relación entre esta ayuda y la página Seguridad</summary>
+          <div class="help-answer">
+            <p>
+              Aquí se explica <strong>cómo usar</strong> los módulos del portal. La página <a href="seguridad.html">Seguridad</a> complementa con lineamientos de protección de datos,
+              buen uso de credenciales y contexto de riesgos que afectan al personal de sede y a la administración central.
+              Ambas deben leerse en la inducción de nuevos supervisores.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Terminales compartidas en la caseta o recepción</summary>
+          <div class="help-answer">
+            <p>
+              Cierre sesión explícitamente al finalizar; no confíe en minimizar el navegador.
+              Evite que terceros vean listas de placas, montos o nombres completos de abonados por encima del hombro (<em>shoulder surfing</em>).
+              En equipos multiturno, acuerde con su jefe de sede quién revisa periódicamente que no queden archivos sensibles en la carpeta de descargas del navegador.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Sospecha de acceso indebido a su cuenta corporativa</summary>
+          <div class="help-answer">
+            <p>
+              Notifique de inmediato a <strong>TI o seguridad de la información</strong> según el protocolo de su empresa.
+              Cambie la contraseña sólo por los canales oficiales que indique soporte. Revise actividad reciente de inicio de sesión si su administrador de Google Workspace se lo permite.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Phishing y enlaces falsos que imitan al portal</summary>
+          <div class="help-answer">
+            <p>
+              Compruebe siempre el dominio en la barra de direcciones antes de introducir credenciales.
+              No abra archivos adjuntos que prometan «actualización urgente de planilla» sin remitente verificable de su organización.
+              Ante duda, contacte a TI antes de hacer clic.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="help-section" id="ayuda-otras">
+      <h2>Glosario breve y remisiones</h2>
+      <div class="help-faq">
+        <details>
+          <summary>Planilla, cierre y recaudación</summary>
+          <div class="help-answer">
+            <p>
+              <strong>Planilla o planillado</strong>: conjunto de registros de servicios de estacionamiento en un período operativo (turno o día, según definición interna).<br />
+              <strong>Cierre de caja</strong>: documento resumen que consolida medios de pago y totales al cierre de un período para una sede o caja.<br />
+              <strong>Recaudación</strong>: monto asociado a esos cierres o a la actividad acumulada que la pantalla agrega para análisis gerencial.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Sede, operador y supervisor</summary>
+          <div class="help-answer">
+            <p>
+              <strong>Sede</strong>: punto físico de operación del estacionamiento identificado con el nombre interno corporativo.<br />
+              <strong>Operador</strong>: quien registra entradas y salidas en campo o quien consolida esos datos según el turno.<br />
+              <strong>Supervisor</strong>: perfil con competencias ampliadas de auditoría, usuarios o reportes según el organigrama local.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Voucher, evidencia y conciliación</summary>
+          <div class="help-answer">
+            <p>
+              <strong>Voucher</strong>: comprobante digital o escaneado asociado a un pago o excepción autorizada.<br />
+              <strong>Evidencia</strong>: fotografía u otro archivo que respalda el hecho del servicio.<br />
+              <strong>Conciliación</strong>: cruce entre lo registrado en el portal, el arqueo físico y, si aplica, extractos bancarios o del ERP corporativo.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Dónde acudir para temas técnicos de fondo?</summary>
+          <div class="help-answer">
+            <p>
+              Ajustes de infraestructura, coherencia entre aplicación móvil y web, permisos de alto nivel o integraciones externas corresponden al <strong>equipo de sistemas</strong> y a la gobernanza de datos de su organización.
+              El presente texto no sustituye manuales técnicos internos reservados a ingeniería.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <p class="help-note">
+      Ante comportamientos inesperados (pérdida de datos en pantalla, error al guardar un formulario o cierre ausente cuando debería existir),
+      registre la <strong>página exacta</strong>, fecha y hora, la acción que intentaba realizar y, si su política lo permite,
+      una <strong>captura de pantalla</strong> o el texto del mensaje mostrado. Remítalo por el <strong>canal de soporte corporativo</strong>
+      para que el área técnica pueda reproducir el caso junto con supervisión operativa.
+    </p>
+  </div>
+
+  <div class="help-bot-root" id="help-bot-root" aria-live="polite">
+    <div
+      class="help-bot-panel"
+      id="help-bot-panel"
+      role="dialog"
+      aria-labelledby="help-bot-title"
+      aria-hidden="true"
+      hidden
+    >
+      <header>
+        <h3 id="help-bot-title">
+          <img src="logolugano1.jpg" class="help-bot-header-icon" width="26" height="26" alt="" />
+          <span>Oso de ayuda</span>
+          <span class="help-bot-badge">Beta</span>
+        </h3>
+        <button type="button" class="help-bot-close" id="help-bot-close" aria-label="Cerrar panel">×</button>
+ </header>
+      <div class="help-bot-chat-shell">
+        <div
+          id="help-bot-messages"
+          class="help-bot-messages"
+          role="log"
+          aria-live="polite"
+          aria-relevant="additions"
+          aria-label="Conversación con el oso de ayuda"
+        ></div>
+        <div class="help-bot-composer">
+          <label for="help-bot-input">Escriba su consulta al oso de ayuda</label>
+          <textarea
+            id="help-bot-input"
+            maxlength="480"
+            rows="2"
+            placeholder="Escriba con sus palabras, por ejemplo «cierre de caja» o «mensualidades»…"
+            autocomplete="off"
+          ></textarea>
+          <button type="button" class="help-bot-send" id="help-bot-send">Enviar</button>
+        </div>
+      </div>
+      <p class="help-bot-disclaimer">
+        El oso de ayuda busca texto en esta página (incluidas sus entradas manuales). No usa servidores de inteligencia artificial externos ni modifica datos.
+      </p>
+    </div>
+    <div class="help-bot-actions" aria-label="Accesos rápidos">
+      <button
+        type="button"
+        class="help-bot-fab"
+        id="help-bot-fab"
+        aria-label="Abrir el oso de ayuda"
+        aria-expanded="false"
+        aria-controls="help-bot-panel"
+        title="Oso de ayuda"
+      >
+        <img src="logolugano1.jpg" class="help-bot-fab-icon" width="34" height="34" alt="" />
+      </button>
+      <button
+        type="button"
+        class="help-gemini-fab"
+        id="help-gemini-fab"
+        aria-label="Abrir Gemini"
+        title="Gemini"
+      >
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2.3l1.35 5.1 5.1 1.35-5.1 1.35L12 15.2l-1.35-5.1-5.1-1.35 5.1-1.35L12 2.3z" fill="url(#g)"/>
+          <path d="M18.6 12.4l.85 3.2 3.2.85-3.2.85-.85 3.2-.85-3.2-3.2-.85 3.2-.85.85-3.2z" fill="url(#g2)" opacity=".95"/>
+          <defs>
+            <linearGradient id="g" x1="6" y1="3" x2="18" y2="15" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#FFB74D"/><stop offset="0.55" stop-color="#FF9800"/><stop offset="1" stop-color="#E65100"/>
+            </linearGradient>
+            <linearGradient id="g2" x1="14" y1="10" x2="24" y2="22" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#FFB74D"/><stop offset="1" stop-color="#E65100"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<div id="auth-error-strip">
+  <p id="auth-banner-detail" style="margin:0;font-family:Consolas,monospace;font-size:12px;"></p>
+</div>
+
+<script src="firebase-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="lugano-admin-auth.js"></script>
+<script src="lugano-auth-gate.js"></script>
+<script src="help-custom-entries.js"></script>
+<script src="help-assistant-chat.js"></script>
+<script src="help-gemini.js"></script>
+ 
+<script src="lugano-firestore-alertas.js"></script>
+</body>
+</html>

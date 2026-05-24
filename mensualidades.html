@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="logolugano1.jpg">
+  <link rel="apple-touch-icon" href="logolugano1.jpg">
+  <title>Mensualidades · S.P.A.C.E</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="help-widget.css">
+  <script src="help-widget.js" defer></script>
+  <script src="lugano-banner-ssr.js"></script>
+  <script src="site-header-toggle.js" defer></script>
+  <script src="lugano-header-alerts.js" defer></script>
+  <link rel="stylesheet" href="lugano-auth-gate.css">
+  <script>
+    window.onload = function () {
+      var el = document.getElementById("mes");
+      if (el) el.style.background = "black";
+    };
+  </script>
+  <style>
+    body.mes-body {
+      margin: 0;
+      background: #0a0a0a;
+      color: #e8eaef;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      text-align: left;
+    }
+    .mes-wrap {
+      max-width: 1325px;
+      margin: 0 auto;
+      padding: 16px 16px 40px;
+      box-sizing: border-box;
+    }
+    .mes-hero {
+      background: linear-gradient(165deg, #161616 0%, #121212 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 18px;
+    }
+    .mes-hero h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      color: #f3f4f6;
+    }
+    .mes-hero p {
+      margin: 0;
+      font-size: 14px;
+      color: #9ca3af;
+      line-height: 1.55;
+    }
+    .mes-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(255, 152, 0, 0.15);
+      color: #ffb74d;
+      border: 1px solid rgba(255, 152, 0, 0.35);
+    }
+    .mes-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .mes-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .mes-aside {
+      background: #141414;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .mes-aside h3 {
+      margin: 0 0 12px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9ca3af;
+    }
+    .mes-filter-btn {
+      display: block;
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 10px 12px;
+      text-align: left;
+      border-radius: 8px;
+      border: 1px solid #3a3a3a;
+      background: #1e1e1e;
+      color: #e8eaef;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .mes-filter-btn:hover {
+      background: #2a2a2a;
+      border-color: #555;
+    }
+    .mes-filter-btn.is-active {
+      border-color: #f57c00;
+      background: rgba(255, 152, 0, 0.12);
+      color: #fff3e0;
+    }
+    .mes-main {
+      min-width: 0;
+    }
+    .mes-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .mes-btn-primary {
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid #e65100;
+      background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+      color: #fff;
+      cursor: pointer;
+    }
+    .mes-btn-primary:hover {
+      filter: brightness(1.06);
+    }
+    .mes-btn-ghost {
+      padding: 10px 16px;
+      font-size: 13px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #222;
+      color: #ccc;
+      cursor: pointer;
+    }
+    .mes-btn-ghost:hover {
+      background: #333;
+    }
+    .mes-count {
+      margin-left: auto;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .mes-panel {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .mes-panel-cap {
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+      border-bottom: 1px solid #333;
+      color: #e8eaef;
+    }
+    .mes-table-wrap {
+      overflow-x: auto;
+    }
+    .mes-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .mes-table th,
+    .mes-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .mes-table th {
+      color: #9ca3af;
+      font-weight: 600;
+      white-space: nowrap;
+      background: #0d0d0d;
+    }
+    .mes-table tbody tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .mes-table td.num {
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+    .mes-pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .mes-pill--activo {
+      background: rgba(46, 125, 50, 0.25);
+      color: #a5d6a7;
+      border: 1px solid rgba(76, 175, 80, 0.4);
+    }
+    .mes-pill--inactivo {
+      background: rgba(97, 97, 97, 0.35);
+      color: #e0e0e0;
+      border: 1px solid #616161;
+    }
+    .mes-pill--pendiente {
+      background: rgba(245, 124, 0, 0.2);
+      color: #ffcc80;
+      border: 1px solid rgba(245, 124, 0, 0.45);
+    }
+    .mes-pill--bloqueada {
+      background: rgba(198, 40, 40, 0.2);
+      color: #ef9a9a;
+      border: 1px solid rgba(198, 40, 40, 0.45);
+    }
+    .mes-status {
+      font-size: 12px;
+      color: #94a3b8;
+      width: 100%;
+      margin-top: 4px;
+    }
+    .mes-status.is-error {
+      color: #ef9a9a;
+    }
+    .mes-empty {
+      padding: 36px 20px;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .mes-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .mes-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+    .mes-field input,
+    .mes-field select,
+    .mes-field textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 9px 11px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #e8eaef;
+      font-size: 14px;
+    }
+    .mes-field textarea {
+      min-height: 72px;
+      resize: vertical;
+    }
+    .mes-field-full {
+      grid-column: 1 / -1;
+    }
+    .mes-form-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .mes-link-del {
+      background: none;
+      border: none;
+      color: #ffb74d;
+      cursor: pointer;
+      font-size: 13px;
+      text-decoration: underline;
+      padding: 0;
+    }
+    .mes-link-del:hover {
+      color: #ffe0b2;
+    }
+    .mes-link-edit {
+      background: none;
+      border: none;
+      color: #90caf9;
+      cursor: pointer;
+      font-size: 13px;
+      text-decoration: underline;
+      padding: 0;
+    }
+    .mes-link-edit:hover {
+      color: #e3f2fd;
+    }
+    .mes-row-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .mes-table tr.mes-row-editing td {
+      background: rgba(255, 152, 0, 0.1);
+    }
+    .mes-field input[readonly] {
+      opacity: 0.75;
+      cursor: not-allowed;
+    }
+    .mes-check-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 13px;
+      color: #d1d5db;
+      cursor: pointer;
+      user-select: none;
+    }
+    .mes-check-row input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+      cursor: pointer;
+    }
+    .mes-placa-secundaria[hidden] {
+      display: none !important;
+    }
+    .mes-placa-dual {
+      display: block;
+      line-height: 1.35;
+    }
+    .mes-placa-dual small {
+      display: block;
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+    .mes-field-hint {
+      margin: 4px 0 0;
+      font-size: 11px;
+      color: #6b7280;
+      line-height: 1.35;
+    }
+    .mes-field-hint strong {
+      color: #ffb74d;
+    }
+    .mes-schema-note {
+      margin-top: 20px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px dashed #444;
+      background: #141414;
+      font-size: 12px;
+      color: #888;
+      line-height: 1.55;
+      font-family: ui-monospace, Consolas, monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+
+<body class="mes-body auth-gate-active" bgcolor="black" text="white">
+
+<div id="auth-gate" class="auth-gate" role="dialog" aria-modal="true" aria-labelledby="auth-gate-title">
+  <div class="auth-gate-brand">
+    <img src="logolugano1.jpg" height="88" alt="S.P.A.C.E" />
+  </div>
+  <div id="auth-logged-out" class="auth-panel-inner auth-gate-card">
+    <p class="auth-panel-title" id="auth-gate-title">Bienvenido</p>
+    <p class="auth-panel-desc">
+      Portal corporativo para la <strong>gestión y administración</strong> del planillado S.P.A.C.E.
+      Use su cuenta institucional para acceder de forma segura, supervisar la operación en tiempo real y consultar la información consolidada del negocio desde un solo lugar.
+    </p>
+    <button type="button" id="btn-google-signin">Iniciar sesión con Google</button>
+    <p id="auth-domain-hint" class="auth-domain-hint"></p>
+  </div>
+</div>
+
+<div id="main-app" class="main-app" hidden aria-hidden="true">
+
+<header bgcolor="white" text="white">
+  <center>
+    <table border="0" style="
+      background-position: center;
+      background: position y 10pt;
+      background-image: url(banner1.png);" font color="white" text="white" text-align="center" width="1325">
+      <tr>
+        <td rowspan="2" bgcolor="black"><a href="index.html"><img src="logolugano1.jpg" height="120" bgcolor="black" alt="S.P.A.C.E"></a></td>
+        <td text="white" colspan="11" height="120" color="white">
+          <h1 style="color: aliceblue;">Mensualidades y contratos</h1>
+        </td>
+      </tr>
+      <tr>
+        <td width="120"><center><a href="index.html" id="index" class="btnmnini"><span style="color: aliceblue;">inicio</span></a></center></td>
+        <td width="120" id="planillados"><center><a href="planillados.html" id="pln" class="btnmnini"><span style="color: aliceblue;">Planillados</span></a></center></td>
+        <td width="120" id="mensualidades"><center><a href="mensualidades.html" id="mes" class="btnmnini"><span style="color: aliceblue;">Mensualidades</span></a></center></td>
+        <td width="120" id="reportes"><center><a href="reportes.html" id="rep" class="btnmnini"><span style="color: aliceblue;">Reportes</span></a></center></td>
+        <td width="120" id="estadistico"><center><a href="estadistico.html" id="est" class="btnmnini"><span style="color: aliceblue;">Estadístico</span></a></center></td>
+        <td width="120" id="seguridad"><center><a href="seguridad.html" id="seg" class="btnmnini"><span style="color: aliceblue;">Seguridad</span></a></center></td>
+        <td width="120" id="usuarios"><center><a href="usuarios.html" id="usu" class="btnmnini"><span style="color: aliceblue;">Usuarios</span></a></center></td>
+        <td width="120" id="estacionamientos"><center><a href="estacionamientos.html" id="esta" class="btnmnini"><span style="color: aliceblue;">Estacionamientos</span></a></center></td>
+        <td width="120" id="programacion"><center><a href="programacion.html" id="prog" class="btnmnini"><span style="color: aliceblue;">Programación</span></a></center></td>
+        <td width="120" id="ayuda"><center><a href="ayuda.html" id="ayu" class="btnmnini"><span style="color: aliceblue;">Ayuda</span></a></center></td>
+      </tr>
+    </table>
+  </center>
+</header>
+
+  <div class="mes-wrap">
+    <section class="mes-hero">
+      <h2>Administración de mensualidades</h2>
+    </section>
+
+    <div class="mes-layout">
+      <aside class="mes-aside" aria-label="Filtros">
+        <h3>Vista</h3>
+        <button type="button" class="mes-filter-btn is-active" data-filter="todos">Todos</button>
+        <button type="button" class="mes-filter-btn" data-filter="activo">Activos</button>
+        <button type="button" class="mes-filter-btn" data-filter="inactivo">Inactivos</button>
+        <button type="button" class="mes-filter-btn" data-filter="pendiente">Pendientes</button>
+        <button type="button" class="mes-filter-btn" data-filter="bloqueada">Bloqueadas</button>
+      </aside>
+
+      <div class="mes-main">
+        <div class="mes-toolbar">
+          <button type="button" class="mes-btn-primary" id="mes-btn-scroll-form">Nueva mensualidad</button>
+          <button type="button" class="mes-btn-ghost" id="mes-btn-reload">Recargar</button>
+          <span class="mes-count" id="mes-count-label">0 registros</span>
+        </div>
+        <p id="mes-status" class="mes-status" role="status"></p>
+
+        <div class="mes-panel">
+          <div class="mes-panel-cap">Contratos y cobros (vista tabla)</div>
+          <div class="mes-table-wrap">
+            <table class="mes-table" id="mes-table">
+              <thead>
+                <tr>
+                  <th>Cliente / referencia</th>
+                  <th>Sede</th>
+                  <th>Placa</th>
+                  <th>Celda</th>
+                  <th>Valor mensual</th>
+                  <th>Estado</th>
+                  <th>Vencimiento</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="mes-tbody">
+              </tbody>
+            </table>
+            <div class="mes-empty" id="mes-empty" hidden>
+              No hay registros con el filtro actual. Pulse «Recargar» o registre una mensualidad abajo.
+            </div>
+          </div>
+        </div>
+
+        <div class="mes-panel" id="mes-form-panel" style="margin-top: 18px;">
+          <div class="mes-panel-cap" id="mes-form-panel-cap">Registrar mensualidad</div>
+          <div style="padding: 16px 18px 18px;">
+            <form id="mes-form" novalidate>
+              <div class="mes-form-grid">
+                <div class="mes-field">
+                  <label for="mes-cliente">Cliente o nombre del contrato</label>
+                  <input id="mes-cliente" name="cliente" type="text" maxlength="120" placeholder="Ej. Juan Pérez · mensual E-50" autocomplete="off" />
+                </div>
+                <div class="mes-field">
+                  <label for="mes-sede">Sede / estacionamiento</label>
+                  <select id="mes-sede" name="sede">
+                    <option value="">— Seleccione sede —</option>
+                  </select>
+                </div>
+                <div class="mes-field">
+                  <label for="mes-placa">Placa principal</label>
+                  <input id="mes-placa" name="placa" type="text" maxlength="16" placeholder="ABC-123" autocomplete="off" />
+                  <label class="mes-check-row" for="mes-dos-placas">
+                    <input id="mes-dos-placas" name="dosPlacas" type="checkbox" />
+                    Contrato con dos placas
+                  </label>
+                </div>
+                <div class="mes-field mes-placa-secundaria" id="mes-placa-2-wrap" hidden>
+                  <label for="mes-placa-2">Segunda placa</label>
+                  <input id="mes-placa-2" name="placa2" type="text" maxlength="16" placeholder="XYZ-456" autocomplete="off" />
+                </div>
+                <div class="mes-field">
+                  <label for="mes-tipo-vehiculo">Tipo de vehículo (tarifa)</label>
+                  <select id="mes-tipo-vehiculo" name="tipoVehiculo">
+                    <option value="automovil">Automóvil</option>
+                    <option value="moto">Moto</option>
+                    <option value="bicicleta">Bicicleta</option>
+                    <option value="ciclomotor">Ciclomotor</option>
+                  </select>
+                </div>
+                <div class="mes-field">
+                  <label for="mes-valor">Valor mensual (COP)</label>
+                  <input id="mes-valor" name="valor" type="number" min="0" step="1000" placeholder="0" />
+                  <p class="mes-field-hint" id="mes-valor-hint" hidden></p>
+                </div>
+                <div class="mes-field">
+                  <label for="mes-celda">Nº celda (opcional)</label>
+                  <input id="mes-celda" name="celda" type="number" min="0" step="1" placeholder="Ej. 12" />
+                </div>
+                <div class="mes-field">
+                  <label for="mes-dia">Día de cobro</label>
+                  <input id="mes-dia" name="diaCobro" type="number" min="1" max="28" placeholder="1–28" />
+                </div>
+                <div class="mes-field">
+                  <label for="mes-estado">Estado</label>
+                  <select id="mes-estado" name="estado">
+                    <option value="activo">Activo</option>
+                    <option value="inactivo">Inactivo</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="bloqueada">Bloqueada</option>
+                  </select>
+                </div>
+                <div class="mes-field mes-field-full">
+                  <label for="mes-notas">Notas</label>
+                  <textarea id="mes-notas" name="notas" maxlength="500" placeholder="Observaciones internas (opcional)"></textarea>
+                </div>
+                <div class="mes-form-actions">
+                  <button type="submit" class="mes-btn-primary" id="mes-btn-save">Guardar en Firestore</button>
+                  <button type="button" class="mes-btn-ghost" id="mes-btn-cancel-edit" hidden>Cancelar edición</button>
+                  <button type="reset" class="mes-btn-ghost" id="mes-btn-reset-form">Limpiar formulario</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="auth-error-strip">
+  <p id="auth-banner-detail" style="margin:0;font-family:Consolas,monospace;font-size:12px;"></p>
+</div>
+
+<script src="firebase-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+  firebase.initializeApp(typeof firebaseConfig !== "undefined" ? firebaseConfig : {});
+  var auth = firebase.auth();
+  var db = firebase.firestore();
+</script>
+<script src="lugano-admin-auth.js"></script>
+<script src="lugano-auth-gate.js"></script>
+<script>
+(function () {
+  var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
+  var MES_COL = cfg.mensualidadesCollection || "mensualidades";
+  var SEDES_COL = cfg.sedesCollection || "sedes";
+  var TARIFAS_COL = cfg.tarifasCollection || "tarifas";
+  var sedesCatalog = [];
+  var tarifasSedeCache = {};
+  var registros = [];
+  var filtroActual = "todos";
+  var mesLoading = false;
+  var mesUnsub = null;
+  var mesEditingId = null;
+
+  var tbody = document.getElementById("mes-tbody");
+  var formPanelCap = document.getElementById("mes-form-panel-cap");
+  var placaInput = document.getElementById("mes-placa");
+  var placa2Input = document.getElementById("mes-placa-2");
+  var dosPlacasCheck = document.getElementById("mes-dos-placas");
+  var placa2Wrap = document.getElementById("mes-placa-2-wrap");
+  var btnSave = document.getElementById("mes-btn-save");
+  var btnCancelEdit = document.getElementById("mes-btn-cancel-edit");
+  var emptyEl = document.getElementById("mes-empty");
+  var countLabel = document.getElementById("mes-count-label");
+  var statusEl = document.getElementById("mes-status");
+
+  function setStatus(msg, isError) {
+    if (!statusEl) return;
+    statusEl.textContent = msg || "";
+    statusEl.classList.toggle("is-error", !!isError);
+  }
+
+  function populateMesSedeSelect(selectedId) {
+    var sel = document.getElementById("mes-sede");
+    if (!sel) return;
+    var byId = {};
+    sedesCatalog.forEach(function (s) {
+      byId[s.id] = s;
+    });
+    registros.forEach(function (r) {
+      var id = String(r.sede || "").trim();
+      if (id && !byId[id]) {
+        byId[id] = { id: id, nombre: id };
+      }
+    });
+    var list = Object.keys(byId).map(function (id) {
+      return byId[id];
+    });
+    list.sort(function (a, b) {
+      return String(a.nombre || a.id).localeCompare(String(b.nombre || b.id), "es", {
+        sensitivity: "base",
+      });
+    });
+    var prev = selectedId != null ? selectedId : sel.value;
+    sel.innerHTML = '<option value="">— Seleccione sede —</option>';
+    list.forEach(function (s) {
+      var opt = document.createElement("option");
+      opt.value = s.id;
+      var label = String(s.nombre || s.id).trim();
+      opt.textContent = label !== s.id ? label + " · " + s.id : s.id;
+      if (prev && s.id === prev) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
+
+  function loadSedesCatalog() {
+    if (!auth.currentUser) return Promise.resolve();
+    return db
+      .collection(SEDES_COL)
+      .get()
+      .then(function (snap) {
+        sedesCatalog = [];
+        snap.forEach(function (doc) {
+          var d = doc.data() || {};
+          if (d.activo === false) return;
+          sedesCatalog.push({
+            id: doc.id,
+            nombre: d.nombre != null ? String(d.nombre) : doc.id,
+          });
+        });
+        sedesCatalog.sort(function (a, b) {
+          return String(a.nombre).localeCompare(String(b.nombre), "es", { sensitivity: "base" });
+        });
+        populateMesSedeSelect();
+      })
+      .catch(function (err) {
+        console.warn("[mensualidades] sedes", err);
+        populateMesSedeSelect();
+      });
+  }
+
+  function fmtMoney(n) {
+    if (n == null || n === "" || isNaN(n)) return "—";
+    try {
+      return new Intl.NumberFormat("es-CO", {
+        style: "currency",
+        currency: "COP",
+        maximumFractionDigits: 0,
+      }).format(Number(n));
+    } catch (e) {
+      return String(n);
+    }
+  }
+
+  function escapeHtml(s) {
+    var d = document.createElement("div");
+    d.textContent = s == null ? "" : String(s);
+    return d.innerHTML;
+  }
+
+  function escapeAttr(s) {
+    return String(s || "").replace(/"/g, "&quot;");
+  }
+
+  function parseFirestoreDate(val) {
+    if (!val) return null;
+    if (val && typeof val.toDate === "function") {
+      try {
+        return val.toDate();
+      } catch (e) {
+        return null;
+      }
+    }
+    if (typeof val === "string") {
+      var d = new Date(val);
+      return isNaN(d.getTime()) ? null : d;
+    }
+    return null;
+  }
+
+  function formatFecha(d) {
+    if (!d || isNaN(d.getTime())) return "—";
+    try {
+      return d.toLocaleDateString("es-CO", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+    } catch (e) {
+      return d.toISOString().slice(0, 10);
+    }
+  }
+
+  function estadoFromData(d) {
+    if (!d || typeof d !== "object") return "pendiente";
+    var s = String(d.estadoContrato || "").toLowerCase().trim();
+    if (s === "activo" || s === "active") return "activo";
+    if (s === "inactivo" || s === "inactive") return "inactivo";
+    if (s === "bloqueada" || s === "bloqueado" || s === "blocked") return "bloqueada";
+    if (s === "pendiente") return "pendiente";
+    if (typeof d.estado === "number") {
+      if (d.estado === 0) return "activo";
+      if (d.estado === 1) return "inactivo";
+      if (d.estado === 2) return "bloqueada";
+    }
+    if (typeof d.estado === "string") {
+      return estadoFromData({ estadoContrato: d.estado });
+    }
+    return "pendiente";
+  }
+
+  function estadoToInt(estado) {
+    if (estado === "activo") return 0;
+    if (estado === "inactivo") return 1;
+    return 2;
+  }
+
+  function normalizePlacaInput(val) {
+    return String(val || "")
+      .trim()
+      .toUpperCase()
+      .replace(/\s+/g, "");
+  }
+
+  function mensualidadDocIdFromPlaca(placa) {
+    var out = "";
+    var s = normalizePlacaInput(placa);
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charAt(i);
+      if (c === "-") out += "_";
+      else if (/[A-Z0-9]/.test(c)) out += c;
+    }
+    return out || "SIN_PLACA";
+  }
+
+  function syncMesDosPlacasUi() {
+    var on = dosPlacasCheck && dosPlacasCheck.checked;
+    if (placa2Wrap) placa2Wrap.hidden = !on;
+    if (!on && placa2Input) placa2Input.value = "";
+  }
+
+  function formatPlacasCellHtml(row) {
+    var p1 = escapeHtml(row.placa || "—");
+    if (row.placa2) {
+      return (
+        '<span class="mes-placa-dual">' +
+        p1 +
+        "<small>+ " +
+        escapeHtml(row.placa2) +
+        "</small></span>"
+      );
+    }
+    return p1;
+  }
+
+  function finDeMesDesde(d) {
+    return new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59);
+  }
+
+  function calcularVencimientoDesdeDiaCobro(diaCobro) {
+    var dia = Math.min(28, Math.max(1, parseInt(diaCobro, 10) || 1));
+    var hoy = new Date();
+    var venc = finDeMesDesde(new Date(hoy.getFullYear(), hoy.getMonth(), dia));
+    if (venc <= hoy) {
+      venc = finDeMesDesde(new Date(hoy.getFullYear(), hoy.getMonth() + 1, dia));
+    }
+    return venc;
+  }
+
+  function pickFirestoreNum(val) {
+    if (val == null || val === "") return null;
+    if (typeof val === "number" && !isNaN(val)) return val;
+    var s = String(val).trim().replace(/\s/g, "");
+    if (!s) return null;
+    if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, "");
+    else if (s.indexOf(",") >= 0 && s.indexOf(".") < 0) s = s.replace(",", ".");
+    var n = parseFloat(s);
+    return isNaN(n) ? null : n;
+  }
+
+  function parseMensualidadValor(d) {
+    if (!d || typeof d !== "object") return null;
+    var keys = [
+      "valorMensual",
+      "montoMensual",
+      "tarifaMensualidad",
+      "tarifaMensual",
+      "valor",
+      "monto",
+      "importeMensual",
+    ];
+    var i;
+    for (i = 0; i < keys.length; i++) {
+      var n = pickFirestoreNum(d[keys[i]]);
+      if (n != null && n >= 0) return n;
+    }
+    if (d.mensualidad != null && typeof d.mensualidad !== "object") {
+      n = pickFirestoreNum(d.mensualidad);
+      if (n != null && n >= 0) return n;
+    }
+    return null;
+  }
+
+  function tarifaMensualDesdeDocTarifas(data, tipoVehiculo) {
+    if (!data || typeof data !== "object") return null;
+    var tipo = tipoVehiculo || "automovil";
+    if (tipo === "automovil") {
+      return pickFirestoreNum(data.mensualidad);
+    }
+    var block = data[tipo];
+    if (block && typeof block === "object") {
+      return pickFirestoreNum(block.mensualidad);
+    }
+    return pickFirestoreNum(data.mensualidad);
+  }
+
+  function fetchTarifaMensualSede(sedeId, tipoVehiculo) {
+    if (!sedeId || !auth.currentUser) return Promise.resolve(null);
+    var cacheKey = sedeId + "|" + (tipoVehiculo || "automovil");
+    if (tarifasSedeCache[cacheKey] !== undefined) {
+      return Promise.resolve(tarifasSedeCache[cacheKey]);
+    }
+    return db
+      .collection(TARIFAS_COL)
+      .doc(sedeId)
+      .get()
+      .then(function (snap) {
+        var tarifa = null;
+        if (snap.exists) {
+          tarifa = tarifaMensualDesdeDocTarifas(snap.data(), tipoVehiculo);
+        }
+        tarifasSedeCache[cacheKey] = tarifa;
+        return tarifa;
+      })
+      .catch(function () {
+        tarifasSedeCache[cacheKey] = null;
+        return null;
+      });
+  }
+
+  function updateMesValorHint(tarifaCatalogo, tarifaGuardada) {
+    var hint = document.getElementById("mes-valor-hint");
+    if (!hint) return;
+    var parts = [];
+    if (tarifaGuardada != null && tarifaGuardada >= 0) {
+      parts.push("Tarifa del contrato: <strong>" + fmtMoney(tarifaGuardada) + "</strong>");
+    }
+    if (tarifaCatalogo != null && tarifaCatalogo > 0) {
+      parts.push("Tarifa vigente sede: <strong>" + fmtMoney(tarifaCatalogo) + "</strong>");
+    }
+    if (!parts.length) {
+      hint.hidden = true;
+      hint.textContent = "";
+      return;
+    }
+    hint.hidden = false;
+    hint.innerHTML = parts.join(" · ");
+  }
+
+  function normalizeMensualidadDoc(doc) {
+    var d = doc.data() || {};
+    var placa = String(d.placa || doc.id || "").trim().toUpperCase();
+    var valor = parseMensualidadValor(d);
+    var tipoVehiculo = String(d.tipoVehiculo || d.tipoTarifa || "automovil").toLowerCase();
+    var venc =
+      parseFirestoreDate(d.proximoPago) ||
+      parseFirestoreDate(d.fechaVencimiento) ||
+      null;
+    var clienteNombre = String(d.clienteNombre || d.nombreCliente || "").trim();
+    var cliente =
+      clienteNombre || (d.numeroCelda > 0 ? "Celda " + d.numeroCelda : placa);
+    var placa2Raw = String(
+      d.placa2 || d.segundaPlaca || d.placaSecundaria || ""
+    ).trim();
+    var placa2 = placa2Raw ? normalizePlacaInput(placa2Raw) : "";
+    var dosPlacas =
+      d.dosPlacas === true ||
+      d.tieneDosPlacas === true ||
+      !!placa2;
+    if (!placa2) dosPlacas = false;
+    return {
+      id: doc.id,
+      ref: doc.ref,
+      cliente: cliente,
+      clienteNombre: clienteNombre,
+      sede: String(d.sede || "").trim(),
+      placa: placa,
+      placa2: placa2,
+      dosPlacas: dosPlacas,
+      valor: valor,
+      tipoVehiculo: tipoVehiculo,
+      tarifaMensualidad: pickFirestoreNum(d.tarifaMensualidad) != null ? pickFirestoreNum(d.tarifaMensualidad) : valor,
+      diaCobro: d.diaCobro != null ? Number(d.diaCobro) : null,
+      estado: estadoFromData(d),
+      notas: String(d.notas || "").trim(),
+      numeroCelda: d.numeroCelda != null ? Number(d.numeroCelda) : 0,
+      proximoPago: formatFecha(venc),
+      vencimientoDate: venc,
+      fechaInicioDate: parseFirestoreDate(d.fechaInicio),
+    };
+  }
+
+  function mesRowById(docId) {
+    for (var i = 0; i < registros.length; i++) {
+      if (registros[i].id === docId) return registros[i];
+    }
+    return null;
+  }
+
+  function updateMesFormModeUi() {
+    if (formPanelCap) {
+      formPanelCap.textContent = mesEditingId
+        ? "Editar mensualidad · " + mesEditingId
+        : "Registrar mensualidad";
+    }
+    if (btnSave) {
+      btnSave.textContent = mesEditingId ? "Guardar cambios" : "Guardar en Firestore";
+    }
+    if (btnCancelEdit) btnCancelEdit.hidden = !mesEditingId;
+  }
+
+  function clearMesFormMode() {
+    mesEditingId = null;
+    var form = document.getElementById("mes-form");
+    if (form) form.reset();
+    syncMesDosPlacasUi();
+    updateMesValorHint(null, null);
+    updateMesFormModeUi();
+    render();
+  }
+
+  function setMesValorEnFormulario(valor) {
+    var valorInput = document.getElementById("mes-valor");
+    if (!valorInput) return;
+    if (valor != null && !isNaN(valor) && valor >= 0) {
+      valorInput.value = String(Math.round(valor));
+    } else {
+      valorInput.value = "";
+    }
+  }
+
+  function aplicarTarifaSedeAlFormulario(sedeId, tipoVehiculo, opts) {
+    opts = opts || {};
+    if (!sedeId) {
+      updateMesValorHint(null, opts.tarifaGuardada);
+      return Promise.resolve(null);
+    }
+    return fetchTarifaMensualSede(sedeId, tipoVehiculo).then(function (tarifaCat) {
+      if (opts.rellenarValor && tarifaCat != null && tarifaCat > 0) {
+        setMesValorEnFormulario(tarifaCat);
+      }
+      updateMesValorHint(tarifaCat, opts.tarifaGuardada);
+      return tarifaCat;
+    });
+  }
+
+  function startEditMensualidad(docId) {
+    var row = mesRowById(docId);
+    if (!row) return;
+    mesEditingId = docId;
+    var tipoSel = document.getElementById("mes-tipo-vehiculo");
+    if (tipoSel) tipoSel.value = row.tipoVehiculo || "automovil";
+    document.getElementById("mes-cliente").value =
+      row.clienteNombre || (row.cliente !== row.placa ? row.cliente : "") || "";
+    var valorGuardado =
+      row.tarifaMensualidad != null && !isNaN(row.tarifaMensualidad)
+        ? row.tarifaMensualidad
+        : row.valor;
+    setMesValorEnFormulario(valorGuardado);
+    document.getElementById("mes-celda").value =
+      row.numeroCelda > 0 ? String(row.numeroCelda) : "";
+    document.getElementById("mes-dia").value =
+      row.diaCobro != null && !isNaN(row.diaCobro) ? String(row.diaCobro) : "";
+    document.getElementById("mes-estado").value = row.estado || "activo";
+    document.getElementById("mes-notas").value = row.notas || "";
+    if (placaInput) placaInput.value = row.placa || "";
+    if (dosPlacasCheck) dosPlacasCheck.checked = !!(row.dosPlacas || row.placa2);
+    if (placa2Input) placa2Input.value = row.placa2 || "";
+    syncMesDosPlacasUi();
+    populateMesSedeSelect(row.sede);
+    updateMesFormModeUi();
+    render();
+    aplicarTarifaSedeAlFormulario(row.sede, row.tipoVehiculo, {
+      tarifaGuardada: valorGuardado,
+      rellenarValor: valorGuardado == null || valorGuardado <= 0,
+    });
+    document.getElementById("mes-form-panel").scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+    document.getElementById("mes-cliente").focus();
+    setStatus("Editando «" + row.placa + "»");
+  }
+
+  function pillClass(estado) {
+    if (estado === "activo") return "mes-pill mes-pill--activo";
+    if (estado === "inactivo") return "mes-pill mes-pill--inactivo";
+    if (estado === "bloqueada") return "mes-pill mes-pill--bloqueada";
+    return "mes-pill mes-pill--pendiente";
+  }
+
+  function pillLabel(estado) {
+    if (estado === "activo") return "Activo";
+    if (estado === "inactivo") return "Inactivo";
+    if (estado === "bloqueada") return "Bloqueada";
+    return "Pendiente";
+  }
+
+  function filtrados() {
+    if (filtroActual === "todos") return registros.slice();
+    return registros.filter(function (r) {
+      return r.estado === filtroActual;
+    });
+  }
+
+  function render() {
+    var rows = filtrados();
+    tbody.innerHTML = "";
+    rows.forEach(function (r) {
+      var tr = document.createElement("tr");
+      if (mesEditingId && r.id === mesEditingId) {
+        tr.className = "mes-row-editing";
+      }
+      tr.innerHTML =
+        "<td>" +
+        escapeHtml(r.cliente || "—") +
+        "</td>" +
+        "<td>" +
+        escapeHtml(r.sede || "—") +
+        "</td>" +
+        "<td>" +
+        formatPlacasCellHtml(r) +
+        "</td>" +
+        "<td>" +
+        (r.numeroCelda > 0 ? escapeHtml(String(r.numeroCelda)) : "—") +
+        "</td>" +
+        '<td class="num">' +
+        fmtMoney(r.valor) +
+        "</td>" +
+        '<td><span class="' +
+        pillClass(r.estado) +
+        '">' +
+        pillLabel(r.estado) +
+        "</span></td>" +
+        "<td>" +
+        escapeHtml(r.proximoPago || "—") +
+        "</td>" +
+        '<td class="mes-row-actions">' +
+        '<button type="button" class="mes-link-edit" data-mes-edit="' +
+        escapeAttr(r.id) +
+        '">Editar</button>' +
+        '<button type="button" class="mes-link-del" data-mes-delete="' +
+        escapeAttr(r.id) +
+        '">Eliminar</button></td>';
+      tbody.appendChild(tr);
+    });
+    var showEmpty = rows.length === 0;
+    emptyEl.hidden = !showEmpty;
+    countLabel.textContent =
+      rows.length +
+      (filtroActual === "todos" ? " registros" : " visibles") +
+      (registros.length !== rows.length ? " · " + registros.length + " en total" : "");
+  }
+
+  function applySnapshot(snap) {
+    registros = snap.docs
+      .map(normalizeMensualidadDoc)
+      .sort(function (a, b) {
+        var pa = (a.placa || "").toLowerCase();
+        var pb = (b.placa || "").toLowerCase();
+        return pa.localeCompare(pb, "es");
+      });
+    render();
+    populateMesSedeSelect();
+  }
+
+  function stopMesListener() {
+    if (mesUnsub) {
+      mesUnsub();
+      mesUnsub = null;
+    }
+  }
+
+  function loadMensualidades() {
+    if (!auth.currentUser) {
+      registros = [];
+      render();
+      setStatus("Inicie sesión para ver mensualidades.");
+      return Promise.resolve();
+    }
+    if (mesLoading) return Promise.resolve();
+    mesLoading = true;
+    setStatus("Cargando «" + MES_COL + "»…");
+    stopMesListener();
+    return db
+      .collection(MES_COL)
+      .get()
+      .then(function (snap) {
+        applySnapshot(snap);
+        setStatus(
+          registros.length +
+            " mensualidad(es) · " +
+            new Date().toLocaleTimeString("es-CO")
+        );
+        mesUnsub = db.collection(MES_COL).onSnapshot(
+          function (live) {
+            applySnapshot(live);
+          },
+          function (err) {
+            console.warn("[mensualidades] onSnapshot", err);
+          }
+        );
+      })
+      .catch(function (err) {
+        console.error("[mensualidades] load", err);
+        setStatus(
+          "Error al cargar: " + (err.message || err.code || err),
+          true
+        );
+        return tryLoadCajaMensualidades();
+      })
+      .finally(function () {
+        mesLoading = false;
+      });
+  }
+
+  function tryLoadCajaMensualidades() {
+    return db
+      .collection("caja_mensualidades")
+      .get()
+      .then(function (snap) {
+        if (!snap.empty) {
+          applySnapshot(snap);
+          setStatus(
+            registros.length + " desde colección legacy caja_mensualidades",
+            false
+          );
+        }
+      })
+      .catch(function () {});
+  }
+
+  function buildMensualidadPayload(form) {
+    var hoy = new Date();
+    var inicioIso =
+      form.fechaInicio && !isNaN(form.fechaInicio.getTime())
+        ? form.fechaInicio.toISOString()
+        : hoy.toISOString();
+    var venc = form.vencimiento;
+    var vencIso = venc.toISOString();
+    var estadoTxt = form.estado;
+    var user = auth.currentUser;
+    var payload = {
+      placa: form.placa,
+      dosPlacas: !!form.dosPlacas,
+      placa2: form.dosPlacas && form.placa2 ? form.placa2 : "",
+      valorMensual: form.valor,
+      montoMensual: form.valor,
+      tarifaMensualidad: form.valor,
+      tipoVehiculo: form.tipoVehiculo || "automovil",
+      moneda: "COP",
+      sede: form.sede,
+      diaCobro: form.diaCobro,
+      estado: estadoToInt(estadoTxt),
+      estadoContrato: estadoTxt,
+      numeroCelda: form.numeroCelda || 0,
+      clienteNombre: form.cliente,
+      notas: form.notas,
+      fechaInicio: inicioIso,
+      fechaVencimiento: vencIso,
+      proximoPago: firebase.firestore.Timestamp.fromDate(venc),
+      origen: "portal_web",
+      operarioCaja: user ? user.email || user.uid : "",
+      actualizadoEn: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    return payload;
+  }
+
+  function saveMensualidad(ev) {
+    if (ev) ev.preventDefault();
+    if (!auth.currentUser) {
+      setStatus("Inicie sesión.", true);
+      return;
+    }
+    var cliente = (document.getElementById("mes-cliente").value || "").trim();
+    var sede = (document.getElementById("mes-sede").value || "").trim();
+    var placa = normalizePlacaInput(document.getElementById("mes-placa").value);
+    var dosPlacas = dosPlacasCheck && dosPlacasCheck.checked;
+    var placa2 = dosPlacas
+      ? normalizePlacaInput(placa2Input ? placa2Input.value : "")
+      : "";
+    var valorRaw = document.getElementById("mes-valor").value;
+    var valor = valorRaw === "" ? null : Number(valorRaw);
+    var diaRaw = document.getElementById("mes-dia").value;
+    var diaCobro =
+      diaRaw === "" ? new Date().getDate() : Math.min(28, Math.max(1, parseInt(diaRaw, 10)));
+    var celdaRaw = document.getElementById("mes-celda").value;
+    var numeroCelda = celdaRaw === "" ? 0 : parseInt(celdaRaw, 10);
+    if (isNaN(numeroCelda) || numeroCelda < 0) numeroCelda = 0;
+    var tipoVehiculo =
+      (document.getElementById("mes-tipo-vehiculo") &&
+        document.getElementById("mes-tipo-vehiculo").value) ||
+      "automovil";
+    var estado = document.getElementById("mes-estado").value || "activo";
+    var notas = (document.getElementById("mes-notas").value || "").trim();
+
+    if (!placa) {
+      window.alert("La placa principal es obligatoria (define el ID del documento en Firestore).");
+      return;
+    }
+    if (dosPlacas && !placa2) {
+      window.alert("Indique la segunda placa o desactive «Contrato con dos placas».");
+      return;
+    }
+    if (placa2 && placa2 === placa) {
+      window.alert("La segunda placa debe ser distinta de la placa principal.");
+      return;
+    }
+    if (!sede) {
+      window.alert("Seleccione la sede / estacionamiento.");
+      return;
+    }
+    if (valor == null || isNaN(valor) || valor < 0) {
+      window.alert("Indique el valor mensual en COP.");
+      return;
+    }
+
+    var editingRow = mesEditingId ? mesRowById(mesEditingId) : null;
+    var docId = mensualidadDocIdFromPlaca(placa);
+    var oldDocId = mesEditingId;
+    var venc = calcularVencimientoDesdeDiaCobro(diaCobro);
+    var payload = buildMensualidadPayload({
+      placa: placa,
+      placa2: placa2,
+      dosPlacas: dosPlacas,
+      sede: sede,
+      cliente: cliente || (numeroCelda > 0 ? "Celda " + numeroCelda : placa),
+      valor: valor,
+      diaCobro: diaCobro,
+      estado: estado,
+      notas: notas,
+      numeroCelda: numeroCelda,
+      tipoVehiculo: tipoVehiculo,
+      vencimiento: venc,
+      fechaInicio: editingRow ? editingRow.fechaInicioDate : null,
+    });
+
+    if (btnSave) btnSave.disabled = true;
+    setStatus((mesEditingId ? "Actualizando" : "Guardando") + " «" + docId + "»…");
+
+    function persistMensualidadDoc(targetId, isRename) {
+      return db
+        .collection(MES_COL)
+        .doc(targetId)
+        .get()
+        .then(function (snap) {
+          if (!snap.exists) {
+            payload.creadoEn = firebase.firestore.FieldValue.serverTimestamp();
+          }
+          return db.collection(MES_COL).doc(targetId).set(payload, { merge: true });
+        })
+        .then(function () {
+          if (!isRename || !oldDocId || oldDocId === targetId) {
+            return null;
+          }
+          return db.collection(MES_COL).doc(oldDocId).delete();
+        });
+    }
+
+    var saveChain = Promise.resolve();
+    if (oldDocId && docId !== oldDocId) {
+      saveChain = db
+        .collection(MES_COL)
+        .doc(docId)
+        .get()
+        .then(function (snap) {
+          if (snap.exists) {
+            throw new Error(
+              "Ya existe una mensualidad con la placa «" +
+                placa +
+                "» (documento «" +
+                docId +
+                "»)."
+            );
+          }
+          var msg =
+            "Cambiará el identificador del contrato de «" +
+            oldDocId +
+            "» a «" +
+            docId +
+            "» según la placa principal.\n\n¿Continuar?";
+          if (!window.confirm(msg)) {
+            throw new Error("Cambio de placa cancelado.");
+          }
+          return persistMensualidadDoc(docId, true);
+        });
+    } else if (!oldDocId) {
+      saveChain = db
+        .collection(MES_COL)
+        .doc(docId)
+        .get()
+        .then(function (snap) {
+          if (snap.exists) {
+            throw new Error(
+              "Ya existe una mensualidad con la placa «" +
+                placa +
+                "» (documento «" +
+                docId +
+                "»). Use Editar en la tabla."
+            );
+          }
+          return persistMensualidadDoc(docId, false);
+        });
+    } else {
+      saveChain = persistMensualidadDoc(docId, false);
+    }
+
+    saveChain
+      .then(function () {
+        var placasLabel = placa2 ? placa + " + " + placa2 : placa;
+        setStatus(
+          (mesEditingId ? "Actualizado" : "Guardado") +
+            " · " +
+            placasLabel +
+            " · vence " +
+            formatFecha(venc)
+        );
+        clearMesFormMode();
+        return loadMensualidades();
+      })
+      .catch(function (err) {
+        if (err && err.message === "Cambio de placa cancelado.") {
+          setStatus("Cambio de placa cancelado.");
+          return;
+        }
+        console.error("[mensualidades] save", err);
+        setStatus("No se pudo guardar: " + (err.message || err), true);
+      })
+      .finally(function () {
+        if (btnSave) btnSave.disabled = false;
+      });
+  }
+
+  function deleteMensualidad(docId) {
+    if (!docId || !auth.currentUser) return;
+    var row = registros.filter(function (r) {
+      return r.id === docId;
+    })[0];
+    var label = row
+      ? row.placa2
+        ? row.placa + " + " + row.placa2
+        : row.placa
+      : docId;
+    if (
+      !window.confirm(
+        "¿Eliminar la mensualidad «" + label + "»?\n\nSe borra el documento en Firestore."
+      )
+    ) {
+      return;
+    }
+    setStatus("Eliminando…");
+    db.collection(MES_COL)
+      .doc(docId)
+      .delete()
+      .then(function () {
+        if (mesEditingId === docId) clearMesFormMode();
+        setStatus("Eliminado · " + label);
+      })
+      .catch(function (err) {
+        setStatus("Error al eliminar: " + (err.message || err), true);
+      });
+  }
+
+  document.querySelectorAll(".mes-filter-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll(".mes-filter-btn").forEach(function (b) {
+        b.classList.remove("is-active");
+      });
+      btn.classList.add("is-active");
+      filtroActual = btn.getAttribute("data-filter") || "todos";
+      render();
+    });
+  });
+
+  document.getElementById("mes-form").addEventListener("submit", saveMensualidad);
+  if (dosPlacasCheck) {
+    dosPlacasCheck.addEventListener("change", syncMesDosPlacasUi);
+  }
+  document.getElementById("mes-btn-reset-form").addEventListener("click", function () {
+    window.setTimeout(clearMesFormMode, 0);
+  });
+  if (btnCancelEdit) {
+    btnCancelEdit.addEventListener("click", clearMesFormMode);
+  }
+  tbody.addEventListener("click", function (e) {
+    var editBtn = e.target.closest("[data-mes-edit]");
+    if (editBtn) {
+      startEditMensualidad(editBtn.getAttribute("data-mes-edit"));
+      return;
+    }
+    var delBtn = e.target.closest("[data-mes-delete]");
+    if (delBtn) {
+      deleteMensualidad(delBtn.getAttribute("data-mes-delete"));
+    }
+  });
+  document.getElementById("mes-btn-reload").addEventListener("click", loadMensualidades);
+  var sedeSelect = document.getElementById("mes-sede");
+  var tipoVehiculoSelect = document.getElementById("mes-tipo-vehiculo");
+  function onMesTarifaContextChange() {
+    var sedeId = sedeSelect ? sedeSelect.value : "";
+    var tipo = tipoVehiculoSelect ? tipoVehiculoSelect.value || "automovil" : "automovil";
+    if (mesEditingId) {
+      var row = mesRowById(mesEditingId);
+      var guardada = row
+        ? row.tarifaMensualidad != null && !isNaN(row.tarifaMensualidad)
+          ? row.tarifaMensualidad
+          : row.valor
+        : null;
+      aplicarTarifaSedeAlFormulario(sedeId, tipo, {
+        tarifaGuardada: guardada,
+        rellenarValor: false,
+      });
+      return;
+    }
+    aplicarTarifaSedeAlFormulario(sedeId, tipo, { rellenarValor: true });
+  }
+  if (sedeSelect) sedeSelect.addEventListener("change", onMesTarifaContextChange);
+  if (tipoVehiculoSelect) tipoVehiculoSelect.addEventListener("change", onMesTarifaContextChange);
+  document.getElementById("mes-btn-scroll-form").addEventListener("click", function () {
+    clearMesFormMode();
+    document.getElementById("mes-form-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+    if (placaInput) placaInput.focus();
+  });
+  updateMesFormModeUi();
+  syncMesDosPlacasUi();
+
+  auth.onAuthStateChanged(function (user) {
+    if (user) {
+      loadSedesCatalog();
+      loadMensualidades();
+    } else {
+      sedesCatalog = [];
+      populateMesSedeSelect();
+      stopMesListener();
+      registros = [];
+      render();
+      setStatus("");
+    }
+  });
+
+  render();
+})();
+</script>
+
+<script src="lugano-firestore-alertas.js"></script>
+</body>
+</html>
