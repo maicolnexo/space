@@ -394,6 +394,9 @@
     .esta-lotes-entrada--activo .esta-lotes-entrada-hora {
       color: #81c784;
     }
+    .esta-lotes-salida .esta-lotes-entrada-hora {
+      color: #94a3b8;
+    }
     .esta-lotes-entrada-estado {
       font-size: 9px;
       font-weight: 700;
@@ -2402,7 +2405,7 @@
               <th>Sede</th>
               <th>Tiquete</th>
               <th title="Fecha y hora de generación del tiquete">Entrada · hora tiquete</th>
-              <th>Salida</th>
+              <th title="Fecha y hora de salida o facturación">Salida · hora</th>
               <th>Permanencia</th>
               <th>Estado</th>
               <th>Origen</th>
@@ -6976,6 +6979,140 @@
     return parsePosFlexDate(fecha);
   }
 
+  function resolvePosFechaSalida(d) {
+    if (!d || typeof d !== "object") return null;
+    return (
+      parsePosFlexDate(d.fechaSalida) ||
+      parsePosFlexDate(d.fechaHoraSalida) ||
+      parsePosFlexDate(d.horaSalida) ||
+      parsePosFlexDate(d.fechaCierre) ||
+      parsePosFlexDate(d.cerradoEn) ||
+      parsePosFlexDate(d.fechaFactura) ||
+      parsePosFlexDate(d.fecha_factura)
+    );
+  }
+
+  function posDocUpdateTime(docSnap) {
+    if (!docSnap) return null;
+    var ut = docSnap.updateTime;
+    if (ut && typeof ut.toDate === "function") {
+      try {
+        var d = ut.toDate();
+        return d instanceof Date && !isNaN(d.getTime()) ? d : null;
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  function normalizeLotesMatchToken(s) {
+    return String(s || "")
+      .trim()
+      .toLowerCase()
+      .replace(/_/g, " ")
+      .replace(/\s+/g, " ");
+  }
+
+  /** Claves de cruce POS ↔ facturas_de_venta (sede + placa + tiquete o # factura POS). */
+  function lotesFacturaMatchKeys(sede, placa, tiquete, numeroFacturaPos) {
+    var sk = normalizeLotesMatchToken(sede);
+    var p = String(placa || "")
+      .trim()
+      .toUpperCase();
+    var keys = [];
+    var t = parseInt(tiquete, 10);
+    var f = parseInt(numeroFacturaPos, 10);
+    if (p) {
+      if (sk && !isNaN(t) && t > 0) keys.push(sk + "|" + p + "|t" + t);
+      if (sk && !isNaN(f) && f > 0) keys.push(sk + "|" + p + "|f" + f);
+      if (!isNaN(t) && t > 0) keys.push("|"+p+"|t"+t);
+      if (!isNaN(f) && f > 0) keys.push("|"+p+"|f"+f);
+    }
+    return keys;
+  }
+
+  function lotesFacturaIndexPut(map, key, entry) {
+    if (!key || !entry) return;
+    var prev = map[key];
+    if (!prev) {
+      map[key] = entry;
+      return;
+    }
+    var salNew = entry.salida ? entry.salida.getTime() : 0;
+    var salOld = prev.salida ? prev.salida.getTime() : 0;
+    if (salNew >= salOld) {
+      map[key] = entry;
+    }
+  }
+
+  async function buildFacturaVentaIndexByKey() {
+    var col = (cfg && cfg.facturasVentaCollection) || "facturas_de_venta";
+    var map = {};
+    try {
+      var snap = await db.collection(col).get();
+      snap.docs.forEach(function (doc) {
+        var d = doc.data() || {};
+        var placa = String(d.placa || "")
+          .trim()
+          .toUpperCase();
+        var sede = String(d.sede || "").trim();
+        if (!placa) return;
+        var tiq = parseInt(d.numeroTiquete, 10);
+        var nFactura = parseInt(d.numeroFacturaPos, 10);
+        var entrada = parsePosFlexDate(d.fechaEntrada);
+        var salida =
+          parsePosFlexDate(d.fechaSalida) ||
+          parsePosFlexDate(d.fechaFactura) ||
+          parsePosFlexDate(d.fecha_factura);
+        if (!salida && !entrada) return;
+        var entry = {
+          entrada: entrada,
+          salida: salida,
+          facturaDocId: doc.id,
+          numeroFactura: String(d.numeroFactura || "").trim(),
+        };
+        lotesFacturaMatchKeys(sede, placa, tiq, nFactura).forEach(function (key) {
+          lotesFacturaIndexPut(map, key, entry);
+        });
+      });
+    } catch (err) {
+      console.warn("[lotes] facturas_de_venta", err.code || err.message);
+    }
+    return map;
+  }
+
+  function lookupFacturaVentaIndex(facturaIndex, meta, d) {
+    if (!facturaIndex || !meta) return null;
+    var placa = String(d.placa || meta.docId || "")
+      .trim()
+      .toUpperCase();
+    var sede = String(d.sede || meta.sede || "").trim();
+    var tiq = parseInt(d.numeroTiquete, 10);
+    var nFactura = parseInt(d.numeroFacturaPos, 10);
+    var keys = lotesFacturaMatchKeys(sede, placa, tiq, nFactura);
+    for (var i = 0; i < keys.length; i++) {
+      if (facturaIndex[keys[i]]) return facturaIndex[keys[i]];
+    }
+    return null;
+  }
+
+  function resolvePosFechaSalidaFromDoc(docSnap, d, activa, facturaIndex, meta, factHit) {
+    if (!activa && factHit && factHit.salida) {
+      return factHit.salida;
+    }
+    var salida = resolvePosFechaSalida(d);
+    if (!salida && !activa && facturaIndex && meta) {
+      var hit = factHit || lookupFacturaVentaIndex(facturaIndex, meta, d);
+      if (hit && hit.salida) salida = hit.salida;
+    }
+    if (!salida && !activa) {
+      var upd = posDocUpdateTime(docSnap);
+      if (upd) salida = upd;
+    }
+    return salida;
+  }
+
   function resolvePosFechaEntradaFromDoc(docSnap, d, activa, planFechaByKey, meta) {
     var entrada = resolvePosFechaEntrada(d);
     var createTime = posDocCreateTime(docSnap);
@@ -7066,6 +7203,51 @@
     return html + "</span>";
   }
 
+  function formatPosSalidaCellHtml(d, opts) {
+    opts = opts || {};
+    if (!d || isNaN(d.getTime())) {
+      return escapeHtml("Sin registro");
+    }
+    var fecha = "";
+    var hora = "";
+    try {
+      fecha = new Intl.DateTimeFormat("es-CO", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }).format(d);
+      hora = new Intl.DateTimeFormat("es-CO", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      }).format(d);
+    } catch (e) {
+      return escapeHtml(formatPosDateTime(d));
+    }
+    if (!hora) {
+      return escapeHtml(fecha || "—");
+    }
+    var title = "Salida " + fecha + " · " + hora;
+    if (opts.desdeFactura) {
+      title +=
+        " (factura " +
+        (opts.numeroFactura || opts.facturaDocId || "facturas_de_venta") +
+        ")";
+    }
+    return (
+      '<span class="esta-lotes-entrada esta-lotes-salida" title="' +
+      escapeHtml(title) +
+      '">' +
+      '<span class="esta-lotes-entrada-fecha">' +
+      escapeHtml(fecha) +
+      "</span>" +
+      '<span class="esta-lotes-entrada-hora">' +
+      escapeHtml(hora) +
+      "</span></span>"
+    );
+  }
+
   function formatPosPermanencia(ms) {
     if (ms == null || isNaN(ms) || ms < 0) return "—";
     var totalMin = Math.floor(ms / 60000);
@@ -7077,6 +7259,22 @@
     return m + "m";
   }
 
+  /** Activo: hasta ahora. Cerrado: solo entre fechaEntrada y fechaSalida (sin reloj actual). */
+  function calcularPermanenciaLotes(row, nowMs) {
+    if (!row || !row.fechaEntrada || isNaN(row.fechaEntrada.getTime())) {
+      return "—";
+    }
+    if (row.activa) {
+      return formatPosPermanencia(nowMs - row.fechaEntrada.getTime());
+    }
+    if (!row.fechaSalida || isNaN(row.fechaSalida.getTime())) {
+      return "—";
+    }
+    var ms = row.fechaSalida.getTime() - row.fechaEntrada.getTime();
+    if (ms < 0) return "—";
+    return formatPosPermanencia(ms);
+  }
+
   function posRowEstaActiva(data) {
     if (!data || typeof data !== "object") return false;
     if (data.activa === false) return false;
@@ -7084,9 +7282,11 @@
     return true;
   }
 
-  function normalizePosFirestoreRow(docSnap, meta, planFechaByKey) {
+  function normalizePosFirestoreRow(docSnap, meta, planFechaByKey, facturaIndex) {
     var d = docSnap.data() || {};
     var activaPre = posRowEstaActiva(d);
+    var activa = posRowEstaActiva(d);
+    var factHit = !activa ? lookupFacturaVentaIndex(facturaIndex, meta, d) : null;
     var entrada = resolvePosFechaEntradaFromDoc(
       docSnap,
       d,
@@ -7094,8 +7294,27 @@
       planFechaByKey,
       meta
     );
-    var salida = parsePosIsoDate(d.fechaSalida);
-    var activa = posRowEstaActiva(d);
+    var salidaDesdeFactura = false;
+    var salida = null;
+    if (!activa && factHit && factHit.salida) {
+      salida = factHit.salida;
+      salidaDesdeFactura = true;
+      if (factHit.entrada) {
+        entrada = factHit.entrada;
+      }
+    } else if (factHit && factHit.entrada && !entrada) {
+      entrada = factHit.entrada;
+    }
+    if (!salida) {
+      salida = resolvePosFechaSalidaFromDoc(
+        docSnap,
+        d,
+        activa,
+        facturaIndex,
+        meta,
+        null
+      );
+    }
     var placa =
       String(d.placa || meta.docId || "")
         .trim()
@@ -7112,6 +7331,9 @@
       numeroTiquete: tiquete,
       fechaEntrada: entrada,
       fechaSalida: salida,
+      salidaDesdeFactura: salidaDesdeFactura,
+      facturaVentaId: factHit ? factHit.facturaDocId || "" : "",
+      facturaVentaNumero: factHit ? factHit.numeroFactura || "" : "",
       activa: activa,
       estadoCaja: String(d.estadoCaja || (activa ? "EN_CAJA" : "CERRADO")),
       listoParaFacturar: d.listoParaFacturar === true,
@@ -7220,35 +7442,45 @@
     var seen = {};
     var planFechaByKey = {};
     var posDocItems = [];
-    await Promise.all(
-      subs.map(function (sub) {
-        return db
-          .collectionGroup(sub)
-          .get()
-          .then(function (snap) {
-            snap.docs.forEach(function (doc) {
-              var planMeta = parsePlanilladoPlacaPath(doc.ref.path);
-              if (planMeta) {
-                var planFe = resolvePosFechaEntrada(doc.data() || {});
-                if (planFe) {
-                  planFechaByKey[planilladoFechaKey(planMeta.sede, planMeta.docId)] = planFe;
+    var fetched = await Promise.all([
+      buildFacturaVentaIndexByKey(),
+      Promise.all(
+        subs.map(function (sub) {
+          return db
+            .collectionGroup(sub)
+            .get()
+            .then(function (snap) {
+              snap.docs.forEach(function (doc) {
+                var planMeta = parsePlanilladoPlacaPath(doc.ref.path);
+                if (planMeta) {
+                  var planFe = resolvePosFechaEntrada(doc.data() || {});
+                  if (planFe) {
+                    planFechaByKey[planilladoFechaKey(planMeta.sede, planMeta.docId)] =
+                      planFe;
+                  }
+                  return;
                 }
-                return;
-              }
-              var meta = parsePosDocPath(doc.ref.path);
-              if (!meta) return;
-              if (seen[meta.path]) return;
-              seen[meta.path] = true;
-              posDocItems.push({ doc: doc, meta: meta });
+                var meta = parsePosDocPath(doc.ref.path);
+                if (!meta) return;
+                if (seen[meta.path]) return;
+                seen[meta.path] = true;
+                posDocItems.push({ doc: doc, meta: meta });
+              });
+            })
+            .catch(function (err) {
+              console.warn("[lotes] collectionGroup", sub, err.code, err.message);
             });
-          })
-          .catch(function (err) {
-            console.warn("[lotes] collectionGroup", sub, err.code, err.message);
-          });
-      })
-    );
+        })
+      ),
+    ]);
+    var facturaIndex = fetched[0] || {};
     var out = posDocItems.map(function (item) {
-      return normalizePosFirestoreRow(item.doc, item.meta, planFechaByKey);
+      return normalizePosFirestoreRow(
+        item.doc,
+        item.meta,
+        planFechaByKey,
+        facturaIndex
+      );
     });
     out.sort(function (a, b) {
       var ta = a.fechaEntrada ? a.fechaEntrada.getTime() : 0;
@@ -8067,14 +8299,7 @@
     var html = "";
     rows.forEach(function (r) {
       var checked = !!lotesSelectedPaths[r.path];
-      var fin = r.fechaSalida;
-      if (!fin && r.activa) fin = new Date(now);
-      var perm =
-        r.fechaEntrada && fin
-          ? formatPosPermanencia(fin.getTime() - r.fechaEntrada.getTime())
-          : r.activa && r.fechaEntrada
-            ? formatPosPermanencia(now - r.fechaEntrada.getTime())
-            : "—";
+      var perm = calcularPermanenciaLotes(r, now);
       var badgeClass = r.activa
         ? "esta-lotes-badge--activo"
         : "esta-lotes-badge--cerrado";
@@ -8107,7 +8332,13 @@
         formatPosEntradaCellHtml(r.fechaEntrada, { activa: r.activa }) +
         "</td>" +
         "<td>" +
-        escapeHtml(r.fechaSalida ? formatPosDateTime(r.fechaSalida) : r.activa ? "—" : "Sin registro") +
+        (r.activa
+          ? escapeHtml("—")
+          : formatPosSalidaCellHtml(r.fechaSalida, {
+              desdeFactura: r.salidaDesdeFactura,
+              facturaDocId: r.facturaVentaId,
+              numeroFactura: r.facturaVentaNumero,
+            })) +
         "</td>" +
         "<td>" +
         escapeHtml(perm) +
@@ -8471,11 +8702,8 @@
       ].join(";"),
     ];
     rows.forEach(function (r) {
-      var fin = r.fechaSalida || (r.activa ? new Date(now) : null);
-      var perm =
-        r.fechaEntrada && fin
-          ? formatPosPermanencia(fin.getTime() - r.fechaEntrada.getTime())
-          : "";
+      var perm = calcularPermanenciaLotes(r, now);
+      if (perm === "—") perm = "";
       lines.push(
         [
           r.placa,

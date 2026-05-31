@@ -357,7 +357,7 @@
     <section class="rc-intro">
       <h2>Recaudos · facturas de venta</h2>
       <p>
-        Acumulado desde <code>facturas_de_venta</code> (caja POS). Muestra subtotal, IVA y total; si el documento incluye
+        Acumulado desde <code>facturas_de_venta</code> (caja POS), actualizado en tiempo real. Muestra subtotal, IVA y total; si el documento incluye
         datos de facturación electrónica o envío DIAN, se reflejan en la tabla. Sin esos campos, el desglose se calcula con IVA
         <span id="rc-iva-label">19</span>% sobre el monto cobrado (misma lógica que la caja).
       </p>
@@ -489,6 +489,10 @@
 
   var todasFacturas = [];
   var filtradas = [];
+  var facturasUnsub = null;
+  var facturasLegacyUnsub = null;
+  var facturasActiveCol = null;
+  var facturasSedesLoaded = false;
   var statusEl = document.getElementById("rc-status");
   var tbody = document.getElementById("rc-tbody");
   var emptyEl = document.getElementById("rc-empty");
@@ -567,6 +571,26 @@
     return "";
   }
 
+  /**
+   * "56.400" en desglose IVA/subtotal suele ser 56 pesos, no 56.400 COP.
+   * "12.000" o "1.500.000" sí son miles (un solo grupo .000 o varios grupos).
+   */
+  function parseMontoPuntoAmbiguoCOP(s) {
+    var m = s.match(/^(\d{1,3})\.(\d{3})$/);
+    if (!m) return null;
+    var ent = parseInt(m[1], 10);
+    var frac = parseInt(m[2], 10);
+    if (isNaN(ent) || isNaN(frac)) return null;
+    if (frac === 0) {
+      return ent * 1000;
+    }
+    var comoMiles = ent * 1000 + frac;
+    if (ent < 200 && comoMiles >= ent * 80) {
+      return ent;
+    }
+    return comoMiles;
+  }
+
   /** Parsea montos COP: 300000, "300.000", "$ 300.000", evita 300.0000 → 3000000. */
   function parseMontoColombia(val) {
     if (val == null || val === "") return null;
@@ -576,6 +600,8 @@
       .replace(/\$/g, "")
       .replace(/\s/g, "");
     if (!s) return null;
+    var ambiguo = parseMontoPuntoAmbiguoCOP(s);
+    if (ambiguo != null) return ambiguo;
     if (/^\d{1,3}(\.\d{3})+$/.test(s)) {
       return parseFloat(s.replace(/\./g, ""));
     }
@@ -599,69 +625,170 @@
       var k = keys[i];
       if (d[k] == null || d[k] === "") continue;
       var n = parseMontoColombia(d[k]);
-      if (n != null && !isNaN(n)) return n;
+      if (n != null && !isNaN(n)) return Math.round(n);
     }
     return null;
   }
 
-  /** Si Firestore guardó un cero de más (300.000 → 3000000), corregir heurísticamente. */
-  function corregirMontoCeroExtra(m) {
-    if (m == null || m <= 0) return { valor: m, corregido: false };
-    if (m >= 100000 && m % 10 === 0) {
-      var div = m / 10;
-      if (div >= 5000 && div <= 50000000 && div % 50 === 0) {
-        return { valor: div, corregido: true };
-      }
-    }
-    return { valor: m, corregido: false };
+  /** Enteros COP desde Firestore (integerValue de la caja POS). */
+  function pickEntero(d, keys) {
+    return pickNum(d, keys);
   }
 
-  function pickMontoFactura(d) {
-    var keys = [
+  /**
+   * Solo corrige montos claramente inflados (~×10) cuando hay desglose coherente
+   * o el valor es muy grande (millones). Evita dividir totales válidos (ej. 455.300).
+   */
+  function corregirMontoInflado(n, referenciaSuma) {
+    if (n == null || n <= 0) return { valor: n, corregido: false };
+    var ref = referenciaSuma > 0 ? referenciaSuma : 0;
+    if (ref > 0) {
+      var divisores = [1000, 100, 10];
+      for (var i = 0; i < divisores.length; i++) {
+        if (n < ref * 8) break;
+        var cand = Math.round(n / divisores[i]);
+        if (cand >= ref * 0.85 && cand <= ref * 1.15) {
+          return { valor: cand, corregido: true };
+        }
+      }
+    }
+    if (n >= 1000000 && n % 10 === 0) {
+      var d10 = n / 10;
+      if (d10 >= 5000 && d10 <= 50000000 && d10 % 50 === 0) {
+        return { valor: Math.round(d10), corregido: true };
+      }
+    }
+    return { valor: Math.round(n), corregido: false };
+  }
+
+  function alinearSubtotalIvaTotal(sub, iva, total) {
+    if (sub > 0 && iva != null && iva >= 0 && total > 0) {
+      var ivaEsp = total - sub;
+      if (ivaEsp > 0) {
+        var fIva = corregirMontoInflado(iva, ivaEsp);
+        iva = fIva.valor;
+      }
+      if (iva < 0) iva = 0;
+      if (Math.abs(sub + iva - total) > Math.max(50, total * 0.02)) {
+        total = sub + iva;
+      }
+    }
+    return { sub: sub, iva: iva, total: total };
+  }
+
+  /**
+   * Misma prioridad que la caja: subtotal + IVA impresos; si no, total cobrado.
+   */
+  function resolverMontosFactura(d) {
+    var montoCorregido = false;
+    var sub = pickEntero(d, [
+      "subtotal",
+      "subtotalImpreso",
+      "dSubtotalImpreso",
+      "subImp",
+      "baseGravable",
+    ]);
+    var iva = pickEntero(d, [
+      "iva",
+      "ivaImpreso",
+      "dIvaImpreso",
+      "ivaImp",
+      "montoIva",
+      "valorIva",
+    ]);
+    var monto = pickEntero(d, ["monto"]);
+    var total = pickEntero(d, [
       "total",
-      "monto",
-      "montoRecibido",
-      "monto_recibido",
       "valorTotal",
       "valorCobrado",
       "importe",
       "totalCobrado",
-      "valor",
-    ];
-    var m = pickNum(d, keys);
-    if (m == null || m <= 0) {
+    ]);
+    var recibido = pickEntero(d, [
+      "montoRecibido",
+      "monto_recibido",
+      "recibido",
+    ]);
+
+    if (monto > 0 && total > 0 && total >= monto * 8 && monto % 50 === 0) {
+      total = monto;
+      montoCorregido = true;
+    } else if (monto > 0 && (total == null || total <= 0)) {
+      total = monto;
+    } else if (monto > 0 && total > 0 && total < monto) {
+      total = monto;
+    }
+
+    if (total == null || total <= 0) {
       for (var k in d) {
         if (!Object.prototype.hasOwnProperty.call(d, k)) continue;
-        if (!/monto|total|valor|importe|recaudo|cobro/i.test(k)) continue;
+        if (!/^(monto|total|valor|importe|recaudo|cobro)/i.test(k)) continue;
+        if (/recibido|recaudoOperario/i.test(k)) continue;
         var n = parseMontoColombia(d[k]);
         if (n != null && n > 0) {
-          m = n;
+          total = Math.round(n);
           break;
         }
       }
     }
-    if (m != null && m > 0) {
-      var fix = corregirMontoCeroExtra(m);
-      return fix;
-    }
-    var sub = pickNum(d, [
-      "subtotal",
-      "subtotalImpreso",
-      "dSubtotalImpreso",
-      "baseGravable",
-    ]);
-    var iva = pickNum(d, [
-      "iva",
-      "ivaImpreso",
-      "dIvaImpreso",
-      "montoIva",
-      "valorIva",
-    ]);
+
     if (sub != null && sub > 0) {
-      var tot = sub + (iva != null && iva > 0 ? iva : 0);
-      return corregirMontoCeroExtra(tot);
+      if (iva == null) iva = 0;
+      var sumaOficial = sub + iva;
+      var fSub = corregirMontoInflado(sub, 0);
+      var fIva = corregirMontoInflado(iva, 0);
+      sub = fSub.valor;
+      iva = fIva.valor;
+      sumaOficial = sub + iva;
+      montoCorregido = fSub.corregido || fIva.corregido;
+
+      if (total == null || total <= 0) {
+        total = sumaOficial;
+      } else {
+        var fTot = corregirMontoInflado(total, sumaOficial);
+        total = fTot.valor;
+        montoCorregido = montoCorregido || fTot.corregido;
+        if (Math.abs(total - sumaOficial) > Math.max(50, sumaOficial * 0.02)) {
+          total = sumaOficial;
+        }
+      }
+
+      var alineado = alinearSubtotalIvaTotal(sub, iva, total);
+      sub = alineado.sub;
+      iva = alineado.iva;
+      total = alineado.total;
+
+      return {
+        subtotal: sub,
+        iva: iva,
+        total: total,
+        estimado: false,
+        montoCorregido: montoCorregido,
+      };
     }
-    return { valor: 0, corregido: false };
+
+    if (total == null || total <= 0) {
+      total = recibido;
+    }
+    if (total != null && total > 0) {
+      var fSolo = corregirMontoInflado(total, 0);
+      var calc = desgloseDesdeTotal(fSolo.valor, IVA_PCT);
+      return {
+        subtotal: calc.subtotal,
+        iva: calc.iva,
+        total: calc.total,
+        estimado: true,
+        montoCorregido: fSolo.corregido,
+      };
+    }
+
+    return {
+      subtotal: 0,
+      iva: 0,
+      total: 0,
+      estimado: false,
+      montoCorregido: false,
+    };
   }
 
   function redondearPeso(v) {
@@ -745,41 +872,12 @@
     var d = doc.data() || {};
     if (d.tipoDocumento === "meta" || d.esMeta === true) return null;
 
-    var montoFix = pickMontoFactura(d);
-    var total = montoFix.valor || 0;
-    var montoCorregido = montoFix.corregido;
-    var sub = pickNum(d, [
-      "subtotal",
-      "subtotalImpreso",
-      "dSubtotalImpreso",
-      "baseGravable",
-    ]);
-    var iva = pickNum(d, [
-      "iva",
-      "ivaImpreso",
-      "dIvaImpreso",
-      "montoIva",
-      "valorIva",
-    ]);
-    var estimado = false;
-
-    if (sub != null && sub > 0 && iva != null && iva >= 0) {
-      if (total <= 0) {
-        total = sub + iva;
-      }
-      estimado = false;
-    } else if (sub != null && sub > 0 && total > 0) {
-      iva = total - sub;
-    } else if (total > 0) {
-      var calc = desgloseDesdeTotal(total, IVA_PCT);
-      sub = calc.subtotal;
-      iva = calc.iva;
-      total = calc.total;
-      estimado = true;
-    } else {
-      sub = 0;
-      iva = 0;
-    }
+    var montos = resolverMontosFactura(d);
+    var sub = montos.subtotal;
+    var iva = montos.iva;
+    var total = montos.total;
+    var estimado = montos.estimado;
+    var montoCorregido = montos.montoCorregido;
 
     var fe = tieneFacturaElectronica(d);
     var dian = estadoDian(d);
@@ -808,45 +906,115 @@
     };
   }
 
-  function loadCollection(name) {
-    return db
-      .collection(name)
-      .get()
-      .then(function (snap) {
-        var rows = [];
-        snap.docs.forEach(function (doc) {
-          var row = normalizeFacturaDoc(doc);
-          if (row) rows.push(row);
-        });
-        return rows;
-      });
+  function stopFacturasListeners() {
+    if (facturasUnsub) {
+      facturasUnsub();
+      facturasUnsub = null;
+    }
+    if (facturasLegacyUnsub) {
+      facturasLegacyUnsub();
+      facturasLegacyUnsub = null;
+    }
+    facturasActiveCol = null;
   }
 
-  function loadFacturas() {
+  function rowsFromSnapshot(snap) {
+    var rows = [];
+    snap.docs.forEach(function (doc) {
+      var row = normalizeFacturaDoc(doc);
+      if (row) rows.push(row);
+    });
+    return rows;
+  }
+
+  function sortFacturas(rows) {
+    rows.sort(function (a, b) {
+      var ta = a.fecha ? a.fecha.getTime() : 0;
+      var tb = b.fecha ? b.fecha.getTime() : 0;
+      return tb - ta;
+    });
+    return rows;
+  }
+
+  function applyFacturasRows(rows, colName) {
+    facturasActiveCol = colName;
+    todasFacturas = sortFacturas(rows.slice());
+    setStatus(
+      todasFacturas.length +
+        " factura(s) · en vivo " +
+        new Date().toLocaleTimeString("es-CO")
+    );
+    applyFilters();
+  }
+
+  function stopLegacyFacturasListener() {
+    if (facturasLegacyUnsub) {
+      facturasLegacyUnsub();
+      facturasLegacyUnsub = null;
+    }
+  }
+
+  function startLegacyFacturasListener() {
+    if (facturasLegacyUnsub || COL === COL_LEGACY) return;
+    facturasLegacyUnsub = db.collection(COL_LEGACY).onSnapshot(
+      function (snap) {
+        if (facturasActiveCol === COL && todasFacturas.length > 0) return;
+        applyFacturasRows(rowsFromSnapshot(snap), COL_LEGACY);
+      },
+      function (err) {
+        console.warn("[recaudos] legacy onSnapshot", err);
+      }
+    );
+  }
+
+  function onPrimaryFacturasSnapshot(snap) {
+    var rows = rowsFromSnapshot(snap);
+    if (rows.length > 0) {
+      stopLegacyFacturasListener();
+      applyFacturasRows(rows, COL);
+      return;
+    }
+    startLegacyFacturasListener();
+    if (!facturasLegacyUnsub) {
+      applyFacturasRows([], COL);
+    }
+  }
+
+  function ensureSedesOnce() {
+    if (facturasSedesLoaded) return;
+    facturasSedesLoaded = true;
+    loadSedes();
+  }
+
+  function startFacturasRealtime() {
     if (!auth.currentUser) {
       setStatus("Inicie sesión.", true);
       return Promise.resolve();
     }
-    setStatus("Cargando facturas…");
-    return loadCollection(COL)
-      .then(function (rows) {
-        if (rows.length) return rows;
-        return loadCollection(COL_LEGACY);
-      })
-      .then(function (rows) {
-        todasFacturas = rows;
-        todasFacturas.sort(function (a, b) {
-          var ta = a.fecha ? a.fecha.getTime() : 0;
-          var tb = b.fecha ? b.fecha.getTime() : 0;
-          return tb - ta;
-        });
-        setStatus(todasFacturas.length + " factura(s) cargadas.");
-        applyFilters();
-      })
-      .catch(function (err) {
-        console.error("[recaudos]", err);
-        setStatus("Error al cargar: " + (err.message || err), true);
-      });
+    stopFacturasListeners();
+    facturasSedesLoaded = false;
+    setStatus("Conectando facturas en vivo…");
+    return new Promise(function (resolve) {
+      var settled = false;
+      function done() {
+        if (!settled) {
+          settled = true;
+          resolve();
+        }
+      }
+      facturasUnsub = db.collection(COL).onSnapshot(
+        function (snap) {
+          onPrimaryFacturasSnapshot(snap);
+          ensureSedesOnce();
+          done();
+        },
+        function (err) {
+          console.error("[recaudos] onSnapshot", err);
+          setStatus("Error en vivo: " + (err.message || err), true);
+          done();
+        }
+      );
+    });
   }
 
   function loadSedes() {
@@ -1076,7 +1244,7 @@
       noteParts.push(
         "†" +
           corregidas +
-          " fila(s): monto ajustado (se detectó un cero de más en Firestore, p. ej. 300.000 guardado como 3000000)."
+          " fila(s): monto corregido (valor en Firestore ~10× mayor que subtotal+IVA de la misma factura)."
       );
     }
     if (filtradas.length && !noteParts.length) {
@@ -1270,7 +1438,9 @@
   }
 
   document.getElementById("rc-btn-apply").addEventListener("click", applyFilters);
-  document.getElementById("rc-btn-reload").addEventListener("click", loadFacturas);
+  document.getElementById("rc-btn-reload").addEventListener("click", function () {
+    startFacturasRealtime();
+  });
   document.getElementById("rc-btn-csv-detalle").addEventListener("click", exportCsvDetalle);
   document.getElementById("rc-btn-csv-resumen").addEventListener("click", exportCsvResumen);
   document.getElementById("rc-btn-json").addEventListener("click", exportJson);
@@ -1284,8 +1454,10 @@
 
   auth.onAuthStateChanged(function (user) {
     if (user) {
-      loadFacturas().then(loadSedes);
+      startFacturasRealtime();
     } else {
+      stopFacturasListeners();
+      facturasSedesLoaded = false;
       todasFacturas = [];
       filtradas = [];
       render();
