@@ -223,6 +223,21 @@
       color: #ef9a9a;
       border: 1px solid rgba(198, 40, 40, 0.45);
     }
+    .mes-pill--app {
+      background: rgba(30, 90, 160, 0.35);
+      color: #90caf9;
+      border: 1px solid rgba(66, 133, 244, 0.45);
+      margin-right: 4px;
+    }
+    .mes-meta-small {
+      display: block;
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 2px;
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+    }
     .mes-status {
       font-size: 12px;
       color: #94a3b8;
@@ -562,6 +577,7 @@
 (function () {
   var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
   var MES_COL = cfg.mensualidadesCollection || "mensualidades";
+  var MES_SUB = cfg.mensualidadesSubcollection || "residentes";
   var SEDES_COL = cfg.sedesCollection || "sedes";
   var TARIFAS_COL = cfg.tarifasCollection || "tarifas";
   var sedesCatalog = [];
@@ -570,7 +586,9 @@
   var filtroActual = "todos";
   var mesLoading = false;
   var mesUnsub = null;
+  var mesUnsubs = [];
   var mesEditingId = null;
+  var mesEditingSede = null;
 
   var tbody = document.getElementById("mes-tbody");
   var formPanelCap = document.getElementById("mes-form-panel-cap");
@@ -673,7 +691,7 @@
   }
 
   function parseFirestoreDate(val) {
-    if (!val) return null;
+    if (val == null || val === "") return null;
     if (val && typeof val.toDate === "function") {
       try {
         return val.toDate();
@@ -681,11 +699,101 @@
         return null;
       }
     }
+    if (typeof val === "number" && isFinite(val)) {
+      if (val > 1e12) return new Date(val);
+      if (val > 1e9) return new Date(val * 1000);
+    }
     if (typeof val === "string") {
+      var ddmm = parseFechaDiaMesAnio(val);
+      if (ddmm) return ddmm;
       var d = new Date(val);
       return isNaN(d.getTime()) ? null : d;
     }
     return null;
+  }
+
+  /** Fechas app móvil: "31/05/2026", "05/06/2026" (DD/MM/YYYY). */
+  function parseFechaDiaMesAnio(val) {
+    if (val == null || val === "") return null;
+    var s = String(val).trim();
+    var m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (!m) return null;
+    var day = parseInt(m[1], 10);
+    var month = parseInt(m[2], 10) - 1;
+    var year = parseInt(m[3], 10);
+    if (month < 0 || month > 11 || day < 1 || day > 31) return null;
+    var d = new Date(year, month, day, 12, 0, 0);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  function formatFechaDiaMesAnio(d) {
+    if (!d || isNaN(d.getTime())) return "";
+    var day = d.getDate();
+    var month = d.getMonth() + 1;
+    var year = d.getFullYear();
+    return (
+      (day < 10 ? "0" : "") +
+      day +
+      "/" +
+      (month < 10 ? "0" : "") +
+      month +
+      "/" +
+      year
+    );
+  }
+
+  function formatMontoAppString(n) {
+    if (n == null || isNaN(n)) return "";
+    var ent = Math.round(Number(n));
+    if (ent < 0) return "";
+    return String(ent).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  function esDocumentoAppMovil(d) {
+    if (!d || typeof d !== "object") return false;
+    return !!(
+      d.nombreUsuario ||
+      d.montoFormateado ||
+      d.estacionamiento ||
+      d.parkingDocumentId ||
+      d.fechaFinMensualidad ||
+      d.fechaInicioMensualidad ||
+      d.residentId
+    );
+  }
+
+  function normalizeTipoVehiculo(val) {
+    var t = String(val || "")
+      .toLowerCase()
+      .trim();
+    if (!t) return "automovil";
+    if (t.indexOf("moto") >= 0) return "moto";
+    if (t.indexOf("bici") >= 0) return "bicicleta";
+    if (t.indexOf("ciclo") >= 0) return "ciclomotor";
+    if (t === "carro" || t === "auto" || t === "automovil" || t === "automóvil") {
+      return "automovil";
+    }
+    return t;
+  }
+
+  function tipoVehiculoEtiquetaApp(tipo) {
+    if (tipo === "moto") return "Moto";
+    if (tipo === "bicicleta") return "Bicicleta";
+    if (tipo === "ciclomotor") return "Ciclomotor";
+    return "Automóvil";
+  }
+
+  function estadoDesdeVencimientoApp(d) {
+    var fin =
+      parseFechaDiaMesAnio(d.fechaFinMensualidad) ||
+      parseFirestoreDate(d.fechaVencimiento) ||
+      parseFirestoreDate(d.proximoPago);
+    if (!fin) return "pendiente";
+    var hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    var finDia = new Date(fin.getFullYear(), fin.getMonth(), fin.getDate(), 23, 59, 59);
+    if (finDia >= hoy) return "activo";
+    return "inactivo";
   }
 
   function formatFecha(d) {
@@ -703,6 +811,9 @@
 
   function estadoFromData(d) {
     if (!d || typeof d !== "object") return "pendiente";
+    if (esDocumentoAppMovil(d) && !d.estadoContrato && d.estado == null) {
+      return estadoDesdeVencimientoApp(d);
+    }
     var s = String(d.estadoContrato || "").toLowerCase().trim();
     if (s === "activo" || s === "active") return "activo";
     if (s === "inactivo" || s === "inactive") return "inactivo";
@@ -743,6 +854,38 @@
     return out || "SIN_PLACA";
   }
 
+  function sedeIdFromDoc(doc) {
+    try {
+      if (doc.ref && doc.ref.parent && doc.ref.parent.id === MES_SUB && doc.ref.parent.parent) {
+        return String(doc.ref.parent.parent.id || "").trim();
+      }
+    } catch (e) {}
+    return "";
+  }
+
+  function mensualidadDocRef(sedeId, docId) {
+    return db
+      .collection(MES_COL)
+      .doc(String(sedeId || "").trim())
+      .collection(MES_SUB)
+      .doc(docId);
+  }
+
+  function mensualidadLegacyRef(docId) {
+    return db.collection(MES_COL).doc(docId);
+  }
+
+  function mesRowKey(row) {
+    return (row.sede || "") + "|" + row.id;
+  }
+
+  function parseMesRowKey(key) {
+    if (!key) return { sede: "", id: "" };
+    var i = String(key).indexOf("|");
+    if (i < 0) return { sede: "", id: String(key) };
+    return { sede: key.slice(0, i), id: key.slice(i + 1) };
+  }
+
   function syncMesDosPlacasUi() {
     var on = dosPlacasCheck && dosPlacasCheck.checked;
     if (placa2Wrap) placa2Wrap.hidden = !on;
@@ -751,16 +894,30 @@
 
   function formatPlacasCellHtml(row) {
     var p1 = escapeHtml(row.placa || "—");
+    var tipo =
+      row.tipoVehiculo && row.tipoVehiculo !== "automovil"
+        ? '<span class="mes-meta-small">' + escapeHtml(row.tipoVehiculo) + "</span>"
+        : "";
     if (row.placa2) {
       return (
         '<span class="mes-placa-dual">' +
         p1 +
         "<small>+ " +
         escapeHtml(row.placa2) +
-        "</small></span>"
+        "</small></span>" +
+        tipo
       );
     }
-    return p1;
+    return p1 + tipo;
+  }
+
+  function formatClienteCellHtml(row) {
+    var titulo = escapeHtml(row.cliente || "—");
+    var meta = [];
+    if (row.telefonoUsuario) meta.push("Tel. " + escapeHtml(row.telefonoUsuario));
+    if (row.correoUsuario) meta.push(escapeHtml(row.correoUsuario));
+    if (!meta.length) return titulo;
+    return titulo + '<span class="mes-meta-small">' + meta.join(" · ") + "</span>";
   }
 
   function finDeMesDesde(d) {
@@ -790,6 +947,10 @@
 
   function parseMensualidadValor(d) {
     if (!d || typeof d !== "object") return null;
+    var nForm = pickFirestoreNum(d.montoFormateado);
+    if (nForm != null && nForm > 0) return nForm;
+    var nAjust = pickFirestoreNum(d.montoAjustado);
+    if (nAjust != null && nAjust > 0) return nAjust;
     var keys = [
       "valorMensual",
       "montoMensual",
@@ -867,16 +1028,56 @@
     hint.innerHTML = parts.join(" · ");
   }
 
+  function notasDesdeDocumento(d, esApp) {
+    var base = String(d.notas || d.observaciones || "").trim();
+    if (!esApp) return base;
+    var partes = [];
+    if (base) partes.push(base);
+    if (d.documentoUsuario) partes.push("Doc: " + String(d.documentoUsuario).trim());
+    if (d.direccionUsuario) partes.push("Dir. usuario: " + String(d.direccionUsuario).trim());
+    if (d.direccionEstacionamiento) {
+      partes.push("Dir. sede: " + String(d.direccionEstacionamiento).trim());
+    }
+    if (d.marcaVehiculo || d.modeloVehiculo || d.lineaVehiculo) {
+      partes.push(
+        "Vehículo: " +
+          [d.marcaVehiculo, d.lineaVehiculo, d.modeloVehiculo].filter(Boolean).join(" ")
+      );
+    }
+    if (d.horariosServicio) partes.push("Horario: " + String(d.horariosServicio).trim());
+    return partes.join("\n");
+  }
+
   function normalizeMensualidadDoc(doc) {
     var d = doc.data() || {};
-    var placa = String(d.placa || doc.id || "").trim().toUpperCase();
+    var esApp = esDocumentoAppMovil(d);
+    var sedePath = sedeIdFromDoc(doc);
+    var placaRaw =
+      d.placa ||
+      d.placaVehiculo ||
+      d.residentId ||
+      d.documentId ||
+      doc.id ||
+      "";
+    var placa = normalizePlacaInput(placaRaw) || String(doc.id || "").trim().toUpperCase();
+    var sede = String(
+      d.sede || d.estacionamiento || d.parkingDocumentId || sedePath || ""
+    ).trim();
     var valor = parseMensualidadValor(d);
-    var tipoVehiculo = String(d.tipoVehiculo || d.tipoTarifa || "automovil").toLowerCase();
+    var tipoVehiculo = normalizeTipoVehiculo(d.tipoVehiculo || d.tipoTarifa || "automovil");
     var venc =
+      parseFechaDiaMesAnio(d.fechaFinMensualidad) ||
       parseFirestoreDate(d.proximoPago) ||
       parseFirestoreDate(d.fechaVencimiento) ||
       null;
-    var clienteNombre = String(d.clienteNombre || d.nombreCliente || "").trim();
+    var inicio =
+      parseFechaDiaMesAnio(d.fechaInicioMensualidad) ||
+      parseFechaDiaMesAnio(d.fechaPagoFormateada) ||
+      parseFirestoreDate(d.fechaInicio) ||
+      (d.fechaCreacion != null ? parseFirestoreDate(d.fechaCreacion) : null);
+    var clienteNombre = String(
+      d.clienteNombre || d.nombreCliente || d.nombreUsuario || ""
+    ).trim();
     var cliente =
       clienteNombre || (d.numeroCelda > 0 ? "Celda " + d.numeroCelda : placa);
     var placa2Raw = String(
@@ -888,25 +1089,43 @@
       d.tieneDosPlacas === true ||
       !!placa2;
     if (!placa2) dosPlacas = false;
+    var diaCobro = d.diaCobro != null ? Number(d.diaCobro) : null;
+    if ((diaCobro == null || isNaN(diaCobro)) && venc) {
+      diaCobro = venc.getDate();
+    }
+    var sedeRuta = sedePath || sede;
     return {
       id: doc.id,
       ref: doc.ref,
+      esAppMovil: esApp,
+      origen: String(d.origen || d.fuente || (esApp ? "app_movil" : "")).trim(),
       cliente: cliente,
       clienteNombre: clienteNombre,
-      sede: String(d.sede || "").trim(),
+      telefonoUsuario: String(d.telefonoUsuario || "").trim(),
+      correoUsuario: String(d.correoUsuario || "").trim(),
+      documentoUsuario: String(d.documentoUsuario || "").trim(),
+      sede: sede,
+      rutaFirestore: sedeRuta
+        ? MES_COL + "/" + sedeRuta + "/" + MES_SUB + "/" + doc.id
+        : MES_COL + "/" + doc.id,
       placa: placa,
       placa2: placa2,
       dosPlacas: dosPlacas,
       valor: valor,
+      montoFormateado: String(d.montoFormateado || "").trim(),
       tipoVehiculo: tipoVehiculo,
-      tarifaMensualidad: pickFirestoreNum(d.tarifaMensualidad) != null ? pickFirestoreNum(d.tarifaMensualidad) : valor,
-      diaCobro: d.diaCobro != null ? Number(d.diaCobro) : null,
+      tarifaMensualidad:
+        pickFirestoreNum(d.tarifaMensualidad) != null
+          ? pickFirestoreNum(d.tarifaMensualidad)
+          : valor,
+      diaCobro: diaCobro,
       estado: estadoFromData(d),
-      notas: String(d.notas || "").trim(),
+      notas: notasDesdeDocumento(d, esApp),
       numeroCelda: d.numeroCelda != null ? Number(d.numeroCelda) : 0,
       proximoPago: formatFecha(venc),
       vencimientoDate: venc,
-      fechaInicioDate: parseFirestoreDate(d.fechaInicio),
+      fechaInicioDate: inicio,
+      rawApp: esApp ? d : null,
     };
   }
 
@@ -915,6 +1134,15 @@
       if (registros[i].id === docId) return registros[i];
     }
     return null;
+  }
+
+  function mesRowByKey(key) {
+    var p = parseMesRowKey(key);
+    for (var i = 0; i < registros.length; i++) {
+      if (registros[i].id !== p.id) continue;
+      if (!p.sede || registros[i].sede === p.sede) return registros[i];
+    }
+    return mesRowById(p.id);
   }
 
   function updateMesFormModeUi() {
@@ -931,6 +1159,7 @@
 
   function clearMesFormMode() {
     mesEditingId = null;
+    mesEditingSede = null;
     var form = document.getElementById("mes-form");
     if (form) form.reset();
     syncMesDosPlacasUi();
@@ -964,10 +1193,11 @@
     });
   }
 
-  function startEditMensualidad(docId) {
-    var row = mesRowById(docId);
+  function startEditMensualidad(rowKey) {
+    var row = mesRowByKey(rowKey);
     if (!row) return;
-    mesEditingId = docId;
+    mesEditingId = row.id;
+    mesEditingSede = row.sede || "";
     var tipoSel = document.getElementById("mes-tipo-vehiculo");
     if (tipoSel) tipoSel.value = row.tipoVehiculo || "automovil";
     document.getElementById("mes-cliente").value =
@@ -983,6 +1213,12 @@
       row.diaCobro != null && !isNaN(row.diaCobro) ? String(row.diaCobro) : "";
     document.getElementById("mes-estado").value = row.estado || "activo";
     document.getElementById("mes-notas").value = row.notas || "";
+    if (row.esAppMovil && row.vencimientoDate && !isNaN(row.vencimientoDate.getTime())) {
+      var diaV = row.vencimientoDate.getDate();
+      if (diaV >= 1 && diaV <= 28) {
+        document.getElementById("mes-dia").value = String(diaV);
+      }
+    }
     if (placaInput) placaInput.value = row.placa || "";
     if (dosPlacasCheck) dosPlacasCheck.checked = !!(row.dosPlacas || row.placa2);
     if (placa2Input) placa2Input.value = row.placa2 || "";
@@ -1028,12 +1264,17 @@
     tbody.innerHTML = "";
     rows.forEach(function (r) {
       var tr = document.createElement("tr");
-      if (mesEditingId && r.id === mesEditingId) {
+      if (
+        mesEditingId &&
+        r.id === mesEditingId &&
+        (!mesEditingSede || r.sede === mesEditingSede)
+      ) {
         tr.className = "mes-row-editing";
       }
+      var rowKey = mesRowKey(r);
       tr.innerHTML =
         "<td>" +
-        escapeHtml(r.cliente || "—") +
+        formatClienteCellHtml(r) +
         "</td>" +
         "<td>" +
         escapeHtml(r.sede || "—") +
@@ -1047,7 +1288,11 @@
         '<td class="num">' +
         fmtMoney(r.valor) +
         "</td>" +
-        '<td><span class="' +
+        "<td>" +
+        (r.esAppMovil
+          ? '<span class="mes-pill mes-pill--app" title="Contrato app móvil">App</span> '
+          : "") +
+        '<span class="' +
         pillClass(r.estado) +
         '">' +
         pillLabel(r.estado) +
@@ -1057,10 +1302,10 @@
         "</td>" +
         '<td class="mes-row-actions">' +
         '<button type="button" class="mes-link-edit" data-mes-edit="' +
-        escapeAttr(r.id) +
+        escapeAttr(rowKey) +
         '">Editar</button>' +
         '<button type="button" class="mes-link-del" data-mes-delete="' +
-        escapeAttr(r.id) +
+        escapeAttr(rowKey) +
         '">Eliminar</button></td>';
       tbody.appendChild(tr);
     });
@@ -1072,16 +1317,32 @@
       (registros.length !== rows.length ? " · " + registros.length + " en total" : "");
   }
 
-  function applySnapshot(snap) {
-    registros = snap.docs
-      .map(normalizeMensualidadDoc)
-      .sort(function (a, b) {
-        var pa = (a.placa || "").toLowerCase();
-        var pb = (b.placa || "").toLowerCase();
-        return pa.localeCompare(pb, "es");
-      });
+  function ordenarRegistrosMensualidades(lista) {
+    return lista.sort(function (a, b) {
+      var pa = (a.placa || "").toLowerCase();
+      var pb = (b.placa || "").toLowerCase();
+      return pa.localeCompare(pb, "es");
+    });
+  }
+
+  function mergeMensualidadDocs(docs) {
+    var byKey = {};
+    (docs || []).forEach(function (doc) {
+      var row = normalizeMensualidadDoc(doc);
+      var key = (row.sede || "_legacy") + "\0" + row.id;
+      byKey[key] = row;
+    });
+    registros = ordenarRegistrosMensualidades(
+      Object.keys(byKey).map(function (k) {
+        return byKey[k];
+      })
+    );
     render();
     populateMesSedeSelect();
+  }
+
+  function applySnapshot(snap) {
+    mergeMensualidadDocs(snap.docs || []);
   }
 
   function stopMesListener() {
@@ -1089,6 +1350,89 @@
       mesUnsub();
       mesUnsub = null;
     }
+    mesUnsubs.forEach(function (u) {
+      try {
+        u();
+      } catch (e) {}
+    });
+    mesUnsubs = [];
+  }
+
+  function attachPerSedeListeners(sedeIds) {
+    var bySede = {};
+    sedeIds.forEach(function (sid) {
+      var unsub = db
+        .collection(MES_COL)
+        .doc(sid)
+        .collection(MES_SUB)
+        .onSnapshot(
+          function (snap) {
+            bySede[sid] = snap.docs.map(normalizeMensualidadDoc);
+            var merged = [];
+            Object.keys(bySede).forEach(function (k) {
+              merged = merged.concat(bySede[k]);
+            });
+            registros = ordenarRegistrosMensualidades(merged);
+            render();
+            populateMesSedeSelect();
+          },
+          function (err) {
+            console.warn("[mensualidades] onSnapshot sede " + sid, err);
+          }
+        );
+      mesUnsubs.push(unsub);
+    });
+  }
+
+  function loadMensualidadesPorSedes() {
+    return loadSedesCatalog()
+      .catch(function () {})
+      .then(function () {
+        return db.collection(MES_COL).get();
+      })
+      .then(function (sedeSnap) {
+        var legacy = [];
+        var sedeMap = {};
+        sedeSnap.forEach(function (doc) {
+          var d = doc.data() || {};
+          if (
+            d.placa ||
+            d.valorMensual != null ||
+            d.montoMensual != null ||
+            d.tarifaMensualidad != null
+          ) {
+            legacy.push(doc);
+          } else {
+            sedeMap[doc.id] = true;
+          }
+        });
+        sedesCatalog.forEach(function (s) {
+          if (s && s.id) sedeMap[s.id] = true;
+        });
+        var sedeIds = Object.keys(sedeMap);
+        if (!sedeIds.length) {
+          if (legacy.length) {
+            mergeMensualidadDocs(legacy);
+            return;
+          }
+          mergeMensualidadDocs([]);
+          return;
+        }
+        var jobs = sedeIds.map(function (sid) {
+          return db.collection(MES_COL).doc(sid).collection(MES_SUB).get();
+        });
+        return Promise.all(jobs).then(function (snaps) {
+          var all = legacy.slice();
+          snaps.forEach(function (s) {
+            s.docs.forEach(function (d) {
+              all.push(d);
+            });
+          });
+          mergeMensualidadDocs(all);
+          stopMesListener();
+          attachPerSedeListeners(sedeIds);
+        });
+      });
   }
 
   function loadMensualidades() {
@@ -1100,10 +1444,12 @@
     }
     if (mesLoading) return Promise.resolve();
     mesLoading = true;
-    setStatus("Cargando «" + MES_COL + "»…");
+    setStatus(
+      "Cargando «" + MES_COL + "/{sede}/" + MES_SUB + "»…"
+    );
     stopMesListener();
     return db
-      .collection(MES_COL)
+      .collectionGroup(MES_SUB)
       .get()
       .then(function (snap) {
         applySnapshot(snap);
@@ -1112,14 +1458,29 @@
             " mensualidad(es) · " +
             new Date().toLocaleTimeString("es-CO")
         );
-        mesUnsub = db.collection(MES_COL).onSnapshot(
+        mesUnsub = db.collectionGroup(MES_SUB).onSnapshot(
           function (live) {
             applySnapshot(live);
           },
           function (err) {
-            console.warn("[mensualidades] onSnapshot", err);
+            console.warn("[mensualidades] onSnapshot collectionGroup", err);
           }
         );
+      })
+      .catch(function (err) {
+        if (err && err.code === "failed-precondition") {
+          setStatus(
+            "Leyendo por sede (si Firebase lo pide, cree el índice de collection group)…"
+          );
+        }
+        console.warn("[mensualidades] collectionGroup", err);
+        return loadMensualidadesPorSedes().then(function () {
+          setStatus(
+            registros.length +
+              " mensualidad(es) · " +
+              new Date().toLocaleTimeString("es-CO")
+          );
+        });
       })
       .catch(function (err) {
         console.error("[mensualidades] load", err);
@@ -1127,10 +1488,37 @@
           "Error al cargar: " + (err.message || err.code || err),
           true
         );
-        return tryLoadCajaMensualidades();
+        return tryLoadLegacyFlat();
       })
       .finally(function () {
         mesLoading = false;
+      });
+  }
+
+  function tryLoadLegacyFlat() {
+    return db
+      .collection(MES_COL)
+      .get()
+      .then(function (snap) {
+        var flat = [];
+        snap.forEach(function (doc) {
+          var d = doc.data() || {};
+          if (d.placa || d.valorMensual != null || d.montoMensual != null) {
+            flat.push(doc);
+          }
+        });
+        if (flat.length) {
+          mergeMensualidadDocs(flat);
+          setStatus(
+            registros.length + " desde ruta plana legacy «" + MES_COL + "/{id}»",
+            false
+          );
+          return;
+        }
+        return tryLoadCajaMensualidades();
+      })
+      .catch(function () {
+        return tryLoadCajaMensualidades();
       });
   }
 
@@ -1150,12 +1538,50 @@
       .catch(function () {});
   }
 
-  function buildMensualidadPayload(form) {
+  function buildAppMensualidadExtras(form, rawApp) {
+    var raw = rawApp && typeof rawApp === "object" ? rawApp : {};
+    var docPlaca = mensualidadDocIdFromPlaca(form.placa);
+    var inicio =
+      form.fechaInicio && !isNaN(form.fechaInicio.getTime()) ? form.fechaInicio : new Date();
+    var venc = form.vencimiento;
+    return {
+      nombreUsuario: form.cliente || raw.nombreUsuario || "",
+      placa: form.placa,
+      placaVehiculo: form.placa,
+      residentId: raw.residentId || docPlaca,
+      documentId: raw.documentId || docPlaca,
+      estacionamiento: form.sede,
+      parkingDocumentId: form.sede,
+      montoFormateado: formatMontoAppString(form.valor),
+      montoAjustado:
+        raw.montoAjustado != null && String(raw.montoAjustado) !== ""
+          ? String(raw.montoAjustado)
+          : "0",
+      tipoVehiculo: tipoVehiculoEtiquetaApp(form.tipoVehiculo || "automovil"),
+      fechaInicioMensualidad: formatFechaDiaMesAnio(inicio),
+      fechaFinMensualidad: formatFechaDiaMesAnio(venc),
+      fechaPagoFormateada: formatFechaDiaMesAnio(venc),
+      observaciones: form.notas || "",
+      telefonoUsuario: raw.telefonoUsuario || "",
+      correoUsuario: raw.correoUsuario || "",
+      documentoUsuario: raw.documentoUsuario || "",
+      direccionUsuario: raw.direccionUsuario || "",
+      direccionEstacionamiento: raw.direccionEstacionamiento || "",
+      horariosServicio: raw.horariosServicio || "",
+      marcaVehiculo: raw.marcaVehiculo || "",
+      modeloVehiculo: raw.modeloVehiculo || "",
+      lineaVehiculo: raw.lineaVehiculo || "",
+      lugarExpedicion: raw.lugarExpedicion || "",
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+  }
+
+  function buildMensualidadPayload(form, opts) {
+    opts = opts || {};
     var hoy = new Date();
-    var inicioIso =
-      form.fechaInicio && !isNaN(form.fechaInicio.getTime())
-        ? form.fechaInicio.toISOString()
-        : hoy.toISOString();
+    var inicio =
+      form.fechaInicio && !isNaN(form.fechaInicio.getTime()) ? form.fechaInicio : hoy;
+    var inicioIso = inicio.toISOString();
     var venc = form.vencimiento;
     var vencIso = venc.toISOString();
     var estadoTxt = form.estado;
@@ -1179,10 +1605,13 @@
       fechaInicio: inicioIso,
       fechaVencimiento: vencIso,
       proximoPago: firebase.firestore.Timestamp.fromDate(venc),
-      origen: "portal_web",
+      origen: opts.esAppMovil ? "app_movil" : "portal_web",
       operarioCaja: user ? user.email || user.uid : "",
       actualizadoEn: firebase.firestore.FieldValue.serverTimestamp(),
     };
+    if (opts.esAppMovil) {
+      Object.assign(payload, buildAppMensualidadExtras(form, opts.rawApp));
+    }
     return payload;
   }
 
@@ -1235,94 +1664,125 @@
       return;
     }
 
-    var editingRow = mesEditingId ? mesRowById(mesEditingId) : null;
+    var editingRow =
+      mesEditingId && mesEditingSede
+        ? mesRowByKey(mesEditingSede + "|" + mesEditingId)
+        : mesEditingId
+          ? mesRowById(mesEditingId)
+          : null;
     var docId = mensualidadDocIdFromPlaca(placa);
     var oldDocId = mesEditingId;
+    var oldSede = editingRow ? editingRow.sede || mesEditingSede : "";
     var venc = calcularVencimientoDesdeDiaCobro(diaCobro);
-    var payload = buildMensualidadPayload({
-      placa: placa,
-      placa2: placa2,
-      dosPlacas: dosPlacas,
-      sede: sede,
-      cliente: cliente || (numeroCelda > 0 ? "Celda " + numeroCelda : placa),
-      valor: valor,
-      diaCobro: diaCobro,
-      estado: estado,
-      notas: notas,
-      numeroCelda: numeroCelda,
-      tipoVehiculo: tipoVehiculo,
-      vencimiento: venc,
-      fechaInicio: editingRow ? editingRow.fechaInicioDate : null,
-    });
+    var vencGuardado =
+      editingRow && editingRow.vencimientoDate && !isNaN(editingRow.vencimientoDate.getTime())
+        ? editingRow.vencimientoDate
+        : venc;
+    var payload = buildMensualidadPayload(
+      {
+        placa: placa,
+        placa2: placa2,
+        dosPlacas: dosPlacas,
+        sede: sede,
+        cliente: cliente || (numeroCelda > 0 ? "Celda " + numeroCelda : placa),
+        valor: valor,
+        diaCobro: diaCobro,
+        estado: estado,
+        notas: notas,
+        numeroCelda: numeroCelda,
+        tipoVehiculo: tipoVehiculo,
+        vencimiento: vencGuardado,
+        fechaInicio: editingRow ? editingRow.fechaInicioDate : null,
+      },
+      {
+        esAppMovil: !!(editingRow && editingRow.esAppMovil),
+        rawApp: editingRow ? editingRow.rawApp : null,
+      }
+    );
 
     if (btnSave) btnSave.disabled = true;
     setStatus((mesEditingId ? "Actualizando" : "Guardando") + " «" + docId + "»…");
 
-    function persistMensualidadDoc(targetId, isRename) {
-      return db
-        .collection(MES_COL)
-        .doc(targetId)
-        .get()
-        .then(function (snap) {
-          if (!snap.exists) {
-            payload.creadoEn = firebase.firestore.FieldValue.serverTimestamp();
-          }
-          return db.collection(MES_COL).doc(targetId).set(payload, { merge: true });
-        })
-        .then(function () {
-          if (!isRename || !oldDocId || oldDocId === targetId) {
-            return null;
-          }
-          return db.collection(MES_COL).doc(oldDocId).delete();
-        });
+    function deleteMensualidadAnterior(sedeAnt, idAnt, refAnt) {
+      if (!idAnt) return Promise.resolve();
+      if (refAnt && refAnt.delete) return refAnt.delete();
+      if (sedeAnt) return mensualidadDocRef(sedeAnt, idAnt).delete();
+      return mensualidadLegacyRef(idAnt).delete();
+    }
+
+    function persistMensualidadDoc(sedeDest, targetId, isRename) {
+      var ref = mensualidadDocRef(sedeDest, targetId);
+      return ref.get().then(function (snap) {
+        if (!snap.exists) {
+          payload.creadoEn = firebase.firestore.FieldValue.serverTimestamp();
+        }
+        return ref.set(payload, { merge: true });
+      }).then(function () {
+        if (!isRename || !oldDocId) return null;
+        if (oldDocId === targetId && oldSede === sedeDest) return null;
+        return deleteMensualidadAnterior(
+          oldSede,
+          oldDocId,
+          editingRow ? editingRow.ref : null
+        );
+      });
     }
 
     var saveChain = Promise.resolve();
-    if (oldDocId && docId !== oldDocId) {
-      saveChain = db
-        .collection(MES_COL)
-        .doc(docId)
+    if (oldDocId && (docId !== oldDocId || sede !== oldSede)) {
+      saveChain = mensualidadDocRef(sede, docId)
         .get()
         .then(function (snap) {
           if (snap.exists) {
             throw new Error(
               "Ya existe una mensualidad con la placa «" +
                 placa +
-                "» (documento «" +
+                "» en «" +
+                sede +
+                "/" +
+                MES_SUB +
+                "/" +
                 docId +
-                "»)."
+                "»."
             );
           }
           var msg =
-            "Cambiará el identificador del contrato de «" +
+            "Cambiará el contrato de «" +
+            (oldSede ? oldSede + "/" : "") +
             oldDocId +
             "» a «" +
+            sede +
+            "/" +
+            MES_SUB +
+            "/" +
             docId +
-            "» según la placa principal.\n\n¿Continuar?";
+            "».\n\n¿Continuar?";
           if (!window.confirm(msg)) {
             throw new Error("Cambio de placa cancelado.");
           }
-          return persistMensualidadDoc(docId, true);
+          return persistMensualidadDoc(sede, docId, true);
         });
     } else if (!oldDocId) {
-      saveChain = db
-        .collection(MES_COL)
-        .doc(docId)
+      saveChain = mensualidadDocRef(sede, docId)
         .get()
         .then(function (snap) {
           if (snap.exists) {
             throw new Error(
               "Ya existe una mensualidad con la placa «" +
                 placa +
-                "» (documento «" +
+                "» («" +
+                sede +
+                "/" +
+                MES_SUB +
+                "/" +
                 docId +
                 "»). Use Editar en la tabla."
             );
           }
-          return persistMensualidadDoc(docId, false);
+          return persistMensualidadDoc(sede, docId, false);
         });
     } else {
-      saveChain = persistMensualidadDoc(docId, false);
+      saveChain = persistMensualidadDoc(sede, docId, false);
     }
 
     saveChain
@@ -1351,34 +1811,48 @@
       });
   }
 
-  function deleteMensualidad(docId) {
-    if (!docId || !auth.currentUser) return;
-    var row = registros.filter(function (r) {
-      return r.id === docId;
-    })[0];
+  function deleteMensualidad(rowKey) {
+    if (!rowKey || !auth.currentUser) return;
+    var row = mesRowByKey(rowKey);
     var label = row
       ? row.placa2
         ? row.placa + " + " + row.placa2
         : row.placa
-      : docId;
+      : rowKey;
+    var ruta =
+      row && row.sede
+        ? MES_COL + "/" + row.sede + "/" + MES_SUB + "/" + row.id
+        : MES_COL + "/" + parseMesRowKey(rowKey).id;
     if (
       !window.confirm(
-        "¿Eliminar la mensualidad «" + label + "»?\n\nSe borra el documento en Firestore."
+        "¿Eliminar la mensualidad «" +
+          label +
+          "»?\n\nSe borra: " +
+          ruta
       )
     ) {
       return;
     }
     setStatus("Eliminando…");
-    db.collection(MES_COL)
-      .doc(docId)
-      .delete()
-      .then(function () {
-        if (mesEditingId === docId) clearMesFormMode();
-        setStatus("Eliminado · " + label);
-      })
-      .catch(function (err) {
-        setStatus("Error al eliminar: " + (err.message || err), true);
-      });
+    var delRef = row && row.ref ? row.ref : null;
+    var p = delRef
+      ? delRef.delete()
+      : row && row.sede
+        ? mensualidadDocRef(row.sede, row.id).delete()
+        : mensualidadLegacyRef(parseMesRowKey(rowKey).id).delete();
+    p.then(function () {
+      if (
+        mesEditingId &&
+        row &&
+        mesEditingId === row.id &&
+        mesEditingSede === row.sede
+      ) {
+        clearMesFormMode();
+      }
+      setStatus("Eliminado · " + label);
+    }).catch(function (err) {
+      setStatus("Error al eliminar: " + (err.message || err), true);
+    });
   }
 
   document.querySelectorAll(".mes-filter-btn").forEach(function (btn) {
@@ -1420,7 +1894,9 @@
     var sedeId = sedeSelect ? sedeSelect.value : "";
     var tipo = tipoVehiculoSelect ? tipoVehiculoSelect.value || "automovil" : "automovil";
     if (mesEditingId) {
-      var row = mesRowById(mesEditingId);
+      var row = mesEditingSede
+        ? mesRowByKey(mesEditingSede + "|" + mesEditingId)
+        : mesRowById(mesEditingId);
       var guardada = row
         ? row.tarifaMensualidad != null && !isNaN(row.tarifaMensualidad)
           ? row.tarifaMensualidad

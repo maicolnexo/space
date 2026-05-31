@@ -75,10 +75,14 @@ const firebaseConfig = {
   /** Modelo Gemini con visión (planillados). Ej.: gemini-2.0-flash, gemini-1.5-flash */
   planilladoGeminiModel: "gemini-2.0-flash",
   /**
-   * Mensualidades / contratos (mensualidades.html, caja POS).
-   * Documento: mensualidades/{placa_normalizada} — placa, valorMensual, sede, estado, proximoPago, etc.
+   * Mensualidades / contratos (mensualidades.html, caja POS, app móvil).
+   * Ruta: mensualidades/{idSede}/residentes/{placa_normalizada}
+   * Ej.: mensualidades/E-5 Falabella/residentes/UBG45Y
+   * App móvil (check-list): nombreUsuario, montoFormateado, estacionamiento,
+   * fechaFinMensualidad / fechaInicioMensualidad (DD/MM/YYYY), placaVehiculo, tipoVehiculo, etc.
    */
   mensualidadesCollection: "mensualidades",
+  mensualidadesSubcollection: "residentes",
   /** Programación de personal semanal (programacion.html). Documento por lunes ISO: YYYY-MM-DD. */
   programacionSemanalCollection: "programacion_semanal",
   /**
