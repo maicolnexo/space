@@ -114,6 +114,107 @@
             margin: 0;
             padding: 6px 12px;
             font-size: 13px;
+            cursor: pointer;
+        }
+        #listado-placas .placa-chip-glob:hover,
+        .station-chip:hover,
+        .tabla-vehiculos-wrap .placa-chip-tabla:hover {
+            filter: brightness(1.05);
+            box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.45);
+        }
+        .station-chip,
+        .tabla-vehiculos-wrap .placa-chip-tabla {
+            cursor: pointer;
+        }
+        .placa-detail-dialog {
+            position: fixed;
+            inset: 0;
+            z-index: 10050;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+        .placa-detail-dialog[hidden] {
+            display: none !important;
+        }
+        .placa-detail-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.72);
+        }
+        .placa-detail-inner {
+            position: relative;
+            z-index: 1;
+            width: min(96vw, 440px);
+            max-height: min(88vh, 640px);
+            overflow: auto;
+            background: linear-gradient(165deg, #1e1e1e 0%, #121212 100%);
+            border: 1px solid #444;
+            border-radius: 14px;
+            padding: 18px 18px 14px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+        }
+        .placa-detail-close {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            border: none;
+            background: transparent;
+            color: #ccc;
+            font-size: 26px;
+            line-height: 1;
+            cursor: pointer;
+        }
+        .placa-detail-close:hover {
+            color: #fff;
+        }
+        .placa-detail-title {
+            margin: 0 36px 8px 0;
+            font-size: 20px;
+            color: #fff3e0;
+            font-family: Consolas, "Courier New", monospace;
+            letter-spacing: 0.06em;
+        }
+        .placa-detail-meta {
+            margin: 0 0 14px;
+            font-size: 12px;
+            color: #9ca3af;
+            line-height: 1.45;
+        }
+        .placa-detail-fields {
+            margin: 0;
+            display: grid;
+            grid-template-columns: minmax(110px, 38%) 1fr;
+            gap: 8px 12px;
+            font-size: 13px;
+        }
+        .placa-detail-fields dt {
+            margin: 0;
+            color: #9ca3af;
+            font-weight: 600;
+        }
+        .placa-detail-fields dd {
+            margin: 0;
+            color: #e8eaef;
+            word-break: break-word;
+        }
+        .placa-detail-actions {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid #333;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .placa-detail-actions .fotos-cell-btn {
+            margin: 0;
+        }
+        .placa-detail-hint {
+            font-size: 12px;
+            color: #777;
+            margin: 0 0 10px;
         }
         /** Misma placa que arriba / por sede, dentro de la tabla detalle */
         .tabla-vehiculos-wrap .placa-chip-tabla {
@@ -776,8 +877,8 @@
     <tr>
         <td colspan="10" style="padding:14px;text-align:left;vertical-align:top;">
             <h2 style="color:aliceblue;margin:0 0 8px;font-size:18px;">Resumen de placas · tiempo real</h2>
-            <p id="placas-resumen" style="color:#aaa;font-size:13px;margin:0 0 12px;">Sincronizando datos…</p>
-            <div id="listado-placas" aria-label="Listado de placas"></div>
+            <p id="placas-resumen" class="placa-detail-hint" style="color:#aaa;font-size:13px;margin:0 0 12px;">Sincronizando datos…</p>
+            <div id="listado-placas" aria-label="Listado de placas (toca una placa para ver detalle)"></div>
             <div class="stations-grid-wrap">
                 <h3 style="color:#ddd;font-size:15px;margin:0 0 6px;font-weight:600;">Placas por estacionamiento</h3>
                 <p class="stations-grid-note">Vista agrupada por sede según la ruta de datos (<strong>planillado</strong> / identificador de sede / …). Se listan las sedes configuradas; el recuento puede ser (0) si no hay registros. Actualización automática.</p>
@@ -851,6 +952,17 @@
         </div>
         <p class="fotos-lightbox-counter" id="fotos-lightbox-counter"></p>
         <p class="fotos-lightbox-hint" id="fotos-lightbox-hint">Arrastra para mover cuando hay zoom. Rueda o pellizco para ampliar en fotos. «Mejorar calidad» mejora contraste/saturación/brillo solo aquí (sin subir archivos).</p>
+    </div>
+</div>
+
+<div id="placa-detail-dialog" class="placa-detail-dialog" hidden aria-hidden="true">
+    <div class="placa-detail-backdrop" tabindex="-1"></div>
+    <div class="placa-detail-inner" role="dialog" aria-modal="true" aria-labelledby="placa-detail-title">
+        <button type="button" class="placa-detail-close" aria-label="Cerrar detalle de placa">×</button>
+        <h3 id="placa-detail-title" class="placa-detail-title">—</h3>
+        <p id="placa-detail-meta" class="placa-detail-meta"></p>
+        <dl id="placa-detail-fields" class="placa-detail-fields"></dl>
+        <div id="placa-detail-actions" class="placa-detail-actions"></div>
     </div>
 </div>
 
@@ -1082,6 +1194,8 @@
       pr.textContent = "Inicie sesión para ver placas y datos del planillado.";
     }
   }
+
+  initPlacaDetailDialog();
 
   if (window.LuganoAuthGate) {
     LuganoAuthGate.init({
@@ -1973,6 +2087,265 @@
     return String(pick(d, "licensePlate", "placa", "Placa") || r.docId || "").trim();
   }
 
+  function normalizePlateKey(placa) {
+    return String(placa || "")
+      .trim()
+      .toUpperCase();
+  }
+
+  function rowsForPlate(placa) {
+    var want = normalizePlateKey(placa);
+    if (!want) return [];
+    return Array.from(rows.values()).filter(function (r) {
+      return normalizePlateKey(plateLabel(r)) === want;
+    });
+  }
+
+  function extractVehicleFields(r) {
+    var d = r.data || {};
+    var placa = pick(d, "licensePlate", "placa", "Placa") || r.docId;
+    var idOp =
+      pick(d, "lastOperator", "user", "idOperario", "operarioId", "id_operario", "operatorName") ||
+      r.operarioId;
+    var est = pick(d, "parking", "parkingName", "estacionamiento", "sede") || r.stationId;
+
+    var fechaVal = pick(d, "dateTime", "fecha", "lastCheckDateTime", "createdAt");
+    var horaVal = pick(d, "hora");
+    var fechaFull = fmtTs(fechaVal);
+    var fechaCol = fechaFull;
+    var horaCol = "";
+    if (typeof horaVal === "string" && horaVal) horaCol = horaVal;
+    else if (horaVal && horaVal.seconds != null) horaCol = fmtTs(horaVal);
+    if (!horaCol && fechaFull.indexOf(",") !== -1) {
+      var p2 = fechaFull.split(",");
+      fechaCol = p2[0].trim();
+      horaCol = p2.slice(1).join(",").trim();
+    }
+
+    var ticket = pick(d, "keysNumber", "ticket", "tipoTicket", "ticketTarjeta");
+    var idTicket = pick(d, "cellNumber", "idTicket", "id_ticket", "idTarjeta", "id");
+    var tipoVeh = pick(d, "tipoVehiculo", "tipo", "clase");
+    if (!tipoVeh) {
+      var ic = pick(d, "isCar");
+      var im = pick(d, "isMotorcycle");
+      if (ic === true || ic === "true") tipoVeh = "Auto";
+      else if (im === true || im === "true") tipoVeh = "Moto";
+    }
+    var observaciones = pick(
+      d,
+      "description",
+      "Description",
+      "observaciones",
+      "Observaciones",
+      "observacion",
+      "Observacion",
+      "observation",
+      "observations",
+      "notes",
+      "notas",
+      "comentarios",
+      "comments",
+      "remarks",
+      "remark",
+      "mensaje",
+      "detalle"
+    );
+    if (observaciones != null && typeof observaciones === "object") {
+      try {
+        observaciones = JSON.stringify(observaciones);
+      } catch (e2) {
+        observaciones = String(observaciones);
+      }
+    } else if (observaciones != null && observaciones !== "") {
+      observaciones = String(observaciones).trim();
+    } else {
+      observaciones = "";
+    }
+    var ultimo = fmtTs(pick(d, "lastCheckDateTime", "ultimoUso", "updatedAt"));
+    var urlsHttp = collectHttpPhotoUrls(d);
+    var storageCands = collectStorageCandidates(d);
+
+    return {
+      placa: String(placa || "").trim(),
+      idOp: String(idOp || "").trim() || "—",
+      estacionamiento: String(est || "").trim() || stationLabelForRow(r),
+      fecha: fechaCol || "—",
+      hora: horaCol || "—",
+      llave: String(ticket || "").trim() || "—",
+      celda: String(idTicket || "").trim() || "—",
+      tipoVehiculo: String(tipoVeh || "").trim() || "—",
+      observaciones: observaciones || "—",
+      ultimoUso: ultimo || "—",
+      fullPath: r.fullPath || "—",
+      operarioRuta: r.operarioId || "—",
+      hasFotos: urlsHttp.length > 0 || storageCands.length > 0,
+      fotoPath: urlsHttp.length || storageCands.length ? r.fullPath : "",
+      fotoLabel: urlsHttp.length
+        ? summarizeMediaButtonLabel(urlsHttp)
+        : storageCands.length
+          ? storageCands.length === 1
+            ? "Ver foto (Storage)"
+            : "Ver " + storageCands.length + " fotos (Storage)"
+          : "",
+      recency: recencyMillis(d),
+    };
+  }
+
+  function closePlacaDetailDialog() {
+    var dlg = document.getElementById("placa-detail-dialog");
+    if (!dlg) return;
+    dlg.hidden = true;
+    dlg.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  function openPlacaDetailDialog(placa) {
+    var dlg = document.getElementById("placa-detail-dialog");
+    var titleEl = document.getElementById("placa-detail-title");
+    var metaEl = document.getElementById("placa-detail-meta");
+    var fieldsEl = document.getElementById("placa-detail-fields");
+    var actionsEl = document.getElementById("placa-detail-actions");
+    if (!dlg || !titleEl || !fieldsEl) return;
+
+    var list = rowsForPlate(placa);
+    list.sort(function (a, b) {
+      return (b.data ? recencyMillis(b.data) : 0) - (a.data ? recencyMillis(a.data) : 0);
+    });
+
+    var displayPlate = normalizePlateKey(placa) || "Sin placa";
+    titleEl.textContent = displayPlate;
+
+    if (!list.length) {
+      if (metaEl) {
+        metaEl.textContent = "No hay registros en tiempo real para esta placa en el proyecto actual.";
+      }
+      fieldsEl.innerHTML =
+        '<dt>Estado</dt><dd>Sin datos en Firestore para esta placa</dd>';
+      if (actionsEl) actionsEl.innerHTML = "";
+      dlg.hidden = false;
+      dlg.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      return;
+    }
+
+    var latest = extractVehicleFields(list[0]);
+    var sedes = {};
+    list.forEach(function (r) {
+      sedes[extractVehicleFields(r).estacionamiento] = true;
+    });
+    var sedesList = Object.keys(sedes).filter(Boolean);
+
+    if (metaEl) {
+      metaEl.textContent =
+        list.length +
+        " registro(s) en planillado" +
+        (sedesList.length ? " · " + sedesList.join(" · ") : "") +
+        (list.length > 1 ? " · mostrando el más reciente" : "");
+    }
+
+    var detailFields = [
+      ["Estacionamiento", latest.estacionamiento],
+      ["Operario", latest.idOp],
+      ["Fecha", latest.fecha],
+      ["Hora", latest.hora],
+      ["Llave no°", latest.llave],
+      ["Celda no°", latest.celda],
+      ["Tipo de vehículo", latest.tipoVehiculo],
+      ["Último uso", latest.ultimoUso],
+      ["Observaciones", latest.observaciones],
+    ];
+    if (list.length > 1) {
+      detailFields.push(["Registros (placa)", String(list.length)]);
+    }
+    detailFields.push(["Ruta Firestore", latest.fullPath]);
+
+    fieldsEl.innerHTML = detailFields
+      .map(function (pair) {
+        return "<dt>" + esc(pair[0]) + "</dt><dd>" + esc(pair[1]) + "</dd>";
+      })
+      .join("");
+
+    if (actionsEl) {
+      if (latest.fotoPath && fotoGalleryRegistry.has(latest.fotoPath)) {
+        actionsEl.innerHTML =
+          '<button type="button" class="fotos-cell-btn" data-foto-path="' +
+          escAttr(latest.fotoPath) +
+          '">' +
+          esc(latest.fotoLabel || "Ver fotos") +
+          "</button>";
+      } else {
+        actionsEl.innerHTML = "";
+      }
+    }
+
+    dlg.hidden = false;
+    dlg.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    var closeBtn = dlg.querySelector(".placa-detail-close");
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function initPlacaDetailDialog() {
+    var dlg = document.getElementById("placa-detail-dialog");
+    if (!dlg || dlg.getAttribute("data-placa-init") === "1") return;
+    dlg.setAttribute("data-placa-init", "1");
+
+    var backdrop = dlg.querySelector(".placa-detail-backdrop");
+    var closeBtn = dlg.querySelector(".placa-detail-close");
+    if (backdrop) backdrop.addEventListener("click", closePlacaDetailDialog);
+    if (closeBtn) closeBtn.addEventListener("click", closePlacaDetailDialog);
+
+    document.addEventListener("keydown", function (ev) {
+      if (ev.key === "Escape" && !dlg.hidden) {
+        ev.preventDefault();
+        closePlacaDetailDialog();
+      }
+    });
+
+    document.addEventListener("click", function (ev) {
+      var chip = ev.target.closest("[data-placa]");
+      if (!chip) return;
+      if (
+        !chip.closest("#listado-placas") &&
+        !chip.closest("#listado-por-estacionamiento") &&
+        !chip.closest("#vehiculos-live-body")
+      ) {
+        return;
+      }
+      ev.preventDefault();
+      ev.stopPropagation();
+      var placa = chip.getAttribute("data-placa");
+      if (placa) openPlacaDetailDialog(placa);
+    });
+
+    document.addEventListener("keydown", function (ev) {
+      if (ev.key !== "Enter" && ev.key !== " ") return;
+      var chip = ev.target.closest("[data-placa]");
+      if (!chip) return;
+      if (
+        !chip.closest("#listado-placas") &&
+        !chip.closest("#listado-por-estacionamiento") &&
+        !chip.closest("#vehiculos-live-body")
+      ) {
+        return;
+      }
+      ev.preventDefault();
+      openPlacaDetailDialog(chip.getAttribute("data-placa"));
+    });
+
+    var actionsEl = document.getElementById("placa-detail-actions");
+    if (actionsEl) {
+      actionsEl.addEventListener("click", function (ev) {
+        var btn = ev.target.closest(".fotos-cell-btn[data-foto-path]");
+        if (!btn) return;
+        var path = btn.getAttribute("data-foto-path");
+        if (!path) return;
+        closePlacaDetailDialog();
+        openFotoGalleryForPath(path, btn);
+      });
+    }
+  }
+
   function stationLabelForRow(r) {
     var d = r.data || {};
     var label =
@@ -2108,8 +2481,10 @@
                     "</span>"
                   : "";
               return (
-                '<span class="station-chip" title="' +
-                escAttr(st + " · " + p) +
+                '<span class="station-chip" role="button" tabindex="0" data-placa="' +
+                escAttr(p) +
+                '" title="' +
+                escAttr(st + " · " + p + " · toque para detalle") +
                 '">' +
                 esc(p) +
                 dup +
@@ -2224,15 +2599,22 @@
           PLANILLADO_OLD +
           "» (detalle en la tabla inferior)";
       }
+      if (plates.length) {
+        msg += " · toque una placa para ver el vehículo";
+      }
     }
     resumen.textContent = msg;
 
     box.innerHTML = plates
       .map(function (p) {
         var where = byPlate.get(p);
-        var title = where ? ' title="' + escAttr(where) + '"' : "";
+        var title = where
+          ? ' title="' + escAttr(where + " · toque para detalle") + '"'
+          : ' title="Toca para ver detalle del vehículo"';
         return (
-          '<span class="placa-chip-glob"' +
+          '<span class="placa-chip-glob" role="button" tabindex="0" data-placa="' +
+          escAttr(p) +
+          '"' +
           title +
           ">" +
           esc(p) +
@@ -2473,7 +2855,9 @@
 
       var tr = document.createElement("tr");
       tr.innerHTML =
-        '<td bgcolor="black" width="120"><center><span class="placa-chip-tabla">' +
+        '<td bgcolor="black" width="120"><center><span class="placa-chip-tabla" role="button" tabindex="0" data-placa="' +
+        escAttr(String(placa || "").trim()) +
+        '" title="Toca para ver detalle">' +
         esc(placa) +
         "</span></center></td>" +
         '<td bgcolor="black" width="120"><center>' + esc(idOp) + "</center></td>" +

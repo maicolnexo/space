@@ -436,6 +436,112 @@
     .prog-grid-asignacion .prog-asign-turno-cell {
       vertical-align: middle;
     }
+    .prog-grid-asignacion .prog-asign-sede-cell {
+      width: 128px;
+      max-width: 128px;
+      min-width: 128px;
+      vertical-align: top;
+    }
+    .prog-asign-sede-wrap {
+      position: relative;
+      display: block;
+      min-height: 3.2em;
+      max-height: 3.9em;
+      padding: 6px 5px;
+      box-sizing: border-box;
+    }
+    .prog-asign-sede-display {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      font-size: 10px;
+      line-height: 1.22;
+      font-weight: 600;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      color: #eceff4;
+      pointer-events: none;
+      text-align: left;
+    }
+    .prog-asign-sede-wrap select.prog-asign-sede {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 3.2em;
+      opacity: 0;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .prog-asign-sede-wrap select.prog-asign-sede option {
+      white-space: normal;
+      line-height: 1.25;
+    }
+    .prog-grid-asignacion .prog-asign-turno-cell {
+      width: 132px;
+      max-width: 132px;
+      min-width: 132px;
+      vertical-align: top;
+    }
+    .prog-asign-turno-wrap {
+      position: relative;
+      display: block;
+      min-height: 3.2em;
+      max-height: 3.9em;
+      padding: 6px 5px;
+      box-sizing: border-box;
+    }
+    .prog-asign-turno-display {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      font-size: 10px;
+      line-height: 1.22;
+      font-weight: 600;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      color: #eceff4;
+      pointer-events: none;
+      text-align: left;
+    }
+    .prog-asign-turno-wrap select.prog-asign-turno {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 3.2em;
+      opacity: 0;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .prog-asign-turno-wrap select.prog-asign-turno option {
+      white-space: normal;
+      line-height: 1.25;
+    }
+    .prog-asign-turno-cell .prog-super-gestionar-btn {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 3.2em;
+      max-height: 3.9em;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+    .prog-asign-turno-cell .prog-super-gestionar-meta {
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      line-height: 1.2;
+    }
     .prog-leyenda-dias {
       display: flex;
       flex-wrap: wrap;
@@ -705,6 +811,16 @@
     .prog-row-super .prog-dia-bloque.prog-dia-tipo-descanso:hover {
       filter: brightness(1.08);
     }
+    .prog-grid-asignacion tr:not(.prog-row-super) .prog-dia-etiqueta,
+    .prog-grid-asignacion tr:not(.prog-row-super) .prog-dia-emoji {
+      cursor: pointer;
+    }
+    .prog-grid-asignacion tr:not(.prog-row-super) textarea.prog-dia-tit-toggle {
+      cursor: pointer;
+    }
+    .prog-grid-asignacion tr:not(.prog-row-super) textarea.prog-dia-tit-toggle:hover {
+      filter: brightness(1.1);
+    }
     .prog-dia-bloque.prog-dia-tipo-supernumerario {
       background: linear-gradient(180deg, #3d3520 0%, #2a2418 100%);
       box-shadow: inset 3px 0 0 #f59e0b;
@@ -864,11 +980,18 @@
       background: #1a1810;
     }
     .prog-super-sede-lbl {
-      display: block;
-      padding: 8px 10px;
-      font-size: 11px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      padding: 8px 6px;
+      font-size: 10px;
+      line-height: 1.22;
       color: #9ca3af;
       font-style: italic;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      text-align: left;
     }
     .prog-super-coberturas-wrap {
       padding: 4px;
@@ -1532,6 +1655,242 @@
     .prog-inact-notas-libres .prog-sheet-text {
       min-height: 100px;
     }
+    .prog-aut-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .prog-aut-sedes-resumen {
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+      background: #101014;
+      font-size: 11px;
+      color: #9ca3af;
+      line-height: 1.45;
+    }
+    .prog-aut-sedes-resumen strong {
+      color: #e5e7eb;
+    }
+    .prog-aut-sede-line {
+      margin: 4px 0 0;
+    }
+    .prog-aut-registro-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .prog-aut-card {
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      background: #12121a;
+      overflow: hidden;
+    }
+    .prog-aut-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      background: #18181f;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .prog-aut-card-head strong {
+      font-size: 13px;
+      color: #f3f4f6;
+    }
+    .prog-aut-card-meta {
+      margin: 0;
+      padding: 6px 12px 0;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    .prog-aut-perfiles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 10px;
+      padding: 10px 12px 12px;
+    }
+    .prog-aut-perfil {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #0d0d10;
+      font-size: 11px;
+      font-weight: 600;
+      color: #d1d5db;
+      cursor: pointer;
+      user-select: none;
+    }
+    .prog-aut-perfil input {
+      accent-color: #81c784;
+    }
+    .prog-aut-perfil.is-on {
+      border-color: #4ade80;
+      background: rgba(74, 222, 128, 0.12);
+      color: #bbf7d0;
+    }
+    .prog-aut-notas-libres {
+      margin-top: 12px;
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+      background: #101014;
+      padding: 0 12px 12px;
+    }
+    .prog-aut-notas-libres summary {
+      padding: 12px 0 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #9ca3af;
+      cursor: pointer;
+    }
+    .prog-aut-notas-libres .prog-sheet-text {
+      min-height: 100px;
+    }
+    .prog-operario-perfiles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px 3px;
+      justify-content: center;
+      margin-top: 2px;
+      max-width: 100%;
+    }
+    .prog-operario-perfil-chip {
+      font-size: 8px;
+      font-weight: 700;
+      line-height: 1;
+      padding: 2px 4px;
+      border-radius: 4px;
+      background: rgba(129, 199, 132, 0.2);
+      color: #86efac;
+      letter-spacing: 0.02em;
+    }
+    .prog-grid-asignacion tr.prog-row-no-idoneo .prog-asign-turno-cell .prog-asign-turno-wrap,
+    .prog-grid-asignacion tr.prog-row-no-idoneo .prog-asign-turno-cell select.prog-asign-turno {
+      box-shadow: inset 0 0 0 2px rgba(239, 68, 68, 0.55);
+    }
+    .prog-grid-asignacion tr.prog-row-noche-espera .prog-asign-turno-cell .prog-asign-turno-wrap,
+    .prog-grid-asignacion tr.prog-row-noche-espera .prog-asign-turno-cell select.prog-asign-turno {
+      box-shadow: inset 0 0 0 2px rgba(129, 140, 248, 0.65);
+    }
+    .prog-noche-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+      align-items: flex-end;
+      margin-bottom: 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+      background: #141418;
+    }
+    .prog-noche-toolbar label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .prog-noche-toolbar input[type="number"] {
+      width: 110px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #0d0d10;
+      color: #eceff4;
+      font-size: 14px;
+    }
+    .prog-noche-toolbar button {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #1f1f28;
+      color: #e5e7eb;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .prog-noche-toolbar button:hover {
+      border-color: #818cf8;
+      background: #2a2a3a;
+    }
+    .prog-noche-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+      background: #101014;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    .prog-noche-summary strong {
+      color: #c7d2fe;
+    }
+    .prog-noche-list-wrap {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+      background: #0d0d10;
+    }
+    .prog-noche-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .prog-noche-table th,
+    .prog-noche-table td {
+      padding: 9px 10px;
+      border-bottom: 1px solid #222;
+      text-align: left;
+      vertical-align: top;
+    }
+    .prog-noche-table th {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #9ca3af;
+      background: #141418;
+      position: sticky;
+      top: 0;
+    }
+    .prog-noche-table tr:last-child td {
+      border-bottom: none;
+    }
+    .prog-noche-estado--ok {
+      color: #86efac;
+      font-weight: 700;
+    }
+    .prog-noche-estado--espera {
+      color: #a5b4fc;
+      font-weight: 700;
+    }
+    .prog-noche-estado--libre {
+      color: #9ca3af;
+    }
+    .prog-noche-notas-libres {
+      margin-top: 12px;
+      border-radius: 10px;
+      border: 1px solid #2a2a2a;
+      background: #101014;
+      padding: 0 12px 12px;
+    }
+    .prog-noche-notas-libres summary {
+      padding: 12px 0 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #9ca3af;
+      cursor: pointer;
+    }
     .prog-dialog-inact .prog-dialog-panel {
       width: min(760px, 100%);
       max-height: min(90vh, 780px);
@@ -1715,7 +2074,8 @@
       <p>
         Asigne cada <strong>operario</strong> a una <strong>sede</strong> y un <strong>turno</strong> según la dotación configurada en Estacionamientos.
         Los horarios de inicio y fin se completan solos al elegir el turno. También puede usar la vista libre tipo Excel.
-        Se guarda por semana en <code>programacion_semanal</code> (también <strong>guardado automático</strong> tras editar)
+        Se guarda por semana en <code>programacion_semanal</code> al pulsar <strong>Guardar ahora</strong>
+        (asignación, vista Excel, inactividades, noche y autorizados en un solo documento)
         y se publica <code>programacion_dias</code> para la app móvil. Use ↶ ↷ para deshacer o rehacer cambios.
       </p>
     </div>
@@ -1782,6 +2142,7 @@
         <span>🏥 Incapacidad</span>
         <span>📋 Permiso</span>
         <span>🔒 No opera</span>
+        <span title="Titulares: clic en la etiqueta del día">🔁 Programado → Descanso → Cerrado</span>
       </p>
       <div class="prog-table-frame">
         <table class="prog-grid prog-grid-asignacion" id="prog-table-asignacion">
@@ -1917,13 +2278,71 @@
     </div>
 
     <div id="panel-noche" class="prog-panel" role="tabpanel" hidden>
-      <p class="prog-panel-note">Turno noche u horarios especiales.</p>
-      <textarea class="prog-sheet-text" id="prog-ta-noche" spellcheck="false"></textarea>
+      <p class="prog-panel-note">
+        Control de operarios con <strong>turno de noche</strong>. El lapso mínimo (60 días o más) define cuánto debe
+        pasar desde el último turno nocturno antes de volver a programarlo. Se detectan turnos por nombre, horario
+        que cruza medianoche o franja nocturna (desde 20:00 / hasta 08:00).
+      </p>
+      <div class="prog-noche-toolbar">
+        <label>
+          Lapso mínimo (días)
+          <input
+            type="number"
+            id="prog-noche-lapso"
+            min="60"
+            step="1"
+            value="60"
+            title="Mínimo 60 días (≈2 meses) entre turnos de noche del mismo operario"
+          />
+        </label>
+        <button type="button" id="prog-noche-scan-semana">↻ Incluir semana en pantalla</button>
+        <button type="button" id="prog-noche-scan-firestore">↻ Escanear historial Firestore</button>
+      </div>
+      <div id="prog-noche-summary" class="prog-noche-summary" aria-live="polite"></div>
+      <div class="prog-noche-list-wrap">
+        <table class="prog-noche-table" id="prog-noche-table">
+          <thead>
+            <tr>
+              <th>Operario</th>
+              <th>Último turno noche</th>
+              <th>Hace (días)</th>
+              <th>Estado</th>
+              <th>Detalle</th>
+            </tr>
+          </thead>
+          <tbody id="prog-noche-tbody"></tbody>
+        </table>
+      </div>
+      <details class="prog-noche-notas-libres">
+        <summary>Notas libres (opcional)</summary>
+        <textarea
+          class="prog-sheet-text"
+          id="prog-ta-noche"
+          spellcheck="false"
+          placeholder="Observaciones sobre turnos de noche…"
+        ></textarea>
+      </details>
     </div>
 
     <div id="panel-autorizados" class="prog-panel" role="tabpanel" hidden>
-      <p class="prog-panel-note">Personal u horarios autorizados.</p>
-      <textarea class="prog-sheet-text" id="prog-ta-autorizados" spellcheck="false"></textarea>
+      <p class="prog-panel-note">
+        Marque por operario los <strong>perfiles idóneos</strong> (conducir, motos, patio, apoyo, relevos,
+        supernumerario). En la asignación se resaltan turnos que no coinciden con el perfil del personal.
+      </p>
+      <div class="prog-aut-toolbar">
+        <button type="button" id="prog-aut-sync-btn">↻ Actualizar lista de operarios</button>
+      </div>
+      <div id="prog-aut-sedes-resumen" class="prog-aut-sedes-resumen" hidden aria-live="polite"></div>
+      <div id="prog-aut-registro-list" class="prog-aut-registro-list" aria-live="polite"></div>
+      <details class="prog-aut-notas-libres">
+        <summary>Notas libres (opcional)</summary>
+        <textarea
+          class="prog-sheet-text"
+          id="prog-ta-autorizados"
+          spellcheck="false"
+          placeholder="Observaciones generales sobre autorizaciones…"
+        ></textarea>
+      </details>
     </div>
   </div>
 
@@ -2016,6 +2435,15 @@
     { id: "porteria", label: "Portería" },
     { id: "recorredor", label: "Recorredor" },
   ];
+  /** Perfiles idóneos en pestaña Autorizados (vinculados a roles de turno en asignación). */
+  var PROG_PERFILES_IDONEOS = [
+    { id: "conductor", label: "Conductor", emoji: "🚗", rol: "conductor" },
+    { id: "motos", label: "Motos", emoji: "🏍", rol: "recorredor" },
+    { id: "patio", label: "Patio", emoji: "🅿", rol: "patio" },
+    { id: "apoyo", label: "Apoyo", emoji: "🤝", roles: ["cajero", "porteria"] },
+    { id: "relevos", label: "Relevos", emoji: "🔄" },
+    { id: "supernumerario", label: "Supernumerario", emoji: "⭐", turnoSuper: true },
+  ];
 
   /** Turno estándar: 8 h por jornada laboral. */
   var PROG_HORAS_JORNADA = 8;
@@ -2025,6 +2453,8 @@
   var PROG_REF_MONDAY = new Date(2025, 0, 6);
   var PROG_TURNO_SUPER_ID = "__supernumerario__";
   var PROG_SUPER_REST_PREFIX = "SUPER_REST";
+  /** Ciclo al tocar la etiqueta del día en filas titulares (supernumerario cubre «descanso»). */
+  var PROG_TIT_DIA_CICLO = ["programado", "descanso", "cerrado"];
 
   function superRestCoberturaKey(diaIndex, operarioId) {
     return PROG_SUPER_REST_PREFIX + "|" + diaIndex + "|" + String(operarioId || "");
@@ -2193,7 +2623,27 @@
     return (tr.querySelector(".prog-col-operario") || {}).textContent.trim();
   }
 
-  function buildOperarioCellHtml(nombre, esSuper) {
+  function buildOperarioPerfilesChipsHtml(operarioId) {
+    if (!operarioId) return "";
+    var rec = autorizadosRegistro.operarios[operarioId];
+    if (!rec || !rec.perfiles) return "";
+    var chips = [];
+    PROG_PERFILES_IDONEOS.forEach(function (p) {
+      if (rec.perfiles[p.id]) {
+        chips.push(
+          '<span class="prog-operario-perfil-chip" title="' +
+            escapeHtmlProg(p.label) +
+            '">' +
+            (p.emoji || "") +
+            "</span>"
+        );
+      }
+    });
+    if (!chips.length) return "";
+    return '<span class="prog-operario-perfiles">' + chips.join("") + "</span>";
+  }
+
+  function buildOperarioCellHtml(nombre, esSuper, operarioId) {
     var emoji = esSuper ? "⭐" : "👤";
     var nom = nombre || "(Sin nombre)";
     return (
@@ -2203,7 +2653,9 @@
       "</span>" +
       '<span class="prog-bloque-texto prog-operario-nombre">' +
       escapeHtmlProg(nom) +
-      "</span></div>"
+      "</span>" +
+      (esSuper ? "" : buildOperarioPerfilesChipsHtml(operarioId)) +
+      "</div>"
     );
   }
 
@@ -2290,6 +2742,10 @@
   var sheetNoche = "";
   var sheetAutorizados = "";
   var inactividadesRegistro = { operarios: {} };
+  var autorizadosRegistro = { operarios: {} };
+  var PROG_NOCHE_LAPSO_DEFAULT = 60;
+  var PROG_NOCHE_LAPSO_MIN = 60;
+  var nocheRegistro = { lapsoDias: PROG_NOCHE_LAPSO_DEFAULT, historial: {} };
 
   var progUndoStack = [];
   var progRedoStack = [];
@@ -2301,6 +2757,7 @@
   var progPendingAutosaveWeekKey = null;
   var progSaveFlushWaiters = [];
   var progCargandoSemana = false;
+  var PROG_AUTOSAVE_ENABLED = false;
   var PROG_AUTOSAVE_MS = 2500;
   var PROG_HISTORY_MS = 500;
   var progExcelPasswordVerified = false;
@@ -2492,6 +2949,7 @@
       a.dayTipos[i] = "";
       a.daySolicitudes[i] = "";
       if (a.dayHorarios) a.dayHorarios[i] = "";
+      if (a.dayTitManual) a.dayTitManual[i] = "";
     }
     return a;
   }
@@ -2549,14 +3007,67 @@
     return false;
   }
 
-  function semanaFirestoreTieneDiasSinAsignar(data) {
-    if (!semanaSinDatosAsignacionEnFirestore(data)) return false;
+  function semanaTieneContenidoProgramacionGuardado(data) {
+    data = data || {};
     if (!Array.isArray(data.asignaciones)) return false;
     var i;
     for (i = 0; i < data.asignaciones.length; i++) {
       if (asignacionRawTieneDiasGuardados(data.asignaciones[i])) return true;
+      var raw = data.asignaciones[i] || {};
+      if (raw.sedeId != null && String(raw.sedeId).trim()) return true;
+      if (raw.turnoId != null && String(raw.turnoId).trim()) return true;
     }
-    return !!(Array.isArray(data.rows) && data.rows.length);
+    if (Array.isArray(data.rows) && data.rows.length) {
+      for (i = 0; i < data.rows.length; i++) {
+        var r = data.rows[i] || {};
+        if (r.sede && String(r.sede).trim()) return true;
+        if (r.turno && String(r.turno).trim()) return true;
+        var days = r.days;
+        if (Array.isArray(days)) {
+          var j;
+          for (j = 0; j < days.length; j++) {
+            if (days[j] != null && String(days[j]).trim()) return true;
+          }
+        }
+      }
+    }
+    if (data.sheetInactividades && String(data.sheetInactividades).trim()) return true;
+    if (data.sheetNoche && String(data.sheetNoche).trim()) return true;
+    if (data.sheetAutorizados && String(data.sheetAutorizados).trim()) return true;
+    var aut = normalizeAutorizadosRegistro(data.autorizadosRegistro);
+    var autIds = Object.keys(aut.operarios || {});
+    var ai;
+    var pi;
+    for (ai = 0; ai < autIds.length; ai++) {
+      var recAut = aut.operarios[autIds[ai]];
+      if (!recAut || !recAut.perfiles) continue;
+      for (pi = 0; pi < PROG_PERFILES_IDONEOS.length; pi++) {
+        if (recAut.perfiles[PROG_PERFILES_IDONEOS[pi].id]) return true;
+      }
+    }
+    var inact = normalizeInactividadesRegistro(data.inactividadesRegistro);
+    var inactIds = Object.keys(inact.operarios || {});
+    for (ai = 0; ai < inactIds.length; ai++) {
+      var recIn = inact.operarios[inactIds[ai]];
+      if (!recIn) continue;
+      if (recIn.domingoTrabajado) return true;
+      if ((recIn.inasistencias || []).length) return true;
+      if ((recIn.salidasTempranas || []).length) return true;
+    }
+    var noc = normalizeNocheRegistro(data.nocheRegistro);
+    var nocIds = Object.keys(noc.historial || {});
+    for (ai = 0; ai < nocIds.length; ai++) {
+      var hNoc = noc.historial[nocIds[ai]];
+      if (!hNoc) continue;
+      if ((hNoc.eventos || []).length) return true;
+      if (hNoc.ultimaFecha && String(hNoc.ultimaFecha).trim()) return true;
+    }
+    return false;
+  }
+
+  function semanaFirestoreTieneDiasSinAsignar(data) {
+    if (!semanaSinDatosAsignacionEnFirestore(data)) return false;
+    return semanaTieneContenidoProgramacionGuardado(data);
   }
 
   /** true si ningún operario tiene sedeId ni turnoId guardados en Firestore (semana sin armar). */
@@ -2638,6 +3149,7 @@
       dayTipos: ["", "", "", "", "", "", ""],
       daySolicitudes: ["", "", "", "", "", "", ""],
       dayHorarios: ["", "", "", "", "", "", ""],
+      dayTitManual: ["", "", "", "", "", "", ""],
       superCoberturas: [],
     };
   }
@@ -2799,8 +3311,10 @@
           label: diaLabelCorto(d) + " · " + detalle,
         });
       }
-      indicesDescansoOperario(semIdx, idx, sede).forEach(function (d) {
-        pushSlot(d, "");
+      var descansoMap = diasDescansoTitularParaCobertura(tr, semIdx, idx, sede);
+      Object.keys(descansoMap).forEach(function (k) {
+        var d = parseInt(k, 10);
+        if (!isNaN(d) && descansoMap[d]) pushSlot(d, "");
       });
       indicesDiasSolicitudCobertura(tr).forEach(function (d) {
         var tas = tr.querySelectorAll("textarea");
@@ -2978,7 +3492,7 @@
       : '<p class="prog-dialog-empty">Sin pendientes de titulares.</p>';
     html += "</section>";
     html +=
-      '<p class="prog-dialog-foot">Clic en DISPONIBLE/DESCANSO en la fila para cambiar. Objetivo ' +
+      '<p class="prog-dialog-foot">Super: clic en DISPONIBLE/DESCANSO. Titular: clic en la etiqueta del día (Programado → Descanso → Cerrado). Objetivo ' +
       maxJ +
       " jornadas en sede · máx. una cobertura por día · use × para quitar.</p>";
     html +=
@@ -3542,6 +4056,77 @@
     if (typeof notifyProgramacionEdit === "function") notifyProgramacionEdit();
   }
 
+  function diaIndexFromTextarea(tr, tx) {
+    if (!tr || !tx) return -1;
+    var tas = tr.querySelectorAll("textarea");
+    var i;
+    for (i = 0; i < tas.length; i++) {
+      if (tas[i] === tx) return i;
+    }
+    return -1;
+  }
+
+  function aplicarEstadoDiaTitularCelda(tr, tx, operarioIndex, diaIndex) {
+    if (!tx || !tr) return false;
+    var manual = tx.getAttribute("data-tit-dia-manual");
+    if (manual !== "programado" && manual !== "descanso" && manual !== "cerrado") {
+      tx.classList.remove("prog-dia-tit-toggle");
+      return false;
+    }
+    if (tx.getAttribute("data-solicitud-cobertura") === "1") return false;
+    tx.classList.add("prog-dia-tit-toggle");
+    if (manual === "cerrado") {
+      setDiaCelda(tx, "cerrado", PROG_NOVEDAD_LABELS.cerrado);
+      return true;
+    }
+    if (manual === "descanso") {
+      var relevos = construirMapaRelevoPorTitular();
+      var relevo = relevos[operarioIndex + "|" + diaIndex];
+      if (relevo) setDiaCelda(tx, "descanso-relevo", relevo);
+      else setDiaCelda(tx, "descanso", PROG_NOVEDAD_LABELS.descanso);
+      return true;
+    }
+    limpiarMarcadorDescansoInterjornada(tx);
+    setDiaCelda(tx, "programado", PROG_NOVEDAD_LABELS.programado);
+    return true;
+  }
+
+  function alternarEstadoDiaTitular(tx, tr) {
+    if (!tx || !tr || trEsSupernumerario(tr)) return;
+    if (tx.getAttribute("data-solicitud-cobertura") === "1") return;
+    var tipoActual = tx.getAttribute("data-tit-dia-manual") || "";
+    if (!tipoActual) {
+      var dt = tx.getAttribute("data-day-tipo") || "programado";
+      if (dt === "descanso-relevo") tipoActual = "descanso";
+      else if (PROG_TIT_DIA_CICLO.indexOf(dt) >= 0) tipoActual = dt;
+      else tipoActual = "programado";
+    }
+    var idxCiclo = PROG_TIT_DIA_CICLO.indexOf(tipoActual);
+    if (idxCiclo < 0) idxCiclo = 0;
+    var next = PROG_TIT_DIA_CICLO[(idxCiclo + 1) % PROG_TIT_DIA_CICLO.length];
+    tx.setAttribute("data-tit-dia-manual", next);
+    var opIdx = operarioIndexFromTr(tr);
+    var diaIdx = diaIndexFromTextarea(tr, tx);
+    aplicarEstadoDiaTitularCelda(tr, tx, opIdx, diaIdx);
+    sincronizarDescansosConSupers(tr);
+    if (typeof notifyProgramacionEdit === "function") notifyProgramacionEdit();
+  }
+
+  function diasDescansoTitularParaCobertura(tr, semIdx, operarioIndex, sede) {
+    var map = {};
+    var d;
+    indicesDescansoOperario(semIdx, operarioIndex, sede).forEach(function (di) {
+      map[di] = true;
+    });
+    var tas = tr.querySelectorAll("textarea");
+    for (d = 0; d < 7 && d < tas.length; d++) {
+      var man = tas[d].getAttribute("data-tit-dia-manual");
+      if (man === "programado") delete map[d];
+      if (man === "descanso") map[d] = true;
+    }
+    return map;
+  }
+
   function actualizarRelevoEnSupernumerarios() {
     if (!asignTbody || !currentMonday) return;
     var relevos = construirMapaRelevoPorSuperDescanso();
@@ -3592,6 +4177,22 @@
       var d;
       for (d = 0; d < 7 && d < tas.length; d++) {
         var esSol = tas[d].getAttribute("data-solicitud-cobertura") === "1";
+        var manualTitRel = tas[d].getAttribute("data-tit-dia-manual");
+        if (
+          manualTitRel === "programado" ||
+          manualTitRel === "descanso" ||
+          manualTitRel === "cerrado"
+        ) {
+          if (manualTitRel === "programado") continue;
+          if (manualTitRel === "cerrado") {
+            setDiaCelda(tas[d], "cerrado", PROG_NOVEDAD_LABELS.cerrado);
+            continue;
+          }
+          var relevoMan = relevos[idx + "|" + d];
+          if (relevoMan) setDiaCelda(tas[d], "descanso-relevo", relevoMan);
+          else setDiaCelda(tas[d], "descanso", PROG_NOVEDAD_LABELS.descanso);
+          continue;
+        }
         if (diaEstacionamientoCerradoEnColumna(sede, d)) {
           if (esSol) {
             var relC = relevos[idx + "|" + d];
@@ -3646,13 +4247,17 @@
       var sedeSel = tr.querySelector(".prog-asign-sede");
       if (!sedeSel || !tr.cells[2]) return;
       var curSede = sedeSel.value;
-      tr.cells[2].innerHTML = buildSedeSelectHtml(curSede, tr);
+      setSedeCellHtml(tr.cells[2], buildSedeSelectHtml(curSede, tr));
       var turnoCell = tr.querySelector(".prog-asign-turno-cell");
       if (turnoCell && !tr.querySelector(".prog-super-coberturas-wrap")) {
         var turnoSel = tr.querySelector(".prog-asign-turno");
-        turnoCell.innerHTML = buildTurnoSelectHtml(curSede, turnoSel ? turnoSel.value : "", tr);
+        setTurnoCellHtml(
+          turnoCell,
+          buildTurnoSelectHtml(curSede, turnoSel ? turnoSel.value : "", tr)
+        );
       }
     });
+    syncAllProgAsignTurnoDisplays();
     actualizarEstiloSedesCompletas();
   }
 
@@ -4347,7 +4952,10 @@
           }
           aplicarDiasSolicitudEnDom(trDom, diasWk, item);
           notifyProgramacionEdit();
-          return saveProgramacionWeek({ silent: true });
+          if (PROG_AUTOSAVE_ENABLED) {
+            return saveProgramacionWeek({ silent: true });
+          }
+          return Promise.resolve();
         }
         if (esVac) {
           return Promise.resolve();
@@ -5174,6 +5782,8 @@
     while (daySolicitudes.length < 7) daySolicitudes.push("");
     var dayHorarios = Array.isArray(raw.dayHorarios) ? raw.dayHorarios.slice(0, 7) : [];
     while (dayHorarios.length < 7) dayHorarios.push("");
+    var dayTitManual = Array.isArray(raw.dayTitManual) ? raw.dayTitManual.slice(0, 7) : [];
+    while (dayTitManual.length < 7) dayTitManual.push("");
     var out = {
       operarioId: raw.operarioId != null ? String(raw.operarioId) : "",
       operarioNombre: raw.operarioNombre != null ? String(raw.operarioNombre) : "",
@@ -5189,6 +5799,7 @@
       dayTipos: dayTipos,
       daySolicitudes: daySolicitudes,
       dayHorarios: dayHorarios,
+      dayTitManual: dayTitManual,
       superCoberturas: Array.isArray(raw.superCoberturas)
         ? raw.superCoberturas.filter(function (k) {
             return k && !isSuperRestCoberturaKey(k);
@@ -5319,7 +5930,76 @@
     return html + "</select>";
   }
 
+  function wrapSedeSelectCellHtml(selectHtml) {
+    return (
+      '<div class="prog-asign-sede-wrap">' +
+      '<span class="prog-asign-sede-display" aria-hidden="true"></span>' +
+      selectHtml +
+      "</div>"
+    );
+  }
+
+  function syncProgAsignSedeDisplay(sel) {
+    if (!sel) return;
+    var wrap = sel.closest(".prog-asign-sede-wrap");
+    if (!wrap) return;
+    var disp = wrap.querySelector(".prog-asign-sede-display");
+    if (!disp) return;
+    var opt = sel.options[sel.selectedIndex];
+    var txt = opt ? String(opt.textContent || "").trim() : "— Sede —";
+    if (!txt) txt = "— Sede —";
+    disp.textContent = txt;
+    disp.title = txt;
+    sel.title = txt;
+  }
+
+  function syncAllProgAsignSedeDisplays() {
+    if (!asignTbody) return;
+    asignTbody.querySelectorAll("select.prog-asign-sede").forEach(syncProgAsignSedeDisplay);
+  }
+
+  function setSedeCellHtml(td, selectHtml) {
+    if (!td) return;
+    td.innerHTML = wrapSedeSelectCellHtml(selectHtml);
+    syncProgAsignSedeDisplay(td.querySelector(".prog-asign-sede"));
+  }
+
+  function wrapTurnoSelectCellHtml(selectHtml) {
+    return (
+      '<div class="prog-asign-turno-wrap">' +
+      '<span class="prog-asign-turno-display" aria-hidden="true"></span>' +
+      selectHtml +
+      "</div>"
+    );
+  }
+
+  function syncProgAsignTurnoDisplay(sel) {
+    if (!sel) return;
+    var wrap = sel.closest(".prog-asign-turno-wrap");
+    if (!wrap) return;
+    var disp = wrap.querySelector(".prog-asign-turno-display");
+    if (!disp) return;
+    var opt = sel.options[sel.selectedIndex];
+    var txt = opt ? String(opt.textContent || "").trim() : "— Turno —";
+    if (!txt) txt = "— Turno —";
+    disp.textContent = txt;
+    disp.title = txt;
+    sel.title = txt;
+  }
+
+  function syncAllProgAsignTurnoDisplays() {
+    if (!asignTbody) return;
+    asignTbody.querySelectorAll("select.prog-asign-turno").forEach(syncProgAsignTurnoDisplay);
+  }
+
+  function setTurnoCellHtml(td, selectHtml) {
+    if (!td) return;
+    td.innerHTML = wrapTurnoSelectCellHtml(selectHtml);
+    syncProgAsignTurnoDisplay(td.querySelector(".prog-asign-turno"));
+  }
+
   function buildTurnoSelectHtml(sedeId, selectedTurnoId, excludeTr) {
+    var opId = excludeTr ? excludeTr.getAttribute("data-operario-id") || "" : "";
     if (isSupernumerarioTurnoId(selectedTurnoId)) {
       return (
         '<select class="prog-asign-turno" title="Turno">' +
@@ -5337,6 +6017,7 @@
           PROG_TURNO_SUPER_ID +
           '"' +
           (selectedTurnoId === PROG_TURNO_SUPER_ID ? " selected" : "") +
+          turnoOptionIdoneoAttrs(opId, "supernumerario", selectedTurnoId === PROG_TURNO_SUPER_ID) +
           ">SUPERNUMERARIO (" +
           descansosPendientesGlobal(excludeTr) +
           " descansos por cubrir)</option>";
@@ -5350,11 +6031,25 @@
       var label = t.nombre || t.id;
       if (t.rol) label += " · " + progRolTurnoLabel(t.rol);
       var rest = turnoCupoMax(t) - (uso.turnoCounts[sedeId + "|" + t.id] || 0);
+      var perfReq = perfilRequeridoParaTurno(t);
+      var esNoche = esTurnoNoche(t, sede);
+      if (!operarioTienePerfilIdoneo(opId, perfReq)) label += " · no idóneo";
+      if (esNoche && !operarioPuedeTurnoNoche(opId)) label += " · lapso noche";
+      var optAttrs = turnoOptionIdoneoAttrs(opId, perfReq, t.id === selectedTurnoId);
+      if (esNoche && !operarioPuedeTurnoNoche(opId) && t.id !== selectedTurnoId) {
+        optAttrs =
+          ' disabled title="Lapso de descanso nocturno (' +
+          getNocheLapsoDias() +
+          ' días mín.)"';
+      } else if (esNoche && !operarioPuedeTurnoNoche(opId)) {
+        optAttrs = ' title="Asignado en lapso de descanso nocturno"';
+      }
       html +=
         '<option value="' +
         t.id.replace(/"/g, "&quot;") +
         '"' +
         (t.id === selectedTurnoId ? " selected" : "") +
+        optAttrs +
         ">" +
         label.replace(/</g, "&lt;") +
         " (" +
@@ -5369,6 +6064,7 @@
         PROG_TURNO_SUPER_ID +
         '"' +
         (selectedTurnoId === PROG_TURNO_SUPER_ID ? " selected" : "") +
+        turnoOptionIdoneoAttrs(opId, "supernumerario", selectedTurnoId === PROG_TURNO_SUPER_ID) +
         ">SUPERNUMERARIO — cubrir descansos (" +
         descansosPendientesGlobal(excludeTr) +
         ")</option>";
@@ -5999,8 +6695,8 @@
     tr.removeAttribute("data-super-coberturas");
     var tdSede = tr.cells[2];
     var tdTurno = tr.querySelector(".prog-asign-turno-cell");
-    if (tdSede) tdSede.innerHTML = buildSedeSelectHtml(sedeId || "", tr);
-    if (tdTurno) tdTurno.innerHTML = buildTurnoSelectHtml(sedeId || "", turnoId || "", tr);
+    setSedeCellHtml(tdSede, buildSedeSelectHtml(sedeId || "", tr));
+    setTurnoCellHtml(tdTurno, buildTurnoSelectHtml(sedeId || "", turnoId || "", tr));
   }
 
   function activarModoSupernumerario(tr) {
@@ -6059,12 +6755,12 @@
       var curTurno = turnoSel ? turnoSel.value : "";
       var tdSede = tr.cells[2];
       var tdTurno = tr.querySelector(".prog-asign-turno-cell");
-      if (tdSede) tdSede.innerHTML = buildSedeSelectHtml(curSede, tr);
-      if (tdTurno) {
-        tdTurno.innerHTML = buildTurnoSelectHtml(curSede, curTurno, tr);
-      }
+      setSedeCellHtml(tdSede, buildSedeSelectHtml(curSede, tr));
+      setTurnoCellHtml(tdTurno, buildTurnoSelectHtml(curSede, curTurno, tr));
       if (!skipSync) syncAsignRowFromTurno(tr);
     });
+    syncAllProgAsignSedeDisplays();
+    syncAllProgAsignTurnoDisplays();
     if (!skipSync) {
       refreshListasSuperCoberturas();
       refreshDesplegablesSede();
@@ -6126,6 +6822,8 @@
       limpiarDiasFilaTr(tr);
       limpiarColumnasMetaFilaTr(tr);
     }
+    marcarFilaIdoneidadTr(tr);
+    marcarFilaNocheCooldown(tr);
   }
 
   function wireAsignRowEvents(tr) {
@@ -6154,6 +6852,22 @@
       var txDia = textareaDiaFromTarget(e.target);
       if (txDia) {
         var trTx = txDia.closest("tr");
+        if (
+          trTx &&
+          !trEsSupernumerario(trTx) &&
+          (e.target.closest(".prog-dia-etiqueta") || e.target.closest(".prog-dia-emoji"))
+        ) {
+          var tipoTitClick = txDia.getAttribute("data-day-tipo");
+          if (
+            txDia.getAttribute("data-solicitud-cobertura") !== "1" &&
+            tipoTitClick !== "incapacidad" &&
+            tipoTitClick !== "permiso"
+          ) {
+            e.preventDefault();
+            alternarEstadoDiaTitular(txDia, trTx);
+            return;
+          }
+        }
         if (trTx && trEsSupernumerario(trTx)) {
           var tipoDia = txDia.getAttribute("data-day-tipo");
           if (tipoDia === "disponible" || tipoDia === "descanso") {
@@ -6197,6 +6911,7 @@
         return;
       }
       if (sel.classList.contains("prog-asign-turno")) {
+        syncProgAsignTurnoDisplay(sel);
         if (isSupernumerarioTurnoId(sel.value)) {
           activarModoSupernumerario(tr);
           return;
@@ -6207,9 +6922,10 @@
         }
       }
       if (sel.classList.contains("prog-asign-sede")) {
+        syncProgAsignSedeDisplay(sel);
         var sedeId = sel.value;
         var tdTurno = tr.querySelector(".prog-asign-turno-cell");
-        if (tdTurno) tdTurno.innerHTML = buildTurnoSelectHtml(sedeId, "", tr);
+        setTurnoCellHtml(tdTurno, buildTurnoSelectHtml(sedeId, "", tr));
       }
       syncAsignRowFromTurno(tr);
       refreshAllAsignDropdowns(true);
@@ -6235,16 +6951,20 @@
       tdOp.className = "prog-col-operario";
       tdOp.innerHTML = buildOperarioCellHtml(
         row.operarioNombre,
-        isSupernumerarioTurnoId(row.turnoId)
+        isSupernumerarioTurnoId(row.turnoId),
+        row.operarioId || ""
       );
       tr.appendChild(tdOp);
       var tdSede = document.createElement("td");
       tdSede.className = "prog-asign-sede-cell";
-      tdSede.innerHTML = buildSedeSelectHtml(row.sedeId || "", tr);
+      setSedeCellHtml(tdSede, buildSedeSelectHtml(row.sedeId || "", tr));
       tr.appendChild(tdSede);
       var tdTurno = document.createElement("td");
       tdTurno.className = "prog-asign-turno-cell";
-      tdTurno.innerHTML = buildTurnoSelectHtml(row.sedeId || "", row.turnoId || "", tr);
+      setTurnoCellHtml(
+        tdTurno,
+        buildTurnoSelectHtml(row.sedeId || "", row.turnoId || "", tr)
+      );
       tr.appendChild(tdTurno);
       var filaConfigurada = asignacionTieneSedeTurno(row);
       var tdRol = document.createElement("td");
@@ -6281,26 +7001,43 @@
             texto = "";
           }
         } else if (!filaConfigurada) {
-          tipo = "";
-          texto = "";
+          var tieneDiaGuardado =
+            (texto && String(texto).trim()) ||
+            (tipo && String(tipo).trim()) ||
+            (row.daySolicitudes && row.daySolicitudes[di]);
+          if (!tieneDiaGuardado) {
+            tipo = "";
+            texto = "";
+          }
         }
-        if (filaConfigurada && !tipo && texto) {
+        if (!tipo && texto) {
           if (texto === PROG_NOVEDAD_LABELS.disponible) tipo = "disponible";
           else if (texto === PROG_NOVEDAD_LABELS.descanso) tipo = "descanso";
           else if (row.dayTipos && row.dayTipos[di] === "descanso-relevo") tipo = "descanso-relevo";
-          else if (texto && texto !== PROG_NOVEDAD_LABELS.descanso && row.dayTipos && row.dayTipos[di] === "descanso") {
+          else if (
+            texto &&
+            texto !== PROG_NOVEDAD_LABELS.descanso &&
+            row.dayTipos &&
+            row.dayTipos[di] === "descanso"
+          ) {
             tipo = "descanso-relevo";
           } else if (texto === PROG_NOVEDAD_LABELS.programado) tipo = "programado";
           else if (texto === PROG_NOVEDAD_LABELS.incapacidad) tipo = "incapacidad";
           else if (texto === PROG_NOVEDAD_LABELS.permiso) tipo = "permiso";
           else if (texto === PROG_NOVEDAD_LABELS.cerrado) tipo = "cerrado";
-          else if (row.turnoId === PROG_TURNO_SUPER_ID || String(row.turnoNombre || "").toUpperCase() === "SUPERNUMERARIO") {
+          else if (
+            filaConfigurada &&
+            (row.turnoId === PROG_TURNO_SUPER_ID ||
+              String(row.turnoNombre || "").toUpperCase() === "SUPERNUMERARIO")
+          ) {
             tipo = "supernumerario";
+          } else if (row.dayTipos && row.dayTipos[di]) {
+            tipo = String(row.dayTipos[di]);
           }
         }
         var tdDia = createDiaCeldaTd(tipo, texto);
         var txDia = tdDia.querySelector("textarea");
-        if (filaConfigurada && row.daySolicitudes && row.daySolicitudes[di] && txDia) {
+        if (row.daySolicitudes && row.daySolicitudes[di] && txDia) {
           restaurarDiaSolicitudPersistida(txDia, row.daySolicitudes[di]);
         }
         if (
@@ -6319,6 +7056,17 @@
         ) {
           txDia.setAttribute("data-super-dia-manual", tipo);
         }
+        if (
+          txDia &&
+          !isSupernumerarioTurnoId(row.turnoId) &&
+          row.dayTitManual &&
+          row.dayTitManual[di]
+        ) {
+          var manTit = String(row.dayTitManual[di]).trim();
+          if (PROG_TIT_DIA_CICLO.indexOf(manTit) >= 0) {
+            txDia.setAttribute("data-tit-dia-manual", manTit);
+          }
+        }
         tr.appendChild(tdDia);
       });
       asignTbody.appendChild(tr);
@@ -6336,14 +7084,18 @@
     });
     renumerarFilasAsignacion();
     initAsignacionDelegation();
+    syncAllProgAsignSedeDisplays();
+    syncAllProgAsignTurnoDisplays();
     refreshAllAsignDropdowns(true);
-    if (currentMonday) {
+    if (currentMonday && asignaciones.some(asignacionTieneSedeTurno)) {
       aplicarRepartoSemanalATodasLasFilas();
     }
     actualizarEstiloSedesCompletas();
     fillProgAsignFilterOptions();
     applyProgAsignFilters();
     updateProgAsignTheadStickyTop();
+    marcarTodasFilasIdoneidad();
+    marcarTodasFilasNocheCooldown();
   }
 
   function readAsignacionesFromDom() {
@@ -6357,6 +7109,7 @@
       var dayTipos = [];
       var daySolicitudes = [];
       var dayHorarios = [];
+      var dayTitManual = [];
       var ti;
       for (ti = 0; ti < 7 && ti < tas.length; ti++) {
         days.push(tas[ti].value);
@@ -6370,11 +7123,13 @@
         dayHorarios.push(
           tipoD === "disponible" ? tas[ti].getAttribute("data-disponible-horario") || "" : ""
         );
+        dayTitManual.push(tas[ti].getAttribute("data-tit-dia-manual") || "");
       }
       while (days.length < 7) days.push("");
       while (dayTipos.length < 7) dayTipos.push("");
       while (daySolicitudes.length < 7) daySolicitudes.push("");
       while (dayHorarios.length < 7) dayHorarios.push("");
+      while (dayTitManual.length < 7) dayTitManual.push("");
       var esSuper = trEsSupernumerario(tr);
       var sedeId = esSuper ? "" : sedeSel ? sedeSel.value : "";
       var turnoIdVal = esSuper ? PROG_TURNO_SUPER_ID : turnoSel ? turnoSel.value : "";
@@ -6384,6 +7139,7 @@
         dayTipos = ["", "", "", "", "", "", ""];
         daySolicitudes = ["", "", "", "", "", "", ""];
         dayHorarios = ["", "", "", "", "", "", ""];
+        dayTitManual = ["", "", "", "", "", "", ""];
       }
       var cobKeys = esSuper
         ? getSuperCoberturasSeleccionadas(tr).map(function (s) {
@@ -6411,6 +7167,7 @@
         dayTipos: dayTipos,
         daySolicitudes: daySolicitudes,
         dayHorarios: dayHorarios,
+        dayTitManual: dayTitManual,
       });
     });
     return out;
@@ -6520,6 +7277,15 @@
         var relSol = relevos[operarioIndex + "|" + d];
         if (relSol) aplicarRelevoSolicitudEnCelda(tas[d], relSol);
         else reponerDiaSolicitudSinRelevo(tas[d]);
+        continue;
+      }
+      var manualTit = tas[d].getAttribute("data-tit-dia-manual");
+      if (
+        manualTit === "programado" ||
+        manualTit === "descanso" ||
+        manualTit === "cerrado"
+      ) {
+        aplicarEstadoDiaTitularCelda(tr, tas[d], operarioIndex, d);
         continue;
       }
       if (diaEstacionamientoCerradoEnColumna(sede, d)) {
@@ -6734,6 +7500,691 @@
       };
     });
     return out;
+  }
+
+  function emptyPerfilesIdoneos() {
+    var p = {};
+    PROG_PERFILES_IDONEOS.forEach(function (pf) {
+      p[pf.id] = false;
+    });
+    return p;
+  }
+
+  function emptyAutorizadoRecord(operarioId, operarioNombre) {
+    return {
+      operarioId: operarioId != null ? String(operarioId) : "",
+      operarioNombre: operarioNombre != null ? String(operarioNombre) : "",
+      perfiles: emptyPerfilesIdoneos(),
+    };
+  }
+
+  function normalizeAutorizadosRegistro(raw) {
+    var out = { operarios: {} };
+    if (!raw || typeof raw !== "object") return out;
+    var src = raw.operarios && typeof raw.operarios === "object" ? raw.operarios : raw;
+    Object.keys(src).forEach(function (key) {
+      var r = src[key] || {};
+      var id = r.operarioId != null ? String(r.operarioId) : String(key);
+      var base = emptyPerfilesIdoneos();
+      var rp = r.perfiles && typeof r.perfiles === "object" ? r.perfiles : r;
+      PROG_PERFILES_IDONEOS.forEach(function (pf) {
+        if (rp[pf.id] != null) base[pf.id] = !!rp[pf.id];
+      });
+      out.operarios[id] = {
+        operarioId: id,
+        operarioNombre: r.operarioNombre != null ? String(r.operarioNombre) : "",
+        perfiles: base,
+      };
+    });
+    return out;
+  }
+
+  function operarioTieneAlgunPerfilMarcado(operarioId) {
+    var rec = autorizadosRegistro.operarios[operarioId];
+    if (!rec || !rec.perfiles) return false;
+    var i;
+    for (i = 0; i < PROG_PERFILES_IDONEOS.length; i++) {
+      if (rec.perfiles[PROG_PERFILES_IDONEOS[i].id]) return true;
+    }
+    return false;
+  }
+
+  function operarioTienePerfilIdoneo(operarioId, perfilKey) {
+    if (!perfilKey || !operarioId) return true;
+    var rec = autorizadosRegistro.operarios[operarioId];
+    if (!rec || !rec.perfiles) return true;
+    if (!operarioTieneAlgunPerfilMarcado(operarioId)) return true;
+    return !!rec.perfiles[perfilKey];
+  }
+
+  function perfilRequeridoParaTurno(turno) {
+    if (!turno) return "";
+    if (isSupernumerarioTurnoId(turno.id)) return "supernumerario";
+    var rol = normalizarRolTurno(turno.rol);
+    var i;
+    for (i = 0; i < PROG_PERFILES_IDONEOS.length; i++) {
+      var p = PROG_PERFILES_IDONEOS[i];
+      if (p.rol && p.rol === rol) return p.id;
+      if (p.roles && p.roles.indexOf(rol) >= 0) return p.id;
+    }
+    return "";
+  }
+
+  function turnoOptionIdoneoAttrs(operarioId, perfilReq, isSelected) {
+    if (!perfilReq || operarioTienePerfilIdoneo(operarioId, perfilReq)) return "";
+    if (isSelected) return ' title="Asignado sin perfil idóneo marcado"';
+    return ' disabled title="Sin perfil idóneo para este turno"';
+  }
+
+  function marcarFilaIdoneidadTr(tr) {
+    if (!tr || trEsSupernumerario(tr)) {
+      if (tr) tr.classList.remove("prog-row-no-idoneo");
+      return;
+    }
+    var opId = tr.getAttribute("data-operario-id") || "";
+    var sedeSel = tr.querySelector(".prog-asign-sede");
+    var turnoSel = tr.querySelector(".prog-asign-turno");
+    if (!opId || !turnoSel || !turnoSel.value) {
+      tr.classList.remove("prog-row-no-idoneo");
+      return;
+    }
+    var sede = sedeSel && sedeSel.value ? getSedeById(sedeSel.value) : null;
+    var turnos = sede ? getTurnosListaSede(sede) : [];
+    var turnoObj = null;
+    var i;
+    for (i = 0; i < turnos.length; i++) {
+      if (turnos[i].id === turnoSel.value) {
+        turnoObj = turnos[i];
+        break;
+      }
+    }
+    var perfReq = perfilRequeridoParaTurno(
+      turnoObj || { id: turnoSel.value, rol: tr.getAttribute("data-rol") || "" }
+    );
+    if (!operarioTienePerfilIdoneo(opId, perfReq)) {
+      tr.classList.add("prog-row-no-idoneo");
+    } else {
+      tr.classList.remove("prog-row-no-idoneo");
+    }
+  }
+
+  function marcarTodasFilasIdoneidad() {
+    if (!asignTbody) return;
+    asignTbody.querySelectorAll("tr").forEach(marcarFilaIdoneidadTr);
+  }
+
+  function syncAutorizadosDesdeOperarios() {
+    var next = {};
+    var prev = autorizadosRegistro.operarios || {};
+    operariosCatalog.forEach(function (o) {
+      if (o.activo === false) return;
+      var old = prev[o.id] || emptyAutorizadoRecord(o.id, o.name);
+      next[o.id] = {
+        operarioId: o.id,
+        operarioNombre: o.name || old.operarioNombre || o.id,
+        perfiles: Object.assign(emptyPerfilesIdoneos(), old.perfiles || {}),
+      };
+    });
+    var asig = readAsignacionesFromDom();
+    asig.forEach(function (a) {
+      var id = a.operarioId || operarioNombreNorm(a.operarioNombre);
+      if (!id) return;
+      if (!next[id]) {
+        var oldA = prev[id] || emptyAutorizadoRecord(id, a.operarioNombre);
+        next[id] = {
+          operarioId: id,
+          operarioNombre: a.operarioNombre || oldA.operarioNombre || id,
+          perfiles: Object.assign(emptyPerfilesIdoneos(), oldA.perfiles || {}),
+        };
+      } else if (a.operarioNombre && !next[id].operarioNombre) {
+        next[id].operarioNombre = a.operarioNombre;
+      }
+    });
+    autorizadosRegistro.operarios = next;
+  }
+
+  function renderAutorizadosSedesResumen() {
+    var el = document.getElementById("prog-aut-sedes-resumen");
+    if (!el || !catalogsReady) {
+      if (el) el.hidden = true;
+      return;
+    }
+    if (!sedesCatalog.length) {
+      el.hidden = true;
+      return;
+    }
+    var lines = [];
+    sedesCatalog.forEach(function (s) {
+      var need = {};
+      getTurnosListaSede(s).forEach(function (t) {
+        var pk = perfilRequeridoParaTurno(t);
+        if (!pk) return;
+        need[pk] = (need[pk] || 0) + Math.max(1, turnoCupoMax(t));
+      });
+      var parts = [];
+      PROG_PERFILES_IDONEOS.forEach(function (pf) {
+        if (need[pf.id]) {
+          parts.push(pf.emoji + " " + pf.label + " ×" + need[pf.id]);
+        }
+      });
+      if (parts.length) {
+        lines.push(
+          '<p class="prog-aut-sede-line"><strong>' +
+            escapeHtmlProg(s.nombre) +
+            ":</strong> " +
+            escapeHtmlProg(parts.join(" · ")) +
+            "</p>"
+        );
+      }
+    });
+    if (!lines.length) {
+      el.hidden = true;
+      return;
+    }
+    el.hidden = false;
+    el.innerHTML =
+      "<strong>Perfiles sugeridos por sede</strong> (según turnos configurados en Estacionamientos):" +
+      lines.join("");
+  }
+
+  function renderAutorizadosRegistroList() {
+    var list = document.getElementById("prog-aut-registro-list");
+    if (!list) return;
+    var ids = Object.keys(autorizadosRegistro.operarios || {}).sort(function (a, b) {
+      var na = autorizadosRegistro.operarios[a].operarioNombre || a;
+      var nb = autorizadosRegistro.operarios[b].operarioNombre || b;
+      return String(na).localeCompare(String(nb), "es");
+    });
+    if (!ids.length) {
+      list.innerHTML =
+        '<p class="prog-dialog-empty">No hay operarios. Pulse «Actualizar lista de operarios» o cargue el catálogo.</p>';
+      return;
+    }
+    list.innerHTML = ids
+      .map(function (id) {
+        var rec = autorizadosRegistro.operarios[id];
+        var a = getAsignacionVigentePorOperarioId(id);
+        var meta =
+          a && a.sedeNombre
+            ? "🏢 " + a.sedeNombre + (a.turnoNombre ? " · ⏰ " + a.turnoNombre : "")
+            : "Sin sede/turno en la semana";
+        var checks = PROG_PERFILES_IDONEOS.map(function (pf) {
+          var on = !!(rec.perfiles && rec.perfiles[pf.id]);
+          return (
+            '<label class="prog-aut-perfil' +
+            (on ? " is-on" : "") +
+            '" data-aut-op="' +
+            escapeHtmlProg(id) +
+            '" data-aut-perfil="' +
+            escapeHtmlProg(pf.id) +
+            '"><input type="checkbox" class="prog-aut-perfil-cb" data-aut-perfil="' +
+            escapeHtmlProg(pf.id) +
+            '"' +
+            (on ? " checked" : "") +
+            " /> " +
+            (pf.emoji || "") +
+            " " +
+            escapeHtmlProg(pf.label) +
+            "</label>"
+          );
+        }).join("");
+        return (
+          '<article class="prog-aut-card" data-aut-op="' +
+          escapeHtmlProg(id) +
+          '"><div class="prog-aut-card-head"><strong>' +
+          escapeHtmlProg(rec.operarioNombre || id) +
+          '</strong></div><p class="prog-aut-card-meta">' +
+          escapeHtmlProg(meta) +
+          '</p><div class="prog-aut-perfiles">' +
+          checks +
+          "</div></article>"
+        );
+      })
+      .join("");
+  }
+
+  function notifyAutorizadosChange() {
+    renderAutorizadosRegistroList();
+    renderAutorizadosSedesResumen();
+    if (asignTbody) {
+      asignTbody.querySelectorAll("tr").forEach(function (tr) {
+        if (trEsSupernumerario(tr)) return;
+        var tdOp = tr.querySelector(".prog-col-operario");
+        if (tdOp) {
+          tdOp.innerHTML = buildOperarioCellHtml(
+            operarioNombreFromTr(tr),
+            false,
+            tr.getAttribute("data-operario-id") || ""
+          );
+        }
+        marcarFilaIdoneidadTr(tr);
+      });
+      refreshAllAsignDropdowns(true);
+    }
+    if (typeof notifyProgramacionEdit === "function") notifyProgramacionEdit();
+  }
+
+  function getNocheLapsoDias() {
+    var n = parseInt(nocheRegistro.lapsoDias, 10);
+    if (isNaN(n) || n < PROG_NOCHE_LAPSO_MIN) return PROG_NOCHE_LAPSO_MIN;
+    return n;
+  }
+
+  function fechaHoyISO() {
+    var t = new Date();
+    return t.getFullYear() + "-" + pad(t.getMonth() + 1) + "-" + pad(t.getDate());
+  }
+
+  function diasEntreFechasISO(desdeISO, hastaISO) {
+    if (!desdeISO || !hastaISO) return 0;
+    var a = new Date(desdeISO + "T12:00:00");
+    var b = new Date(hastaISO + "T12:00:00");
+    if (isNaN(a.getTime()) || isNaN(b.getTime())) return 0;
+    return Math.floor((b.getTime() - a.getTime()) / 86400000);
+  }
+
+  function esTurnoNoche(turno, sede) {
+    if (!turno) return false;
+    if (turno.esNoche === true || turno.noche === true) return true;
+    var nom = String(turno.nombre || "").toLowerCase();
+    if (/\b(noche|nocturno|nocturna|night)\b/.test(nom)) return true;
+    var hi = parseHoraAMinutos(turno.horaInicio);
+    var hf = parseHoraAMinutos(turno.horaFin);
+    if (hi == null && hf == null && sede) {
+      hi = parseHoraAMinutos(sede.horaApertura);
+      hf = parseHoraAMinutos(sede.horaCierre);
+    }
+    if (hi == null || hf == null) return false;
+    if (hf <= hi) return true;
+    if (hi >= 20 * 60 || hf <= 8 * 60) return true;
+    return false;
+  }
+
+  function fechaFinSemanaDesdeWeekKey(weekKey) {
+    if (!weekKey) return fechaHoyISO();
+    var mon = new Date(weekKey + "T12:00:00");
+    if (isNaN(mon.getTime())) return weekKey;
+    var dom = new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + 6);
+    return dom.getFullYear() + "-" + pad(dom.getMonth() + 1) + "-" + pad(dom.getDate());
+  }
+
+  function normalizeNocheRegistro(raw) {
+    var out = {
+      lapsoDias: PROG_NOCHE_LAPSO_DEFAULT,
+      historial: {},
+    };
+    if (!raw || typeof raw !== "object") return out;
+    var lapso = parseInt(raw.lapsoDias, 10);
+    out.lapsoDias =
+      isNaN(lapso) || lapso < PROG_NOCHE_LAPSO_MIN ? PROG_NOCHE_LAPSO_MIN : lapso;
+    var src = raw.historial && typeof raw.historial === "object" ? raw.historial : {};
+    Object.keys(src).forEach(function (key) {
+      var r = src[key] || {};
+      var id = r.operarioId != null ? String(r.operarioId) : String(key);
+      var eventos = Array.isArray(r.eventos) ? r.eventos : [];
+      var ultima = r.ultimaFecha != null ? String(r.ultimaFecha).slice(0, 10) : "";
+      var evNorm = eventos
+        .map(function (e) {
+          return {
+            operarioId: id,
+            operarioNombre: e.operarioNombre != null ? String(e.operarioNombre) : "",
+            fecha: e.fecha != null ? String(e.fecha).slice(0, 10) : "",
+            weekKey: e.weekKey != null ? String(e.weekKey) : "",
+            sedeNombre: e.sedeNombre != null ? String(e.sedeNombre) : "",
+            turnoNombre: e.turnoNombre != null ? String(e.turnoNombre) : "",
+          };
+        })
+        .filter(function (e) {
+          return e.fecha;
+        });
+      evNorm.forEach(function (e) {
+        if (e.fecha > ultima) ultima = e.fecha;
+      });
+      out.historial[id] = {
+        operarioId: id,
+        operarioNombre: r.operarioNombre != null ? String(r.operarioNombre) : "",
+        ultimaFecha: ultima,
+        eventos: evNorm,
+      };
+    });
+    return out;
+  }
+
+  function recalcUltimaFechaOperarioNoche(h) {
+    if (!h) return;
+    var max = "";
+    (h.eventos || []).forEach(function (e) {
+      if (e.fecha && e.fecha > max) max = e.fecha;
+    });
+    h.ultimaFecha = max;
+  }
+
+  function limpiarEventosSemanaNoche(weekKey) {
+    if (!weekKey) return;
+    Object.keys(nocheRegistro.historial || {}).forEach(function (opId) {
+      var h = nocheRegistro.historial[opId];
+      if (!h) return;
+      h.eventos = (h.eventos || []).filter(function (e) {
+        return e.weekKey !== weekKey;
+      });
+      recalcUltimaFechaOperarioNoche(h);
+      if (!h.eventos.length && !h.ultimaFecha) delete nocheRegistro.historial[opId];
+    });
+  }
+
+  function mergeEventosNocheHistorial(eventos) {
+    (eventos || []).forEach(function (ev) {
+      var id = ev.operarioId;
+      if (!id) return;
+      if (!nocheRegistro.historial[id]) {
+        nocheRegistro.historial[id] = {
+          operarioId: id,
+          operarioNombre: ev.operarioNombre || id,
+          ultimaFecha: "",
+          eventos: [],
+        };
+      }
+      var h = nocheRegistro.historial[id];
+      if (ev.operarioNombre) h.operarioNombre = ev.operarioNombre;
+      var dup = false;
+      var i;
+      for (i = 0; i < h.eventos.length; i++) {
+        if (
+          h.eventos[i].weekKey === ev.weekKey &&
+          h.eventos[i].fecha === ev.fecha &&
+          h.eventos[i].turnoNombre === ev.turnoNombre
+        ) {
+          dup = true;
+          break;
+        }
+      }
+      if (!dup) h.eventos.push(ev);
+      if (ev.fecha && ev.fecha > (h.ultimaFecha || "")) h.ultimaFecha = ev.fecha;
+    });
+  }
+
+  function extraerEventosNocheDesdeAsignaciones(weekKey, asignacionesList) {
+    var eventos = [];
+    var fechaRef = fechaFinSemanaDesdeWeekKey(weekKey);
+    (asignacionesList || []).forEach(function (a) {
+      if (!a || !a.sedeId || !a.turnoId || isSupernumerarioTurnoId(a.turnoId)) return;
+      var sede = getSedeById(a.sedeId);
+      var turno = findTurnoInSede(sede, a.turnoId);
+      if (!esTurnoNoche(turno, sede)) return;
+      var opId = a.operarioId || operarioNombreNorm(a.operarioNombre);
+      if (!opId) return;
+      eventos.push({
+        operarioId: opId,
+        operarioNombre: a.operarioNombre || opId,
+        fecha: fechaRef,
+        weekKey: weekKey,
+        sedeNombre: a.sedeNombre || (sede ? sede.nombre : a.sedeId),
+        turnoNombre: a.turnoNombre || (turno ? turno.nombre : a.turnoId),
+      });
+    });
+    return eventos;
+  }
+
+  function syncNocheSemanaActualDesdeDom() {
+    if (!currentMonday) return;
+    var wk = formatKeyMonday(currentMonday);
+    limpiarEventosSemanaNoche(wk);
+    var asig = readAsignacionesFromDom();
+    mergeEventosNocheHistorial(extraerEventosNocheDesdeAsignaciones(wk, asig));
+  }
+
+  function operarioPuedeTurnoNoche(operarioId) {
+    if (!operarioId) return true;
+    var h = nocheRegistro.historial[operarioId];
+    if (!h || !h.ultimaFecha) return true;
+    var dias = diasEntreFechasISO(h.ultimaFecha, fechaHoyISO());
+    return dias >= getNocheLapsoDias();
+  }
+
+  function diasRestantesLapsoNoche(operarioId) {
+    if (!operarioId) return 0;
+    var h = nocheRegistro.historial[operarioId];
+    if (!h || !h.ultimaFecha) return 0;
+    var dias = diasEntreFechasISO(h.ultimaFecha, fechaHoyISO());
+    var lapso = getNocheLapsoDias();
+    if (dias >= lapso) return 0;
+    return lapso - dias;
+  }
+
+  function marcarFilaNocheCooldown(tr) {
+    if (!tr || trEsSupernumerario(tr)) {
+      if (tr) tr.classList.remove("prog-row-noche-espera");
+      return;
+    }
+    var opId = tr.getAttribute("data-operario-id") || "";
+    var sedeSel = tr.querySelector(".prog-asign-sede");
+    var turnoSel = tr.querySelector(".prog-asign-turno");
+    if (!opId || !turnoSel || !turnoSel.value) {
+      tr.classList.remove("prog-row-noche-espera");
+      return;
+    }
+    var sede = sedeSel && sedeSel.value ? getSedeById(sedeSel.value) : null;
+    var turno = findTurnoInSede(sede, turnoSel.value);
+    if (esTurnoNoche(turno, sede) && !operarioPuedeTurnoNoche(opId)) {
+      tr.classList.add("prog-row-noche-espera");
+    } else {
+      tr.classList.remove("prog-row-noche-espera");
+    }
+  }
+
+  function marcarTodasFilasNocheCooldown() {
+    if (!asignTbody) return;
+    asignTbody.querySelectorAll("tr").forEach(marcarFilaNocheCooldown);
+  }
+
+  function renderNochePanel() {
+    var lapsoInp = document.getElementById("prog-noche-lapso");
+    if (lapsoInp) {
+      lapsoInp.value = String(getNocheLapsoDias());
+      lapsoInp.min = String(PROG_NOCHE_LAPSO_MIN);
+    }
+    var summary = document.getElementById("prog-noche-summary");
+    var tbody = document.getElementById("prog-noche-tbody");
+    if (!tbody) return;
+    var lapso = getNocheLapsoDias();
+    var hoy = fechaHoyISO();
+    var filas = [];
+    var enEspera = 0;
+    var conHistorial = 0;
+    operariosCatalog.forEach(function (o) {
+      if (o.activo === false) return;
+      var rec = nocheRegistro.historial[o.id];
+      var ultima = rec && rec.ultimaFecha ? rec.ultimaFecha : "";
+      var dias = ultima ? diasEntreFechasISO(ultima, hoy) : null;
+      var puede = operarioPuedeTurnoNoche(o.id);
+      if (ultima) conHistorial++;
+      if (!puede) enEspera++;
+      var ultimoEv = rec && rec.eventos && rec.eventos.length ? rec.eventos[rec.eventos.length - 1] : null;
+      var detalle = ultimoEv
+        ? (ultimoEv.sedeNombre || "—") + " · " + (ultimoEv.turnoNombre || "—") + " · sem. " + (ultimoEv.weekKey || "—")
+        : "Sin registro de noche";
+      var estadoCls = "prog-noche-estado--libre";
+      var estadoTxt = "Sin turno noche registrado";
+      if (ultima) {
+        if (puede) {
+          estadoCls = "prog-noche-estado--ok";
+          estadoTxt = "Puede programarse de noche";
+        } else {
+          estadoCls = "prog-noche-estado--espera";
+          estadoTxt = "En espera · faltan " + diasRestantesLapsoNoche(o.id) + " día(s)";
+        }
+      }
+      filas.push({
+        nombre: o.name || o.id,
+        ultima: ultima || "—",
+        dias: dias != null ? String(dias) : "—",
+        estadoCls: estadoCls,
+        estadoTxt: estadoTxt,
+        detalle: detalle,
+        sortKey: puede ? 1 : 0,
+        diasNum: dias != null ? dias : -1,
+      });
+    });
+    filas.sort(function (a, b) {
+      if (a.sortKey !== b.sortKey) return a.sortKey - b.sortKey;
+      return b.diasNum - a.diasNum;
+    });
+    if (summary) {
+      summary.innerHTML =
+        "<span>Lapso: <strong>" +
+        lapso +
+        " días</strong></span>" +
+        "<span>Con historial noche: <strong>" +
+        conHistorial +
+        "</strong></span>" +
+        "<span>En espera de lapso: <strong>" +
+        enEspera +
+        "</strong></span>" +
+        "<span>Hoy: <strong>" +
+        hoy +
+        "</strong></span>";
+    }
+    if (!filas.length) {
+      tbody.innerHTML =
+        '<tr><td colspan="5" style="color:#9ca3af;">No hay operarios en el catálogo.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = filas
+      .map(function (f) {
+        return (
+          "<tr><td><strong>" +
+          escapeHtmlProg(f.nombre) +
+          "</strong></td><td>" +
+          escapeHtmlProg(f.ultima) +
+          "</td><td>" +
+          escapeHtmlProg(f.dias) +
+          '</td><td class="' +
+          f.estadoCls +
+          '">' +
+          escapeHtmlProg(f.estadoTxt) +
+          "</td><td>" +
+          escapeHtmlProg(f.detalle) +
+          "</td></tr>"
+        );
+      })
+      .join("");
+  }
+
+  function notifyNocheChange() {
+    renderNochePanel();
+    marcarTodasFilasNocheCooldown();
+    refreshAllAsignDropdowns(true);
+    if (typeof notifyProgramacionEdit === "function") notifyProgramacionEdit();
+  }
+
+  function escanearHistorialNocheFirestore() {
+    if (!auth.currentUser) {
+      setStatus("Inicie sesión para escanear historial.");
+      return Promise.resolve();
+    }
+    setStatus("Escaneando turnos de noche en semanas guardadas…");
+    return db
+      .collection(COL)
+      .limit(120)
+      .get()
+      .then(function (snap) {
+        var docs = [];
+        snap.forEach(function (doc) {
+          docs.push(doc);
+        });
+        docs.sort(function (a, b) {
+          var ka = (a.data() && a.data().weekKey) || a.id || "";
+          var kb = (b.data() && b.data().weekKey) || b.id || "";
+          return String(kb).localeCompare(String(ka));
+        });
+        docs.slice(0, 80).forEach(function (doc) {
+          var data = doc.data() || {};
+          var wk = data.weekKey || doc.id;
+          var lista = Array.isArray(data.asignaciones) ? data.asignaciones : [];
+          var i;
+          for (i = 0; i < lista.length; i++) {
+            lista[i] = normalizeAsignacionItem(lista[i]);
+          }
+          mergeEventosNocheHistorial(extraerEventosNocheDesdeAsignaciones(wk, lista));
+        });
+        syncNocheSemanaActualDesdeDom();
+        notifyNocheChange();
+        setStatus(
+          "Historial de noche actualizado · " +
+            Math.min(80, docs.length) +
+            " semana(s) revisadas · lapso " +
+            getNocheLapsoDias() +
+            " días"
+        );
+      })
+      .catch(function (e) {
+        setStatus("Error al escanear noche: " + (e.message || e));
+      });
+  }
+
+  function initNochePanel() {
+    if (initNochePanel._done) return;
+    initNochePanel._done = true;
+    var lapsoInp = document.getElementById("prog-noche-lapso");
+    var btnSem = document.getElementById("prog-noche-scan-semana");
+    var btnFs = document.getElementById("prog-noche-scan-firestore");
+    var ta = document.getElementById("prog-ta-noche");
+    if (lapsoInp) {
+      lapsoInp.addEventListener("change", function () {
+        var v = parseInt(lapsoInp.value, 10);
+        nocheRegistro.lapsoDias =
+          isNaN(v) || v < PROG_NOCHE_LAPSO_MIN ? PROG_NOCHE_LAPSO_MIN : v;
+        lapsoInp.value = String(nocheRegistro.lapsoDias);
+        notifyNocheChange();
+      });
+    }
+    if (btnSem) {
+      btnSem.addEventListener("click", function () {
+        syncNocheSemanaActualDesdeDom();
+        notifyNocheChange();
+        setStatus("Semana actual incluida en control de noche.");
+      });
+    }
+    if (btnFs) {
+      btnFs.addEventListener("click", function () {
+        escanearHistorialNocheFirestore();
+      });
+    }
+    if (ta) ta.addEventListener("input", notifyProgramacionEdit);
+  }
+
+  function initAutorizadosPanel() {
+    if (initAutorizadosPanel._done) return;
+    initAutorizadosPanel._done = true;
+    var list = document.getElementById("prog-aut-registro-list");
+    var syncBtn = document.getElementById("prog-aut-sync-btn");
+    var ta = document.getElementById("prog-ta-autorizados");
+    if (syncBtn) {
+      syncBtn.addEventListener("click", function () {
+        syncAutorizadosDesdeOperarios();
+        notifyAutorizadosChange();
+        setStatus("Perfiles idóneos · lista actualizada.");
+      });
+    }
+    if (ta) ta.addEventListener("input", notifyProgramacionEdit);
+    if (list) {
+      list.addEventListener("change", function (e) {
+        var cb = e.target.closest(".prog-aut-perfil-cb");
+        if (!cb) return;
+        var card = e.target.closest(".prog-aut-card");
+        if (!card) return;
+        var opId = card.getAttribute("data-aut-op");
+        var perfil = cb.getAttribute("data-aut-perfil");
+        if (!opId || !perfil || !autorizadosRegistro.operarios[opId]) return;
+        if (!autorizadosRegistro.operarios[opId].perfiles) {
+          autorizadosRegistro.operarios[opId].perfiles = emptyPerfilesIdoneos();
+        }
+        autorizadosRegistro.operarios[opId].perfiles[perfil] = !!cb.checked;
+        var lbl = cb.closest(".prog-aut-perfil");
+        if (lbl) lbl.classList.toggle("is-on", !!cb.checked);
+        notifyAutorizadosChange();
+      });
+    }
   }
 
   function getAsignacionPorOperarioId(operarioId) {
@@ -7311,25 +8762,92 @@
     });
   }
 
-  function serializeProgramacionState() {
+  function rowsTienenContenidoProg(rowList) {
+    if (!Array.isArray(rowList) || !rowList.length) return false;
+    var i;
+    var j;
+    for (i = 0; i < rowList.length; i++) {
+      var r = rowList[i] || {};
+      if (r.sede && String(r.sede).trim()) return true;
+      if (r.turno && String(r.turno).trim()) return true;
+      if (r.rol && String(r.rol).trim()) return true;
+      if (r.horarios && String(r.horarios).trim()) return true;
+      var days = r.days;
+      if (Array.isArray(days)) {
+        for (j = 0; j < days.length; j++) {
+          if (days[j] != null && String(days[j]).trim()) return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function syncAutorizadosRegistroFromDom() {
+    document.querySelectorAll(".prog-aut-card[data-aut-op]").forEach(function (card) {
+      var opId = card.getAttribute("data-aut-op");
+      if (!opId) return;
+      if (!autorizadosRegistro.operarios[opId]) {
+        autorizadosRegistro.operarios[opId] = emptyAutorizadoRecord(opId, "");
+      }
+      var rec = autorizadosRegistro.operarios[opId];
+      if (!rec.perfiles) rec.perfiles = emptyPerfilesIdoneos();
+      PROG_PERFILES_IDONEOS.forEach(function (pf) {
+        var cb = card.querySelector('.prog-aut-perfil-cb[data-aut-perfil="' + pf.id + '"]');
+        if (cb) rec.perfiles[pf.id] = !!cb.checked;
+      });
+    });
+  }
+
+  function flushProgramacionPanelsToMemory() {
+    syncAutorizadosDesdeOperarios();
+    syncAutorizadosRegistroFromDom();
+    var lapsoInp = document.getElementById("prog-noche-lapso");
+    if (lapsoInp) {
+      var v = parseInt(lapsoInp.value, 10);
+      nocheRegistro.lapsoDias =
+        isNaN(v) || v < PROG_NOCHE_LAPSO_MIN ? PROG_NOCHE_LAPSO_MIN : v;
+      lapsoInp.value = String(nocheRegistro.lapsoDias);
+    }
+    syncNocheSemanaActualDesdeDom();
+    var taInact = document.getElementById("prog-ta-inactividades");
+    if (taInact) sheetInactividades = taInact.value;
+    var taNoche = document.getElementById("prog-ta-noche");
+    if (taNoche) sheetNoche = taNoche.value;
+    var taAut = document.getElementById("prog-ta-autorizados");
+    if (taAut) sheetAutorizados = taAut.value;
+  }
+
+  function resolveRowsParaGuardar(asignParaGuardar) {
     var panelPrincipal = document.getElementById("panel-principal");
+    var tbody = document.getElementById("prog-tbody");
+    if (
+      panelPrincipal &&
+      !panelPrincipal.hidden &&
+      tbody &&
+      tbody.querySelectorAll("tr").length
+    ) {
+      var desdeDom = readRowsFromDom();
+      sortRowsBySede(desdeDom);
+      return desdeDom;
+    }
+    if (rowsTienenContenidoProg(rows)) return rows.slice();
+    return asignacionesToLegacyRows(asignParaGuardar);
+  }
+
+  function serializeProgramacionState() {
+    flushProgramacionPanelsToMemory();
     var asig = readAsignacionesFromDom();
     sortAsignacionesBySede(asig);
-    var r;
-    if (panelPrincipal && !panelPrincipal.hidden) {
-      r = readRowsFromDom();
-      sortRowsBySede(r);
-    } else {
-      r = asignacionesToLegacyRows(asig);
-    }
-    var taInact = document.getElementById("prog-ta-inactividades");
+    var r = resolveRowsParaGuardar(asig);
     return {
       asignaciones: asig.map(normalizeAsignacionItem),
       rows: r,
       inactividadesRegistro: normalizeInactividadesRegistro(inactividadesRegistro),
-      sheetInactividades: taInact ? taInact.value : sheetInactividades,
-      sheetNoche: document.getElementById("prog-ta-noche").value,
-      sheetAutorizados: document.getElementById("prog-ta-autorizados").value,
+      autorizadosRegistro: normalizeAutorizadosRegistro(autorizadosRegistro),
+      nocheRegistro: normalizeNocheRegistro(nocheRegistro),
+      sheetInactividades: sheetInactividades,
+      sheetNoche: sheetNoche,
+      sheetAutorizados: sheetAutorizados,
     };
   }
 
@@ -7460,6 +8978,7 @@
     }
     return verificarPasswordAntesDeAplicarExcel()
       .then(function () {
+        flushProgramacionPanelsToMemory();
         rows = readRowsFromDom();
         sortRowsBySede(rows);
         if (btn) btn.textContent = "Guardando…";
@@ -7492,7 +9011,7 @@
   }
 
   function scheduleProgramacionAutosave() {
-    if (isProgExcelTabActive()) return;
+    if (!PROG_AUTOSAVE_ENABLED || isProgExcelTabActive()) return;
     clearTimeout(progAutosaveTimer);
     progAutosaveTimer = setTimeout(function () {
       saveProgramacionWeek({ silent: true });
@@ -7509,7 +9028,15 @@
       );
       return;
     }
-    scheduleProgramacionAutosave();
+    if (PROG_AUTOSAVE_ENABLED) {
+      scheduleProgramacionAutosave();
+    } else {
+      setStatus(
+        "Cambios sin guardar · pulse «Guardar ahora» (" +
+          formatKeyMonday(currentMonday) +
+          ")"
+      );
+    }
   }
 
   function applyProgramacionSnapshot(snap) {
@@ -7518,6 +9045,8 @@
       asignaciones: snap.asignaciones,
       rows: snap.rows,
       inactividadesRegistro: snap.inactividadesRegistro,
+      autorizadosRegistro: snap.autorizadosRegistro,
+      nocheRegistro: snap.nocheRegistro,
       sheetInactividades: snap.sheetInactividades,
       sheetNoche: snap.sheetNoche,
       sheetAutorizados: snap.sheetAutorizados,
@@ -7540,9 +9069,19 @@
     applyProgramacionSnapshot(progUndoStack[progUndoStack.length - 1]);
     progSuppressHistory = false;
     updateUndoRedoButtons();
-    if (!isProgExcelTabActive()) scheduleProgramacionAutosave();
-    else marcarProgExcelPendiente();
-    setStatus("Deshacer · " + formatKeyMonday(currentMonday));
+    if (isProgExcelTabActive()) {
+      marcarProgExcelPendiente();
+      setStatus("Deshacer · " + formatKeyMonday(currentMonday));
+    } else if (PROG_AUTOSAVE_ENABLED) {
+      scheduleProgramacionAutosave();
+      setStatus("Deshacer · " + formatKeyMonday(currentMonday));
+    } else {
+      setStatus(
+        "Deshacer · cambios sin guardar · «Guardar ahora» (" +
+          formatKeyMonday(currentMonday) +
+          ")"
+      );
+    }
   }
 
   function programacionRedo() {
@@ -7553,9 +9092,19 @@
     applyProgramacionSnapshot(next);
     progSuppressHistory = false;
     updateUndoRedoButtons();
-    if (!isProgExcelTabActive()) scheduleProgramacionAutosave();
-    else marcarProgExcelPendiente();
-    setStatus("Rehacer · " + formatKeyMonday(currentMonday));
+    if (isProgExcelTabActive()) {
+      marcarProgExcelPendiente();
+      setStatus("Rehacer · " + formatKeyMonday(currentMonday));
+    } else if (PROG_AUTOSAVE_ENABLED) {
+      scheduleProgramacionAutosave();
+      setStatus("Rehacer · " + formatKeyMonday(currentMonday));
+    } else {
+      setStatus(
+        "Rehacer · cambios sin guardar · «Guardar ahora» (" +
+          formatKeyMonday(currentMonday) +
+          ")"
+      );
+    }
   }
 
   function flushProgramacionSaves() {
@@ -7606,6 +9155,8 @@
     var asignParaGuardar;
     var rowsParaGuardar;
     var inactParaGuardar;
+    var autParaGuardar;
+    var nocheParaGuardar;
     var sheetInactVal;
     var sheetNocheVal;
     var sheetAutVal;
@@ -7618,23 +9169,27 @@
       if (currentMonday && formatKeyMonday(currentMonday) !== key) {
         return Promise.resolve();
       }
+      flushProgramacionPanelsToMemory();
       asignaciones = readAsignacionesFromDom();
       sortAsignacionesBySede(asignaciones);
       asignParaGuardar = asignaciones.map(normalizeAsignacionItem);
-      var panelPrincipal = document.getElementById("panel-principal");
-      if (panelPrincipal && !panelPrincipal.hidden) {
-        rows = readRowsFromDom();
-        sortRowsBySede(rows);
-        rowsParaGuardar = rows.slice();
-      } else {
-        rows = asignacionesToLegacyRows(asignaciones);
-        rowsParaGuardar = rows.slice();
-      }
+      rowsParaGuardar = resolveRowsParaGuardar(asignParaGuardar);
+      rows = rowsParaGuardar.slice();
     }
     if (opts.inactividadesFrozen) {
       inactParaGuardar = normalizeInactividadesRegistro(opts.inactividadesFrozen);
     } else {
       inactParaGuardar = normalizeInactividadesRegistro(inactividadesRegistro);
+    }
+    if (opts.autorizadosFrozen) {
+      autParaGuardar = normalizeAutorizadosRegistro(opts.autorizadosFrozen);
+    } else {
+      autParaGuardar = normalizeAutorizadosRegistro(autorizadosRegistro);
+    }
+    if (opts.nocheFrozen) {
+      nocheParaGuardar = normalizeNocheRegistro(opts.nocheFrozen);
+    } else {
+      nocheParaGuardar = normalizeNocheRegistro(nocheRegistro);
     }
     if (opts.sheetsFrozen) {
       sheetInactVal =
@@ -7643,10 +9198,9 @@
       sheetAutVal =
         opts.sheetsFrozen.autorizados != null ? String(opts.sheetsFrozen.autorizados) : "";
     } else {
-      var taInact = document.getElementById("prog-ta-inactividades");
-      sheetInactVal = taInact ? taInact.value : sheetInactividades;
-      sheetNocheVal = document.getElementById("prog-ta-noche").value;
-      sheetAutVal = document.getElementById("prog-ta-autorizados").value;
+      sheetInactVal = sheetInactividades;
+      sheetNocheVal = sheetNoche;
+      sheetAutVal = sheetAutorizados;
     }
     if (
       currentMonday &&
@@ -7656,6 +9210,8 @@
       asignaciones = asignParaGuardar;
       rows = rowsParaGuardar;
       inactividadesRegistro = inactParaGuardar;
+      autorizadosRegistro = autParaGuardar;
+      nocheRegistro = nocheParaGuardar;
       sheetInactividades = sheetInactVal;
       sheetNoche = sheetNocheVal;
       sheetAutorizados = sheetAutVal;
@@ -7667,6 +9223,8 @@
       asignaciones: asignParaGuardar,
       rows: rowsParaGuardar,
       inactividadesRegistro: inactParaGuardar,
+      autorizadosRegistro: autParaGuardar,
+      nocheRegistro: nocheParaGuardar,
       sheetInactividades: sheetInactVal,
       sheetNoche: sheetNocheVal,
       sheetAutorizados: sheetAutVal,
@@ -7695,7 +9253,9 @@
           (opts.silent ? "Guardado automático" : "Guardado") +
           " · semana " +
           key +
-          " · calendario " +
+          " · asignación + Excel (" +
+          rowsParaGuardar.length +
+          " filas) + inactividades + noche + autorizados · calendario " +
           Object.keys(diasCal).length +
           " día(s) · " +
           new Date().toLocaleTimeString("es-CO");
@@ -7712,6 +9272,7 @@
           progPendingAutosave = false;
           progPendingAutosaveWeekKey = null;
           if (
+            PROG_AUTOSAVE_ENABLED &&
             pendingKey &&
             currentMonday &&
             pendingKey === formatKeyMonday(currentMonday) &&
@@ -7788,8 +9349,44 @@
   function switchTab(name) {
     var panelPrincipal = document.getElementById("panel-principal");
     var wasExcel = panelPrincipal && !panelPrincipal.hidden;
+    var pAutLeave = document.getElementById("panel-autorizados");
+    var pNocheLeave = document.getElementById("panel-noche");
+    if (pAutLeave && !pAutLeave.hidden && name !== "autorizados") {
+      syncAutorizadosRegistroFromDom();
+    }
+    if (pNocheLeave && !pNocheLeave.hidden && name !== "noche") {
+      var lapsoInpLeave = document.getElementById("prog-noche-lapso");
+      if (lapsoInpLeave) {
+        var vLeave = parseInt(lapsoInpLeave.value, 10);
+        nocheRegistro.lapsoDias =
+          isNaN(vLeave) || vLeave < PROG_NOCHE_LAPSO_MIN
+            ? PROG_NOCHE_LAPSO_MIN
+            : vLeave;
+      }
+      syncNocheSemanaActualDesdeDom();
+    }
+    var taInactLeave = document.getElementById("prog-ta-inactividades");
+    if (taInactLeave && name !== "inactividades") {
+      var pInactLeave = document.getElementById("panel-inactividades");
+      if (pInactLeave && !pInactLeave.hidden) sheetInactividades = taInactLeave.value;
+    }
+    var taNocheLeave = document.getElementById("prog-ta-noche");
+    if (taNocheLeave && name !== "noche") {
+      if (pNocheLeave && !pNocheLeave.hidden) sheetNoche = taNocheLeave.value;
+    }
+    var taAutLeave = document.getElementById("prog-ta-autorizados");
+    if (taAutLeave && name !== "autorizados") {
+      if (pAutLeave && !pAutLeave.hidden) sheetAutorizados = taAutLeave.value;
+    }
     if (wasExcel && name !== "principal" && !abandonarExcelPendienteSiHay()) {
       return;
+    }
+    if (wasExcel && name !== "principal" && !progExcelPendingChanges) {
+      var tbodyLeave = document.getElementById("prog-tbody");
+      if (tbodyLeave && tbodyLeave.querySelectorAll("tr").length) {
+        rows = readRowsFromDom();
+        sortRowsBySede(rows);
+      }
     }
     var tabs = document.querySelectorAll(".prog-tabs button");
     tabs.forEach(function (btn) {
@@ -7807,7 +9404,9 @@
     if (name === "principal") {
       asignaciones = readAsignacionesFromDom();
       sortAsignacionesBySede(asignaciones);
-      rows = asignacionesToLegacyRows(asignaciones);
+      if (!rowsTienenContenidoProg(rows)) {
+        rows = asignacionesToLegacyRows(asignaciones);
+      }
       renderRowsFixStructure();
       progExcelPasswordVerified = false;
       progExcelPendingChanges = false;
@@ -7823,6 +9422,16 @@
     if (name === "inactividades") {
       syncInactividadesDesdeAsignaciones();
       renderInactividadesRegistroList();
+    }
+    if (name === "autorizados") {
+      syncAutorizadosDesdeOperarios();
+      renderAutorizadosRegistroList();
+      renderAutorizadosSedesResumen();
+    }
+    if (name === "noche") {
+      syncNocheSemanaActualDesdeDom();
+      renderNochePanel();
+      marcarTodasFilasNocheCooldown();
     }
   }
 
@@ -7946,6 +9555,11 @@
     if (!Object.keys(inactividadesRegistro.operarios || {}).length && asignaciones.length) {
       syncInactividadesDesdeAsignaciones();
     }
+    autorizadosRegistro = normalizeAutorizadosRegistro(data.autorizadosRegistro);
+    if (!Object.keys(autorizadosRegistro.operarios || {}).length) {
+      syncAutorizadosDesdeOperarios();
+    }
+    nocheRegistro = normalizeNocheRegistro(data.nocheRegistro);
     sheetInactividades = data.sheetInactividades != null ? String(data.sheetInactividades) : "";
     sheetNoche = data.sheetNoche != null ? String(data.sheetNoche) : "";
     sheetAutorizados = data.sheetAutorizados != null ? String(data.sheetAutorizados) : "";
@@ -7953,12 +9567,19 @@
     if (taInactEl) taInactEl.value = sheetInactividades;
     renderInactividadesRegistroList();
     document.getElementById("prog-ta-noche").value = sheetNoche;
+    renderNochePanel();
     document.getElementById("prog-ta-autorizados").value = sheetAutorizados;
+    renderAutorizadosRegistroList();
+    renderAutorizadosSedesResumen();
     renderAsignaciones();
+    syncNocheSemanaActualDesdeDom();
+    renderNochePanel();
     renderRowsFixStructure();
+    var preservarDiasSinSedeTurno = sinSedeTurno && tieneContenido;
     if (
       !semanaVacia &&
       currentMonday &&
+      !preservarDiasSinSedeTurno &&
       asignaciones.some(function (a) {
         return asignacionTieneSedeTurno(a);
       })
@@ -7986,7 +9607,7 @@
           key +
           "»)?\n\n" +
           "Se eliminarán sede, turno, días de la grilla, coberturas de supernumerarios, " +
-          "inactividades registradas y las hojas de texto (inactividades, noche, autorizados). " +
+          "inactividades, perfiles idóneos, control de noche y las hojas de texto. " +
           "Solo se conserva el listado de operarios.\n\n" +
           "Puede deshacer con ↶ antes de volver a guardar."
       )
@@ -8018,6 +9639,8 @@
     });
     var rowsFrozen = rows.slice();
     inactividadesRegistro = { operarios: {} };
+    autorizadosRegistro = { operarios: {} };
+    nocheRegistro = { lapsoDias: PROG_NOCHE_LAPSO_DEFAULT, historial: {} };
     sheetInactividades = "";
     sheetNoche = "";
     sheetAutorizados = "";
@@ -8027,6 +9650,9 @@
     if (taNocheClear) taNocheClear.value = "";
     var taAutClear = document.getElementById("prog-ta-autorizados");
     if (taAutClear) taAutClear.value = "";
+    renderAutorizadosRegistroList();
+    renderAutorizadosSedesResumen();
+    renderNochePanel();
     progExcelPasswordVerified = false;
     progExcelPendingChanges = false;
     updateProgExcelPendingUi();
@@ -8049,6 +9675,8 @@
             asignacionesFrozen: asignacionesFrozen,
             rowsFrozen: rowsFrozen,
             inactividadesFrozen: { operarios: {} },
+            autorizadosFrozen: { operarios: {} },
+            nocheFrozen: { lapsoDias: PROG_NOCHE_LAPSO_DEFAULT, historial: {} },
             sheetsFrozen: {
               inactividades: "",
               noche: "",
@@ -8114,20 +9742,19 @@
         var added = 0;
         if (snap.exists) {
           var snapData = snap.data();
-          var limpiarDoc =
-            semanaFirestoreTieneDiasSinAsignar(snapData);
           added = applyLoadedData(snapData) || 0;
           var vacia = semanaSinDatosAsignacionEnFirestore(snapData);
+          var conDiasSinSede =
+            vacia && semanaTieneContenidoProgramacionGuardado(snapData);
           setStatus(
-            vacia
-              ? "Semana «" + key + "» sin asignaciones guardadas (plantilla limpia)."
-              : added > 0
-                ? "Cargado · " + key + " · se agregaron " + added + " operario(s) nuevo(s)"
-                : "Cargado · " + key
+            conDiasSinSede
+              ? "Cargado · " + key + " · días y ajustes restaurados (asigne sede/turno si falta)"
+              : vacia
+                ? "Semana «" + key + "» sin asignaciones guardadas (plantilla limpia)."
+                : added > 0
+                  ? "Cargado · " + key + " · se agregaron " + added + " operario(s) nuevo(s)"
+                  : "Cargado · " + key
           );
-          if (limpiarDoc) {
-            saveProgramacionWeek({ silent: true, forceSave: true });
-          }
         } else {
           added = applyLoadedData(null) || 0;
           setStatus(
@@ -8146,12 +9773,16 @@
   }
 
   document.getElementById("prog-save").addEventListener("click", function () {
-    if (isProgExcelTabActive()) {
+    if (
+      isProgExcelTabActive() &&
+      (progExcelPendingChanges || !progExcelPasswordVerified)
+    ) {
       aplicarCambiosVistaExcel();
       return;
     }
+    flushProgramacionPanelsToMemory();
     pushProgramacionHistory();
-    saveProgramacionWeek({ silent: false });
+    saveProgramacionWeek({ silent: false, skipExcelPasswordCheck: true });
   });
 
   document.getElementById("prog-clear-week").addEventListener("click", function () {
@@ -8209,6 +9840,8 @@
   initProgAsignFilters();
   initProgOperarioAlerts();
   initInactividadesPanel();
+  initAutorizadosPanel();
+  initNochePanel();
 
   auth.onAuthStateChanged(function (user) {
     if (user) {

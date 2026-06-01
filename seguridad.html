@@ -36,6 +36,9 @@
       line-height: 1.55;
       font-size: 15px;
     }
+    .sec-page.sec-page--wide {
+      max-width: 1240px;
+    }
     .sec-page h1 {
       margin: 0 0 8px;
       font-size: 1.45rem;
@@ -157,6 +160,11 @@
       border-color: #e65100;
       color: #fff;
     }
+    .sec-tab.sec-tab--global.is-active {
+      background: linear-gradient(180deg, #3949ab 0%, #303f9f 100%);
+      border-color: #5c6bc0;
+      color: #e8eaf6;
+    }
 
     /* Accesos rápidos */
     .sec-quick {
@@ -271,6 +279,437 @@
       font-size: 14px;
       color: #d1d5db;
     }
+    .sec-global-card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+    }
+    .sec-global-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .sec-global-toolbar button {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: #2a2a2a;
+      color: #eee;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sec-global-toolbar button:hover {
+      background: #383838;
+    }
+    .sec-global-toolbar button.sec-btn-accent {
+      border-color: #e65100;
+      background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
+      color: #fff;
+    }
+    #gc-status {
+      font-size: 13px;
+      color: #94a3b8;
+      flex: 1;
+      min-width: 160px;
+    }
+    .sec-toggle-list,
+    .gc-panel-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+    .sec-toggle-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: #1a1a1a;
+      border: 1px solid #2e2e2e;
+      border-radius: 10px;
+    }
+    .sec-toggle-item.is-on {
+      border-color: rgba(76, 175, 80, 0.45);
+      background: rgba(46, 125, 50, 0.08);
+    }
+    .sec-toggle-item.is-off {
+      border-color: rgba(97, 97, 97, 0.5);
+      opacity: 0.92;
+    }
+    .sec-toggle-item.gc-item--new {
+      border-color: #ff9800;
+      box-shadow: inset 3px 0 0 #ff9800;
+    }
+    .gc-new-badge {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 1px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #1a1208;
+      background: #ff9800;
+      border-radius: 4px;
+      vertical-align: middle;
+    }
+    .gc-root-badge {
+      background: #42a5f5;
+      color: #0a1620;
+    }
+    .sec-toggle-label {
+      flex: 1;
+      min-width: 0;
+    }
+    .sec-toggle-label strong {
+      display: block;
+      font-size: 14px;
+      color: #e8eaef;
+      font-weight: 600;
+    }
+    .sec-toggle-label code {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 4px;
+      display: block;
+      word-break: break-all;
+    }
+    .sec-toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+    .sec-toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .sec-toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #444;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .sec-toggle-slider::before {
+      content: "";
+      position: absolute;
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .sec-toggle-switch input:checked + .sec-toggle-slider {
+      background: #43a047;
+    }
+    .sec-toggle-switch input:checked + .sec-toggle-slider::before {
+      transform: translateX(22px);
+    }
+    .sec-global-meta {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid #333;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .sec-global-empty {
+      padding: 20px;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 14px;
+    }
+    .gc-controls {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .gc-controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .sec-global-filter {
+      flex: 1;
+      min-width: 200px;
+      box-sizing: border-box;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #eee;
+      font-size: 13px;
+      font-family: inherit;
+    }
+    .gc-filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .gc-chip {
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid #444;
+      background: #252525;
+      color: #cbd5e1;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .gc-chip:hover {
+      background: #333;
+    }
+    .gc-chip.is-active {
+      border-color: #5c6bc0;
+      background: rgba(92, 107, 192, 0.25);
+      color: #c5cae9;
+    }
+    .gc-bulk-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 12px 14px;
+      background: #161618;
+      border: 1px solid #333;
+      border-radius: 10px;
+    }
+    .gc-summary {
+      font-size: 13px;
+      color: #a5d6a7;
+      font-variant-numeric: tabular-nums;
+      flex: 1;
+      min-width: 140px;
+    }
+    .gc-bulk-bar button {
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: #2a2a2a;
+      color: #eee;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .gc-bulk-bar button:hover {
+      background: #383838;
+    }
+    .gc-bulk-bar button.gc-btn-on {
+      border-color: #2e7d32;
+      color: #c8e6c9;
+    }
+    .gc-bulk-bar button.gc-btn-off {
+      border-color: #616161;
+      color: #e0e0e0;
+    }
+    .gc-panels {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+      align-items: start;
+    }
+    .gc-panel {
+      background: #141416;
+      border: 1px solid #333;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 120px;
+    }
+    .gc-panel.is-collapsed .gc-panel-body {
+      display: none;
+    }
+    .gc-panel-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 14px;
+      background: linear-gradient(180deg, #252530 0%, #1a1a22 100%);
+      border-bottom: 1px solid #333;
+      cursor: pointer;
+      user-select: none;
+    }
+    .gc-panel-head h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: #e8eaef;
+      flex: 1;
+      min-width: 120px;
+    }
+    .gc-panel-badge {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(76, 175, 80, 0.15);
+      border: 1px solid rgba(76, 175, 80, 0.35);
+      color: #a5d6a7;
+      font-variant-numeric: tabular-nums;
+    }
+    .gc-panel-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      width: 100%;
+      margin-top: 4px;
+    }
+    .gc-panel-actions button {
+      padding: 5px 10px;
+      font-size: 10px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #222;
+      color: #ccc;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+    }
+    .gc-panel-actions button:hover {
+      background: #333;
+    }
+    .gc-panel-chevron {
+      font-size: 12px;
+      color: #94a3b8;
+      transition: transform 0.2s;
+    }
+    .gc-panel.is-collapsed .gc-panel-chevron {
+      transform: rotate(-90deg);
+    }
+    .gc-panel-body {
+      padding: 10px 12px 12px;
+      max-height: min(42vh, 380px);
+      overflow-y: auto;
+    }
+    .gc-panel--admin .gc-panel-head {
+      border-left: 3px solid #ab47bc;
+    }
+    .gc-panel--main .gc-panel-head {
+      border-left: 3px solid #42a5f5;
+    }
+    .gc-panel--drawer .gc-panel-head {
+      border-left: 3px solid #ff9800;
+    }
+    .gc-panel--section .gc-panel-head {
+      border-left: 3px solid #66bb6a;
+    }
+    .gc-panel--other .gc-panel-head {
+      border-left: 3px solid #78909c;
+    }
+    .gc-pass-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 13000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    .gc-pass-gate[hidden] {
+      display: none !important;
+    }
+    .gc-pass-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+    }
+    .gc-pass-dialog {
+      position: relative;
+      z-index: 1;
+      width: min(420px, 100%);
+      background: #141418;
+      border: 1px solid #444;
+      border-radius: 14px;
+      padding: 20px 22px 22px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+    }
+    .gc-pass-dialog h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: #e8eaef;
+    }
+    .gc-pass-dialog p {
+      margin: 0 0 14px;
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.45;
+    }
+    .gc-pass-dialog input[type="password"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: #1a1a1a;
+      color: #eee;
+      font-size: 14px;
+      font-family: inherit;
+      margin-bottom: 10px;
+    }
+    .gc-pass-error {
+      margin: 0 0 12px;
+      font-size: 12px;
+      color: #fca5a5;
+      min-height: 1.2em;
+    }
+    .gc-pass-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .gc-pass-actions button {
+      padding: 9px 16px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: #2a2a2a;
+      color: #eee;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .gc-pass-actions button.gc-pass-confirm {
+      border-color: #5c6bc0;
+      background: linear-gradient(180deg, #3949ab 0%, #303f9f 100%);
+      color: #e8eaf6;
+    }
+    .gc-live-pill {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: rgba(76, 175, 80, 0.2);
+      border: 1px solid rgba(76, 175, 80, 0.45);
+      color: #a5d6a7;
+      vertical-align: middle;
+    }
+    .gc-live-pill.is-paused {
+      background: rgba(158, 158, 158, 0.15);
+      border-color: #616161;
+      color: #bdbdbd;
+    }
     .sec-toast {
       position: fixed;
       bottom: 24px;
@@ -357,6 +796,7 @@
       <button type="button" class="sec-tab" role="tab" aria-selected="false" data-sec-tab="android">App Android</button>
       <button type="button" class="sec-tab" role="tab" aria-selected="false" data-sec-tab="roadmap">Prioridades</button>
       <button type="button" class="sec-tab" role="tab" aria-selected="false" data-sec-tab="checklist">Checklist interactivo</button>
+      <button type="button" class="sec-tab sec-tab--global" role="tab" aria-selected="false" data-sec-tab="global-config">Configuraciones globales</button>
     </div>
 
     <div class="sec-quick">
@@ -531,8 +971,67 @@
       </ul>
     </section>
 
+    <section class="sec-panel" data-sec-panel="global-config" id="panel-global-config" hidden>
+      <div class="sec-global-card">
+        <h2>Configuraciones globales (app móvil)<span id="gc-live-pill" class="gc-live-pill is-paused" hidden>En vivo</span></h2>
+        <p style="margin: 0 0 12px; font-size: 13px; color: #9ca3af; line-height: 1.55;">
+          Controla qué pantallas y funciones muestra la aplicación <strong>Check List</strong> en cada dispositivo.
+          El indicador <strong>«En vivo»</strong> confirma que esta página está leyendo el documento en tiempo real.
+        </p>
+        <p style="margin: 0 0 12px; font-size: 13px; color: #f0ad4e; line-height: 1.55;">
+          <strong>Importante:</strong> por seguridad, Check List puede ocultar por completo módulos, menús y acciones
+          (checklist, recaudos, mensualidades, configuración de operarios, etc.) según los interruptores activos aquí.
+          Desactive solo lo estrictamente necesario y documente los cambios antes de aplicarlos en producción.
+        </p>
+        <div class="sec-global-toolbar">
+          <button type="button" id="gc-btn-reload">Recargar</button>
+          <button type="button" class="sec-btn-accent" id="gc-btn-save">Guardar cambios</button>
+          <span id="gc-status" role="status"></span>
+        </div>
+        <div class="gc-controls">
+          <div class="gc-controls-row">
+            <input type="search" class="sec-global-filter" id="gc-filter" placeholder="Buscar por nombre o clave…" autocomplete="off" />
+            <div class="gc-filter-chips" role="group" aria-label="Filtrar por estado">
+              <button type="button" class="gc-chip is-active" data-gc-filter-mode="all">Todos</button>
+              <button type="button" class="gc-chip" data-gc-filter-mode="on">Solo activos</button>
+              <button type="button" class="gc-chip" data-gc-filter-mode="off">Solo ocultos</button>
+            </div>
+          </div>
+          <div class="gc-bulk-bar">
+            <span class="gc-summary" id="gc-summary" aria-live="polite">—</span>
+            <button type="button" class="gc-btn-on" id="gc-btn-visible-on">Marcar visibles</button>
+            <button type="button" class="gc-btn-off" id="gc-btn-visible-off">Desmarcar visibles</button>
+            <button type="button" class="gc-btn-on" id="gc-btn-all-on">Marcar todos</button>
+            <button type="button" class="gc-btn-off" id="gc-btn-all-off">Desmarcar todos</button>
+          </div>
+        </div>
+        <div id="gc-empty" class="sec-global-empty" hidden>
+          No hay opciones con el filtro actual. Pruebe «Todos» o limpie la búsqueda.
+        </div>
+        <div class="gc-panels" id="gc-panels"></div>
+        <p class="sec-global-meta" id="gc-meta"></p>
+      </div>
+    </section>
+
     <div id="sec-toast" class="sec-toast" role="status"></div>
   </main>
+
+  <div id="gc-pass-gate" class="gc-pass-gate" hidden aria-hidden="true">
+    <div class="gc-pass-backdrop" id="gc-pass-backdrop"></div>
+    <div class="gc-pass-dialog" role="dialog" aria-labelledby="gc-pass-title" aria-modal="true">
+      <h2 id="gc-pass-title">Confirmar contraseña</h2>
+      <p id="gc-pass-desc">
+        Para editar las configuraciones globales de la app móvil, ingrese su
+        <strong>contraseña de administración</strong> (la misma del acceso al portal).
+      </p>
+      <input type="password" id="gc-gate-password" autocomplete="current-password" placeholder="Contraseña de administración" />
+      <p id="gc-gate-error" class="gc-pass-error" role="alert"></p>
+      <div class="gc-pass-actions">
+        <button type="button" id="gc-gate-cancel">Cancelar</button>
+        <button type="button" class="gc-pass-confirm" id="gc-gate-confirm">Continuar</button>
+      </div>
+    </div>
+  </div>
 
   <script>
 (function () {
@@ -542,8 +1041,20 @@
   var tabs = document.querySelectorAll("[data-sec-tab]");
   var panels = document.querySelectorAll("[data-sec-panel]");
   var checks = document.querySelectorAll("[data-sec-check]");
+  var currentSecTab = "overview";
 
-  function showPanel(id) {
+  function activateTab(id) {
+    if (id === "global-config" && window.LuganoGlobalConfig) {
+      window.LuganoGlobalConfig.requestAccess();
+      return;
+    }
+    if (
+      currentSecTab === "global-config" &&
+      id !== "global-config" &&
+      window.LuganoGlobalConfig
+    ) {
+      window.LuganoGlobalConfig.onLeave();
+    }
     panels.forEach(function (p) {
       p.hidden = p.getAttribute("data-sec-panel") !== id;
     });
@@ -556,18 +1067,63 @@
       localStorage.setItem(STORAGE_TAB, id);
     } catch (e) {}
     if (id === "checklist") updateScore();
+    var secPage = document.querySelector(".sec-page");
+    if (secPage) secPage.classList.toggle("sec-page--wide", id === "global-config");
+    currentSecTab = id;
   }
+
+  window.SecNav = {
+    activateTab: function (id, opts) {
+      opts = opts || {};
+      if (id === "global-config" && !opts.forceGlobal) {
+        if (window.LuganoGlobalConfig) window.LuganoGlobalConfig.requestAccess();
+        return;
+      }
+      if (
+        currentSecTab === "global-config" &&
+        id !== "global-config" &&
+        window.LuganoGlobalConfig
+      ) {
+        window.LuganoGlobalConfig.onLeave();
+      }
+      panels.forEach(function (p) {
+        p.hidden = p.getAttribute("data-sec-panel") !== id;
+      });
+      tabs.forEach(function (b) {
+        var on = b.getAttribute("data-sec-tab") === id;
+        b.classList.toggle("is-active", on);
+        b.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      try {
+        localStorage.setItem(STORAGE_TAB, id);
+      } catch (e) {}
+      if (id === "checklist") updateScore();
+      var secPage = document.querySelector(".sec-page");
+      if (secPage) secPage.classList.toggle("sec-page--wide", id === "global-config");
+      currentSecTab = id;
+      if (id === "global-config" && window.LuganoGlobalConfig) {
+        window.LuganoGlobalConfig.onEnter();
+      }
+    },
+    getCurrentTab: function () {
+      return currentSecTab;
+    },
+  };
 
   tabs.forEach(function (b) {
     b.addEventListener("click", function () {
-      showPanel(b.getAttribute("data-sec-tab"));
+      activateTab(b.getAttribute("data-sec-tab"));
     });
   });
 
   try {
     var last = localStorage.getItem(STORAGE_TAB);
+    if (last === "global-config") last = "overview";
     if (last && document.querySelector('[data-sec-panel="' + last + '"]')) {
-      showPanel(last);
+      activateTab(last);
+    } else {
+      var secPage = document.querySelector(".sec-page");
+      if (secPage) secPage.classList.remove("sec-page--wide");
     }
   } catch (e) {}
 
@@ -672,9 +1228,1260 @@
 <script src="firebase-config.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="lugano-admin-auth.js"></script>
 <script src="lugano-auth-gate.js"></script>
+<script>
+(function () {
+  if (typeof firebase === "undefined") return;
+  firebase.initializeApp(typeof firebaseConfig !== "undefined" ? firebaseConfig : {});
+  var db = firebase.firestore();
+  var auth = firebase.auth();
+  var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
+  var COL = cfg.appSettingsCollection || "app_settings";
+  var DOC_ID = cfg.globalConfigDocId || "global_config";
+  var FEATURE_MAP_KEY = "featureVisibility";
+  var EXTRA_FEATURE_MAP_KEYS = [
+    "featureVisibilityPending",
+    "pendingFeatureVisibility",
+    "featureVisibilityUpdates",
+  ];
+  var FV_META_KEYS = { updatedAt: true, updatedBy: true };
 
+  /** Listado oficial en Firestore (app_settings/global_config → featureVisibility). */
+  var CANONICAL_FEATURE_KEYS = [
+    "admin_add_admin",
+    "admin_feature_settings",
+    "admin_login_button",
+    "admin_manage_admins",
+    "admin_operator_options",
+    "drawer_alertas",
+    "drawer_biometric_lock",
+    "drawer_checklist_sections",
+    "drawer_cierre_caja",
+    "drawer_manual_app",
+    "drawer_manual_funciones",
+    "drawer_operarios_linea",
+    "drawer_pausas_activas",
+    "drawer_planillado",
+    "drawer_programaciones",
+    "drawer_registros_checklist",
+    "drawer_registros_estacionamiento",
+    "drawer_registros_individuales",
+    "drawer_registros_individuales_operario",
+    "drawer_registros_operacion",
+    "drawer_relevos",
+    "drawer_solicitud_comentarios",
+    "drawer_solicitud_permiso",
+    "drawer_solicitud_prestamo",
+    "drawer_solicitud_revision_caja",
+    "drawer_solicitud_vacaciones",
+    "drawer_solicitudes",
+    "main_admin_panel",
+    "main_bike_management",
+    "main_chat",
+    "main_cleaning",
+    "main_correspondence",
+    "main_custody",
+    "main_electric_vehicle",
+    "main_lost_ticket",
+    "main_manual_tickets",
+    "main_mensualidades",
+    "main_start_checklist",
+    "main_vehicle_notes",
+    "section_cleaning",
+    "section_documentation",
+    "section_equipment",
+    "section_first_aid",
+    "section_infrastructure",
+    "section_operator_equipment",
+    "section_service_notes",
+    "section_spill_kit",
+    "section_system",
+    "showBiometricLockButton",
+    "showDeleteButtonsForOperators",
+    "syncButtonVisible",
+  ];
+
+  /**
+   * La app móvil lee estos booleanos en la RAÍZ de app_settings/global_config
+   * y también (a veces) dentro de featureVisibility. Hay que escribir en ambos.
+   */
+  var ROOT_LEGACY_TOGGLE_KEYS = [
+    "showBiometricLockButton",
+    "showDeleteButtonsForOperators",
+    "syncButtonVisible",
+  ];
+
+  var panelsEl = document.getElementById("gc-panels");
+  var emptyEl = document.getElementById("gc-empty");
+  var filterEl = document.getElementById("gc-filter");
+  var summaryEl = document.getElementById("gc-summary");
+  var statusEl = document.getElementById("gc-status");
+  var metaEl = document.getElementById("gc-meta");
+
+  var toggleKeys = [];
+  var featureMap = {};
+  var rawDoc = {};
+  var pendingStates = {};
+  var filterText = "";
+  var filterMode = "all";
+  var gcUnlocked = false;
+  var gcUnsub = null;
+  var gcSaveInProgress = false;
+  var gcLocalDirty = false;
+  var gcEditedKeys = {};
+  var lastRemoteFeatureMap = {};
+  var gcSaveBaseline = {};
+  var gcRootBaseline = {};
+  var gcSeenKeys = {};
+  var gcNewKeysHighlight = {};
+
+  var gateEl = document.getElementById("gc-pass-gate");
+  var gatePassInput = document.getElementById("gc-gate-password");
+  var gateErrorEl = document.getElementById("gc-gate-error");
+  var gateTitleEl = document.getElementById("gc-pass-title");
+  var gateDescEl = document.getElementById("gc-pass-desc");
+  var gateConfirmBtn = document.getElementById("gc-gate-confirm");
+  var livePillEl = document.getElementById("gc-live-pill");
+  var gcGateMode = "enter";
+
+  var GC_GATE_COPY = {
+    enter: {
+      title: "Confirmar contraseña",
+      desc:
+        "Para editar las configuraciones globales de la app móvil, ingrese su contraseña de administración (la misma del acceso al portal).",
+      confirm: "Continuar",
+    },
+    save: {
+      title: "Contraseña para guardar",
+      desc:
+        "Confirme su contraseña de administración para guardar los cambios en Firestore.",
+      confirm: "Guardar cambios",
+    },
+  };
+
+  var FEATURE_LABELS = {
+    admin_add_admin: "Agregar administrador",
+    admin_feature_settings: "Ajustes de funciones (admin)",
+    admin_login_button: "Botón de login admin",
+    admin_manage_admins: "Gestionar administradores",
+    admin_operator_options: "Opciones de operarios (admin)",
+    drawer_alertas: "Alertas",
+    drawer_biometric_lock: "Bloqueo biométrico (menú)",
+    drawer_checklist_sections: "Secciones del checklist",
+    drawer_cierre_caja: "Cierre de caja",
+    drawer_manual_app: "Manual de la app",
+    drawer_manual_funciones: "Manual de funciones",
+    drawer_operarios_linea: "Operarios en línea",
+    drawer_pausas_activas: "Pausas activas",
+    drawer_planillado: "Planillado",
+    drawer_programaciones: "Programaciones",
+    drawer_registros_checklist: "Registros checklist",
+    drawer_registros_estacionamiento: "Registros estacionamiento",
+    drawer_registros_individuales: "Registros individuales",
+    drawer_registros_individuales_operario: "Registros individuales (operario)",
+    drawer_registros_operacion: "Registros de operación",
+    drawer_relevos: "Relevos",
+    drawer_solicitud_comentarios: "Solicitud · comentarios",
+    drawer_solicitud_permiso: "Solicitud · permiso",
+    drawer_solicitud_prestamo: "Solicitud · préstamo",
+    drawer_solicitud_revision_caja: "Solicitud · revisión de caja",
+    drawer_solicitud_vacaciones: "Solicitud · vacaciones",
+    drawer_solicitudes: "Solicitudes (menú)",
+    main_admin_panel: "Panel de administración",
+    main_bike_management: "Gestión de bicicletas",
+    main_chat: "Chat",
+    main_cleaning: "Aseo",
+    main_correspondence: "Correspondencia",
+    main_custody: "Custodia",
+    main_electric_vehicle: "Vehículo eléctrico",
+    main_lost_ticket: "Tiquete perdido",
+    main_manual_tickets: "Tiquetes manuales",
+    main_mensualidades: "Mensualidades",
+    main_start_checklist: "Iniciar checklist",
+    main_vehicle_notes: "Notas de vehículo",
+    section_cleaning: "Sección · aseo",
+    section_documentation: "Sección · documentación",
+    section_equipment: "Sección · equipos",
+    section_first_aid: "Sección · primeros auxilios",
+    section_infrastructure: "Sección · infraestructura",
+    section_operator_equipment: "Sección · equipo operario",
+    section_service_notes: "Sección · notas de servicio",
+    section_spill_kit: "Sección · kit de derrames",
+    section_system: "Sección · sistema",
+    showBiometricLockButton: "Botón bloqueo biométrico",
+    showDeleteButtonsForOperators: "Botones eliminar operarios",
+    syncButtonVisible: "Botón sincronizar visible",
+  };
+
+  var FEATURE_GROUPS = [
+    { id: "admin", prefix: "admin_", title: "Administración", icon: "⚙️" },
+    { id: "main", prefix: "main_", title: "Pantalla principal", icon: "📱" },
+    { id: "drawer", prefix: "drawer_", title: "Menú lateral", icon: "☰" },
+    { id: "section", prefix: "section_", title: "Secciones checklist", icon: "✓" },
+    { id: "flags", prefix: "show", title: "Opciones adicionales", icon: "🔧" },
+    { id: "sync", prefix: "sync", title: "Sincronización", icon: "⟳" },
+    { id: "other", prefix: "", title: "Otros", icon: "◇" },
+  ];
+
+  function isFeatureMetaKey(key) {
+    return !!FV_META_KEYS[key];
+  }
+
+  function isFeatureToggleKey(key, val) {
+    if (!key || isFeatureMetaKey(key)) return false;
+    if (val === undefined) return true;
+    return isToggleField(val);
+  }
+
+  function setStatus(msg, isError) {
+    if (!statusEl) return;
+    statusEl.textContent = msg || "";
+    statusEl.style.color = isError ? "#fca5a5" : "#94a3b8";
+  }
+
+  function setGateError(msg) {
+    if (!gateErrorEl) return;
+    gateErrorEl.textContent = msg || "";
+  }
+
+  function markGcDirty() {
+    gcLocalDirty = true;
+  }
+
+  function clearGcDirty() {
+    gcLocalDirty = false;
+    gcEditedKeys = {};
+    if (gcUnlocked) setLivePill(true);
+  }
+
+  function markKeyEdited(key) {
+    if (key) gcEditedKeys[key] = true;
+  }
+
+  function setLivePill(active) {
+    if (!livePillEl) return;
+    livePillEl.hidden = !gcUnlocked;
+    livePillEl.classList.toggle("is-paused", !active);
+    livePillEl.textContent = active ? "En vivo" : "Pausado";
+  }
+
+  function openPasswordGate(mode) {
+    if (!gateEl) return;
+    gcGateMode = mode === "save" ? "save" : "enter";
+    var copy = GC_GATE_COPY[gcGateMode] || GC_GATE_COPY.enter;
+    if (gateTitleEl) gateTitleEl.textContent = copy.title;
+    if (gateDescEl) gateDescEl.textContent = copy.desc;
+    if (gateConfirmBtn) gateConfirmBtn.textContent = copy.confirm;
+    setGateError("");
+    if (gatePassInput) {
+      gatePassInput.value = "";
+    }
+    gateEl.hidden = false;
+    gateEl.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    setTimeout(function () {
+      if (gatePassInput) gatePassInput.focus();
+    }, 50);
+  }
+
+  function closePasswordGate() {
+    if (!gateEl) return;
+    gateEl.hidden = true;
+    gateEl.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    setGateError("");
+    if (gatePassInput) gatePassInput.value = "";
+    gcGateMode = "enter";
+    var copy = GC_GATE_COPY.enter;
+    if (gateTitleEl) gateTitleEl.textContent = copy.title;
+    if (gateDescEl) gateDescEl.textContent = copy.desc;
+    if (gateConfirmBtn) gateConfirmBtn.textContent = copy.confirm;
+  }
+
+  function verifyGatePassword() {
+    if (!auth.currentUser) {
+      return Promise.reject(new Error("Debe iniciar sesión con Google."));
+    }
+    if (
+      typeof LuganoAdminAuth === "undefined" ||
+      !LuganoAdminAuth.verifyCurrentAdminPassword
+    ) {
+      return Promise.reject(
+        new Error("No está disponible la verificación (recargue la página).")
+      );
+    }
+    var pass = gatePassInput ? String(gatePassInput.value || "").trim() : "";
+    if (!pass) {
+      return Promise.reject(new Error("Indique su contraseña de administración."));
+    }
+    return LuganoAdminAuth.verifyCurrentAdminPassword(auth.currentUser, pass);
+  }
+
+  function stopGcRealtime() {
+    if (gcUnsub) {
+      gcUnsub();
+      gcUnsub = null;
+    }
+    setLivePill(false);
+  }
+
+  function flattenFeatureMap(map, prefix) {
+    var out = {};
+    map = map || {};
+    prefix = prefix || "";
+    Object.keys(map).forEach(function (k) {
+      if (isFeatureMetaKey(k)) return;
+      var v = map[k];
+      var fullKey = prefix ? prefix + "_" + k : k;
+      if (isFeatureMetaKey(fullKey)) return;
+      if (
+        v &&
+        typeof v === "object" &&
+        !Array.isArray(v) &&
+        typeof v.toDate !== "function" &&
+        !isToggleField(v)
+      ) {
+        var nested = flattenFeatureMap(v, fullKey);
+        Object.keys(nested).forEach(function (nk) {
+          out[nk] = nested[nk];
+        });
+        return;
+      }
+      out[fullKey] = v;
+    });
+    return out;
+  }
+
+  function syncSaveBaseline(remoteFlat, rawDoc) {
+    gcSaveBaseline = {};
+    gcRootBaseline = {};
+    Object.keys(remoteFlat || {}).forEach(function (k) {
+      if (isFeatureToggleKey(k, remoteFlat[k])) {
+        gcSaveBaseline[k] = remoteFlat[k];
+      }
+    });
+    CANONICAL_FEATURE_KEYS.forEach(function (k) {
+      if (!Object.prototype.hasOwnProperty.call(gcSaveBaseline, k)) {
+        gcSaveBaseline[k] = false;
+      }
+    });
+    ROOT_LEGACY_TOGGLE_KEYS.forEach(function (k) {
+      if (rawDoc && Object.prototype.hasOwnProperty.call(rawDoc, k)) {
+        gcRootBaseline[k] = rawDoc[k];
+        gcSaveBaseline[k] = rawDoc[k];
+      } else if (Object.prototype.hasOwnProperty.call(gcSaveBaseline, k)) {
+        gcRootBaseline[k] = gcSaveBaseline[k];
+      } else {
+        gcRootBaseline[k] = false;
+        gcSaveBaseline[k] = false;
+      }
+    });
+  }
+
+  function getBaselineToggleValue(key) {
+    if (
+      ROOT_LEGACY_TOGGLE_KEYS.indexOf(key) >= 0 &&
+      Object.prototype.hasOwnProperty.call(gcRootBaseline, key)
+    ) {
+      return readToggleValue(gcRootBaseline[key]);
+    }
+    return readToggleValue(gcSaveBaseline[key]);
+  }
+
+  function applyRemoteDoc(data, fromRemote) {
+    if (!data) data = {};
+    var remoteFlat = extractFeatureMap(data);
+    lastRemoteFeatureMap = remoteFlat;
+    var addedRemote = noteNewKeysFromRemote(remoteFlat);
+    if (!gcLocalDirty) {
+      syncSaveBaseline(remoteFlat, data);
+    }
+
+    if (gcLocalDirty && fromRemote) {
+      mergeDomIntoPending();
+      var prevCount = toggleKeys.length;
+      var added = addedRemote.slice();
+      Object.keys(remoteFlat).forEach(function (k) {
+        if (!isFeatureToggleKey(k, remoteFlat[k])) return;
+        if (toggleKeys.indexOf(k) < 0 && added.indexOf(k) < 0) added.push(k);
+        if (!Object.prototype.hasOwnProperty.call(gcSaveBaseline, k)) {
+          gcSaveBaseline[k] = remoteFlat[k];
+        }
+        if (ROOT_LEGACY_TOGGLE_KEYS.indexOf(k) >= 0 && Object.prototype.hasOwnProperty.call(data, k)) {
+          gcRootBaseline[k] = data[k];
+          gcSaveBaseline[k] = data[k];
+        }
+        if (!gcEditedKeys[k]) {
+          pendingStates[k] = readToggleValue(remoteFlat[k]);
+        }
+      });
+      renderToggles(data);
+      var msg =
+        "En vivo · " +
+        toggleKeys.length +
+        " opción(es) · " +
+        new Date().toLocaleTimeString("es-CO");
+      if (added.length) {
+        msg += " · +" + added.length + " nueva(s) desde Firestore";
+      } else if (toggleKeys.length !== prevCount) {
+        msg += " · lista actualizada";
+      } else {
+        msg += " · sus cambios locales se conservan";
+      }
+      setStatus(msg);
+      setLivePill(true);
+      return;
+    }
+
+    if (fromRemote) gcEditedKeys = {};
+    pendingStates = {};
+    renderToggles(data);
+    if (fromRemote) {
+      setStatus(
+        "Sincronizado en tiempo real · " +
+          new Date().toLocaleTimeString("es-CO") +
+          " · " +
+          toggleKeys.length +
+          " opción(es)"
+      );
+    }
+  }
+
+  function startGcRealtime() {
+    stopGcRealtime();
+    if (!auth.currentUser || !gcUnlocked) return;
+    setLivePill(true);
+    gcUnsub = db
+      .collection(COL)
+      .doc(DOC_ID)
+      .onSnapshot(
+        function (snap) {
+          if (gcSaveInProgress) return;
+          if (!snap.exists) {
+            applyRemoteDoc({}, true);
+            setStatus(
+              "El documento no existe. Cree " + COL + "/" + DOC_ID + " en Firebase.",
+              true
+            );
+            return;
+          }
+          applyRemoteDoc(snap.data() || {}, true);
+        },
+        function (err) {
+          console.warn("[global-config] onSnapshot", err);
+          setStatus("Error tiempo real: " + (err.message || err.code || err), true);
+          setLivePill(false);
+        }
+      );
+  }
+
+  function humanLabel(key) {
+    if (FEATURE_LABELS[key]) return FEATURE_LABELS[key];
+    return String(key)
+      .replace(/_/g, " ")
+      .replace(/^\w/, function (c) {
+        return c.toUpperCase();
+      });
+  }
+
+  function isToggleField(val) {
+    if (val === null || val === undefined) return true;
+    if (typeof val === "boolean") return true;
+    if (typeof val === "number" && !isNaN(val)) return true;
+    if (typeof val === "string") {
+      var s = val.trim().toLowerCase();
+      return (
+        s === "true" ||
+        s === "false" ||
+        s === "1" ||
+        s === "0" ||
+        s === "yes" ||
+        s === "no" ||
+        s === "si" ||
+        s === "sí" ||
+        s === "on" ||
+        s === "off"
+      );
+    }
+    return false;
+  }
+
+  function readToggleValue(val) {
+    if (val === null || val === undefined) return false;
+    if (typeof val === "boolean") return val;
+    if (typeof val === "number") return val !== 0;
+    if (typeof val === "string") {
+      var s = val.trim().toLowerCase();
+      return (
+        s === "true" ||
+        s === "1" ||
+        s === "yes" ||
+        s === "si" ||
+        s === "sí" ||
+        s === "on"
+      );
+    }
+    return false;
+  }
+
+  function collectAllToggleKeyNames() {
+    var set = {};
+    function add(k, val) {
+      if (!isFeatureToggleKey(k, val)) return;
+      set[k] = true;
+    }
+    CANONICAL_FEATURE_KEYS.forEach(function (k) {
+      set[k] = true;
+    });
+    Object.keys(featureMap || {}).forEach(function (k) {
+      add(k, featureMap[k]);
+    });
+    Object.keys(lastRemoteFeatureMap || {}).forEach(function (k) {
+      add(k, lastRemoteFeatureMap[k]);
+    });
+    Object.keys(pendingStates || {}).forEach(function (k) {
+      set[k] = true;
+    });
+    Object.keys(gcEditedKeys || {}).forEach(function (k) {
+      set[k] = true;
+    });
+    Object.keys(gcSaveBaseline || {}).forEach(function (k) {
+      add(k, gcSaveBaseline[k]);
+    });
+    toggleKeys.forEach(function (k) {
+      set[k] = true;
+    });
+    return Object.keys(set).sort(function (a, b) {
+      return humanLabel(a).localeCompare(humanLabel(b), "es", { sensitivity: "base" });
+    });
+  }
+
+  function isNewFeatureKey(key) {
+    return !!gcNewKeysHighlight[key];
+  }
+
+  function noteNewKeysFromRemote(remoteFlat) {
+    var added = [];
+    Object.keys(remoteFlat || {}).forEach(function (k) {
+      if (!isFeatureToggleKey(k, remoteFlat[k])) return;
+      if (!gcSeenKeys[k]) {
+        gcSeenKeys[k] = true;
+        gcNewKeysHighlight[k] = true;
+        added.push(k);
+      }
+    });
+    return added;
+  }
+
+  function clearNewKeyHighlight(key) {
+    if (key) delete gcNewKeysHighlight[key];
+    else gcNewKeysHighlight = {};
+  }
+
+  function extractFeatureMap(doc) {
+    doc = doc || {};
+    var flat = {};
+    var fv = doc[FEATURE_MAP_KEY];
+    if (fv && typeof fv === "object" && !Array.isArray(fv)) {
+      flat = flattenFeatureMap(fv);
+    }
+    EXTRA_FEATURE_MAP_KEYS.forEach(function (field) {
+      var extra = doc[field];
+      if (extra && typeof extra === "object" && !Array.isArray(extra)) {
+        var flatExtra = flattenFeatureMap(extra);
+        Object.keys(flatExtra).forEach(function (k) {
+          if (!Object.prototype.hasOwnProperty.call(flat, k)) flat[k] = flatExtra[k];
+        });
+      }
+    });
+    Object.keys(doc).forEach(function (k) {
+      if (
+        k === FEATURE_MAP_KEY ||
+        k === "updatedAt" ||
+        k === "updatedBy" ||
+        EXTRA_FEATURE_MAP_KEYS.indexOf(k) >= 0
+      ) {
+        return;
+      }
+      if (!isToggleField(doc[k])) return;
+      if (!Object.prototype.hasOwnProperty.call(flat, k)) flat[k] = doc[k];
+    });
+    ROOT_LEGACY_TOGGLE_KEYS.forEach(function (k) {
+      if (Object.prototype.hasOwnProperty.call(doc, k) && isToggleField(doc[k])) {
+        flat[k] = doc[k];
+      }
+    });
+    delete flat.updatedAt;
+    delete flat.updatedBy;
+    return flat;
+  }
+
+  function readToggleFromDoc(doc, key) {
+    doc = doc || {};
+    if (ROOT_LEGACY_TOGGLE_KEYS.indexOf(key) >= 0) {
+      if (Object.prototype.hasOwnProperty.call(doc, key) && isToggleField(doc[key])) {
+        return readToggleValue(doc[key]);
+      }
+    }
+    var fv = doc[FEATURE_MAP_KEY];
+    if (fv && typeof fv === "object" && Object.prototype.hasOwnProperty.call(fv, key)) {
+      return readToggleValue(fv[key]);
+    }
+    return readToggleValue(extractFeatureMap(doc)[key]);
+  }
+
+  function groupForKey(key) {
+    for (var i = 0; i < FEATURE_GROUPS.length - 1; i++) {
+      var g = FEATURE_GROUPS[i];
+      if (g.prefix && key.indexOf(g.prefix) === 0) return g;
+    }
+    return FEATURE_GROUPS[FEATURE_GROUPS.length - 1];
+  }
+
+  function getToggleValue(key) {
+    if (Object.prototype.hasOwnProperty.call(pendingStates, key)) {
+      return !!pendingStates[key];
+    }
+    return readToggleValue(featureMap[key]);
+  }
+
+  function matchesFilter(key) {
+    if (filterMode === "on" && !getToggleValue(key)) return false;
+    if (filterMode === "off" && getToggleValue(key)) return false;
+    if (!filterText) return true;
+    var q = filterText;
+    return (
+      key.toLowerCase().indexOf(q) >= 0 ||
+      humanLabel(key).toLowerCase().indexOf(q) >= 0
+    );
+  }
+
+  function mergeDomIntoPending() {
+    if (!panelsEl) return;
+    panelsEl.querySelectorAll('input[type="checkbox"][data-gc-key]').forEach(function (cb) {
+      var k = cb.getAttribute("data-gc-key");
+      if (k) pendingStates[k] = cb.checked;
+    });
+  }
+
+  function initPendingFromFeatureMap() {
+    pendingStates = {};
+    toggleKeys.forEach(function (k) {
+      pendingStates[k] = readToggleValue(featureMap[k]);
+    });
+  }
+
+  function setToggleValue(key, on) {
+    pendingStates[key] = !!on;
+  }
+
+  function getChangedToggleKeys() {
+    mergeDomIntoPending();
+    var all = collectAllToggleKeyNames();
+    var changed = all.filter(function (k) {
+      return getBaselineToggleValue(k) !== getToggleValue(k);
+    });
+    ROOT_LEGACY_TOGGLE_KEYS.forEach(function (k) {
+      if (gcEditedKeys[k] && changed.indexOf(k) < 0) changed.push(k);
+    });
+    return changed;
+  }
+
+  function buildFlatFeatureMapForSave() {
+    mergeDomIntoPending();
+    var out = {};
+    Object.keys(lastRemoteFeatureMap || {}).forEach(function (k) {
+      if (!isFeatureToggleKey(k, lastRemoteFeatureMap[k])) return;
+      out[k] = !!getToggleValue(k);
+    });
+    CANONICAL_FEATURE_KEYS.forEach(function (key) {
+      out[key] = !!getToggleValue(key);
+    });
+    collectAllToggleKeyNames().forEach(function (key) {
+      if (!isFeatureMetaKey(key)) out[key] = !!getToggleValue(key);
+    });
+    delete out.updatedAt;
+    delete out.updatedBy;
+    return out;
+  }
+
+  function keysMatchingFilter(scope) {
+    var pool = collectAllToggleKeyNames();
+    if (scope && scope.groupId) {
+      pool = pool.filter(function (k) {
+        return groupForKey(k).id === scope.groupId;
+      });
+    }
+    return pool.filter(matchesFilter);
+  }
+
+  function setManyToggles(on, scope) {
+    mergeDomIntoPending();
+    var targets = keysMatchingFilter(scope || {});
+    targets.forEach(function (k) {
+      setToggleValue(k, on);
+      markKeyEdited(k);
+    });
+    markGcDirty();
+    renderToggles(rawDoc);
+    setStatus((on ? "Activadas " : "Ocultadas ") + targets.length + " opción(es) · sin guardar");
+  }
+
+  function updateSummary() {
+    if (!summaryEl) return;
+    var activas = 0;
+    toggleKeys.forEach(function (k) {
+      if (getToggleValue(k)) activas++;
+    });
+    var visibles = keysMatchingFilter({}).length;
+    var hiddenByFilter = toggleKeys.length - visibles;
+    var line =
+      activas +
+      " activa(s) · " +
+      (toggleKeys.length - activas) +
+      " oculta(s) · " +
+      toggleKeys.length +
+      " en total";
+    if (hiddenByFilter > 0) {
+      line += " · " + hiddenByFilter + " oculta(s) por filtro (use «Todos»)";
+    }
+    var newCount = Object.keys(gcNewKeysHighlight).length;
+    if (newCount > 0) {
+      line += " · " + newCount + " nueva(s) (etiqueta naranja)";
+    }
+    summaryEl.textContent = line;
+  }
+
+  function appendToggleRow(container, key) {
+    if (!matchesFilter(key)) return false;
+    var on = getToggleValue(key);
+    var isNew = isNewFeatureKey(key);
+    var li = document.createElement("li");
+    li.className =
+      "sec-toggle-item " + (on ? "is-on" : "is-off") + (isNew ? " gc-item--new" : "");
+    li.innerHTML =
+      '<div class="sec-toggle-label"><strong>' +
+      humanLabel(key) +
+      (isNew ? ' <span class="gc-new-badge">Nuevo</span>' : "") +
+      (ROOT_LEGACY_TOGGLE_KEYS.indexOf(key) >= 0
+        ? ' <span class="gc-new-badge gc-root-badge">Raíz</span>'
+        : "") +
+      '</strong><code>' +
+      key +
+      "</code></div>" +
+      '<label class="sec-toggle-switch" title="' +
+      (on ? "Visible" : "Oculto") +
+      '">' +
+      '<input type="checkbox" data-gc-key="' +
+      key +
+      '" ' +
+      (on ? "checked" : "") +
+      " />" +
+      '<span class="sec-toggle-slider"></span></label>';
+    var cb = li.querySelector("input");
+    function onToggleInput() {
+      setToggleValue(key, cb.checked);
+      markKeyEdited(key);
+      clearNewKeyHighlight(key);
+      li.classList.toggle("is-on", cb.checked);
+      li.classList.toggle("is-off", !cb.checked);
+      updateSummary();
+      markGcDirty();
+      setStatus("Cambios sin guardar · tiempo real sigue activo para opciones nuevas");
+    }
+    cb.addEventListener("change", onToggleInput);
+    cb.addEventListener("input", onToggleInput);
+    container.appendChild(li);
+    return true;
+  }
+
+  function buildGroupPanel(group, groupKeys) {
+    var visibleKeys = groupKeys.filter(matchesFilter);
+    if (!visibleKeys.length) return null;
+
+    var activasEnGrupo = 0;
+    groupKeys.forEach(function (k) {
+      if (getToggleValue(k)) activasEnGrupo++;
+    });
+
+    var panel = document.createElement("article");
+    panel.className = "gc-panel gc-panel--" + group.id;
+    panel.setAttribute("data-gc-group", group.id);
+
+    var head = document.createElement("header");
+    head.className = "gc-panel-head";
+    head.innerHTML =
+      '<span class="gc-panel-chevron" aria-hidden="true">▼</span>' +
+      "<h3>" +
+      (group.icon ? group.icon + " " : "") +
+      group.title +
+      "</h3>" +
+      '<span class="gc-panel-badge">' +
+      activasEnGrupo +
+      "/" +
+      groupKeys.length +
+      " activas</span>";
+
+    var actions = document.createElement("div");
+    actions.className = "gc-panel-actions";
+    actions.innerHTML =
+      '<button type="button" class="gc-panel-on" data-gc-group="' +
+      group.id +
+      '">Activar panel</button>' +
+      '<button type="button" class="gc-panel-off" data-gc-group="' +
+      group.id +
+      '">Ocultar panel</button>';
+    head.appendChild(actions);
+
+    head.addEventListener("click", function (ev) {
+      if (ev.target.closest(".gc-panel-actions")) return;
+      panel.classList.toggle("is-collapsed");
+    });
+
+    var body = document.createElement("div");
+    body.className = "gc-panel-body";
+    var list = document.createElement("ul");
+    list.className = "gc-panel-list";
+
+    visibleKeys.forEach(function (key) {
+      appendToggleRow(list, key);
+    });
+
+    body.appendChild(list);
+    panel.appendChild(head);
+    panel.appendChild(body);
+    return panel;
+  }
+
+  function renderToggles(doc) {
+    if (!panelsEl) return;
+    /* No llamar mergeDomIntoPending aquí: pisa pendingStates y anula marcar/desmarcar masivo. */
+    panelsEl.innerHTML = "";
+    rawDoc = doc || {};
+    featureMap = extractFeatureMap(rawDoc);
+
+    var keys = collectAllToggleKeyNames();
+    toggleKeys = keys.slice();
+    keys.forEach(function (k) {
+      if (!Object.prototype.hasOwnProperty.call(pendingStates, k)) {
+        pendingStates[k] = readToggleValue(featureMap[k]);
+      }
+    });
+
+    var panelCount = 0;
+    var itemCount = 0;
+    FEATURE_GROUPS.forEach(function (group) {
+      var groupKeys = keys.filter(function (k) {
+        return groupForKey(k).id === group.id;
+      });
+      if (!groupKeys.length) return;
+      var panel = buildGroupPanel(group, groupKeys);
+      if (!panel) return;
+      panelsEl.appendChild(panel);
+      panelCount++;
+      itemCount += groupKeys.filter(matchesFilter).length;
+    });
+
+    if (emptyEl) emptyEl.hidden = itemCount > 0;
+    updateSummary();
+
+    if (metaEl) {
+      var parts = [
+        "Ruta: " + COL + "/" + DOC_ID + " → " + FEATURE_MAP_KEY,
+        panelCount + " panel(es) · " + toggleKeys.length + " opción(es)",
+      ];
+      if (rawDoc.updatedAt && rawDoc.updatedAt.toDate) {
+        try {
+          parts.push(
+            "Actualizado: " + rawDoc.updatedAt.toDate().toLocaleString("es-CO")
+          );
+        } catch (e) {}
+      }
+      if (rawDoc.updatedBy) {
+        parts.push("Por: " + String(rawDoc.updatedBy).trim());
+      }
+      metaEl.textContent = parts.join(" · ");
+    }
+  }
+
+  function loadGlobalConfig() {
+    if (!auth.currentUser) {
+      setStatus("Inicie sesión para cargar configuraciones.", true);
+      return Promise.resolve();
+    }
+    if (!gcUnlocked) {
+      return Promise.resolve();
+    }
+    setStatus("Conectando en tiempo real a «" + FEATURE_MAP_KEY + "»…");
+    startGcRealtime();
+    return Promise.resolve();
+  }
+
+  function saveGlobalConfig() {
+    if (!auth.currentUser) {
+      setStatus("Inicie sesión.", true);
+      return Promise.resolve();
+    }
+    if (!gcUnlocked) {
+      setStatus("Desbloquee la pantalla con su contraseña primero.", true);
+      return Promise.resolve();
+    }
+    mergeDomIntoPending();
+    if (!gcLocalDirty && !Object.keys(gcEditedKeys).length) {
+      setStatus("No hay cambios para guardar.");
+      return Promise.resolve();
+    }
+    openPasswordGate("save");
+    return Promise.resolve();
+  }
+
+  function writeGlobalConfigDoc(newFeatureMap, updatedBy) {
+    var ref = db.collection(COL).doc(DOC_ID);
+    var rootPayload = {};
+    ROOT_LEGACY_TOGGLE_KEYS.forEach(function (k) {
+      rootPayload[k] = !!newFeatureMap[k];
+    });
+    var fullPayload = {
+      featureVisibility: newFeatureMap,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedBy: String(updatedBy || "").trim() || "portal_web",
+    };
+    Object.keys(rootPayload).forEach(function (k) {
+      fullPayload[k] = rootPayload[k];
+    });
+    console.info("[global-config] batch guardar", COL + "/" + DOC_ID, {
+      raiz: rootPayload,
+      featureVisibility: newFeatureMap,
+    });
+    var batch = db.batch();
+    batch.set(ref, fullPayload, { merge: true });
+    return batch.commit().catch(function (err) {
+      if (err && err.code === "not-found") {
+        return ref.set(fullPayload);
+      }
+      throw err;
+    });
+  }
+
+  function doSaveGlobalConfig() {
+    if (!auth.currentUser) {
+      setStatus("Sesión expirada. Inicie sesión con Google de nuevo.", true);
+      return Promise.resolve();
+    }
+    mergeDomIntoPending();
+    if (!gcLocalDirty && !Object.keys(gcEditedKeys).length) {
+      setStatus("No hay cambios para guardar.");
+      return Promise.resolve();
+    }
+
+    var changedKeys = getChangedToggleKeys();
+    if (!changedKeys.length && Object.keys(gcEditedKeys).length) {
+      changedKeys = Object.keys(gcEditedKeys);
+    }
+    if (!changedKeys.length) {
+      changedKeys = collectAllToggleKeyNames();
+    }
+
+    var expected = {};
+    changedKeys.forEach(function (k) {
+      expected[k] = !!getToggleValue(k);
+    });
+    var newFeatureMap = buildFlatFeatureMapForSave();
+
+    var sess =
+      window.LuganoAdminAuth && window.LuganoAdminAuth.getAdminSession
+        ? window.LuganoAdminAuth.getAdminSession()
+        : null;
+    var updatedBy =
+      (sess && sess.nombre) ||
+      auth.currentUser.displayName ||
+      auth.currentUser.email ||
+      auth.currentUser.uid ||
+      "portal_web";
+
+    var activos = 0;
+    toggleKeys.forEach(function (k) {
+      if (newFeatureMap[k]) activos++;
+    });
+
+    setStatus(
+      "Guardando " + changedKeys.length + " cambio(s) en " + COL + "/" + DOC_ID + "…"
+    );
+    gcSaveInProgress = true;
+    setLivePill(false);
+    stopGcRealtime();
+
+    console.info("[global-config] guardando", COL + "/" + DOC_ID, newFeatureMap);
+
+    return writeGlobalConfigDoc(newFeatureMap, updatedBy)
+      .then(function () {
+        if (db.waitForPendingWrites) {
+          return db.waitForPendingWrites();
+        }
+      })
+      .then(function () {
+        var ref = db.collection(COL).doc(DOC_ID);
+        return ref.get({ source: "server" }).catch(function () {
+          return ref.get();
+        });
+      })
+      .then(function (snap) {
+        if (!snap.exists) {
+          throw new Error("No se pudo verificar el guardado en Firestore.");
+        }
+        var docData = snap.data() || {};
+        var saved = extractFeatureMap(docData);
+        var mismatch = changedKeys.filter(function (k) {
+          if (ROOT_LEGACY_TOGGLE_KEYS.indexOf(k) >= 0) {
+            return readToggleValue(docData[k]) !== expected[k];
+          }
+          return readToggleValue(saved[k]) !== expected[k];
+        });
+        var legacyRootFail = ROOT_LEGACY_TOGGLE_KEYS.filter(function (k) {
+          return readToggleValue(docData[k]) !== !!newFeatureMap[k];
+        });
+        clearGcDirty();
+        clearNewKeyHighlight();
+        syncSaveBaseline(saved, docData);
+        applyRemoteDoc(snap.data() || {}, false);
+        if (legacyRootFail.length) {
+          console.warn("[global-config] raíz sin actualizar:", legacyRootFail, {
+            esperado: newFeatureMap,
+            leido: docData,
+          });
+          setStatus(
+            "Los campos en la raíz no se actualizaron: " +
+              legacyRootFail.join(", ") +
+              ". ¿La app móvil los sobrescribe al instante?",
+            true
+          );
+        } else if (mismatch.length) {
+          console.warn("[global-config] relectura distinta:", mismatch, expected, saved);
+          setStatus(
+            "Escritura enviada. Al re-leer, " +
+              mismatch.length +
+              " clave(s) no coinciden. Revise Firebase Console.",
+            true
+          );
+        } else {
+          var legacyOk = ROOT_LEGACY_TOGGLE_KEYS.map(function (k) {
+            return k + "=" + (docData[k] ? "true" : "false");
+          }).join(", ");
+          setStatus(
+            "Guardado en Firestore · " +
+              changedKeys.length +
+              " cambio(s) · raíz: " +
+              legacyOk
+          );
+        }
+        var toast = document.getElementById("sec-toast");
+        if (toast) {
+          toast.textContent = mismatch.length
+            ? "Guardado enviado; verifique valores en Firebase Console."
+            : "Configuraciones globales guardadas en Firestore.";
+          toast.classList.add("is-visible");
+          setTimeout(function () {
+            toast.classList.remove("is-visible");
+          }, 3200);
+        }
+      })
+      .catch(function (err) {
+        var msg = err.message || err.code || String(err);
+        if (err && err.code === "permission-denied") {
+          msg +=
+            " — Ejecute: firebase deploy --only firestore:rules (colección app_settings).";
+        }
+        setStatus("Error al guardar: " + msg, true);
+        console.error("[global-config] guardar", err);
+      })
+      .finally(function () {
+        gcSaveInProgress = false;
+        if (gcUnlocked) startGcRealtime();
+      });
+  }
+
+  function requestAccess() {
+    if (gcUnlocked) {
+      if (window.SecNav) window.SecNav.activateTab("global-config", { forceGlobal: true });
+      return;
+    }
+    openPasswordGate("enter");
+  }
+
+  function onEnter() {
+    loadGlobalConfig();
+  }
+
+  function onLeave() {
+    gcUnlocked = false;
+    gcLocalDirty = false;
+    gcEditedKeys = {};
+    lastRemoteFeatureMap = {};
+    gcSaveBaseline = {};
+    gcRootBaseline = {};
+    gcSeenKeys = {};
+    gcNewKeysHighlight = {};
+    stopGcRealtime();
+    closePasswordGate();
+  }
+
+  function confirmGateAction() {
+    var mode = gcGateMode;
+    var copy = GC_GATE_COPY[mode] || GC_GATE_COPY.enter;
+    if (gateConfirmBtn) {
+      gateConfirmBtn.disabled = true;
+      gateConfirmBtn.textContent = "Verificando…";
+    }
+    return verifyGatePassword()
+      .then(function () {
+        if (mode === "save") {
+          closePasswordGate();
+          return doSaveGlobalConfig().catch(function (err) {
+            setStatus("Error al guardar: " + (err.message || err.code || err), true);
+            console.error("[global-config] save gate", err);
+          });
+        }
+        gcUnlocked = true;
+        closePasswordGate();
+        if (window.SecNav) {
+          window.SecNav.activateTab("global-config", { forceGlobal: true });
+        }
+      })
+      .catch(function (err) {
+        setGateError(err.message || String(err));
+        if (gatePassInput) {
+          gatePassInput.focus();
+          gatePassInput.select();
+        }
+      })
+      .finally(function () {
+        if (gateConfirmBtn) {
+          gateConfirmBtn.disabled = false;
+          gateConfirmBtn.textContent = copy.confirm;
+        }
+      });
+  }
+
+  document.getElementById("gc-gate-confirm").addEventListener("click", confirmGateAction);
+  document.getElementById("gc-gate-cancel").addEventListener("click", closePasswordGate);
+  document.getElementById("gc-pass-backdrop").addEventListener("click", closePasswordGate);
+  if (gatePassInput) {
+    gatePassInput.addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter") {
+        ev.preventDefault();
+        confirmGateAction();
+      }
+      if (ev.key === "Escape") closePasswordGate();
+    });
+  }
+
+  document.getElementById("gc-btn-reload").addEventListener("click", function () {
+    if (gcLocalDirty && !window.confirm("Tiene cambios sin guardar. ¿Recargar desde Firestore?")) {
+      return;
+    }
+    clearGcDirty();
+    loadGlobalConfig();
+  });
+  document.getElementById("gc-btn-save").addEventListener("click", saveGlobalConfig);
+  document.getElementById("gc-btn-visible-on").addEventListener("click", function () {
+    setManyToggles(true, {});
+  });
+  document.getElementById("gc-btn-visible-off").addEventListener("click", function () {
+    setManyToggles(false, {});
+  });
+  document.getElementById("gc-btn-all-on").addEventListener("click", function () {
+    mergeDomIntoPending();
+    collectAllToggleKeyNames().forEach(function (k) {
+      setToggleValue(k, true);
+      markKeyEdited(k);
+    });
+    filterMode = "all";
+    filterText = "";
+    if (filterEl) filterEl.value = "";
+    document.querySelectorAll(".gc-chip").forEach(function (c) {
+      c.classList.toggle("is-active", c.getAttribute("data-gc-filter-mode") === "all");
+    });
+    markGcDirty();
+    renderToggles(rawDoc);
+    setStatus("Todas las opciones activadas · sin guardar");
+  });
+  document.getElementById("gc-btn-all-off").addEventListener("click", function () {
+    mergeDomIntoPending();
+    collectAllToggleKeyNames().forEach(function (k) {
+      setToggleValue(k, false);
+      markKeyEdited(k);
+    });
+    filterMode = "all";
+    filterText = "";
+    if (filterEl) filterEl.value = "";
+    document.querySelectorAll(".gc-chip").forEach(function (c) {
+      c.classList.toggle("is-active", c.getAttribute("data-gc-filter-mode") === "all");
+    });
+    markGcDirty();
+    renderToggles(rawDoc);
+    setStatus("Todas las opciones ocultadas · sin guardar");
+  });
+
+  if (filterEl) {
+    filterEl.addEventListener("input", function () {
+      filterText = String(filterEl.value || "")
+        .trim()
+        .toLowerCase();
+      renderToggles(rawDoc);
+    });
+  }
+
+  document.querySelectorAll(".gc-chip").forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      filterMode = chip.getAttribute("data-gc-filter-mode") || "all";
+      document.querySelectorAll(".gc-chip").forEach(function (c) {
+        c.classList.toggle("is-active", c === chip);
+      });
+      renderToggles(rawDoc);
+    });
+  });
+
+  if (panelsEl) {
+    panelsEl.addEventListener("click", function (ev) {
+      var btnOn = ev.target.closest(".gc-panel-on");
+      var btnOff = ev.target.closest(".gc-panel-off");
+      if (!btnOn && !btnOff) return;
+      ev.stopPropagation();
+      var gid = (btnOn || btnOff).getAttribute("data-gc-group");
+      setManyToggles(!!btnOn, { groupId: gid });
+    });
+  }
+
+  auth.onAuthStateChanged(function (user) {
+    if (!user) {
+      onLeave();
+      if (panelsEl) panelsEl.innerHTML = "";
+      pendingStates = {};
+      if (emptyEl) emptyEl.hidden = true;
+      if (summaryEl) summaryEl.textContent = "—";
+      setStatus("");
+      if (window.SecNav && window.SecNav.getCurrentTab() === "global-config") {
+        window.SecNav.activateTab("overview");
+      }
+      return;
+    }
+  });
+
+  window.LuganoGlobalConfig = {
+    load: loadGlobalConfig,
+    save: saveGlobalConfig,
+    saveConfirmed: doSaveGlobalConfig,
+    requestAccess: requestAccess,
+    onEnter: onEnter,
+    onLeave: onLeave,
+    isUnlocked: function () {
+      return gcUnlocked;
+    },
+  };
+})();
+</script>
 <script src="lugano-firestore-alertas.js"></script>
 </body>
 </html>

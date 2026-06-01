@@ -1589,6 +1589,1135 @@
       color: #9ca3af;
       line-height: 1.45;
     }
+    button.esta-insight--link {
+      width: 100%;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    button.esta-insight--link:hover {
+      border-color: rgba(76, 175, 80, 0.55);
+      box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+    }
+    button.esta-insight--link:focus-visible {
+      outline: 2px solid #66bb6a;
+      outline-offset: 2px;
+    }
+    button.esta-insight--link--ritmo:hover {
+      border-color: rgba(255, 152, 0, 0.55);
+      box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.22);
+    }
+    button.esta-insight--link--ritmo:focus-visible {
+      outline-color: #ff9800;
+    }
+    button.esta-insight--link--aforo:hover {
+      border-color: rgba(255, 213, 79, 0.55);
+      box-shadow: 0 0 0 2px rgba(255, 213, 79, 0.22);
+    }
+    button.esta-insight--link--aforo:focus-visible {
+      outline-color: #ffd54f;
+    }
+    #esta-panel-aforo[hidden] {
+      display: none !important;
+    }
+    .esta-aforo-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .esta-aforo-status {
+      font-size: 13px;
+      color: #94a3b8;
+      flex: 1;
+      min-width: 180px;
+    }
+    .esta-aforo-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .esta-aforo-kpi {
+      background: #141414;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .esta-aforo-kpi strong {
+      display: block;
+      font-size: 20px;
+      color: #fff8e1;
+    }
+    .esta-aforo-kpi span {
+      font-size: 10px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .esta-aforo-charts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .esta-aforo-chart-card {
+      background: #141418;
+      border: 1px solid rgba(255, 213, 79, 0.28);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .esta-aforo-chart-card h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: #ffe082;
+    }
+    .esta-aforo-chart-card p {
+      margin: 0 0 10px;
+      font-size: 11px;
+      color: #9ca3af;
+      line-height: 1.4;
+    }
+    .esta-aforo-chart-card .canvas-wrap {
+      height: 260px;
+      position: relative;
+    }
+    .esta-aforo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+    }
+    .esta-aforo-card {
+      border-radius: 14px;
+      border: 1px solid #333;
+      background: linear-gradient(160deg, #1c1c20 0%, #101012 100%);
+      padding: 16px 18px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    }
+    .esta-aforo-card.is-hot {
+      border-color: rgba(244, 67, 54, 0.55);
+      box-shadow: 0 0 0 1px rgba(244, 67, 54, 0.2);
+    }
+    .esta-aforo-card.is-warn {
+      border-color: rgba(255, 152, 0, 0.45);
+    }
+    .esta-aforo-card.is-ok {
+      border-color: rgba(129, 199, 132, 0.35);
+    }
+    .esta-aforo-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .esta-aforo-card-head strong {
+      font-size: 15px;
+      color: #f5f5f5;
+    }
+    .esta-aforo-card-head span {
+      font-size: 10px;
+      color: #6b7280;
+      display: block;
+      margin-top: 2px;
+    }
+    .esta-aforo-pct {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffd54f;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .esta-aforo-pct--na {
+      font-size: 14px;
+      color: #9ca3af;
+      font-weight: 600;
+    }
+    .esta-aforo-meter {
+      height: 12px;
+      border-radius: 999px;
+      background: #252525;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .esta-aforo-meter span {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #43a047, #ffd54f, #e65100);
+      transition: width 0.35s ease;
+    }
+    .esta-aforo-stats {
+      font-size: 12px;
+      color: #b0b8c4;
+      line-height: 1.5;
+    }
+    .esta-aforo-grupos {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #333;
+      font-size: 11px;
+      color: #9ca3af;
+      line-height: 1.45;
+    }
+    .esta-aforo-tag {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      background: #252525;
+      color: #aaa;
+    }
+    .esta-aforo-tag--limit {
+      color: #ef9a9a;
+      background: rgba(244, 67, 54, 0.12);
+    }
+    #esta-panel-ritmo[hidden] {
+      display: none !important;
+    }
+    .esta-ritmo-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .esta-ritmo-toolbar input[type="search"],
+    .esta-ritmo-toolbar select {
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #111;
+      color: #eee;
+      font-size: 13px;
+    }
+    .esta-ritmo-toolbar input[type="search"] {
+      flex: 1;
+      min-width: 200px;
+    }
+    .esta-ritmo-status {
+      font-size: 13px;
+      color: #94a3b8;
+      flex: 1;
+      min-width: 160px;
+    }
+    .esta-ritmo-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .esta-ritmo-kpi {
+      background: #141414;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .esta-ritmo-kpi strong {
+      display: block;
+      font-size: 20px;
+      color: #fff3e0;
+    }
+    .esta-ritmo-kpi span {
+      font-size: 10px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .esta-ritmo-hours-wrap {
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 152, 0, 0.25);
+      background: linear-gradient(180deg, #1a1814 0%, #101010 100%);
+    }
+    .esta-ritmo-hours-wrap h3 {
+      margin: 0 0 10px;
+      font-size: 14px;
+      color: #ffcc80;
+    }
+    .esta-ritmo-hours {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 100px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .esta-ritmo-hour {
+      flex: 1 0 28px;
+      min-width: 26px;
+      max-width: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 0;
+    }
+    .esta-ritmo-hour-bar {
+      width: 100%;
+      min-height: 4px;
+      border-radius: 4px 4px 0 0;
+      background: linear-gradient(180deg, #ffb74d 0%, #e65100 100%);
+      opacity: 0.45;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .esta-ritmo-hour.is-active .esta-ritmo-hour-bar,
+    .esta-ritmo-hour:hover .esta-ritmo-hour-bar {
+      opacity: 1;
+      transform: scaleY(1.04);
+    }
+    .esta-ritmo-hour.is-peak .esta-ritmo-hour-bar {
+      box-shadow: 0 0 12px rgba(255, 152, 0, 0.65);
+    }
+    .esta-ritmo-hour-label {
+      font-size: 10px;
+      color: #9ca3af;
+      font-weight: 600;
+    }
+    .esta-ritmo-hour.is-active .esta-ritmo-hour-label {
+      color: #ffb74d;
+    }
+    .esta-ritmo-hour-count {
+      font-size: 9px;
+      color: #6b7280;
+    }
+    .esta-ritmo-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .esta-ritmo-chip {
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #c4c9d4;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .esta-ritmo-chip.is-active {
+      border-color: #e65100;
+      background: rgba(255, 152, 0, 0.15);
+      color: #ffe0b2;
+    }
+    .esta-ritmo-stream {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      max-height: 62vh;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+    .esta-ritmo-group {
+      border-left: 3px solid rgba(255, 152, 0, 0.45);
+      padding-left: 14px;
+    }
+    .esta-ritmo-group-head {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: linear-gradient(90deg, #141414 0%, #0a0a0a 100%);
+      padding: 8px 0 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffb74d;
+    }
+    .esta-ritmo-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 10px;
+    }
+    .esta-ritmo-card {
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      background: linear-gradient(145deg, #1a1a1e 0%, #121216 100%);
+      cursor: pointer;
+      font-family: inherit;
+      color: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .esta-ritmo-card:hover {
+      border-color: #e65100;
+      box-shadow: 0 6px 20px rgba(230, 81, 0, 0.15);
+    }
+    .esta-ritmo-card-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .esta-ritmo-placa {
+      background: #ffdd00;
+      color: #111;
+      border: 2px solid #000;
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-family: Consolas, monospace;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+    }
+    .esta-ritmo-meta {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    .esta-ritmo-body {
+      font-size: 13px;
+      color: #e8eaef;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-word;
+    }
+    .esta-ritmo-body.is-empty {
+      color: #6b7280;
+      font-style: italic;
+    }
+    .esta-ritmo-body mark {
+      background: rgba(255, 213, 79, 0.35);
+      color: #fff8e1;
+      border-radius: 2px;
+      padding: 0 2px;
+    }
+    .esta-ritmo-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .esta-ritmo-tag {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #252525;
+      color: #aaa;
+    }
+    .esta-ritmo-tag--foto {
+      color: #a5d6a7;
+      background: rgba(76, 175, 80, 0.15);
+    }
+    .esta-ritmo-dialog {
+      position: fixed;
+      inset: 0;
+      z-index: 10080;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    .esta-ritmo-dialog[hidden] {
+      display: none !important;
+    }
+    .esta-ritmo-dialog-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+    }
+    .esta-ritmo-dialog-card {
+      position: relative;
+      z-index: 1;
+      width: min(560px, 96vw);
+      max-height: 88vh;
+      overflow: auto;
+      background: #161616;
+      border: 1px solid #444;
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    }
+    .esta-ritmo-dialog-card h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      color: #fff3e0;
+    }
+    .esta-ritmo-dialog-dl {
+      margin: 0;
+      display: grid;
+      grid-template-columns: minmax(100px, 38%) 1fr;
+      gap: 8px 12px;
+      font-size: 13px;
+    }
+    .esta-ritmo-dialog-dl dt {
+      color: #9ca3af;
+      font-weight: 600;
+      margin: 0;
+    }
+    .esta-ritmo-dialog-dl dd {
+      margin: 0;
+      color: #f3f4f6;
+      word-break: break-word;
+      line-height: 1.45;
+    }
+    .esta-ritmo-dialog-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 50%;
+      background: #2a2a2a;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .esta-evidencia-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .esta-evidencia-toolbar label.esta-evidencia-opt {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #9ca3af;
+      cursor: pointer;
+      user-select: none;
+    }
+    .esta-evidencia-toolbar label.esta-evidencia-opt input {
+      accent-color: #81c784;
+    }
+    .esta-evidencia-toolbar input[type="search"] {
+      flex: 1;
+      min-width: 200px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #111;
+      color: #eee;
+      font-size: 13px;
+    }
+    .esta-evidencia-status {
+      font-size: 13px;
+      color: #94a3b8;
+      flex: 1;
+      min-width: 180px;
+    }
+    .esta-panel-load-host {
+      position: relative;
+      min-height: 360px;
+    }
+    .esta-space-loader {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background: rgba(8, 8, 10, 0.92);
+      backdrop-filter: blur(6px);
+      border-radius: 14px;
+      box-sizing: border-box;
+    }
+    .esta-space-loader[hidden] {
+      display: none !important;
+    }
+    .esta-space-loader-inner {
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      padding: 8px 12px;
+    }
+    .esta-space-loader-orbit {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 152, 0, 0.15);
+      border-top-color: #ff9800;
+      border-right-color: #81c784;
+      animation: esta-space-spin 1.1s linear infinite;
+    }
+    @keyframes esta-space-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    .esta-space-loader-area {
+      margin: 0 0 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ffb74d;
+    }
+    .esta-space-loader-msg {
+      margin: 0 0 16px;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #e8eaef;
+      min-height: 3em;
+      transition: opacity 0.35s ease;
+    }
+    .esta-space-loader-msg.is-fading {
+      opacity: 0.35;
+    }
+    .esta-space-loader-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .esta-space-loader-chip {
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 600;
+      border: 1px solid #333;
+      background: #1a1a1a;
+      color: #888;
+      transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .esta-space-loader-chip.is-active {
+      border-color: rgba(255, 152, 0, 0.55);
+      background: rgba(255, 152, 0, 0.12);
+      color: #ffe0b2;
+      transform: scale(1.04);
+    }
+    .esta-space-loader-bar {
+      height: 6px;
+      border-radius: 999px;
+      background: #252525;
+      overflow: hidden;
+    }
+    .esta-space-loader-bar span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #e65100, #ffb74d, #81c784);
+      transition: width 0.45s ease;
+    }
+    .esta-space-loader-hint {
+      margin: 12px 0 0;
+      font-size: 11px;
+      color: #6b7280;
+    }
+    .esta-evidencia-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .esta-evidencia-filter {
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #c4c9d4;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .esta-evidencia-filter.is-active {
+      border-color: #43a047;
+      background: rgba(76, 175, 80, 0.15);
+      color: #c8e6c9;
+    }
+    .esta-evidencia-albums {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .esta-ev-album {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      padding: 0;
+      border-radius: 12px;
+      border: 1px solid #333;
+      background: #141418;
+      overflow: hidden;
+      cursor: pointer;
+      font-family: inherit;
+      color: inherit;
+      transition: border-color 0.15s, transform 0.12s;
+    }
+    .esta-ev-album:hover {
+      border-color: #43a047;
+      transform: translateY(-2px);
+    }
+    .esta-ev-album-thumb {
+      aspect-ratio: 4 / 3;
+      background: #0a0a0c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .esta-ev-album-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .esta-ev-album-thumb .esta-ev-album-placeholder {
+      font-size: 36px;
+      opacity: 0.35;
+    }
+    .esta-ev-album-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(0, 0, 0, 0.72);
+      color: #c8e6c9;
+    }
+    .esta-ev-album-body {
+      padding: 12px 14px 14px;
+    }
+    .esta-ev-album-body strong {
+      display: block;
+      font-size: 14px;
+      color: #f3f4f6;
+      margin-bottom: 4px;
+      word-break: break-word;
+    }
+    .esta-ev-album-body span {
+      display: block;
+      font-size: 11px;
+      color: #9ca3af;
+      line-height: 1.4;
+      word-break: break-all;
+    }
+    .esta-evidencia-detail[hidden] {
+      display: none !important;
+    }
+    .esta-evidencia-detail-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .esta-evidencia-detail-head h3 {
+      margin: 0;
+      flex: 1;
+      font-size: 16px;
+      color: #f3f4f6;
+      word-break: break-word;
+    }
+    .esta-ev-photos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+    }
+    .esta-ev-photo {
+      padding: 0;
+      border: 1px solid #333;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #0d0d0d;
+      cursor: pointer;
+      aspect-ratio: 1;
+    }
+    .esta-ev-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .esta-ev-photo .esta-ev-photo-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      font-size: 11px;
+      color: #6b7280;
+    }
+    .esta-ev-load-more {
+      grid-column: 1 / -1;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px dashed #444;
+      background: #141414;
+      color: #aed581;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .esta-ev-load-more:hover {
+      border-color: #81c784;
+      background: #1a1f1a;
+    }
+    #esta-ev-lightbox.fotos-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 10100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    #esta-ev-lightbox.fotos-lightbox[hidden] {
+      display: none !important;
+    }
+    #esta-ev-lightbox .fotos-lightbox-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+    }
+    #esta-ev-lightbox .fotos-lightbox-inner {
+      position: relative;
+      z-index: 1;
+      max-width: min(96vw, 1100px);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    #esta-ev-lightbox .fotos-lightbox-close {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 3;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(30, 30, 30, 0.92);
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+    #esta-ev-lightbox .fotos-lightbox-close:hover {
+      background: #444;
+    }
+    #esta-ev-lightbox .fotos-lightbox-plate {
+      margin: 0;
+      font-size: 13px;
+      color: #ffb74d;
+      font-weight: 600;
+      text-align: center;
+    }
+    #esta-ev-lightbox .fotos-lightbox-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px 14px;
+      width: 100%;
+      padding: 8px 12px;
+      background: rgba(22, 22, 22, 0.96);
+      border-radius: 10px;
+      border: 1px solid #3a3a3a;
+      box-sizing: border-box;
+    }
+    #esta-ev-lightbox .fotos-zoom-btn {
+      min-width: 40px;
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: #2a2a2a;
+      color: #eee;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1;
+    }
+    #esta-ev-lightbox .fotos-zoom-btn:hover {
+      background: #383838;
+    }
+    #esta-ev-lightbox .fotos-zoom-label {
+      min-width: 52px;
+      text-align: center;
+      font-size: 14px;
+      color: #b8e994;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    #esta-ev-lightbox .fotos-zoom-reset {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: #333;
+      color: #ddd;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    #esta-ev-lightbox .fotos-zoom-reset:hover {
+      background: #444;
+    }
+    #esta-ev-lightbox .fotos-enhance-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #ccc;
+      cursor: pointer;
+      user-select: none;
+    }
+    #esta-ev-lightbox .fotos-enhance-label input {
+      width: 18px;
+      height: 18px;
+      accent-color: #ffb74d;
+      cursor: pointer;
+    }
+    #esta-ev-lightbox .fotos-zoom-toolbar-group {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 14px;
+    }
+    #esta-ev-lightbox .fotos-lightbox-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+    #esta-ev-lightbox .fotos-lightbox-prev,
+    #esta-ev-lightbox .fotos-lightbox-next {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid #555;
+      background: rgba(40, 40, 40, 0.95);
+      color: #fff;
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    #esta-ev-lightbox .fotos-lightbox-prev:hover,
+    #esta-ev-lightbox .fotos-lightbox-next:hover {
+      background: #555;
+    }
+    #esta-ev-lightbox .fotos-lightbox-prev:disabled,
+    #esta-ev-lightbox .fotos-lightbox-next:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+    #esta-ev-lightbox .fotos-lightbox-viewport {
+      overflow: hidden;
+      max-height: min(78vh, 720px);
+      max-width: min(88vw, 1000px);
+      width: 100%;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      touch-action: none;
+      border-radius: 8px;
+      background: #111;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    }
+    #esta-ev-lightbox .fotos-lightbox-viewport:active {
+      cursor: grabbing;
+    }
+    #esta-ev-lightbox .fotos-lightbox-zoom-layer {
+      transform-origin: center center;
+      will-change: transform;
+    }
+    #esta-ev-lightbox .fotos-lightbox-img {
+      display: block;
+      max-height: min(78vh, 720px);
+      max-width: min(88vw, 1000px);
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+      user-select: none;
+      pointer-events: none;
+    }
+    #esta-ev-lightbox .fotos-lightbox-canvas {
+      display: block;
+      max-height: min(78vh, 720px);
+      max-width: min(88vw, 1000px);
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+    }
+    #esta-ev-lightbox .fotos-lightbox-canvas[hidden] {
+      display: none !important;
+    }
+    #esta-ev-lightbox .fotos-lightbox-video {
+      display: block;
+      max-height: min(78vh, 720px);
+      max-width: min(88vw, 1000px);
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+      background: #111;
+    }
+    #esta-ev-lightbox .fotos-lightbox-video[hidden] {
+      display: none !important;
+    }
+    #esta-ev-lightbox .fotos-lightbox-counter,
+    #esta-ev-lightbox .fotos-lightbox-hint {
+      margin: 0;
+      font-size: 12px;
+      color: #9ca3af;
+      text-align: center;
+      max-width: 90vw;
+      line-height: 1.45;
+    }
+    @media (max-width: 640px) {
+      #esta-ev-lightbox .fotos-lightbox-prev,
+      #esta-ev-lightbox .fotos-lightbox-next {
+        width: 36px;
+        height: 36px;
+        font-size: 22px;
+      }
+      #esta-ev-lightbox .fotos-lightbox-toolbar {
+        flex-direction: column;
+      }
+    }
+    #esta-panel-evidencia[hidden] {
+      display: none !important;
+    }
+    .esta-hub-hero {
+      margin-bottom: 22px;
+      padding: 20px 22px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 152, 0, 0.28);
+      background: linear-gradient(135deg, rgba(30, 24, 18, 0.95) 0%, rgba(12, 12, 14, 0.98) 55%, rgba(8, 10, 16, 1) 100%);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+    }
+    .esta-hub-hero h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      color: #f5f5f5;
+      letter-spacing: 0.01em;
+    }
+    .esta-hub-hero p {
+      margin: 0;
+      font-size: 14px;
+      color: #b0b8c4;
+      line-height: 1.55;
+      max-width: 920px;
+    }
+    .esta-hub-modules {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .esta-hub-module {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      text-align: left;
+      padding: 18px 20px;
+      border-radius: 14px;
+      border: 1px solid #3a3a42;
+      background: linear-gradient(160deg, #1c1c22 0%, #121216 100%);
+      color: inherit;
+      font-family: inherit;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    }
+    .esta-hub-module:hover {
+      border-color: #e65100;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(230, 81, 0, 0.18);
+    }
+    .esta-hub-module:focus-visible {
+      outline: 2px solid #ff9800;
+      outline-offset: 2px;
+    }
+    .esta-hub-module-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+    .esta-hub-module strong {
+      font-size: 16px;
+      color: #fff3e0;
+      font-weight: 700;
+    }
+    .esta-hub-module span.esta-hub-module-desc {
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.45;
+    }
+    .esta-hub-module--panel {
+      border-color: rgba(255, 152, 0, 0.35);
+    }
+    .esta-hub-module--lotes {
+      border-color: rgba(66, 165, 245, 0.35);
+    }
+    .esta-hub-module--sedes {
+      border-color: rgba(129, 199, 132, 0.35);
+    }
+    .esta-hub-module--plantillas {
+      border-color: rgba(186, 104, 200, 0.35);
+    }
+    .esta-section-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 16px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #333;
+    }
+    .esta-section-back {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #e8eaef;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .esta-section-back:hover {
+      background: #2a2a2a;
+      border-color: #e65100;
+      color: #fff3e0;
+    }
+    .esta-section-top h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #f3f4f6;
+      flex: 1;
+      min-width: 180px;
+    }
+    .esta-tabs--sub {
+      margin-bottom: 0;
+      flex: 1 1 100%;
+    }
+    #esta-panel-home[hidden],
+    #esta-panel-operativo[hidden],
+    #esta-panel-lotes[hidden],
+    #esta-panel-sedes[hidden],
+    #esta-panel-plantillas[hidden] {
+      display: none !important;
+    }
     .stats-chart-note {
       font-size: 11px;
       color: #6b7280;
@@ -2328,14 +3457,196 @@
  </header>
 
   <div id="stats-main" class="stats-wrap">
-    <nav class="esta-tabs" aria-label="Secciones de estacionamientos">
-      <button type="button" class="esta-tab is-active" id="esta-tab-btn-panel" data-esta-tab="panel">Panel operativo</button>
+    <nav class="esta-tabs esta-tabs--main" id="esta-tabs-nav" aria-label="Secciones de estacionamientos" hidden>
+      <button type="button" class="esta-tab" id="esta-tab-btn-home" data-esta-tab="home">Inicio</button>
+      <button type="button" class="esta-tab" id="esta-tab-btn-panel" data-esta-tab="panel">Panel operativo</button>
       <button type="button" class="esta-tab" id="esta-tab-btn-lotes" data-esta-tab="lotes">Lotes y capacidad</button>
       <button type="button" class="esta-tab" id="esta-tab-btn-sedes" data-esta-tab="sedes">Administración de sedes</button>
       <button type="button" class="esta-tab" id="esta-tab-btn-plantillas" data-esta-tab="plantillas">Plantillas de impresión</button>
     </nav>
 
+    <div id="esta-panel-home" class="esta-tab-panel" aria-label="Panel principal de estacionamientos">
+      <div class="esta-hub-hero">
+        <h2>Centro de gestión · estacionamientos</h2>
+        <p>
+          Elija un módulo para supervisar la operación. El <strong>panel operativo</strong> concentra
+          <strong>caja</strong> (colección de cierres), <strong>planillados</strong> con y sin foto, y referencia por
+          <strong>franja horaria</strong>. Un mayor volumen de planillados en horario activo suele ir ligado a menos brechas de
+          servicio y a mayor trazabilidad — es decir, más control operativo y más protección para el negocio y el cliente.
+        </p>
+      </div>
+      <div class="esta-insights" aria-label="Ideas de lectura">
+        <button type="button" class="esta-insight esta-insight--link esta-insight--link--ritmo" data-esta-go="ritmo" aria-label="Explorar textos de todos los planillados">
+          <span class="esta-insight-icon" aria-hidden="true">📋</span>
+          <div>
+            <strong>Planillados como ritmo</strong>
+            <p>
+              Las barras por hora muestran cuándo se concentran los registros. Picos sostenidos indican operación activa y
+              disciplina de registro en campo. <em style="color:#ffb74d;font-style:normal;">Toca para explorar el texto de todos los planillados.</em>
+            </p>
+          </div>
+        </button>
+        <button type="button" class="esta-insight esta-insight--link" data-esta-go="evidencia" aria-label="Abrir álbumes de evidencia fotográfica">
+          <span class="esta-insight-icon" aria-hidden="true">📷</span>
+          <div>
+            <strong>Evidencia fotográfica</strong>
+            <p>
+              Un alto porcentaje de registros con foto refuerza el respaldo ante reclamos y auditorías; las barras muestran el
+              balance global y, por hora de entrada, cuánto lleva evidencia vs brechas. <em style="color:#81c784;font-style:normal;">Toca para ver álbumes y carpetas de Storage.</em>
+            </p>
+          </div>
+        </button>
+        <button type="button" class="esta-insight esta-insight--link esta-insight--link--aforo" data-esta-go="aforo" aria-label="Ver aforo por sede según cupos y lotes POS">
+          <span class="esta-insight-icon" aria-hidden="true">🅿️</span>
+          <div>
+            <strong>Aforo relativo</strong>
+            <p>
+              Ocupa <strong>cupos configurados</strong> y vehículos <strong>en lote POS</strong> por sede; si falta cupo, se muestra intensidad por planillado.
+              <em style="color:#ffd54f;font-style:normal;">Toca para el mapa de ocupación.</em>
+            </p>
+          </div>
+        </button>
+      </div>
+      <div class="esta-hub-modules" role="list">
+        <button type="button" class="esta-hub-module esta-hub-module--panel" data-esta-go="panel" role="listitem">
+          <span class="esta-hub-module-icon" aria-hidden="true">📊</span>
+          <strong>Panel operativo</strong>
+          <span class="esta-hub-module-desc">Vista por estacionamiento · caja, planillados, evidencia fotográfica y gráficas por franja horaria.</span>
+        </button>
+        <button type="button" class="esta-hub-module esta-hub-module--lotes" data-esta-go="lotes" role="listitem">
+          <span class="esta-hub-module-icon" aria-hidden="true">🎫</span>
+          <strong>Lotes y capacidad</strong>
+          <span class="esta-hub-module-desc">Tiquetes POS, cupos por sede, grupos de lote y purga con historial.</span>
+        </button>
+        <button type="button" class="esta-hub-module esta-hub-module--sedes" data-esta-go="sedes" role="listitem">
+          <span class="esta-hub-module-icon" aria-hidden="true">🏢</span>
+          <strong>Administración de sedes</strong>
+          <span class="esta-hub-module-desc">Catálogo de sedes, horarios, dotación, turnos y tarifas en Firestore.</span>
+        </button>
+        <button type="button" class="esta-hub-module esta-hub-module--plantillas" data-esta-go="plantillas" role="listitem">
+          <span class="esta-hub-module-icon" aria-hidden="true">🖨️</span>
+          <strong>Plantillas de impresión</strong>
+          <span class="esta-hub-module-desc">Editor y vista previa de tickets térmicos para caja y reimpresión.</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="esta-panel-aforo" class="esta-tab-panel" hidden>
+      <div class="esta-section-top">
+        <button type="button" class="esta-section-back" data-esta-back>Inicio</button>
+        <h2>Aforo relativo · cupos y lotes</h2>
+        <nav class="esta-tabs esta-tabs--sub" aria-label="Acceso rápido">
+          <button type="button" class="esta-tab" data-esta-tab="lotes">Editar lotes</button>
+        </nav>
+      </div>
+      <p style="margin:0 0 14px;font-size:13px;color:#9ca3af;line-height:1.5;max-width:920px;">
+        Porcentaje de ocupación = <strong>vehículos en lote ahora</strong> (POS) ÷ <strong>cupos</strong> definidos en cada sede
+        (<code>cuposLote</code> o suma de <strong>grupos de lote</strong>). También se muestra actividad de <strong>planillado</strong> como referencia.
+      </p>
+      <div class="esta-aforo-toolbar">
+        <button type="button" class="primary" id="esta-aforo-btn-refresh">Actualizar aforo</button>
+        <span id="esta-aforo-status" class="esta-aforo-status"></span>
+      </div>
+      <div class="esta-aforo-kpis" id="esta-aforo-kpis" aria-live="polite"></div>
+      <div class="esta-aforo-charts">
+        <div class="esta-aforo-chart-card">
+          <h3>Ocupación real del lote (%)</h3>
+          <p>Sedes con cupos asignados · en lote / capacidad configurada.</p>
+          <div class="canvas-wrap"><canvas id="chart-aforo-cupos" aria-label="Aforo por cupos"></canvas></div>
+        </div>
+        <div class="esta-aforo-chart-card">
+          <h3>Intensidad planillado (referencia)</h3>
+          <p>Registros planillado vs la sede más cargada (cuando no hay cupo o como contraste).</p>
+          <div class="canvas-wrap"><canvas id="chart-aforo-planilla" aria-label="Intensidad planillado"></canvas></div>
+        </div>
+      </div>
+      <div id="esta-aforo-grid" class="esta-aforo-grid" aria-live="polite"></div>
+    </div>
+
+    <div id="esta-panel-ritmo" class="esta-tab-panel" hidden>
+      <div class="esta-section-top">
+        <button type="button" class="esta-section-back" data-esta-back>Inicio</button>
+        <h2>Planillados como ritmo · texto en vivo</h2>
+      </div>
+      <p style="margin:0 0 14px;font-size:13px;color:#9ca3af;line-height:1.5;max-width:920px;">
+        Explorador de <strong>todos los registros planillado</strong>: franja horaria interactiva y tarjetas con observaciones,
+        placa, sede y demás campos de texto. Ideal para revisar el pulso operativo y leer evidencia escrita en campo.
+      </p>
+      <div class="esta-ritmo-toolbar">
+        <button type="button" class="primary" id="esta-ritmo-btn-refresh">Actualizar textos</button>
+        <input type="search" id="esta-ritmo-search" placeholder="Buscar en placa, sede, observaciones…" autocomplete="off" />
+        <select id="esta-ritmo-sede" aria-label="Filtrar por sede">
+          <option value="">Todas las sedes</option>
+        </select>
+        <span id="esta-ritmo-status" class="esta-ritmo-status"></span>
+      </div>
+      <div class="esta-ritmo-kpis" id="esta-ritmo-kpis" aria-live="polite"></div>
+      <div class="esta-ritmo-hours-wrap">
+        <h3>Franja horaria · toque una hora para filtrar</h3>
+        <div id="esta-ritmo-hours" class="esta-ritmo-hours" role="group" aria-label="Registros por hora de entrada"></div>
+      </div>
+      <div class="esta-ritmo-filters" role="group" aria-label="Filtros de vista">
+        <button type="button" class="esta-ritmo-chip is-active" data-ritmo-filter="all">Todos</button>
+        <button type="button" class="esta-ritmo-chip" data-ritmo-filter="obs">Solo con observaciones</button>
+        <button type="button" class="esta-ritmo-chip" data-ritmo-filter="foto">Con foto</button>
+        <button type="button" class="esta-ritmo-chip" data-ritmo-filter="sinhora">Sin hora deducible</button>
+      </div>
+      <div id="esta-ritmo-stream" class="esta-ritmo-stream" aria-live="polite"></div>
+    </div>
+
+    <div id="esta-panel-evidencia" class="esta-tab-panel" hidden>
+      <div class="esta-section-top">
+        <button type="button" class="esta-section-back" data-esta-back>Inicio</button>
+        <h2>Evidencia fotográfica · álbumes</h2>
+      </div>
+      <p style="margin:0 0 14px;font-size:13px;color:#9ca3af;line-height:1.5;max-width:920px;">
+        Álbumes agrupados por <strong>carpeta en Firebase Storage</strong> y por registros de <strong>planillado / Check List</strong> con fotos.
+        Incluye rutas típicas como <code style="color:#aed581;">inspection_photos/…</code> y enlaces https del documento.
+      </p>
+      <div class="esta-evidencia-toolbar">
+        <button type="button" class="primary" id="esta-evidencia-btn-refresh">Actualizar álbumes</button>
+        <button type="button" id="esta-evidencia-btn-back-albums" hidden>Volver a álbumes</button>
+        <label class="esta-evidencia-opt" title="Lista carpetas del bucket; puede tardar varios minutos">
+          <input type="checkbox" id="esta-evidencia-scan-storage" />
+          Explorar carpetas Storage (lento)
+        </label>
+        <input type="search" id="esta-evidencia-search" placeholder="Buscar carpeta, placa o sede…" autocomplete="off" />
+        <span id="esta-evidencia-status" class="esta-evidencia-status"></span>
+      </div>
+      <div class="esta-evidencia-filters" id="esta-evidencia-filters" role="group" aria-label="Filtrar álbumes">
+        <button type="button" class="esta-evidencia-filter is-active" data-ev-filter="all">Todos</button>
+        <button type="button" class="esta-evidencia-filter" data-ev-filter="storage">Carpetas Storage</button>
+        <button type="button" class="esta-evidencia-filter" data-ev-filter="planillado">Planillado</button>
+        <button type="button" class="esta-evidencia-filter" data-ev-filter="inspection">inspection_photos</button>
+      </div>
+      <div id="esta-evidencia-albums-wrap" class="esta-panel-load-host">
+        <div id="esta-space-loader" class="esta-space-loader" hidden aria-live="polite" aria-busy="true">
+          <div class="esta-space-loader-inner">
+            <div class="esta-space-loader-orbit" aria-hidden="true"></div>
+            <p class="esta-space-loader-area" id="esta-space-loader-area">S.P.A.C.E</p>
+            <p class="esta-space-loader-msg" id="esta-space-loader-msg">Preparando módulos…</p>
+            <div class="esta-space-loader-chips" id="esta-space-loader-chips" aria-hidden="true"></div>
+            <div class="esta-space-loader-bar" aria-hidden="true"><span id="esta-space-loader-bar"></span></div>
+            <p class="esta-space-loader-hint">Los mensajes rotan según el área que se está sincronizando.</p>
+          </div>
+        </div>
+        <div id="esta-evidencia-albums" class="esta-evidencia-albums" aria-live="polite"></div>
+      </div>
+      <div id="esta-evidencia-detail" class="esta-evidencia-detail" hidden>
+        <div class="esta-evidencia-detail-head">
+          <button type="button" class="esta-section-back" id="esta-evidencia-detail-back">← Álbumes</button>
+          <h3 id="esta-evidencia-detail-title">—</h3>
+        </div>
+        <p id="esta-evidencia-detail-meta" style="margin:0 0 12px;font-size:12px;color:#9ca3af;"></p>
+        <div id="esta-evidencia-photos" class="esta-ev-photos"></div>
+      </div>
+    </div>
+
     <div id="esta-panel-lotes" class="esta-tab-panel" hidden>
+      <div class="esta-section-top">
+        <button type="button" class="esta-section-back" data-esta-back>Inicio</button>
+        <h2>Lotes y capacidad</h2>
+      </div>
       <div class="esta-lotes-intro">
         <h2>Lotes y capacidad · tiquetes POS</h2>
         <p>
@@ -2549,6 +3860,10 @@
     </div>
 
     <div id="esta-panel-sedes" class="esta-tab-panel" hidden>
+      <div class="esta-section-top">
+        <button type="button" class="esta-section-back" data-esta-back>Inicio</button>
+        <h2>Administración de sedes</h2>
+      </div>
       <div class="esta-sedes-intro">
         <h2>Sedes de estacionamiento</h2>
         <p>
@@ -2721,6 +4036,10 @@
     </div>
 
     <div id="esta-panel-plantillas" class="esta-tab-panel" hidden>
+      <div class="esta-section-top">
+        <button type="button" class="esta-section-back" data-esta-back>Inicio</button>
+        <h2>Plantillas de impresión</h2>
+      </div>
       <div class="esta-pl-shell">
         <div class="esta-plantillas-toolbar">
           <button type="button" id="esta-plantillas-btn-reload">Recargar listado</button>
@@ -2847,47 +4166,21 @@
       </div>
     </div>
 
-    <div id="esta-panel-operativo" class="esta-tab-panel">
-    <div class="stats-intro">
+    <div id="esta-panel-operativo" class="esta-tab-panel" hidden>
+    <div class="esta-section-top">
+      <button type="button" class="esta-section-back" data-esta-back>Inicio</button>
       <h2>Vista por estacionamiento</h2>
+      <nav class="esta-tabs esta-tabs--sub" aria-label="Acceso rápido entre módulos">
+        <button type="button" class="esta-tab" data-esta-tab="lotes">Lotes</button>
+        <button type="button" class="esta-tab" data-esta-tab="sedes">Sedes</button>
+        <button type="button" class="esta-tab" data-esta-tab="plantillas">Plantillas</button>
+      </nav>
+    </div>
+    <div class="stats-intro">
       <p>
         Resumen de <strong>caja</strong> (colección de cierres), <strong>planillados</strong> con y sin foto, y referencia por
-        <strong>franja horaria</strong>. Un mayor volumen de planillados en horario activo suele ir ligado a menos brechas de
-        servicio y a mayor trazabilidad — es decir, más control operativo y más protección para el negocio y el cliente.
+        <strong>franja horaria</strong>. Use «Actualizar panel» tras iniciar sesión.
       </p>
-    </div>
-
-    <div class="esta-insights" aria-label="Ideas de lectura">
-      <div class="esta-insight">
-        <span class="esta-insight-icon" aria-hidden="true">📋</span>
-        <div>
-          <strong>Planillados como ritmo</strong>
-          <p>
-            Las barras por hora muestran cuándo se concentran los registros. Picos sostenidos indican operación activa y
-            disciplina de registro en campo.
-          </p>
-        </div>
-      </div>
-      <div class="esta-insight">
-        <span class="esta-insight-icon" aria-hidden="true">📷</span>
-        <div>
-          <strong>Evidencia fotográfica</strong>
-          <p>
-            Un alto porcentaje de registros con foto refuerza el respaldo ante reclamos y auditorías; las barras muestran el
-            balance global y, por hora de entrada, cuánto lleva evidencia vs brechas.
-          </p>
-        </div>
-      </div>
-      <div class="esta-insight">
-        <span class="esta-insight-icon" aria-hidden="true">🅿️</span>
-        <div>
-          <strong>Aforo relativo</strong>
-          <p>
-            Sin cupos en Firebase, la gráfica compara cada sede contra la más cargada en estos datos: sirve como indicador
-            de intensidad, no de capacidad física absoluta.
-          </p>
-        </div>
-      </div>
     </div>
 
     <div class="stats-toolbar">
@@ -3008,6 +4301,48 @@
 
 </div>
 
+<div id="esta-ritmo-dialog" class="esta-ritmo-dialog" hidden aria-hidden="true">
+  <div class="esta-ritmo-dialog-backdrop" tabindex="-1"></div>
+  <div class="esta-ritmo-dialog-card" role="dialog" aria-modal="true" aria-labelledby="esta-ritmo-dialog-title">
+    <button type="button" class="esta-ritmo-dialog-close" aria-label="Cerrar">×</button>
+    <h3 id="esta-ritmo-dialog-title">—</h3>
+    <dl id="esta-ritmo-dialog-fields" class="esta-ritmo-dialog-dl"></dl>
+  </div>
+</div>
+
+<div id="esta-ev-lightbox" class="fotos-lightbox" hidden aria-hidden="true">
+  <div class="fotos-lightbox-backdrop" tabindex="-1"></div>
+  <div class="fotos-lightbox-inner" role="dialog" aria-modal="true" aria-label="Visor de evidencia fotográfica">
+    <button type="button" class="fotos-lightbox-close" aria-label="Cerrar visor">×</button>
+    <p class="fotos-lightbox-plate" id="esta-ev-lb-plate"></p>
+    <div class="fotos-lightbox-toolbar">
+      <span id="esta-ev-zoom-toolbar" class="fotos-zoom-toolbar-group">
+        <button type="button" class="fotos-zoom-btn" id="esta-ev-zoom-out" aria-label="Alejar">−</button>
+        <span class="fotos-zoom-label" id="esta-ev-zoom-label">100%</span>
+        <button type="button" class="fotos-zoom-btn" id="esta-ev-zoom-in" aria-label="Acercar">+</button>
+        <button type="button" class="fotos-zoom-reset" id="esta-ev-zoom-reset">Restablecer vista</button>
+      </span>
+      <label id="esta-ev-enhance-wrap" class="fotos-enhance-label" title="Realza contraste, saturación y brillo en tu navegador (sin subir archivos). No usa IA en la nube.">
+        <input type="checkbox" id="esta-ev-enhance-clarity" />
+        Mejorar calidad (IA local)
+      </label>
+    </div>
+    <div class="fotos-lightbox-stage">
+      <button type="button" class="fotos-lightbox-prev" id="esta-ev-lb-prev" aria-label="Anterior">‹</button>
+      <div class="fotos-lightbox-viewport" id="esta-ev-lb-viewport">
+        <div class="fotos-lightbox-zoom-layer" id="esta-ev-lb-zoom-layer">
+          <img class="fotos-lightbox-img" id="esta-ev-lb-img" alt="" decoding="async" />
+          <canvas class="fotos-lightbox-canvas" id="esta-ev-lb-canvas" hidden></canvas>
+        </div>
+        <video id="esta-ev-lb-video" class="fotos-lightbox-video" controls playsinline preload="metadata" hidden></video>
+      </div>
+      <button type="button" class="fotos-lightbox-next" id="esta-ev-lb-next" aria-label="Siguiente">›</button>
+    </div>
+    <p class="fotos-lightbox-counter" id="esta-ev-lb-counter"></p>
+    <p class="fotos-lightbox-hint" id="esta-ev-lb-hint">Arrastra para mover cuando hay zoom. Rueda o pellizco para ampliar. «Mejorar calidad» aplica realce inteligente local (contraste, saturación y brillo).</p>
+  </div>
+</div>
+
 <div id="auth-error-strip">
   <p id="auth-banner-detail" style="margin:0;font-family:Consolas,monospace;font-size:12px;"></p>
 </div>
@@ -3016,11 +4351,13 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
   <script>
 (function () {
   firebase.initializeApp(typeof firebaseConfig !== "undefined" ? firebaseConfig : {});
   var db = firebase.firestore();
   var auth = firebase.auth();
+  var storage = firebase.storage && firebase.storage();
   var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
 
   var PLANILLADO_OLD = "planillado_old";
@@ -3085,6 +4422,1575 @@
     return false;
   }
 
+  function escEv(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function escAttrEv(s) {
+    return escEv(s).replace(/'/g, "&#39;");
+  }
+
+  function storageDirname(path) {
+    var p = String(path || "")
+      .replace(/\\/g, "/")
+      .replace(/^\/+/, "");
+    var i = p.lastIndexOf("/");
+    return i === -1 ? "" : p.slice(0, i);
+  }
+
+  function storageBasename(path) {
+    var p = String(path || "").replace(/\\/g, "/");
+    return p.slice(p.lastIndexOf("/") + 1);
+  }
+
+  function isImagePathLike(s) {
+    return /\.(jpe?g|png|webp|gif|mp4|m4v|mov|webm)(\?.*)?$/i.test(String(s || ""));
+  }
+
+  function firebasePathFromStorageApiUrl(fullUrl) {
+    try {
+      var m = String(fullUrl).match(/\/v0\/b\/[^/]+\/o\/([^?]+)/);
+      if (!m) return null;
+      return decodeURIComponent(m[1].replace(/\+/g, " "));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function collectHttpPhotoUrls(data) {
+    if (!data) return [];
+    var out = [];
+    var seen = {};
+    function normHttp(s) {
+      if (typeof s !== "string") return null;
+      var t = s.trim().replace(/^["']+|["']+$/g, "");
+      if (!t) return null;
+      var low = t.toLowerCase();
+      if (low.indexOf("file:") === 0 || low.indexOf("gs:") === 0 || low.indexOf("content:") === 0) return null;
+      if (low.indexOf("http://") === 0 || low.indexOf("https://") === 0) return t;
+      return null;
+    }
+    function add(u) {
+      if (!u || seen[u]) return;
+      seen[u] = true;
+      out.push(u);
+    }
+    function walk(v, depth) {
+      if (v == null || depth > 20) return;
+      if (typeof v === "string") {
+        var h = normHttp(v);
+        if (h) add(h);
+        var found = v.match(/https?:\/\/[^\s"'<>|\\[\]{}]+/gi);
+        if (found) found.forEach(function (chunk) {
+          add(normHttp(chunk.replace(/[,;.)\]}'"´`]+$/g, "")));
+        });
+        return;
+      }
+      if (typeof v !== "object" || typeof v.toDate === "function") return;
+      if (Array.isArray(v)) {
+        v.forEach(function (x) { walk(x, depth + 1); });
+        return;
+      }
+      ["url", "downloadURL", "downloadUrl", "uri", "photoUrl"].forEach(function (k) {
+        var h2 = normHttp(v[k]);
+        if (h2) add(h2);
+      });
+      var k;
+      for (k in v) {
+        if (Object.prototype.hasOwnProperty.call(v, k)) walk(v[k], depth + 1);
+      }
+    }
+    walk(data, 0);
+    return out;
+  }
+
+  function collectStorageCandidates(data) {
+    if (!data) return [];
+    var seen = {};
+    var out = [];
+    function couldBeStorageRef(s) {
+      if (typeof s !== "string") return false;
+      var t = s.trim();
+      if (!t || t.length > 1500) return false;
+      var low = t.toLowerCase();
+      if (low.indexOf("http://") === 0 || low.indexOf("https://") === 0) return false;
+      if (low.indexOf("file:") === 0 || low.indexOf("content:") === 0) return false;
+      if (low.indexOf("gs://") === 0) return true;
+      if (/^inspection_photos\//i.test(t)) return true;
+      if (t.indexOf("/") !== -1 && t.indexOf(":") === -1 && isImagePathLike(t)) return true;
+      return false;
+    }
+    function walk(v, depth) {
+      if (v == null || depth > 20) return;
+      if (typeof v === "string") {
+        if (couldBeStorageRef(v) && !seen[v]) {
+          seen[v] = true;
+          out.push(v.replace(/^gs:\/\/[^/]+\//i, ""));
+        }
+        return;
+      }
+      if (typeof v !== "object" || typeof v.toDate === "function") return;
+      if (Array.isArray(v)) {
+        v.forEach(function (x) { walk(x, depth + 1); });
+        return;
+      }
+      var k;
+      for (k in v) {
+        if (Object.prototype.hasOwnProperty.call(v, k)) walk(v[k], depth + 1);
+      }
+    }
+    walk(data, 0);
+    return out;
+  }
+
+  function resolveStoragePath(raw) {
+    if (!storage || !auth.currentUser) return Promise.reject(new Error("Storage no disponible"));
+    var s = String(raw || "").trim().replace(/^\/+/, "");
+    if (!s) return Promise.reject(new Error("Ruta vacía"));
+    if (s.toLowerCase().indexOf("gs://") === 0) {
+      return storage.refFromURL(s).getDownloadURL();
+    }
+    return storage.ref(s).getDownloadURL();
+  }
+
+  function plateFromDocData(d, docId) {
+    return String(
+      pick(d, "licensePlate", "placa", "Placa") || docId || ""
+    ).trim();
+  }
+
+  var evidenciaAlbums = [];
+  var evidenciaFilter = "all";
+  var evidenciaSearchQ = "";
+  var evidenciaSelectedAlbumId = null;
+  var evidenciaLoading = false;
+  var evidenciaCacheTime = 0;
+  var EVIDENCIA_CACHE_MS = 3 * 60 * 1000;
+  var evidenciaScanStorageEnabled = false;
+  var evidenciaStorageScanning = false;
+  var EVIDENCIA_MAX_PHOTOS_PER_ALBUM = 80;
+  var EVIDENCIA_DETAIL_PAGE = 36;
+  var EVIDENCIA_THUMB_CONCURRENCY = 4;
+  var evidenciaThumbObserver = null;
+  var evidenciaDetailPhotoObserver = null;
+  var evidenciaThumbQueue = [];
+  var evidenciaThumbInflight = 0;
+  var evidenciaLightboxUrls = [];
+  var evidenciaLightboxPhotos = [];
+  var evidenciaLightboxIndex = 0;
+  var evidenciaLightboxAlbum = null;
+  var evLbZoomScale = 1;
+  var evLbPanX = 0;
+  var evLbPanY = 0;
+  var evLbPanDragging = false;
+  var evLbPanLastX = 0;
+  var evLbPanLastY = 0;
+  var evLbPinchStartDist = 0;
+  var evLbPinchStartScale = 1;
+
+  var evLbEl = document.getElementById("esta-ev-lightbox");
+  var evLbImg = document.getElementById("esta-ev-lb-img");
+  var evLbCanvas = document.getElementById("esta-ev-lb-canvas");
+  var evLbVideo = document.getElementById("esta-ev-lb-video");
+  var evLbViewport = document.getElementById("esta-ev-lb-viewport");
+  var evLbZoomLayer = document.getElementById("esta-ev-lb-zoom-layer");
+  var evLbCounter = document.getElementById("esta-ev-lb-counter");
+  var evLbPlate = document.getElementById("esta-ev-lb-plate");
+  var evLbHint = document.getElementById("esta-ev-lb-hint");
+  var evLbPrev = document.getElementById("esta-ev-lb-prev");
+  var evLbNext = document.getElementById("esta-ev-lb-next");
+  var evZoomInBtn = document.getElementById("esta-ev-zoom-in");
+  var evZoomOutBtn = document.getElementById("esta-ev-zoom-out");
+  var evZoomResetBtn = document.getElementById("esta-ev-zoom-reset");
+  var evZoomLabel = document.getElementById("esta-ev-zoom-label");
+  var evEnhanceClarity = document.getElementById("esta-ev-enhance-clarity");
+  var evZoomToolbar = document.getElementById("esta-ev-zoom-toolbar");
+  var evEnhanceWrap = document.getElementById("esta-ev-enhance-wrap");
+  var evLbBackdrop = evLbEl ? evLbEl.querySelector(".fotos-lightbox-backdrop") : null;
+  var evLbCloseBtn = evLbEl ? evLbEl.querySelector(".fotos-lightbox-close") : null;
+
+  function urlCountsAsVideo(url) {
+    return /\.(mp4|m4v|mov|webm)(\?|$)/i.test(String(url || ""));
+  }
+
+  function evLbClamp(v, lo, hi) {
+    return Math.min(hi, Math.max(lo, v));
+  }
+
+  function evLbCurrentIsVideo() {
+    if (!evidenciaLightboxAlbum || evidenciaLightboxIndex < 0) return false;
+    var url = evidenciaLightboxUrls[evidenciaLightboxIndex];
+    if (!url) return false;
+    return urlCountsAsVideo(url);
+  }
+
+  function resetEvLbZoomPan() {
+    evLbZoomScale = 1;
+    evLbPanX = 0;
+    evLbPanY = 0;
+    applyEvLbZoomTransform();
+  }
+
+  function applyEvLbZoomTransform() {
+    if (!evLbZoomLayer) return;
+    evLbZoomLayer.style.transform =
+      "translate(" + evLbPanX + "px," + evLbPanY + "px) scale(" + evLbZoomScale + ")";
+    if (evZoomLabel) evZoomLabel.textContent = Math.round(evLbZoomScale * 100) + "%";
+  }
+
+  function evLbTouchDistance(a, b) {
+    var dx = a.clientX - b.clientX;
+    var dy = a.clientY - b.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  function applyEvLocalClarityEnhancement(canvas, img) {
+    var maxW = 2400;
+    var nw = img.naturalWidth;
+    var nh = img.naturalHeight;
+    if (!nw || !nh) return;
+    var rw = nw;
+    var rh = nh;
+    if (nw > maxW) {
+      rw = maxW;
+      rh = Math.round(nh * (maxW / nw));
+    }
+    canvas.width = rw;
+    canvas.height = rh;
+    var ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.filter = "contrast(1.12) saturate(1.08) brightness(1.04)";
+    ctx.drawImage(img, 0, 0, rw, rh);
+    ctx.filter = "none";
+  }
+
+  function syncEvEnhanceDisplay() {
+    if (!evLbImg || !evLbCanvas) return;
+    if (evLbCurrentIsVideo()) return;
+    if (!evEnhanceClarity || !evEnhanceClarity.checked) {
+      evLbCanvas.hidden = true;
+      evLbCanvas.style.display = "none";
+      evLbImg.style.display = "block";
+      return;
+    }
+    if (!evLbImg.complete || evLbImg.naturalWidth === 0) return;
+    try {
+      applyEvLocalClarityEnhancement(evLbCanvas, evLbImg);
+      evLbCanvas.hidden = false;
+      evLbCanvas.style.display = "block";
+      evLbImg.style.display = "none";
+    } catch (err) {
+      if (evEnhanceClarity) evEnhanceClarity.checked = false;
+      evLbCanvas.hidden = true;
+      evLbImg.style.display = "block";
+    }
+  }
+
+  function syncEvVideoEnhanceDisplay() {
+    if (!evLbVideo || !evidenciaLightboxAlbum) return;
+    if (!evLbCurrentIsVideo()) return;
+    if (!evEnhanceClarity || !evEnhanceClarity.checked) {
+      evLbVideo.style.filter = "";
+      return;
+    }
+    evLbVideo.style.filter = "contrast(1.12) saturate(1.08) brightness(1.04)";
+  }
+
+  function pauseEvLbVideo() {
+    if (!evLbVideo) return;
+    try {
+      evLbVideo.pause();
+    } catch (e) {}
+    evLbVideo.style.filter = "";
+    evLbVideo.removeAttribute("src");
+    try {
+      evLbVideo.load();
+    } catch (e2) {}
+  }
+
+  function prefetchEvidenciaLightboxAdjacent(centerIdx) {
+    var alb = evidenciaLightboxAlbum;
+    if (!alb || !alb.photos.length) return;
+    [-1, 1].forEach(function (d) {
+      var j = centerIdx + d;
+      if (j < 0 || j >= alb.photos.length || evidenciaLightboxUrls[j]) return;
+      resolveEvidenciaPhotoUrl(alb.photos[j])
+        .then(function (u) {
+          if (u) evidenciaLightboxUrls[j] = u;
+        })
+        .catch(function () {});
+    });
+  }
+
+  function updateEvidenciaLightboxSlide() {
+    var alb = evidenciaLightboxAlbum;
+    if (!alb || !alb.photos.length) return;
+    var idx = evidenciaLightboxIndex;
+    var photo = alb.photos[idx];
+    if (!photo) return;
+
+    var url = evidenciaLightboxUrls[idx];
+    if (!url) {
+      pauseEvLbVideo();
+      resetEvLbZoomPan();
+      if (evLbImg) {
+        evLbImg.removeAttribute("src");
+        evLbImg.style.display = "block";
+      }
+      if (evLbCounter) {
+        evLbCounter.textContent =
+          (idx + 1) + " / " + alb.photos.length + " · Cargando…";
+      }
+      if (evLbPrev) evLbPrev.disabled = idx <= 0;
+      if (evLbNext) evLbNext.disabled = idx >= alb.photos.length - 1;
+      resolveEvidenciaPhotoUrl(photo)
+        .then(function (u) {
+          if (evidenciaLightboxIndex !== idx || !evLbEl || evLbEl.hidden) return;
+          if (!u) {
+            evidenciaSetStatus("No se pudo obtener la URL de esta foto.");
+            return;
+          }
+          evidenciaLightboxUrls[idx] = u;
+          evidenciaSetStatus("");
+          updateEvidenciaLightboxSlide();
+        })
+        .catch(function () {
+          evidenciaSetStatus("Error al cargar la foto.");
+        });
+      prefetchEvidenciaLightboxAdjacent(idx);
+      return;
+    }
+
+    var isVid = urlCountsAsVideo(url);
+
+    pauseEvLbVideo();
+    resetEvLbZoomPan();
+
+    if (evLbCanvas) {
+      evLbCanvas.hidden = true;
+      evLbCanvas.style.display = "none";
+      evLbCanvas.width = 0;
+      evLbCanvas.height = 0;
+    }
+
+    if (isVid) {
+      if (evLbZoomLayer) evLbZoomLayer.style.display = "none";
+      if (evLbImg) {
+        evLbImg.removeAttribute("src");
+        evLbImg.style.display = "none";
+      }
+      if (evLbVideo) {
+        evLbVideo.hidden = false;
+        evLbVideo.src = url;
+        try {
+          evLbVideo.load();
+        } catch (e) {}
+      }
+      if (evZoomToolbar) evZoomToolbar.hidden = true;
+      if (evEnhanceWrap) evEnhanceWrap.hidden = false;
+      if (evLbHint) {
+        evLbHint.textContent =
+          "Vídeo · «Mejorar calidad» aplica filtros en tiempo real (solo en tu equipo). Use ‹ › o flechas del teclado.";
+      }
+      syncEvVideoEnhanceDisplay();
+    } else {
+      if (evLbVideo) evLbVideo.hidden = true;
+      if (evLbZoomLayer) evLbZoomLayer.style.display = "";
+      if (evLbImg) {
+        evLbImg.style.display = "block";
+        evLbImg.src = url;
+      }
+      if (evZoomToolbar) evZoomToolbar.hidden = false;
+      if (evEnhanceWrap) evEnhanceWrap.hidden = false;
+      if (evLbHint) {
+        evLbHint.textContent =
+          "Arrastra para mover con zoom. Rueda o pellizco para ampliar. «Mejorar calidad (IA local)» realza la imagen en canvas sin subir archivos.";
+      }
+      if (evEnhanceClarity && evEnhanceClarity.checked) {
+        syncEvEnhanceDisplay();
+      }
+    }
+
+    var nameLine = photo && photo.name ? photo.name : "";
+    var placaLine = photo && photo.placa ? "Placa " + photo.placa : "";
+    if (evLbPlate) {
+      var plateTxt = [placaLine, alb && alb.title ? alb.title : ""].filter(Boolean).join(" · ");
+      evLbPlate.textContent = plateTxt;
+      evLbPlate.style.display = plateTxt ? "block" : "none";
+    }
+    if (evLbCounter) {
+      evLbCounter.textContent =
+        (evidenciaLightboxIndex + 1) +
+        " / " +
+        alb.photos.length +
+        (nameLine ? " · " + nameLine : "");
+    }
+    if (evLbImg && !isVid) evLbImg.alt = nameLine || "Evidencia fotográfica";
+    if (evLbPrev) {
+      evLbPrev.disabled = evidenciaLightboxIndex <= 0;
+      evLbPrev.style.visibility =
+        alb.photos.length <= 1 ? "hidden" : "visible";
+    }
+    if (evLbNext) {
+      evLbNext.disabled = evidenciaLightboxIndex >= alb.photos.length - 1;
+      evLbNext.style.visibility =
+        alb.photos.length <= 1 ? "hidden" : "visible";
+    }
+    prefetchEvidenciaLightboxAdjacent(evidenciaLightboxIndex);
+  }
+
+  function evidenciaLightboxStep(delta) {
+    var alb = evidenciaLightboxAlbum;
+    if (!alb || alb.photos.length < 2) return;
+    var next = evidenciaLightboxIndex + delta;
+    if (next < 0 || next >= alb.photos.length) return;
+    evidenciaLightboxIndex = next;
+    updateEvidenciaLightboxSlide();
+  }
+
+  function evidenciaSetStatus(msg) {
+    var el = document.getElementById("esta-evidencia-status");
+    if (el) el.textContent = msg || "";
+  }
+
+  var spaceLoaderMsgTimer = null;
+  var spaceLoaderActiveArea = "evidencia";
+  var SPACE_LOADER_AREAS = [
+    { id: "planillado", label: "Planillados", color: "#ffb74d" },
+    { id: "evidencia", label: "Evidencia", color: "#81c784" },
+    { id: "storage", label: "Fotos", color: "#90caf9" },
+    { id: "caja", label: "Caja", color: "#64b5f6" },
+    { id: "lotes", label: "Lotes POS", color: "#ce93d8" },
+    { id: "sedes", label: "Sedes", color: "#a5d6a7" },
+    { id: "mensualidades", label: "Mensualidades", color: "#f48fb1" },
+    { id: "programacion", label: "Programación", color: "#b39ddb" },
+    { id: "checklist", label: "Check List", color: "#4dd0e1" },
+  ];
+  var SPACE_LOADER_MESSAGES = {
+    planillado: [
+      "Sincronizando registros de planillado en tiempo real…",
+      "Revisando placas y observaciones de operarios en campo…",
+      "Cruzando subcolecciones de operarios con el proyecto…",
+    ],
+    evidencia: [
+      "Armando álbumes con evidencia fotográfica…",
+      "Clasificando registros con foto y sin foto…",
+      "Preparando vista de respaldo visual por placa…",
+    ],
+    storage: [
+      "Explorando carpetas de fotos en la nube…",
+      "Indexando evidencia en Storage (sin rutas técnicas)…",
+      "Agrupando imágenes por sede y carpeta…",
+    ],
+    caja: [
+      "Consultando cierres de caja por sede…",
+      "Verificando recaudos del día en Firestore…",
+    ],
+    lotes: [
+      "Revisando vehículos activos en lote POS…",
+      "Comprobando cupos y capacidad por estacionamiento…",
+    ],
+    sedes: [
+      "Cargando catálogo de sedes y horarios…",
+      "Alineando estacionamientos con planillado…",
+    ],
+    mensualidades: [
+      "Revisando contratos y residentes en mensualidades…",
+    ],
+    programacion: [
+      "Consultando turnos y programación de personal…",
+    ],
+    checklist: [
+      "Conectando datos con la app Check List…",
+      "Supervisando trazabilidad operativa en campo…",
+    ],
+  };
+
+  function spaceLoaderPickMessage(areaId) {
+    var list = SPACE_LOADER_MESSAGES[areaId] || SPACE_LOADER_MESSAGES.evidencia;
+    return list[Math.floor(Math.random() * list.length)];
+  }
+
+  function spaceLoaderRenderChips() {
+    var wrap = document.getElementById("esta-space-loader-chips");
+    if (!wrap) return;
+    wrap.innerHTML = SPACE_LOADER_AREAS.map(function (a) {
+      return (
+        '<span class="esta-space-loader-chip' +
+        (a.id === spaceLoaderActiveArea ? " is-active" : "") +
+        '" data-space-area="' +
+        a.id +
+        '">' +
+        a.label +
+        "</span>"
+      );
+    }).join("");
+  }
+
+  function spaceLoaderSetArea(areaId) {
+    spaceLoaderActiveArea = areaId || "evidencia";
+    var areaEl = document.getElementById("esta-space-loader-area");
+    var msgEl = document.getElementById("esta-space-loader-msg");
+    var found = null;
+    var i;
+    for (i = 0; i < SPACE_LOADER_AREAS.length; i++) {
+      if (SPACE_LOADER_AREAS[i].id === spaceLoaderActiveArea) {
+        found = SPACE_LOADER_AREAS[i];
+        break;
+      }
+    }
+    if (areaEl) {
+      areaEl.textContent = found ? found.label : "S.P.A.C.E";
+      areaEl.style.color = found ? found.color : "#ffb74d";
+    }
+    spaceLoaderRenderChips();
+    if (msgEl) {
+      msgEl.classList.add("is-fading");
+      window.setTimeout(function () {
+        msgEl.textContent = spaceLoaderPickMessage(spaceLoaderActiveArea);
+        msgEl.classList.remove("is-fading");
+      }, 180);
+    }
+  }
+
+  function spaceLoaderSetProgress(pct) {
+    var bar = document.getElementById("esta-space-loader-bar");
+    if (!bar) return;
+    var n = Math.max(0, Math.min(100, Number(pct) || 0));
+    bar.style.width = n + "%";
+  }
+
+  function spaceLoaderStartRotateMessages() {
+    spaceLoaderStopRotateMessages();
+    spaceLoaderMsgTimer = window.setInterval(function () {
+      var areas = SPACE_LOADER_AREAS.map(function (a) {
+        return a.id;
+      });
+      var next = areas[Math.floor(Math.random() * areas.length)];
+      spaceLoaderSetArea(next);
+    }, 2800);
+  }
+
+  function spaceLoaderStopRotateMessages() {
+    if (spaceLoaderMsgTimer) {
+      window.clearInterval(spaceLoaderMsgTimer);
+      spaceLoaderMsgTimer = null;
+    }
+  }
+
+  function showSpaceLoader(areaId, progress) {
+    var el = document.getElementById("esta-space-loader");
+    if (!el) return;
+    el.hidden = false;
+    el.setAttribute("aria-hidden", "false");
+    spaceLoaderSetArea(areaId || "evidencia");
+    spaceLoaderSetProgress(progress != null ? progress : 8);
+    spaceLoaderStartRotateMessages();
+  }
+
+  function hideSpaceLoader() {
+    var el = document.getElementById("esta-space-loader");
+    spaceLoaderStopRotateMessages();
+    if (el) {
+      el.hidden = true;
+      el.setAttribute("aria-hidden", "true");
+    }
+    spaceLoaderSetProgress(100);
+  }
+
+  function ensureEvidenciaAlbum(map, albumId, meta) {
+    if (!map[albumId]) {
+      map[albumId] = {
+        id: albumId,
+        title: meta.title || storageBasename(albumId) || albumId,
+        subtitle: meta.subtitle || albumId,
+        sources: {},
+        photos: [],
+        photoKeys: {},
+        kind: meta.kind || "mixed",
+        storageOnly: !!meta.storageOnly,
+      };
+    }
+    var a = map[albumId];
+    if (meta.title && (!a.title || a.title === a.id)) a.title = meta.title;
+    if (meta.subtitle) a.subtitle = meta.subtitle;
+    if (meta.kind) a.kind = meta.kind;
+    (meta.sourceTags || []).forEach(function (t) {
+      a.sources[t] = true;
+    });
+    return a;
+  }
+
+  function addPhotoToAlbum(map, albumId, photo, meta) {
+    var alb = ensureEvidenciaAlbum(map, albumId, meta);
+    var key =
+      (photo.storagePath || "") +
+      "|" +
+      (photo.httpUrl || "") +
+      "|" +
+      (photo.name || "");
+    if (alb.photoKeys[key]) return;
+    alb.photoKeys[key] = true;
+    if (!alb.thumbPhoto && (photo.httpUrl || photo.storagePath)) {
+      alb.thumbPhoto = photo;
+    }
+    if (alb.photos.length >= EVIDENCIA_MAX_PHOTOS_PER_ALBUM) {
+      alb.countOverflow = (alb.countOverflow || 0) + 1;
+      return;
+    }
+    alb.photos.push(photo);
+  }
+
+  function albumIdFromStoragePath(path) {
+    var dir = storageDirname(path);
+    return dir || path;
+  }
+
+  function buildAlbumsFromPlanilladoDocs(docs) {
+    var map = {};
+    docs.forEach(function (docSnap) {
+      var d = docSnap.data() || {};
+      if (!documentHasDisplayablePhoto(d)) return;
+      var sede = stationLabelFromDoc(docSnap);
+      var placa = plateFromDocData(d, docSnap.id);
+      var fsPath = docSnap.ref.path;
+      var httpUrls = collectHttpPhotoUrls(d);
+      var storPaths = collectStorageCandidates(d);
+
+      httpUrls.forEach(function (url) {
+        var sp = firebasePathFromStorageApiUrl(url);
+        var albumId = sp ? albumIdFromStoragePath(sp) : "urls/" + sede + "/" + (placa || docSnap.id);
+        addPhotoToAlbum(
+          map,
+          albumId,
+          {
+            httpUrl: url,
+            storagePath: sp || "",
+            name: sp ? storageBasename(sp) : storageBasename(url),
+            placa: placa,
+            sede: sede,
+            firestorePath: fsPath,
+          },
+          {
+            title: storageBasename(albumId) || placa || sede,
+            subtitle: albumId,
+            sourceTags: ["planillado", sp && /^inspection_photos/i.test(sp) ? "inspection" : "http"],
+            kind: sp && /^inspection_photos/i.test(albumId) ? "inspection" : "planillado",
+          }
+        );
+      });
+
+      storPaths.forEach(function (sp) {
+        var albumId = albumIdFromStoragePath(sp);
+        addPhotoToAlbum(
+          map,
+          albumId,
+          {
+            storagePath: sp,
+            httpUrl: "",
+            name: storageBasename(sp),
+            placa: placa,
+            sede: sede,
+            firestorePath: fsPath,
+          },
+          {
+            title: storageBasename(albumId) || placa || sede,
+            subtitle: albumId,
+            sourceTags: ["planillado", "storage", /^inspection_photos/i.test(sp) ? "inspection" : "storage"],
+            kind: /^inspection_photos/i.test(albumId) ? "inspection" : "planillado",
+          }
+        );
+      });
+
+      if (!httpUrls.length && !storPaths.length) {
+        var fallbackId = "planillado/" + sede + "/" + (placa || docSnap.id);
+        addPhotoToAlbum(
+          map,
+          fallbackId,
+          {
+            storagePath: "",
+            httpUrl: "",
+            name: "(evidencia en documento)",
+            placa: placa,
+            sede: sede,
+            firestorePath: fsPath,
+          },
+          {
+            title: placa || docSnap.id,
+            subtitle: sede + " · registro con foto",
+            sourceTags: ["planillado"],
+            kind: "planillado",
+          }
+        );
+      }
+    });
+    return map;
+  }
+
+  async function discoverStorageFolderAlbums(map, onProgress, options) {
+    if (!storage || !auth.currentUser) return { map: map, storageError: "Inicie sesión para listar Storage." };
+    options = options || {};
+    var light = options.light !== false;
+    var roots = light
+      ? ["inspection_photos"]
+      : [
+          "inspection_photos",
+          "check_list",
+          "checklist",
+          "CheckList",
+          "photos",
+          "evidencia",
+          "uploads",
+        ];
+    var seen = {};
+    var queue = [];
+    roots.forEach(function (r) {
+      if (!seen[r]) {
+        seen[r] = true;
+        queue.push({ prefix: r, depth: 0 });
+      }
+    });
+    var maxFolders = options.maxFolders || (light ? 45 : 100);
+    var maxDepth = options.maxDepth || (light ? 3 : 4);
+    var folderCount = 0;
+    var storageError = "";
+
+    while (queue.length && folderCount < maxFolders) {
+      var item = queue.shift();
+      var prefix = item.prefix;
+      var depth = item.depth;
+      try {
+        var ref = prefix ? storage.ref(prefix) : storage.ref();
+        var res = await ref.listAll();
+        folderCount++;
+        if (onProgress) {
+          onProgress(Math.min(98, Math.round((folderCount / maxFolders) * 100)));
+        }
+
+        var albumId = prefix || "(raíz Storage)";
+        var alb = ensureEvidenciaAlbum(map, albumId, {
+          title: prefix ? storageBasename(prefix) : "Raíz del bucket",
+          subtitle: prefix || cfg.storageBucket || "Storage",
+          sourceTags: ["storage"],
+          kind: "storage",
+          storageOnly: true,
+        });
+        alb.storageListed = true;
+
+        res.items.forEach(function (itemRef) {
+          if (!isImagePathLike(itemRef.fullPath)) return;
+          addPhotoToAlbum(
+            map,
+            albumIdFromStoragePath(itemRef.fullPath),
+            {
+              storagePath: itemRef.fullPath,
+              httpUrl: "",
+              name: itemRef.name,
+              placa: "",
+              sede: "",
+              firestorePath: "",
+            },
+            {
+              title: storageBasename(albumIdFromStoragePath(itemRef.fullPath)),
+              subtitle: itemRef.fullPath,
+              sourceTags: ["storage"],
+              kind: /^inspection_photos/i.test(itemRef.fullPath) ? "inspection" : "storage",
+            }
+          );
+        });
+
+        if (depth < maxDepth) {
+          res.prefixes.forEach(function (pref) {
+            var child = prefix ? prefix + "/" + pref.name : pref.name;
+            if (!seen[child]) {
+              seen[child] = true;
+              queue.push({ prefix: child, depth: depth + 1 });
+              ensureEvidenciaAlbum(map, child, {
+                title: pref.name,
+                subtitle: prefix ? prefix + "/" : "Carpeta Storage",
+                sourceTags: ["storage"],
+                kind: /^inspection_photos/i.test(child) ? "inspection" : "storage",
+                storageOnly: true,
+              });
+            }
+          });
+        }
+      } catch (err) {
+        if (!storageError) storageError = err.code || err.message || String(err);
+        console.warn("[evidencia] listAll", prefix, err);
+      }
+    }
+    return { map: map, storageError: storageError };
+  }
+
+  function finalizeEvidenciaAlbums(map) {
+    var list = Object.keys(map).map(function (k) {
+      return map[k];
+    });
+    list.forEach(function (a) {
+      a.count = a.photos.length + (a.countOverflow || 0);
+      a.sourceList = Object.keys(a.sources);
+      if (!a.count && a.storageOnly) a.count = 0;
+    });
+    list.sort(function (a, b) {
+      if (b.count !== a.count) return b.count - a.count;
+      return String(a.id).localeCompare(String(b.id), "es");
+    });
+    return list;
+  }
+
+  function albumMatchesFilter(alb) {
+    if (evidenciaFilter === "all") return true;
+    if (evidenciaFilter === "storage") {
+      return alb.sourceList.indexOf("storage") !== -1 || alb.storageOnly;
+    }
+    if (evidenciaFilter === "planillado") {
+      return alb.sourceList.indexOf("planillado") !== -1;
+    }
+    if (evidenciaFilter === "inspection") {
+      return /^inspection_photos/i.test(alb.id) || alb.kind === "inspection";
+    }
+    return true;
+  }
+
+  function albumMatchesSearch(alb) {
+    if (!evidenciaSearchQ) return true;
+    var q = evidenciaSearchQ.toLowerCase();
+    var blob = (alb.id + " " + alb.title + " " + alb.subtitle).toLowerCase();
+    if (blob.indexOf(q) !== -1) return true;
+    var i;
+    var scanMax = Math.min(alb.photos.length, 24);
+    for (i = 0; i < scanMax; i++) {
+      var p = alb.photos[i];
+      if (
+        String(p.placa || "").toLowerCase().indexOf(q) !== -1 ||
+        String(p.sede || "").toLowerCase().indexOf(q) !== -1 ||
+        String(p.name || "").toLowerCase().indexOf(q) !== -1
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function setupEvidenciaThumbObserver() {
+    if (evidenciaThumbObserver || typeof IntersectionObserver === "undefined") return;
+    evidenciaThumbObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var btn = entry.target;
+          var id = btn.getAttribute("data-ev-album");
+          var alb = findEvidenciaAlbum(id);
+          var thumb = btn.querySelector(".esta-ev-album-thumb");
+          if (alb && thumb) enqueueEvidenciaAlbumThumbnail(alb, thumb);
+          evidenciaThumbObserver.unobserve(btn);
+        });
+      },
+      { root: null, rootMargin: "220px 0px", threshold: 0.01 }
+    );
+  }
+
+  function enqueueEvidenciaAlbumThumbnail(alb, thumbEl) {
+    evidenciaThumbQueue.push({ alb: alb, thumbEl: thumbEl });
+    drainEvidenciaThumbQueue();
+  }
+
+  function drainEvidenciaThumbQueue() {
+    while (
+      evidenciaThumbInflight < EVIDENCIA_THUMB_CONCURRENCY &&
+      evidenciaThumbQueue.length
+    ) {
+      var job = evidenciaThumbQueue.shift();
+      evidenciaThumbInflight++;
+      loadAlbumThumbnail(job.alb, job.thumbEl, function () {
+        evidenciaThumbInflight--;
+        drainEvidenciaThumbQueue();
+      });
+    }
+  }
+
+  function setupEvidenciaDetailPhotoObserver(container) {
+    if (!container) return;
+    if (typeof IntersectionObserver === "undefined") {
+      container.querySelectorAll(".esta-ev-photo").forEach(function (btn) {
+        var idx = parseInt(btn.getAttribute("data-ev-photo-idx"), 10);
+        var albumId = btn.getAttribute("data-ev-album");
+        var alb = findEvidenciaAlbum(albumId);
+        if (alb && alb.photos[idx]) {
+          loadEvidenciaPhotoThumb(albumId, idx, alb.photos[idx], btn);
+        }
+      });
+      return;
+    }
+    if (!evidenciaDetailPhotoObserver) {
+      evidenciaDetailPhotoObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var btn = entry.target;
+            var idx = parseInt(btn.getAttribute("data-ev-photo-idx"), 10);
+            var albumId = btn.getAttribute("data-ev-album");
+            var alb = findEvidenciaAlbum(albumId);
+            if (alb && alb.photos[idx]) {
+              loadEvidenciaPhotoThumb(albumId, idx, alb.photos[idx], btn);
+            }
+            evidenciaDetailPhotoObserver.unobserve(btn);
+          });
+        },
+        { root: null, rootMargin: "160px 0px", threshold: 0.01 }
+      );
+    }
+    container.querySelectorAll(".esta-ev-photo").forEach(function (btn) {
+      evidenciaDetailPhotoObserver.observe(btn);
+    });
+  }
+
+  function getFilteredEvidenciaAlbums() {
+    return evidenciaAlbums.filter(function (a) {
+      return albumMatchesFilter(a) && albumMatchesSearch(a);
+    });
+  }
+
+  function renderEvidenciaAlbumGrid() {
+    var wrap = document.getElementById("esta-evidencia-albums");
+    var detail = document.getElementById("esta-evidencia-detail");
+    var albumsWrap = document.getElementById("esta-evidencia-albums-wrap");
+    var backAlbumsBtn = document.getElementById("esta-evidencia-btn-back-albums");
+    if (!wrap) return;
+    if (detail) detail.hidden = true;
+    if (albumsWrap) albumsWrap.hidden = false;
+    if (backAlbumsBtn) backAlbumsBtn.hidden = true;
+    evidenciaSelectedAlbumId = null;
+
+    var list = getFilteredEvidenciaAlbums();
+    if (!list.length) {
+      wrap.innerHTML =
+        '<p style="grid-column:1/-1;color:#9ca3af;font-size:13px;">No hay álbumes con el filtro actual. Pulse «Actualizar álbumes» o revise permisos de Storage.</p>';
+      return;
+    }
+    wrap.innerHTML = list
+      .map(function (alb) {
+        var tags = (alb.sourceList || []).slice(0, 3).join(" · ") || "—";
+        return (
+          '<button type="button" class="esta-ev-album" data-ev-album="' +
+          escAttrEv(alb.id) +
+          '">' +
+          '<div class="esta-ev-album-thumb"><span class="esta-ev-album-placeholder" aria-hidden="true">📷</span>' +
+          '<span class="esta-ev-album-badge">' +
+          (alb.count || 0) +
+          "</span></div>" +
+          '<div class="esta-ev-album-body"><strong>' +
+          escEv(alb.title) +
+          "</strong>" +
+          "<span>" +
+          escEv(alb.subtitle) +
+          "</span>" +
+          "<span>" +
+          escEv(tags) +
+          "</span></div></button>"
+        );
+      })
+      .join("");
+
+    setupEvidenciaThumbObserver();
+    wrap.querySelectorAll(".esta-ev-album").forEach(function (btn) {
+      if (evidenciaThumbObserver) {
+        evidenciaThumbObserver.observe(btn);
+      } else {
+        var id = btn.getAttribute("data-ev-album");
+        var alb = findEvidenciaAlbum(id);
+        if (alb) {
+          enqueueEvidenciaAlbumThumbnail(
+            alb,
+            btn.querySelector(".esta-ev-album-thumb")
+          );
+        }
+      }
+    });
+  }
+
+  function findEvidenciaAlbum(id) {
+    var i;
+    for (i = 0; i < evidenciaAlbums.length; i++) {
+      if (evidenciaAlbums[i].id === id) return evidenciaAlbums[i];
+    }
+    return null;
+  }
+
+  function loadAlbumThumbnail(alb, thumbEl, done) {
+    if (!alb || !thumbEl) {
+      if (done) done();
+      return;
+    }
+    var photo = alb.thumbPhoto || null;
+    if (!photo) {
+      var j;
+      for (j = 0; j < alb.photos.length; j++) {
+        if (alb.photos[j].httpUrl || alb.photos[j].storagePath) {
+          photo = alb.photos[j];
+          break;
+        }
+      }
+    }
+    if (!photo) {
+      if (done) done();
+      return;
+    }
+    if (thumbEl.getAttribute("data-ev-loaded") === "1") {
+      if (done) done();
+      return;
+    }
+
+    function finish() {
+      if (done) done();
+    }
+
+    function showUrl(url) {
+      if (!url || !thumbEl) {
+        finish();
+        return;
+      }
+      thumbEl.setAttribute("data-ev-loaded", "1");
+      thumbEl.innerHTML =
+        '<img src="' +
+        escAttrEv(url) +
+        '" alt="" loading="lazy" decoding="async" /><span class="esta-ev-album-badge">' +
+        (alb.count || 0) +
+        "</span>";
+      finish();
+    }
+
+    if (photo.httpUrl) {
+      showUrl(photo.httpUrl);
+      return;
+    }
+    if (photo.storagePath) {
+      resolveStoragePath(photo.storagePath)
+        .then(showUrl)
+        .catch(finish);
+      return;
+    }
+    finish();
+  }
+
+  function renderEvidenciaAlbumDetailPhotos(alb, albumId) {
+    var photosEl = document.getElementById("esta-evidencia-photos");
+    if (!photosEl || !alb) return;
+
+    if (!alb.photos.length) {
+      photosEl.innerHTML =
+        '<p style="color:#9ca3af;">Carpeta sin archivos de imagen listados. Puede ser solo prefijo en Storage.</p>';
+      return;
+    }
+
+    var limit = alb._detailLimit || EVIDENCIA_DETAIL_PAGE;
+    var slice = alb.photos.slice(0, limit);
+    var remaining = alb.photos.length - slice.length;
+    var extra = alb.countOverflow || 0;
+
+    photosEl.innerHTML =
+      slice
+        .map(function (p, idx) {
+          return (
+            '<button type="button" class="esta-ev-photo" data-ev-photo-idx="' +
+            idx +
+            '" data-ev-album="' +
+            escAttrEv(albumId) +
+            '"><span class="esta-ev-photo-loading">Cargando…</span></button>'
+          );
+        })
+        .join("") +
+      (remaining > 0 || extra > 0
+        ? '<button type="button" class="esta-ev-load-more" id="esta-ev-load-more">Cargar más (' +
+          (remaining + extra) +
+          ")</button>"
+        : "");
+
+    setupEvidenciaDetailPhotoObserver(photosEl);
+  }
+
+  function openEvidenciaAlbum(albumId) {
+    var alb = findEvidenciaAlbum(albumId);
+    if (!alb) return;
+    evidenciaSelectedAlbumId = albumId;
+    var detail = document.getElementById("esta-evidencia-detail");
+    var albumsWrap = document.getElementById("esta-evidencia-albums-wrap");
+    var backAlbumsBtn = document.getElementById("esta-evidencia-btn-back-albums");
+    var titleEl = document.getElementById("esta-evidencia-detail-title");
+    var metaEl = document.getElementById("esta-evidencia-detail-meta");
+    var photosEl = document.getElementById("esta-evidencia-photos");
+    if (detail) detail.hidden = false;
+    if (albumsWrap) albumsWrap.hidden = true;
+    if (backAlbumsBtn) backAlbumsBtn.hidden = false;
+    if (titleEl) titleEl.textContent = alb.title || alb.id;
+    if (metaEl) {
+      metaEl.textContent =
+        alb.subtitle +
+        " · " +
+        (alb.count || 0) +
+        " archivo(s) · " +
+        (alb.sourceList || []).join(", ");
+    }
+    if (!photosEl) return;
+
+    alb._detailLimit = EVIDENCIA_DETAIL_PAGE;
+    renderEvidenciaAlbumDetailPhotos(alb, albumId);
+  }
+
+  function loadEvidenciaPhotoThumb(albumId, idx, photo, btn) {
+    if (!btn) {
+      btn = document.getElementById("esta-evidencia-photos");
+      if (!btn) return;
+      btn = btn.querySelector('[data-ev-photo-idx="' + idx + '"]');
+    }
+    if (!btn) return;
+
+    function show(url) {
+      if (!url) {
+        btn.innerHTML = '<span class="esta-ev-photo-loading">Sin URL</span>';
+        return;
+      }
+      photo.resolvedUrl = url;
+      btn.innerHTML =
+        '<img src="' +
+        escAttrEv(url) +
+        '" alt="' +
+        escAttrEv(photo.name || "") +
+        '" loading="lazy" />';
+    }
+
+    if (photo.resolvedUrl) {
+      show(photo.resolvedUrl);
+      return;
+    }
+    if (photo.httpUrl) {
+      show(photo.httpUrl);
+      return;
+    }
+    if (photo.storagePath) {
+      resolveStoragePath(photo.storagePath)
+        .then(show)
+        .catch(function () {
+          btn.innerHTML = '<span class="esta-ev-photo-loading">Error Storage</span>';
+        });
+      return;
+    }
+    btn.innerHTML = '<span class="esta-ev-photo-loading">Sin archivo</span>';
+  }
+
+  function resolveEvidenciaPhotoUrl(photo) {
+    if (!photo) return Promise.resolve("");
+    if (photo.resolvedUrl) return Promise.resolve(photo.resolvedUrl);
+    if (photo.httpUrl) {
+      photo.resolvedUrl = photo.httpUrl;
+      return Promise.resolve(photo.httpUrl);
+    }
+    if (photo.storagePath) {
+      return resolveStoragePath(photo.storagePath).then(function (u) {
+        photo.resolvedUrl = u;
+        return u;
+      });
+    }
+    return Promise.resolve("");
+  }
+
+  function openEvidenciaLightbox(albumId, startIdx) {
+    var alb = findEvidenciaAlbum(albumId);
+    if (!alb || !alb.photos.length) return;
+    if (!evLbEl) return;
+    evidenciaLightboxAlbum = alb;
+    evidenciaLightboxUrls = [];
+    evidenciaLightboxPhotos = alb.photos;
+    evidenciaLightboxIndex = Math.min(
+      Math.max(0, startIdx || 0),
+      alb.photos.length - 1
+    );
+    if (evEnhanceClarity) evEnhanceClarity.checked = false;
+    evLbEl.hidden = false;
+    evLbEl.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    updateEvidenciaLightboxSlide();
+  }
+
+  function closeEvidenciaLightbox() {
+    if (!evLbEl) return;
+    evLbEl.hidden = true;
+    evLbEl.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    resetEvLbZoomPan();
+    if (evEnhanceClarity) evEnhanceClarity.checked = false;
+    if (evLbCanvas) {
+      evLbCanvas.hidden = true;
+      evLbCanvas.style.display = "none";
+      evLbCanvas.width = 0;
+      evLbCanvas.height = 0;
+    }
+    if (evLbImg) {
+      evLbImg.removeAttribute("src");
+      evLbImg.style.display = "block";
+    }
+    pauseEvLbVideo();
+    if (evLbVideo) evLbVideo.hidden = true;
+    if (evLbZoomLayer) evLbZoomLayer.style.display = "";
+    if (evZoomToolbar) evZoomToolbar.hidden = false;
+    evidenciaLightboxUrls = [];
+    evidenciaLightboxPhotos = [];
+    evidenciaLightboxAlbum = null;
+  }
+
+  function wireEvLightboxControls() {
+    if (evLbImg) {
+      evLbImg.addEventListener("load", function () {
+        syncEvEnhanceDisplay();
+      });
+    }
+    if (evLbVideo) {
+      evLbVideo.addEventListener("loadedmetadata", function () {
+        syncEvVideoEnhanceDisplay();
+      });
+    }
+    if (evEnhanceClarity) {
+      evEnhanceClarity.addEventListener("change", function () {
+        syncEvEnhanceDisplay();
+        syncEvVideoEnhanceDisplay();
+      });
+    }
+    if (evZoomInBtn) {
+      evZoomInBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (evLbCurrentIsVideo()) return;
+        evLbZoomScale = evLbClamp(evLbZoomScale * 1.2, 1, 5);
+        if (evLbZoomScale === 1) {
+          evLbPanX = 0;
+          evLbPanY = 0;
+        }
+        applyEvLbZoomTransform();
+      });
+    }
+    if (evZoomOutBtn) {
+      evZoomOutBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (evLbCurrentIsVideo()) return;
+        evLbZoomScale = evLbClamp(evLbZoomScale / 1.2, 1, 5);
+        if (evLbZoomScale === 1) {
+          evLbPanX = 0;
+          evLbPanY = 0;
+        }
+        applyEvLbZoomTransform();
+      });
+    }
+    if (evZoomResetBtn) {
+      evZoomResetBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        resetEvLbZoomPan();
+      });
+    }
+    if (evLbViewport) {
+      evLbViewport.addEventListener(
+        "wheel",
+        function (e) {
+          if (!evLbEl || evLbEl.hidden || evLbCurrentIsVideo()) return;
+          e.preventDefault();
+          var factor = e.deltaY > 0 ? 0.9 : 1.1;
+          evLbZoomScale = evLbClamp(evLbZoomScale * factor, 1, 5);
+          if (evLbZoomScale === 1) {
+            evLbPanX = 0;
+            evLbPanY = 0;
+          }
+          applyEvLbZoomTransform();
+        },
+        { passive: false }
+      );
+      evLbViewport.addEventListener("dblclick", function (e) {
+        e.stopPropagation();
+        if (evLbCurrentIsVideo()) return;
+        resetEvLbZoomPan();
+      });
+      evLbViewport.addEventListener("pointerdown", function (e) {
+        if (evLbCurrentIsVideo() || evLbZoomScale <= 1) return;
+        if (e.pointerType === "mouse" && e.button !== 0) return;
+        evLbPanDragging = true;
+        evLbPanLastX = e.clientX;
+        evLbPanLastY = e.clientY;
+        try {
+          evLbViewport.setPointerCapture(e.pointerId);
+        } catch (err) {}
+      });
+      evLbViewport.addEventListener("pointermove", function (e) {
+        if (!evLbPanDragging) return;
+        evLbPanX += e.clientX - evLbPanLastX;
+        evLbPanY += e.clientY - evLbPanLastY;
+        evLbPanLastX = e.clientX;
+        evLbPanLastY = e.clientY;
+        applyEvLbZoomTransform();
+      });
+      evLbViewport.addEventListener("pointerup", function () {
+        evLbPanDragging = false;
+      });
+      evLbViewport.addEventListener("pointercancel", function () {
+        evLbPanDragging = false;
+      });
+      evLbViewport.addEventListener(
+        "touchstart",
+        function (e) {
+          if (evLbCurrentIsVideo()) return;
+          if (e.touches.length === 2) {
+            evLbPinchStartDist = evLbTouchDistance(e.touches[0], e.touches[1]);
+            evLbPinchStartScale = evLbZoomScale;
+          }
+        },
+        { passive: true }
+      );
+      evLbViewport.addEventListener(
+        "touchmove",
+        function (e) {
+          if (evLbCurrentIsVideo()) return;
+          if (e.touches.length === 2 && evLbPinchStartDist > 0) {
+            e.preventDefault();
+            var d = evLbTouchDistance(e.touches[0], e.touches[1]);
+            evLbZoomScale = evLbClamp((evLbPinchStartScale * d) / evLbPinchStartDist, 1, 5);
+            if (evLbZoomScale === 1) {
+              evLbPanX = 0;
+              evLbPanY = 0;
+            }
+            applyEvLbZoomTransform();
+          }
+        },
+        { passive: false }
+      );
+      evLbViewport.addEventListener("touchend", function (e) {
+        if (e.touches.length < 2) evLbPinchStartDist = 0;
+      });
+    }
+    if (evLbCloseBtn) {
+      evLbCloseBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        closeEvidenciaLightbox();
+      });
+    }
+    if (evLbBackdrop) {
+      evLbBackdrop.addEventListener("click", closeEvidenciaLightbox);
+    }
+    if (evLbPrev) {
+      evLbPrev.addEventListener("click", function (e) {
+        e.stopPropagation();
+        evidenciaLightboxStep(-1);
+      });
+    }
+    if (evLbNext) {
+      evLbNext.addEventListener("click", function (e) {
+        e.stopPropagation();
+        evidenciaLightboxStep(1);
+      });
+    }
+    document.addEventListener("keydown", function (e) {
+      if (!evLbEl || evLbEl.hidden) return;
+      if (e.key === "Escape") {
+        closeEvidenciaLightbox();
+      } else if (e.key === "ArrowRight") {
+        evidenciaLightboxStep(1);
+      } else if (e.key === "ArrowLeft") {
+        evidenciaLightboxStep(-1);
+      } else if (e.key === "+" || e.key === "=") {
+        if (evLbCurrentIsVideo()) return;
+        e.preventDefault();
+        evLbZoomScale = evLbClamp(evLbZoomScale * 1.15, 1, 5);
+        applyEvLbZoomTransform();
+      } else if (e.key === "-" || e.key === "_") {
+        if (evLbCurrentIsVideo()) return;
+        e.preventDefault();
+        evLbZoomScale = evLbClamp(evLbZoomScale / 1.15, 1, 5);
+        if (evLbZoomScale === 1) {
+          evLbPanX = 0;
+          evLbPanY = 0;
+        }
+        applyEvLbZoomTransform();
+      } else if (e.key === "0") {
+        if (evLbCurrentIsVideo()) return;
+        resetEvLbZoomPan();
+      }
+    });
+  }
+  wireEvLightboxControls();
+
+  function evidenciaAlbumsSummary(extra) {
+    var msg =
+      evidenciaAlbums.length +
+      " álbum/carpeta(s) · " +
+      evidenciaAlbums.reduce(function (n, a) {
+        return n + (a.count || 0);
+      }, 0) +
+      " archivo(s) con evidencia";
+    if (extra) msg += extra;
+    return msg;
+  }
+
+  async function evidenciaBackgroundStorageScan(map) {
+    if (evidenciaStorageScanning || !evidenciaScanStorageEnabled) return;
+    evidenciaStorageScanning = true;
+    evidenciaSetStatus("Explorando carpetas Storage en segundo plano…");
+    try {
+      var stor = await discoverStorageFolderAlbums(
+        map,
+        function (pct) {
+          evidenciaSetStatus(
+            "Explorando Storage… " + Math.min(99, pct) + "%"
+          );
+        },
+        { light: false, maxFolders: 100, maxDepth: 4 }
+      );
+      evidenciaAlbums = finalizeEvidenciaAlbums(stor.map);
+      evidenciaCacheTime = Date.now();
+      var extra = "";
+      if (stor.storageError) {
+        extra = " · algunas carpetas no listaron (permisos Storage)";
+      }
+      if (!evidenciaSelectedAlbumId) renderEvidenciaAlbumGrid();
+      evidenciaSetStatus(evidenciaAlbumsSummary(extra));
+    } catch (e) {
+      console.warn("[evidencia] storage scan", e);
+      evidenciaSetStatus(
+        evidenciaAlbumsSummary(" · error parcial en Storage")
+      );
+    } finally {
+      evidenciaStorageScanning = false;
+    }
+  }
+
+  async function loadEvidenciaAlbums(force) {
+    if (!auth.currentUser) {
+      evidenciaSetStatus("Inicie sesión para ver álbumes.");
+      return;
+    }
+    if (evidenciaLoading) return;
+    if (
+      !force &&
+      evidenciaAlbums.length &&
+      Date.now() - evidenciaCacheTime < EVIDENCIA_CACHE_MS
+    ) {
+      renderEvidenciaAlbumGrid();
+      return;
+    }
+    evidenciaLoading = true;
+    evidenciaSetStatus("");
+    showSpaceLoader("evidencia", 5);
+    var map = {};
+    try {
+      spaceLoaderSetArea("planillado");
+      spaceLoaderSetProgress(12);
+      var docs = await fetchAllPlanilladoDocs();
+      spaceLoaderSetArea("evidencia");
+      spaceLoaderSetProgress(72);
+      map = buildAlbumsFromPlanilladoDocs(docs);
+      evidenciaAlbums = finalizeEvidenciaAlbums(map);
+      evidenciaCacheTime = Date.now();
+      spaceLoaderSetArea("evidencia");
+      spaceLoaderSetProgress(96);
+      hideSpaceLoader();
+      var msg = evidenciaAlbumsSummary("");
+      if (evidenciaScanStorageEnabled) {
+        msg += " · explorando Storage en segundo plano";
+      }
+      evidenciaSetStatus(msg);
+      renderEvidenciaAlbumGrid();
+      if (evidenciaScanStorageEnabled) {
+        evidenciaBackgroundStorageScan(map);
+      }
+    } catch (e) {
+      hideSpaceLoader();
+      evidenciaSetStatus("Error: " + (e.message || String(e)));
+    } finally {
+      evidenciaLoading = false;
+    }
+  }
+
+  function wireEvidenciaPanel() {
+    setupEvidenciaThumbObserver();
+    var scanStorageEl = document.getElementById("esta-evidencia-scan-storage");
+    if (scanStorageEl) {
+      evidenciaScanStorageEnabled = !!scanStorageEl.checked;
+      scanStorageEl.addEventListener("change", function () {
+        evidenciaScanStorageEnabled = !!scanStorageEl.checked;
+        if (evidenciaScanStorageEnabled && evidenciaAlbums.length && auth.currentUser) {
+          var map = {};
+          evidenciaAlbums.forEach(function (a) {
+            map[a.id] = a;
+          });
+          evidenciaBackgroundStorageScan(map);
+        }
+      });
+    }
+    var refreshBtn = document.getElementById("esta-evidencia-btn-refresh");
+    if (refreshBtn) {
+      refreshBtn.addEventListener("click", function () {
+        evidenciaAlbums = [];
+        evidenciaCacheTime = 0;
+        loadEvidenciaAlbums(true);
+      });
+    }
+    var searchEl = document.getElementById("esta-evidencia-search");
+    if (searchEl) {
+      searchEl.addEventListener("input", function () {
+        evidenciaSearchQ = String(searchEl.value || "")
+          .trim()
+          .toLowerCase();
+        if (!evidenciaSelectedAlbumId) renderEvidenciaAlbumGrid();
+      });
+    }
+    document.querySelectorAll(".esta-evidencia-filter").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        evidenciaFilter = btn.getAttribute("data-ev-filter") || "all";
+        document.querySelectorAll(".esta-evidencia-filter").forEach(function (b) {
+          b.classList.toggle("is-active", b === btn);
+        });
+        if (!evidenciaSelectedAlbumId) renderEvidenciaAlbumGrid();
+      });
+    });
+    var albumsEl = document.getElementById("esta-evidencia-albums");
+    if (albumsEl) {
+      albumsEl.addEventListener("click", function (ev) {
+        var card = ev.target.closest("[data-ev-album]");
+        if (!card) return;
+        openEvidenciaAlbum(card.getAttribute("data-ev-album"));
+      });
+    }
+    var detailBack = document.getElementById("esta-evidencia-detail-back");
+    var backAlbumsBtn = document.getElementById("esta-evidencia-btn-back-albums");
+    function backToAlbums() {
+      renderEvidenciaAlbumGrid();
+    }
+    if (detailBack) detailBack.addEventListener("click", backToAlbums);
+    if (backAlbumsBtn) backAlbumsBtn.addEventListener("click", backToAlbums);
+    var photosEl = document.getElementById("esta-evidencia-photos");
+    if (photosEl) {
+      photosEl.addEventListener("click", function (ev) {
+        if (ev.target.closest("#esta-ev-load-more")) {
+          var albMore = findEvidenciaAlbum(evidenciaSelectedAlbumId);
+          if (albMore) {
+            albMore._detailLimit =
+              (albMore._detailLimit || EVIDENCIA_DETAIL_PAGE) +
+              EVIDENCIA_DETAIL_PAGE;
+            renderEvidenciaAlbumDetailPhotos(albMore, evidenciaSelectedAlbumId);
+          }
+          return;
+        }
+        var btn = ev.target.closest("[data-ev-photo-idx]");
+        if (!btn) return;
+        openEvidenciaLightbox(
+          btn.getAttribute("data-ev-album"),
+          parseInt(btn.getAttribute("data-ev-photo-idx"), 10)
+        );
+      });
+    }
+  }
+  wireEvidenciaPanel();
+
   /** Hora local 0–23 para gráfica de franjas; null si no se puede inferir. */
   function extractHourFromDoc(docSnap) {
     var d = docSnap && docSnap.data ? docSnap.data() || {} : {};
@@ -3126,6 +6032,534 @@
     if (parsed.stationId && parsed.stationId !== "(legacy)") return parsed.stationId;
     return "(sin sede)";
   }
+
+  function fmtTsRitmo(v) {
+    if (v == null || v === "") return "";
+    try {
+      if (typeof v.toDate === "function") return v.toDate().toLocaleString("es-CO");
+      if (v.seconds != null) return new Date(v.seconds * 1000).toLocaleString("es-CO");
+    } catch (e) {}
+    return String(v);
+  }
+
+  var ritmoEntries = [];
+  var ritmoHourCounts = [];
+  var ritmoSelectedHour = null;
+  var ritmoFilterMode = "all";
+  var ritmoSearchQ = "";
+  var ritmoSedeFilter = "";
+  var ritmoLoading = false;
+  var RITMO_RENDER_CAP = 600;
+
+  var RITMO_SKIP_KEYS =
+    /^(photos|fotos|foto|urls|url|uri|download|image|encrypted|iv|nonce|token|hash|path)/i;
+
+  function ritmoEsc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function ritmoEscAttr(s) {
+    return ritmoEsc(s).replace(/'/g, "&#39;");
+  }
+
+  function ritmoNormalizeObs(v) {
+    if (v == null || v === "") return "";
+    if (typeof v === "object") {
+      try {
+        return JSON.stringify(v);
+      } catch (e) {
+        return String(v);
+      }
+    }
+    return String(v).trim();
+  }
+
+  function ritmoCollectExtraStrings(data, depth, out, seen) {
+    if (!data || depth > 8) return;
+    if (typeof data === "string") {
+      var t = data.trim();
+      if (t.length < 3 || t.length > 800) return;
+      if (/^https?:\/\//i.test(t) || /^gs:\/\//i.test(t)) return;
+      if (/inspection_photos\//i.test(t)) return;
+      if (seen[t]) return;
+      seen[t] = true;
+      out.push(t);
+      return;
+    }
+    if (typeof data !== "object") return;
+    if (typeof data.toDate === "function") return;
+    if (Array.isArray(data)) {
+      data.forEach(function (x) {
+        ritmoCollectExtraStrings(x, depth + 1, out, seen);
+      });
+      return;
+    }
+    var k;
+    for (k in data) {
+      if (!Object.prototype.hasOwnProperty.call(data, k)) continue;
+      if (RITMO_SKIP_KEYS.test(k)) continue;
+      ritmoCollectExtraStrings(data[k], depth + 1, out, seen);
+    }
+  }
+
+  function buildRitmoEntry(docSnap) {
+    var d = docSnap.data() || {};
+    var placa = plateFromDocData(d, docSnap.id);
+    var sede = stationLabelFromDoc(docSnap);
+    var hour = extractHourFromDoc(docSnap);
+    var operario = pick(
+      d,
+      "lastOperator",
+      "user",
+      "operatorName",
+      "idOperario",
+      "operarioId",
+      "nombreOperario"
+    );
+    var observaciones = ritmoNormalizeObs(
+      pick(
+        d,
+        "description",
+        "Description",
+        "observaciones",
+        "Observaciones",
+        "observacion",
+        "observation",
+        "notes",
+        "notas",
+        "comentarios",
+        "comments",
+        "remarks",
+        "mensaje",
+        "detalle"
+      )
+    );
+    var tipoVeh = pick(d, "tipoVehiculo", "tipo", "clase");
+    if (!tipoVeh) {
+      if (pick(d, "isCar") === true || pick(d, "isCar") === "true") tipoVeh = "Auto";
+      else if (pick(d, "isMotorcycle") === true || pick(d, "isMotorcycle") === "true") tipoVeh = "Moto";
+    }
+    var llave = pick(d, "keysNumber", "ticket", "tipoTicket");
+    var celda = pick(d, "cellNumber", "idTicket", "idTarjeta");
+    var fechaTxt = fmtTsRitmo(
+      pick(d, "dateTime", "fecha", "lastCheckDateTime", "createdAt", "timestamp")
+    );
+    var horaTxt = pick(d, "hora", "hour", "Hora");
+    if (horaTxt && typeof horaTxt === "object") horaTxt = fmtTsRitmo(horaTxt);
+    else horaTxt = String(horaTxt || "").trim();
+
+    var fields = [
+      { label: "Placa", value: placa || "—" },
+      { label: "Sede", value: sede },
+      { label: "Operario", value: String(operario || "").trim() || "—" },
+      { label: "Fecha / hora registro", value: fechaTxt || horaTxt || "—" },
+      { label: "Franja (hora entrada)", value: hour != null ? hour + ":00" : "Sin hora deducible" },
+      { label: "Tipo vehículo", value: String(tipoVeh || "").trim() || "—" },
+      { label: "Llave", value: String(llave || "").trim() || "—" },
+      { label: "Celda / ticket", value: String(celda || "").trim() || "—" },
+      { label: "Observaciones", value: observaciones || "—" },
+    ];
+
+    var extra = [];
+    ritmoCollectExtraStrings(d, 0, extra, {});
+    extra.forEach(function (txt, i) {
+      if (txt === observaciones) return;
+      fields.push({ label: "Campo " + (i + 1), value: txt });
+    });
+
+    var preview = observaciones;
+    if (!preview && extra.length) preview = extra.slice(0, 2).join(" · ");
+    if (!preview) {
+      preview = [tipoVeh, llave && "Llave " + llave, celda && "Celda " + celda]
+        .filter(Boolean)
+        .join(" · ");
+    }
+    if (!preview) preview = "Registro sin texto destacado (ver detalle).";
+
+    return {
+      id: docSnap.ref.path,
+      placa: placa,
+      sede: sede,
+      hour: hour,
+      operario: String(operario || "").trim(),
+      observaciones: observaciones,
+      preview: preview,
+      fields: fields,
+      hasObs: !!observaciones,
+      hasFoto: documentHasDisplayablePhoto(d),
+      tipoVeh: String(tipoVeh || "").trim(),
+      fechaTxt: fechaTxt,
+    };
+  }
+
+  function ritmoSetStatus(msg) {
+    var el = document.getElementById("esta-ritmo-status");
+    if (el) el.textContent = msg || "";
+  }
+
+  function ritmoHighlightText(text, q) {
+    var safe = ritmoEsc(text || "");
+    if (!q) return safe;
+    var re = new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
+    return safe.replace(re, "<mark>$1</mark>");
+  }
+
+  function ritmoFilteredEntries() {
+    return ritmoEntries.filter(function (e) {
+      if (ritmoSedeFilter && e.sede !== ritmoSedeFilter) return false;
+      if (ritmoSelectedHour != null) {
+        if (ritmoSelectedHour === -1) {
+          if (e.hour != null) return false;
+        } else if (e.hour !== ritmoSelectedHour) return false;
+      }
+      if (ritmoFilterMode === "obs" && !e.hasObs) return false;
+      if (ritmoFilterMode === "foto" && !e.hasFoto) return false;
+      if (ritmoFilterMode === "sinhora" && e.hour != null) return false;
+      if (ritmoSearchQ) {
+        var blob = (
+          e.placa +
+          " " +
+          e.sede +
+          " " +
+          e.observaciones +
+          " " +
+          e.preview +
+          " " +
+          e.operario
+        ).toLowerCase();
+        if (blob.indexOf(ritmoSearchQ) === -1) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderRitmoHours() {
+    var wrap = document.getElementById("esta-ritmo-hours");
+    if (!wrap) return;
+    var max = 0;
+    var h;
+    for (h = 0; h < 24; h++) {
+      if (ritmoHourCounts[h] > max) max = ritmoHourCounts[h];
+    }
+    var peakH = 0;
+    for (h = 0; h < 24; h++) {
+      if (ritmoHourCounts[h] >= ritmoHourCounts[peakH]) peakH = h;
+    }
+    var html = "";
+    for (h = 0; h < 24; h++) {
+      var cnt = ritmoHourCounts[h] || 0;
+      var pct = max ? Math.max(8, Math.round((cnt / max) * 100)) : 8;
+      var cls = "esta-ritmo-hour";
+      if (ritmoSelectedHour === h) cls += " is-active";
+      if (h === peakH && cnt > 0) cls += " is-peak";
+      html +=
+        '<button type="button" class="' +
+        cls +
+        '" data-ritmo-hour="' +
+        h +
+        '" title="' +
+        cnt +
+        ' registro(s)">' +
+        '<span class="esta-ritmo-hour-bar" style="height:' +
+        pct +
+        '%"></span>' +
+        '<span class="esta-ritmo-hour-label">' +
+        String(h).padStart(2, "0") +
+        "h</span>" +
+        '<span class="esta-ritmo-hour-count">' +
+        cnt +
+        "</span></button>";
+    }
+    var sinHora = ritmoEntries.filter(function (e) {
+      return e.hour == null;
+    }).length;
+    html +=
+      '<button type="button" class="esta-ritmo-hour' +
+      (ritmoSelectedHour === -1 ? " is-active" : "") +
+      '" data-ritmo-hour="-1" title="Sin hora deducible" style="min-width:52px">' +
+      '<span class="esta-ritmo-hour-bar" style="height:12%;opacity:0.35"></span>' +
+      '<span class="esta-ritmo-hour-label">S/H</span>' +
+      '<span class="esta-ritmo-hour-count">' +
+      sinHora +
+      "</span></button>";
+    html +=
+      '<button type="button" class="esta-ritmo-hour' +
+      (ritmoSelectedHour === null ? " is-active" : "") +
+      '" data-ritmo-hour="all" title="Quitar filtro de hora" style="min-width:44px">' +
+      '<span class="esta-ritmo-hour-bar" style="height:18%;opacity:0.25"></span>' +
+      '<span class="esta-ritmo-hour-label">∑</span>' +
+      '<span class="esta-ritmo-hour-count">24h</span></button>';
+    wrap.innerHTML = html;
+  }
+
+  function renderRitmoKpis() {
+    var el = document.getElementById("esta-ritmo-kpis");
+    if (!el) return;
+    var conObs = ritmoEntries.filter(function (e) {
+      return e.hasObs;
+    }).length;
+    var peakH = 0;
+    var h;
+    for (h = 0; h < 24; h++) {
+      if (ritmoHourCounts[h] > ritmoHourCounts[peakH]) peakH = h;
+    }
+    el.innerHTML =
+      '<div class="esta-ritmo-kpi"><strong>' +
+      ritmoEntries.length +
+      '</strong><span>Registros</span></div>' +
+      '<div class="esta-ritmo-kpi"><strong>' +
+      conObs +
+      '</strong><span>Con observaciones</span></div>' +
+      '<div class="esta-ritmo-kpi"><strong>' +
+      String(peakH).padStart(2, "0") +
+      ":00</strong><span>Pico horario</span></div>" +
+      '<div class="esta-ritmo-kpi"><strong>' +
+      ritmoFilteredEntries().length +
+      "</strong><span>En vista</span></div>";
+  }
+
+  function renderRitmoStream() {
+    var stream = document.getElementById("esta-ritmo-stream");
+    if (!stream) return;
+    var list = ritmoFilteredEntries();
+    renderRitmoKpis();
+    if (!list.length) {
+      stream.innerHTML =
+        '<p style="color:#9ca3af;font-size:13px;">No hay registros con los filtros actuales.</p>';
+      return;
+    }
+    var capped = list.length > RITMO_RENDER_CAP;
+    var show = capped ? list.slice(0, RITMO_RENDER_CAP) : list;
+    var groups = {};
+    var order = [];
+    show.forEach(function (e) {
+      var key = e.hour != null ? "h" + e.hour : "sin";
+      if (!groups[key]) {
+        groups[key] = [];
+        order.push(key);
+      }
+      groups[key].push(e);
+    });
+    order.sort(function (a, b) {
+      if (a === "sin") return 1;
+      if (b === "sin") return -1;
+      return parseInt(a.slice(1), 10) - parseInt(b.slice(1), 10);
+    });
+    var html = "";
+    if (capped) {
+      html +=
+        '<p style="color:#ffb74d;font-size:12px;margin:0 0 10px;">Mostrando ' +
+        RITMO_RENDER_CAP +
+        " de " +
+        list.length +
+        " · refine búsqueda o filtre por hora/sede.</p>";
+    }
+    order.forEach(function (key) {
+      var label =
+        key === "sin"
+          ? "Sin hora deducible"
+          : "Franja " + key.slice(1).padStart(2, "0") + ":00 – " + groups[key].length + " registro(s)";
+      html += '<section class="esta-ritmo-group"><div class="esta-ritmo-group-head">' + ritmoEsc(label) + "</div>";
+      html += '<div class="esta-ritmo-cards">';
+      groups[key].forEach(function (e) {
+        var bodyCls = "esta-ritmo-body" + (e.preview.indexOf("sin texto") !== -1 ? " is-empty" : "");
+        html +=
+          '<button type="button" class="esta-ritmo-card" data-ritmo-id="' +
+          ritmoEscAttr(e.id) +
+          '"><div class="esta-ritmo-card-head"><span class="esta-ritmo-placa">' +
+          ritmoEsc(e.placa || "—") +
+          '</span><span class="esta-ritmo-meta">' +
+          ritmoEsc(e.sede) +
+          (e.fechaTxt ? " · " + ritmoEsc(e.fechaTxt) : "") +
+          "</span></div>" +
+          '<div class="' +
+          bodyCls +
+          '">' +
+          ritmoHighlightText(e.preview, ritmoSearchQ) +
+          "</div>" +
+          '<div class="esta-ritmo-tags">' +
+          (e.hasFoto ? '<span class="esta-ritmo-tag esta-ritmo-tag--foto">Con foto</span>' : "") +
+          (e.hasObs ? '<span class="esta-ritmo-tag">Observación</span>' : "") +
+          (e.tipoVeh ? '<span class="esta-ritmo-tag">' + ritmoEsc(e.tipoVeh) + "</span>" : "") +
+          "</div></button>";
+      });
+      html += "</div></section>";
+    });
+    stream.innerHTML = html;
+  }
+
+  function openRitmoDialog(entryId) {
+    var entry = null;
+    var i;
+    for (i = 0; i < ritmoEntries.length; i++) {
+      if (ritmoEntries[i].id === entryId) {
+        entry = ritmoEntries[i];
+        break;
+      }
+    }
+    if (!entry) return;
+    var dlg = document.getElementById("esta-ritmo-dialog");
+    var title = document.getElementById("esta-ritmo-dialog-title");
+    var fields = document.getElementById("esta-ritmo-dialog-fields");
+    if (!dlg || !fields) return;
+    if (title) title.textContent = (entry.placa || "Planillado") + " · " + entry.sede;
+    fields.innerHTML = entry.fields
+      .map(function (f) {
+        return (
+          "<dt>" +
+          ritmoEsc(f.label) +
+          "</dt><dd>" +
+          ritmoHighlightText(f.value, ritmoSearchQ) +
+          "</dd>"
+        );
+      })
+      .join("");
+    fields.innerHTML +=
+      "<dt>Ruta Firestore</dt><dd>" + ritmoEsc(entry.id) + "</dd>";
+    dlg.hidden = false;
+    dlg.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeRitmoDialog() {
+    var dlg = document.getElementById("esta-ritmo-dialog");
+    if (!dlg) return;
+    dlg.hidden = true;
+    dlg.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  function populateRitmoSedeSelect() {
+    var sel = document.getElementById("esta-ritmo-sede");
+    if (!sel) return;
+    var sedes = {};
+    ritmoEntries.forEach(function (e) {
+      sedes[e.sede] = true;
+    });
+    var sorted = Object.keys(sedes).sort(function (a, b) {
+      return a.localeCompare(b, "es");
+    });
+    var cur = ritmoSedeFilter;
+    sel.innerHTML =
+      '<option value="">Todas las sedes</option>' +
+      sorted
+        .map(function (s) {
+          return (
+            '<option value="' +
+            ritmoEscAttr(s) +
+            '"' +
+            (s === cur ? " selected" : "") +
+            ">" +
+            ritmoEsc(s) +
+            "</option>"
+          );
+        })
+        .join("");
+  }
+
+  async function loadRitmoPlanillados(force) {
+    if (!auth.currentUser) {
+      ritmoSetStatus("Inicie sesión para cargar planillados.");
+      return;
+    }
+    if (ritmoLoading) return;
+    if (!force && ritmoEntries.length) {
+      renderRitmoHours();
+      renderRitmoStream();
+      return;
+    }
+    ritmoLoading = true;
+    ritmoSetStatus("Cargando textos de planillado…");
+    try {
+      var docs = await fetchAllPlanilladoDocs();
+      ritmoEntries = docs.map(buildRitmoEntry);
+      ritmoHourCounts = new Array(24);
+      var hi;
+      for (hi = 0; hi < 24; hi++) ritmoHourCounts[hi] = 0;
+      ritmoEntries.forEach(function (e) {
+        if (e.hour != null && e.hour >= 0 && e.hour <= 23) ritmoHourCounts[e.hour]++;
+      });
+      populateRitmoSedeSelect();
+      ritmoSetStatus(ritmoEntries.length + " registro(s) indexados · toque una franja horaria o una tarjeta.");
+      renderRitmoHours();
+      renderRitmoStream();
+    } catch (e) {
+      ritmoSetStatus("Error: " + (e.message || String(e)));
+    } finally {
+      ritmoLoading = false;
+    }
+  }
+
+  function wireRitmoPanel() {
+    var refreshBtn = document.getElementById("esta-ritmo-btn-refresh");
+    if (refreshBtn) {
+      refreshBtn.addEventListener("click", function () {
+        ritmoEntries = [];
+        loadRitmoPlanillados(true);
+      });
+    }
+    var searchEl = document.getElementById("esta-ritmo-search");
+    if (searchEl) {
+      searchEl.addEventListener("input", function () {
+        ritmoSearchQ = String(searchEl.value || "")
+          .trim()
+          .toLowerCase();
+        renderRitmoStream();
+      });
+    }
+    var sedeEl = document.getElementById("esta-ritmo-sede");
+    if (sedeEl) {
+      sedeEl.addEventListener("change", function () {
+        ritmoSedeFilter = sedeEl.value || "";
+        renderRitmoStream();
+      });
+    }
+    document.querySelectorAll("[data-ritmo-filter]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        ritmoFilterMode = btn.getAttribute("data-ritmo-filter") || "all";
+        document.querySelectorAll("[data-ritmo-filter]").forEach(function (b) {
+          b.classList.toggle("is-active", b === btn);
+        });
+        renderRitmoStream();
+      });
+    });
+    var hoursEl = document.getElementById("esta-ritmo-hours");
+    if (hoursEl) {
+      hoursEl.addEventListener("click", function (ev) {
+        var btn = ev.target.closest("[data-ritmo-hour]");
+        if (!btn) return;
+        var raw = btn.getAttribute("data-ritmo-hour");
+        if (raw === "all") ritmoSelectedHour = null;
+        else ritmoSelectedHour = parseInt(raw, 10);
+        renderRitmoHours();
+        renderRitmoStream();
+      });
+    }
+    var streamEl = document.getElementById("esta-ritmo-stream");
+    if (streamEl) {
+      streamEl.addEventListener("click", function (ev) {
+        var card = ev.target.closest("[data-ritmo-id]");
+        if (!card) return;
+        openRitmoDialog(card.getAttribute("data-ritmo-id"));
+      });
+    }
+    var dlg = document.getElementById("esta-ritmo-dialog");
+    if (dlg) {
+      var backdrop = dlg.querySelector(".esta-ritmo-dialog-backdrop");
+      var closeBtn = dlg.querySelector(".esta-ritmo-dialog-close");
+      if (backdrop) backdrop.addEventListener("click", closeRitmoDialog);
+      if (closeBtn) closeBtn.addEventListener("click", closeRitmoDialog);
+    }
+    document.addEventListener("keydown", function (ev) {
+      var dlgOpen = document.getElementById("esta-ritmo-dialog");
+      if (dlgOpen && !dlgOpen.hidden && ev.key === "Escape") closeRitmoDialog();
+    });
+  }
+  wireRitmoPanel();
 
   function extractRecaudoNumberPlain(data) {
     if (!data || typeof data !== "object") return 0;
@@ -7856,6 +11290,409 @@
       });
   }
 
+  var aforoSedeRows = [];
+  var aforoChartInstances = [];
+  var aforoLoading = false;
+
+  function aforoSetStatus(msg) {
+    var el = document.getElementById("esta-aforo-status");
+    if (el) el.textContent = msg || "";
+  }
+
+  function destroyAforoCharts() {
+    aforoChartInstances.forEach(function (c) {
+      try {
+        c.destroy();
+      } catch (e) {}
+    });
+    aforoChartInstances = [];
+  }
+
+  function getCapacidadLoteSede(s) {
+    if (!s) return { capacidad: 0, modo: "sin", cuposAuto: 0, cuposMoto: 0 };
+    if (s.usarGrupos && s.grupos && s.grupos.length) {
+      var auto = 0;
+      var moto = 0;
+      s.grupos.forEach(function (g) {
+        auto += g.cuposAuto || 0;
+        moto += g.cuposMoto || 0;
+      });
+      return {
+        capacidad: auto + moto,
+        modo: "grupos",
+        cuposAuto: auto,
+        cuposMoto: moto,
+      };
+    }
+    if (s.cupos > 0) {
+      return { capacidad: s.cupos, modo: "unico", cuposAuto: s.cupos, cuposMoto: 0 };
+    }
+    return { capacidad: 0, modo: "sin", cuposAuto: 0, cuposMoto: 0 };
+  }
+
+  function aforoCardClass(pct, capacidad) {
+    if (capacidad <= 0 || pct == null) return "";
+    if (pct >= 95) return " is-hot";
+    if (pct >= 75) return " is-warn";
+    return " is-ok";
+  }
+
+  function buildGruposAforoHtml(s) {
+    if (!s.usarGrupos || !s.grupos || !s.grupos.length) return "";
+    var ocup = countOcupacionGruposLote(s.id);
+    var ratio = getMotosPorCupoAutoFromSedeDoc(s.id);
+    var lines = s.grupos.map(function (g) {
+      var oc = ocup[g.id] || { auto: 0, moto: 0 };
+      var motoCap = cupoMotoEfectivoGrupo(g, oc, ratio);
+      return (
+        escapeHtml(g.nombre) +
+        ": auto " +
+        oc.auto +
+        "/" +
+        g.cuposAuto +
+        " · moto " +
+        oc.moto +
+        "/" +
+        motoCap
+      );
+    });
+    return (
+      '<div class="esta-aforo-grupos"><strong>Grupos de lote</strong><br>' +
+      lines.join("<br>") +
+      "</div>"
+    );
+  }
+
+  async function loadAforoPanel(force) {
+    if (!auth.currentUser) {
+      aforoSetStatus("Inicie sesión para ver aforo.");
+      return;
+    }
+    if (aforoLoading) return;
+    if (!force && aforoSedeRows.length) {
+      renderAforoPanel();
+      return;
+    }
+    aforoLoading = true;
+    aforoSetStatus("Cargando sedes, lotes POS y planillado…");
+    destroyAforoCharts();
+    try {
+      if (!sedeDocs.length) await loadSedesList();
+      if (!lotesRawRows.length) await loadLotesData();
+      var planBySede = {};
+      try {
+        var docs = await fetchAllPlanilladoDocs();
+        docs.forEach(function (docSnap) {
+          var sede = stationLabelFromDoc(docSnap);
+          planBySede[sede] = (planBySede[sede] || 0) + 1;
+        });
+      } catch (ePlan) {
+        console.warn("[aforo] planillado", ePlan);
+      }
+      var list = buildLotesCuposSedeList();
+      aforoSedeRows = list.map(function (s) {
+        var cap = getCapacidadLoteSede(s);
+        var activos = s.activos || 0;
+        var pctReal =
+          cap.capacidad > 0
+            ? Math.min(100, Math.round((activos / cap.capacidad) * 100))
+            : null;
+        var libres =
+          cap.capacidad > 0 ? Math.max(0, cap.capacidad - activos) : null;
+        return {
+          id: s.id,
+          nombre: s.nombre,
+          activos: activos,
+          cupos: cap.capacidad,
+          cuposModo: cap.modo,
+          cuposAuto: cap.cuposAuto,
+          cuposMoto: cap.cuposMoto,
+          libres: libres,
+          pctReal: pctReal,
+          limitarLote: s.limitarLote,
+          usarGrupos: s.usarGrupos,
+          grupos: s.grupos,
+          planillados: planBySede[s.nombre] || planBySede[s.id] || 0,
+        };
+      });
+      aforoSedeRows.sort(function (a, b) {
+        var pa = a.pctReal != null ? a.pctReal : -1;
+        var pb = b.pctReal != null ? b.pctReal : -1;
+        if (pb !== pa) return pb - pa;
+        return b.activos - a.activos;
+      });
+      renderAforoPanel();
+      aforoSetStatus(
+        aforoSedeRows.length +
+          " sede(s) · actualizado " +
+          new Date().toLocaleTimeString("es-CO")
+      );
+    } catch (e) {
+      aforoSetStatus("Error: " + (e.message || String(e)));
+    } finally {
+      aforoLoading = false;
+    }
+  }
+
+  function renderAforoPanel() {
+    var kpisEl = document.getElementById("esta-aforo-kpis");
+    var gridEl = document.getElementById("esta-aforo-grid");
+    if (!kpisEl || !gridEl) return;
+
+    var conCupo = aforoSedeRows.filter(function (s) {
+      return s.cupos > 0;
+    });
+    var enLoteTotal = aforoSedeRows.reduce(function (n, s) {
+      return n + s.activos;
+    }, 0);
+    var maxPct = 0;
+    var maxPctSede = "—";
+    aforoSedeRows.forEach(function (s) {
+      if (s.pctReal != null && s.pctReal > maxPct) {
+        maxPct = s.pctReal;
+        maxPctSede = s.nombre;
+      }
+    });
+    var maxPlan = 0;
+    aforoSedeRows.forEach(function (s) {
+      if (s.planillados > maxPlan) maxPlan = s.planillados;
+    });
+
+    kpisEl.innerHTML =
+      '<div class="esta-aforo-kpi"><strong>' +
+      conCupo.length +
+      '</strong><span>Sedes con cupo</span></div>' +
+      '<div class="esta-aforo-kpi"><strong>' +
+      enLoteTotal +
+      '</strong><span>En lote ahora</span></div>' +
+      '<div class="esta-aforo-kpi"><strong>' +
+      (maxPct ? maxPct + "%" : "—") +
+      '</strong><span>Más llena · ' +
+      escapeHtml(maxPctSede) +
+      "</span></div>" +
+      '<div class="esta-aforo-kpi"><strong>' +
+      aforoSedeRows.length +
+      "</strong><span>Sedes en vista</span></div>";
+
+    destroyAforoCharts();
+    Chart.defaults.color = "#9ca3af";
+    Chart.defaults.borderColor = "#333";
+
+    var conCupoSorted = conCupo
+      .slice()
+      .sort(function (a, b) {
+        return (b.pctReal || 0) - (a.pctReal || 0);
+      });
+    var labelsCupos = conCupoSorted.map(function (s) {
+      return s.nombre;
+    });
+    var dataCupos = conCupoSorted.map(function (s) {
+      return s.pctReal || 0;
+    });
+
+    var canvasCupos = document.getElementById("chart-aforo-cupos");
+    if (canvasCupos) {
+      var ch1 = new Chart(canvasCupos, {
+        type: "bar",
+        data: {
+          labels: labelsCupos.length ? labelsCupos : ["(sin cupos configurados)"],
+          datasets: [
+            {
+              label: "% ocupación lote",
+              data: labelsCupos.length ? dataCupos : [0],
+              backgroundColor: dataCupos.map(function (p) {
+                if (p >= 95) return "rgba(244, 67, 54, 0.75)";
+                if (p >= 75) return "rgba(255, 152, 0, 0.75)";
+                return "rgba(255, 213, 79, 0.65)";
+              }),
+              borderColor: "#ffa000",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function (ctx) {
+                  var s = conCupoSorted[ctx.dataIndex];
+                  if (!s) return "";
+                  return (
+                    (s.pctReal || 0) +
+                    "% · " +
+                    s.activos +
+                    "/" +
+                    s.cupos +
+                    " en lote"
+                  );
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                callback: function (v) {
+                  return v + "%";
+                },
+              },
+            },
+          },
+        },
+      });
+      aforoChartInstances.push(ch1);
+    }
+
+    var planSorted = aforoSedeRows
+      .slice()
+      .sort(function (a, b) {
+        return b.planillados - a.planillados;
+      });
+    var maxP = 0;
+    planSorted.forEach(function (s) {
+      if (s.planillados > maxP) maxP = s.planillados;
+    });
+    if (!maxP) maxP = 1;
+    var labelsPl = planSorted.map(function (s) {
+      return s.nombre;
+    });
+    var dataPl = planSorted.map(function (s) {
+      return Math.round((s.planillados / maxP) * 100);
+    });
+
+    var canvasPl = document.getElementById("chart-aforo-planilla");
+    if (canvasPl) {
+      var ch2 = new Chart(canvasPl, {
+        type: "bar",
+        data: {
+          labels: labelsPl,
+          datasets: [
+            {
+              label: "Intensidad relativa",
+              data: dataPl,
+              backgroundColor: "rgba(100, 181, 246, 0.55)",
+              borderColor: "#42a5f5",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function (ctx) {
+                  var s = planSorted[ctx.dataIndex];
+                  if (!s) return "";
+                  return (
+                    s.planillados +
+                    " registros planillado · " +
+                    (ctx.parsed.x || 0) +
+                    "% vs sede más cargada"
+                  );
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                callback: function (v) {
+                  return v + "%";
+                },
+              },
+            },
+          },
+        },
+      });
+      aforoChartInstances.push(ch2);
+    }
+
+    if (!aforoSedeRows.length) {
+      gridEl.innerHTML =
+        '<p style="color:#9ca3af;grid-column:1/-1;">No hay sedes. Configure cupos en «Lotes y capacidad» o cree sedes.</p>';
+      return;
+    }
+
+    gridEl.innerHTML = aforoSedeRows
+      .map(function (s) {
+        var cls = "esta-aforo-card" + aforoCardClass(s.pctReal, s.cupos);
+        var pctHtml =
+          s.pctReal != null
+            ? '<div class="esta-aforo-pct">' + s.pctReal + "%</div>"
+            : '<div class="esta-aforo-pct esta-aforo-pct--na">Sin cupo</div>';
+        var meterW = s.pctReal != null ? s.pctReal : 0;
+        var capTxt =
+          s.cupos > 0
+            ? s.activos +
+              " en lote · " +
+              s.libres +
+              " libre(s) · " +
+              s.cupos +
+              " cupo(s)" +
+              (s.cuposModo === "grupos"
+                ? " (grupos: " + s.cuposAuto + " auto + " + s.cuposMoto + " moto)"
+                : "")
+            : "Sin cupos en Firebase — use «Editar lotes»";
+        var planInt =
+          maxPlan > 0 ? Math.round((s.planillados / maxPlan) * 100) : 0;
+        return (
+          '<article class="' +
+          cls +
+          '">' +
+          '<div class="esta-aforo-card-head"><div><strong>' +
+          escapeHtml(s.nombre) +
+          "</strong><span>" +
+          escapeHtml(s.id) +
+          "</span></div>" +
+          pctHtml +
+          "</div>" +
+          '<div class="esta-aforo-meter"><span style="width:' +
+          meterW +
+          '%"></span></div>' +
+          '<div class="esta-aforo-stats">' +
+          escapeHtml(capTxt) +
+          "<br>Planillado: <strong>" +
+          s.planillados +
+          "</strong> registro(s)" +
+          (maxPlan
+            ? " · intensidad " + planInt + "% vs sede más cargada"
+            : "") +
+          "</div>" +
+          buildGruposAforoHtml(s) +
+          (s.limitarLote
+            ? '<span class="esta-aforo-tag esta-aforo-tag--limit">Limitar ingreso en caja</span>'
+            : s.cupos > 0
+              ? '<span class="esta-aforo-tag">Solo alerta en caja</span>'
+              : "") +
+          "</article>"
+        );
+      })
+      .join("");
+  }
+
+  function wireAforoPanel() {
+    var btn = document.getElementById("esta-aforo-btn-refresh");
+    if (btn) {
+      btn.addEventListener("click", function () {
+        aforoSedeRows = [];
+        loadAforoPanel(true);
+      });
+    }
+  }
+  wireAforoPanel();
+
   function libresLoteClass(libres, cupos) {
     if (cupos <= 0 || libres == null) return "";
     if (libres <= 0) return "esta-lotes-cupos-libres--full";
@@ -8992,27 +12829,73 @@
   }
   wireLotesPanel();
 
+  var estaCurrentTab = "home";
+
+  function confirmPlantillaLeaveSection() {
+    if (!plantillaDirty || !plantillaSelectedId) return true;
+    if (
+      window.confirm(
+        "Hay cambios sin guardar en la plantilla. ¿Cambiar de sección y descartarlos?"
+      )
+    ) {
+      plantillaDirty = false;
+      return true;
+    }
+    return false;
+  }
+
   function switchEstaTab(tab) {
+    if (!tab) tab = "home";
+    if (estaCurrentTab === "plantillas" && tab !== "plantillas" && !confirmPlantillaLeaveSection()) {
+      return;
+    }
+    estaCurrentTab = tab;
+
+    var isHome = tab === "home";
     var isSedes = tab === "sedes";
     var isPlantillas = tab === "plantillas";
     var isLotes = tab === "lotes";
-    var isPanel = tab === "panel" || (!isSedes && !isPlantillas && !isLotes);
+    var isPanel = tab === "panel";
+    var isEvidencia = tab === "evidencia";
+    var isRitmo = tab === "ritmo";
+    var isAforo = tab === "aforo";
+
+    var panelHome = document.getElementById("esta-panel-home");
     var panelOp = document.getElementById("esta-panel-operativo");
     var panelSedes = document.getElementById("esta-panel-sedes");
     var panelPlantillas = document.getElementById("esta-panel-plantillas");
     var panelLotes = document.getElementById("esta-panel-lotes");
-    var btnPanel = document.getElementById("esta-tab-btn-panel");
-    var btnSedes = document.getElementById("esta-tab-btn-sedes");
-    var btnPlantillas = document.getElementById("esta-tab-btn-plantillas");
-    var btnLotes = document.getElementById("esta-tab-btn-lotes");
+    var panelEvidencia = document.getElementById("esta-panel-evidencia");
+    var panelRitmo = document.getElementById("esta-panel-ritmo");
+    var panelAforo = document.getElementById("esta-panel-aforo");
+    var tabsNav = document.getElementById("esta-tabs-nav");
+
+    if (panelHome) panelHome.hidden = !isHome;
     if (panelOp) panelOp.hidden = !isPanel;
     if (panelSedes) panelSedes.hidden = !isSedes;
     if (panelPlantillas) panelPlantillas.hidden = !isPlantillas;
     if (panelLotes) panelLotes.hidden = !isLotes;
+    if (panelEvidencia) panelEvidencia.hidden = !isEvidencia;
+    if (panelRitmo) panelRitmo.hidden = !isRitmo;
+    if (panelAforo) panelAforo.hidden = !isAforo;
+    if (tabsNav) tabsNav.hidden = isHome;
+
+    var btnHome = document.getElementById("esta-tab-btn-home");
+    var btnPanel = document.getElementById("esta-tab-btn-panel");
+    var btnSedes = document.getElementById("esta-tab-btn-sedes");
+    var btnPlantillas = document.getElementById("esta-tab-btn-plantillas");
+    var btnLotes = document.getElementById("esta-tab-btn-lotes");
+    if (btnHome) btnHome.classList.toggle("is-active", isHome);
     if (btnPanel) btnPanel.classList.toggle("is-active", isPanel);
     if (btnSedes) btnSedes.classList.toggle("is-active", isSedes);
     if (btnPlantillas) btnPlantillas.classList.toggle("is-active", isPlantillas);
     if (btnLotes) btnLotes.classList.toggle("is-active", isLotes);
+
+    document.querySelectorAll(".esta-tabs--sub .esta-tab").forEach(function (btn) {
+      var t = btn.getAttribute("data-esta-tab");
+      btn.classList.toggle("is-active", t === tab);
+    });
+
     if (isSedes) {
       loadSedesList();
       startSedeHorarioRefresh();
@@ -9025,36 +12908,43 @@
       if (auth.currentUser) loadSedesList();
       if (lotesPurgaHistorialVisible) loadLotesPurgaHistorial();
     }
+    if (isPanel && auth.currentUser) {
+      loadStats();
+    }
+    if (isEvidencia && auth.currentUser) {
+      loadEvidenciaAlbums(false);
+    }
+    if (isRitmo && auth.currentUser) {
+      loadRitmoPlanillados(false);
+    }
+    if (isAforo && auth.currentUser) {
+      loadAforoPanel(false);
+    }
   }
 
-  document.getElementById("esta-tab-btn-panel").addEventListener("click", function () {
-    switchEstaTab("panel");
-  });
-  var estaTabBtnLotes = document.getElementById("esta-tab-btn-lotes");
-  if (estaTabBtnLotes) {
-    estaTabBtnLotes.addEventListener("click", function () {
-      switchEstaTab("lotes");
+  function wireEstaNavigation() {
+    document.querySelectorAll("[data-esta-go]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var go = btn.getAttribute("data-esta-go");
+        if (go) switchEstaTab(go);
+      });
     });
-  }
-  document.getElementById("esta-tab-btn-sedes").addEventListener("click", function () {
-    switchEstaTab("sedes");
-  });
-  var estaTabBtnPlantillas = document.getElementById("esta-tab-btn-plantillas");
-  if (estaTabBtnPlantillas) {
-    estaTabBtnPlantillas.addEventListener("click", function () {
-      if (plantillaDirty && plantillaSelectedId) {
-        if (
-          !window.confirm(
-            "Hay cambios sin guardar en la plantilla. ¿Cambiar de sección y descartarlos?"
-          )
-        ) {
-          return;
-        }
-        plantillaDirty = false;
-      }
-      switchEstaTab("plantillas");
+    document.querySelectorAll("[data-esta-back]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        switchEstaTab("home");
+      });
     });
+    document.querySelectorAll("[data-esta-tab]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var t = btn.getAttribute("data-esta-tab");
+        if (!t) return;
+        if (t === "plantillas" && !confirmPlantillaLeaveSection()) return;
+        switchEstaTab(t);
+      });
+    });
+    switchEstaTab("home");
   }
+  wireEstaNavigation();
 
   function clearSedeForm() {
     sedeSelectedId = null;
@@ -10171,7 +14061,8 @@
 
   auth.onAuthStateChanged(function (user) {
     if (user) {
-      loadStats();
+      var panelOp = document.getElementById("esta-panel-operativo");
+      if (panelOp && !panelOp.hidden) loadStats();
       if (document.getElementById("esta-panel-sedes") && !document.getElementById("esta-panel-sedes").hidden) {
         loadSedesList();
       }

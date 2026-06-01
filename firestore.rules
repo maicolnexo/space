@@ -99,7 +99,6 @@ service cloud.firestore {
     match /administradores/{adminId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated()
-        && request.auth.uid == adminId
         && request.resource.data.nombre is string
         && request.resource.data.email is string
         && request.resource.data.rol is string
@@ -107,11 +106,18 @@ service cloud.firestore {
         && request.resource.data.salt is string
         && request.resource.data.createdAt is number
         && request.resource.data.lastAccess is number
-        && request.resource.data.active is bool;
+        && request.resource.data.active is bool
+        && (
+          isAdminDoc()
+          || (
+            request.auth.uid == adminId
+            && !exists(/databases/$(database)/documents/administradores/$(adminId))
+          )
+        );
       allow update: if isAuthenticated()
-        && request.auth.uid == adminId;
+        && (request.auth.uid == adminId || isAdminDoc());
       allow delete: if isAuthenticated()
-        && request.auth.uid == adminId;
+        && (request.auth.uid == adminId || isAdminDoc());
     }
 
     match /admins/{adminId} {
@@ -315,6 +321,13 @@ service cloud.firestore {
         && (!("bicicleta" in request.resource.data) || request.resource.data.bicicleta is map)
         && (!("ciclomotor" in request.resource.data) || request.resource.data.ciclomotor is map);
       allow delete: if isAuthenticated();
+    }
+
+    // Ajustes globales app móvil (seguridad.html): app_settings/global_config
+    match /app_settings/{docId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated();
+      allow delete: if isAuthenticated() && isAdminDoc();
     }
 
     // Denegar explícito lo no contemplado (opcional; sin wildcard abierto)

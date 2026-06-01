@@ -191,6 +191,108 @@
     .stats-main[hidden] {
       display: none !important;
     }
+    .stats-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      align-items: flex-end;
+      margin-bottom: 14px;
+      padding: 12px 14px;
+      background: #141414;
+      border: 1px solid #333;
+      border-radius: 10px;
+    }
+    .stats-filters label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .stats-filters input,
+    .stats-filters select {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: #eee;
+      font-size: 13px;
+      min-width: 140px;
+    }
+    .stats-filter-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .stats-filter-presets button {
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      border: 1px solid #444;
+      background: #252525;
+      color: #ccc;
+      cursor: pointer;
+    }
+    .stats-filter-presets button.is-active {
+      border-color: #e65100;
+      background: #3d2a14;
+      color: #ffcc80;
+    }
+    .stats-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .stats-tabs button {
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid #444;
+      background: #1c1c1c;
+      color: #bbb;
+      cursor: pointer;
+    }
+    .stats-tabs button.is-active {
+      border-color: #e65100;
+      background: linear-gradient(180deg, #ff9800 0%, #e65100 100%);
+      color: #fff;
+    }
+    .stats-panel[hidden] {
+      display: none !important;
+    }
+    .stats-section-title {
+      margin: 0 0 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #f3f4f6;
+    }
+    .stats-kpis--wide {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+    .stats-charts--triple {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width: 1100px) {
+      .stats-charts--triple {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 700px) {
+      .stats-charts--triple {
+        grid-template-columns: 1fr;
+      }
+    }
+    .stats-report-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
     </style>
 </head>
 
@@ -243,52 +345,186 @@
 
   <div id="stats-main" class="stats-wrap">
     <div class="stats-intro">
-      <h2>Panel estadístico</h2>
+      <h2>Panel estadístico e informes</h2>
+      <p>
+        Consolida datos de la app y del portal: <strong>planillados</strong>, <strong>facturas de venta</strong>,
+        <strong>recibos de caja</strong> (cierres), recaudo POS y operación. Use los filtros de fecha y las pestañas para revisar cada área.
+      </p>
     </div>
     <div class="stats-toolbar">
-      <button type="button" class="primary" id="stats-btn-refresh">Actualizar gráficas</button>
+      <button type="button" class="primary" id="stats-btn-refresh">Actualizar informes</button>
+      <a href="recaudos.html" class="stats-link-btn">Recaudos</a>
+      <a href="planillados.html" class="stats-link-btn">Planillados</a>
+      <a href="planillas-cierres.html" class="stats-link-btn">Cierres POS</a>
       <span id="stats-status"></span>
     </div>
-
-    <div class="stats-kpis" id="stats-kpis"></div>
-
-    <div class="stats-charts">
-      <div class="stats-chart-card">
-        <h3>Vehículos / registros por estacionamiento</h3>
-        <div class="canvas-wrap"><canvas id="chart-vehiculos-sede" aria-label="Gráfica barras vehículos por sede"></canvas></div>
+    <div class="stats-filters">
+      <div class="stats-filter-presets" role="group" aria-label="Rango rápido">
+        <button type="button" data-range="7">7 días</button>
+        <button type="button" data-range="30" class="is-active">30 días</button>
+        <button type="button" data-range="90">90 días</button>
+        <button type="button" data-range="365">1 año</button>
+        <button type="button" data-range="0">Todo</button>
       </div>
-      <div class="stats-chart-card">
-        <h3>Recaudo por estacionamiento (cierres)</h3>
-        <div class="canvas-wrap"><canvas id="chart-recaudos-sede" aria-label="Gráfica barras recaudo"></canvas></div>
-      </div>
-      <div class="stats-chart-card">
-        <h3>Registros con foto vs sin foto</h3>
-        <div class="canvas-wrap"><canvas id="chart-fotos" aria-label="Gráfica circular fotos"></canvas></div>
-      </div>
-      <div class="stats-chart-card">
-        <h3>Registros por sede (comparativa)</h3>
-        <div class="canvas-wrap"><canvas id="chart-registros-horizontal" aria-label="Gráfica barras horizontales"></canvas></div>
-      </div>
+      <label>Desde <input type="date" id="stats-date-from" /></label>
+      <label>Hasta <input type="date" id="stats-date-to" /></label>
+    </div>
+    <div class="stats-tabs" role="tablist">
+      <button type="button" class="is-active" data-stats-tab="overview" role="tab">Resumen</button>
+      <button type="button" data-stats-tab="recaudos" role="tab">Recaudos y facturas</button>
+      <button type="button" data-stats-tab="planillado" role="tab">Planillados</button>
+      <button type="button" data-stats-tab="cierres" role="tab">Cierres de caja</button>
+      <button type="button" data-stats-tab="app" role="tab">App y operación</button>
     </div>
 
-    <div class="stats-table-wrap">
-      <h3>Detalle por estacionamiento</h3>
-      <div style="overflow-x:auto;">
-        <table class="stats-table" id="stats-detail-table">
-          <thead>
-            <tr>
-              <th>Estacionamiento</th>
-              <th class="num">Registros</th>
-              <th class="num">Con foto</th>
-              <th class="num">Sin foto</th>
-              <th class="num">% con foto</th>
-              <th class="num">Recaudo (cierres)</th>
-            </tr>
-          </thead>
-          <tbody id="stats-detail-body"></tbody>
-        </table>
+    <div class="stats-kpis stats-kpis--wide" id="stats-kpis"></div>
+
+    <section class="stats-panel" data-stats-panel="overview">
+      <h3 class="stats-section-title">Vista general</h3>
+      <div class="stats-charts">
+        <div class="stats-chart-card">
+          <h3>Recaudo facturas por sede</h3>
+          <div class="canvas-wrap"><canvas id="chart-facturas-sede"></canvas></div>
+        </div>
+        <div class="stats-chart-card">
+          <h3>Recaudo cierres de caja por sede</h3>
+          <div class="canvas-wrap"><canvas id="chart-recaudos-sede"></canvas></div>
+        </div>
+        <div class="stats-chart-card">
+          <h3>Recibos de caja por sede</h3>
+          <div class="canvas-wrap"><canvas id="chart-recibos-caja"></canvas></div>
+        </div>
+        <div class="stats-chart-card">
+          <h3>Registros planillado por sede</h3>
+          <div class="canvas-wrap"><canvas id="chart-vehiculos-sede"></canvas></div>
+        </div>
       </div>
-    </div>
+      <div class="stats-table-wrap" style="margin-top:16px;">
+        <h3>Informe consolidado por estacionamiento</h3>
+        <div style="overflow-x:auto;">
+          <table class="stats-table">
+            <thead>
+              <tr>
+                <th>Estacionamiento</th>
+                <th class="num">Planillados</th>
+                <th class="num">Facturas</th>
+                <th class="num">Recaudo facturas</th>
+                <th class="num">Recibos caja</th>
+                <th class="num">Recaudo cierres</th>
+                <th class="num">Recaudo POS</th>
+              </tr>
+            </thead>
+            <tbody id="stats-detail-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-panel" data-stats-panel="recaudos" hidden>
+      <h3 class="stats-section-title">Recaudos y facturas de venta</h3>
+      <div class="stats-charts stats-charts--triple">
+        <div class="stats-chart-card">
+          <h3>Facturas por sede (cantidad)</h3>
+          <div class="canvas-wrap"><canvas id="chart-facturas-count"></canvas></div>
+        </div>
+        <div class="stats-chart-card">
+          <h3>Recaudo facturas (COP)</h3>
+          <div class="canvas-wrap"><canvas id="chart-facturas-monto"></canvas></div>
+        </div>
+        <div class="stats-chart-card">
+          <h3>POS vs cierres caja (COP)</h3>
+          <div class="canvas-wrap"><canvas id="chart-pos-vs-cierres"></canvas></div>
+        </div>
+      </div>
+      <div class="stats-table-wrap" style="margin-top:16px;">
+        <h3>Detalle recaudos por sede</h3>
+        <div style="overflow-x:auto;">
+          <table class="stats-table">
+            <thead>
+              <tr>
+                <th>Sede</th>
+                <th class="num">Facturas</th>
+                <th class="num">Subtotal est.</th>
+                <th class="num">Total facturas</th>
+                <th class="num">Cierres POS</th>
+                <th class="num">Total POS</th>
+              </tr>
+            </thead>
+            <tbody id="stats-recaudos-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-panel" data-stats-panel="planillado" hidden>
+      <h3 class="stats-section-title">Planillados (vehículos en operación)</h3>
+      <div class="stats-charts">
+        <div class="stats-chart-card">
+          <h3>Registros con foto vs sin foto</h3>
+          <div class="canvas-wrap"><canvas id="chart-fotos"></canvas></div>
+        </div>
+        <div class="stats-chart-card">
+          <h3>Registros por sede</h3>
+          <div class="canvas-wrap"><canvas id="chart-registros-horizontal"></canvas></div>
+        </div>
+      </div>
+      <div class="stats-table-wrap" style="margin-top:16px;">
+        <h3>Detalle planillado por sede</h3>
+        <div style="overflow-x:auto;">
+          <table class="stats-table">
+            <thead>
+              <tr>
+                <th>Estacionamiento</th>
+                <th class="num">Registros</th>
+                <th class="num">Con foto</th>
+                <th class="num">Sin foto</th>
+                <th class="num">% con foto</th>
+              </tr>
+            </thead>
+            <tbody id="stats-planillado-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-panel" data-stats-panel="cierres" hidden>
+      <h3 class="stats-section-title">Cierres de caja y recibos</h3>
+      <div class="stats-charts">
+        <div class="stats-chart-card">
+          <h3>Recaudo por cierre (app)</h3>
+          <div class="canvas-wrap"><canvas id="chart-cierres-monto"></canvas></div>
+        </div>
+        <div class="stats-chart-card">
+          <h3>Cantidad de recibos de caja</h3>
+          <div class="canvas-wrap"><canvas id="chart-cierres-count"></canvas></div>
+        </div>
+      </div>
+      <div class="stats-table-wrap" style="margin-top:16px;">
+        <h3>Detalle cierres por sede</h3>
+        <div style="overflow-x:auto;">
+          <table class="stats-table">
+            <thead>
+              <tr>
+                <th>Sede</th>
+                <th class="num">Recibos de caja</th>
+                <th class="num">Recaudo total</th>
+                <th class="num">Promedio / recibo</th>
+              </tr>
+            </thead>
+            <tbody id="stats-cierres-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-panel" data-stats-panel="app" hidden>
+      <h3 class="stats-section-title">Indicadores de la app</h3>
+      <div class="stats-kpis stats-kpis--wide" id="stats-kpis-app"></div>
+      <p style="margin:0;font-size:13px;color:#9ca3af;line-height:1.55;">
+        Estos valores reflejan el estado actual en Firestore (mensualidades activas, operarios registrados, semanas de programación).
+        Para ajustar visibilidad de módulos en Check List use <a href="seguridad.html" style="color:#90caf9;">Seguridad → Configuraciones globales</a>.
+      </p>
+    </section>
   </div>
 
 </div>
@@ -781,7 +1017,16 @@
 
   var statusEl = document.getElementById("stats-status");
   var kpisEl = document.getElementById("stats-kpis");
+  var kpisAppEl = document.getElementById("stats-kpis-app");
   var detailBody = document.getElementById("stats-detail-body");
+  var recaudosBody = document.getElementById("stats-recaudos-body");
+  var planilladoBody = document.getElementById("stats-planillado-body");
+  var cierresBody = document.getElementById("stats-cierres-body");
+  var dateFromEl = document.getElementById("stats-date-from");
+  var dateToEl = document.getElementById("stats-date-to");
+  var statsRangeDays = 30;
+  var statsDateFrom = null;
+  var statsDateTo = null;
 
   function setLoading(msg) {
     statusEl.textContent = msg || "";
@@ -945,56 +1190,70 @@
               var fromRestSubs = json.collectionIds || [];
               var operarios = uniqueStrings(fromRestSubs.concat(probeOps));
               if (!operarios.length) {
-                map[sedeId] = { id: sedeId, monto: base };
+                map[sedeId] = { id: sedeId, monto: base, recibos: 0 };
                 return;
               }
               return Promise.all(
                 operarios.map(function (opId) {
                   return sedeRef.collection(opId).get().then(function (snap) {
+                    var recibos = snap.docs.length;
                     return Promise.all(
                       snap.docs.map(function (cierreDoc) {
                         return extractRecaudoFromCierreAsync(cierreDoc.data() || {});
                       })
                     ).then(function (parts) {
-                      return parts.reduce(function (a, n) {
-                        return a + n;
-                      }, 0);
+                      return {
+                        monto: parts.reduce(function (a, n) {
+                          return a + n;
+                        }, 0),
+                        recibos: recibos,
+                      };
                     });
                   });
                 })
               ).then(function (perOpTotals) {
-                var extra = perOpTotals.reduce(function (a, n) {
-                  return a + n;
-                }, 0);
-                map[sedeId] = { id: sedeId, monto: base + extra };
+                var extra = 0;
+                var recibos = 0;
+                perOpTotals.forEach(function (x) {
+                  extra += x.monto || 0;
+                  recibos += x.recibos || 0;
+                });
+                map[sedeId] = { id: sedeId, monto: base + extra, recibos: recibos };
               });
             })
             .catch(function (err) {
               console.warn("[estadistico] cierres listSubs", sedeId, err.message || err);
               if (!probeOps.length) {
                 return extractRecaudoFromCierreAsync(baseData).then(function (m) {
-                  map[sedeId] = { id: sedeId, monto: m };
+                  map[sedeId] = { id: sedeId, monto: m, recibos: 0 };
                 });
               }
               return Promise.all(
                 probeOps.map(function (opId) {
                   return sedeRef.collection(opId).get().then(function (snap) {
+                    var recibos = snap.docs.length;
                     return Promise.all(
                       snap.docs.map(function (cierreDoc) {
                         return extractRecaudoFromCierreAsync(cierreDoc.data() || {});
                       })
                     ).then(function (parts) {
-                      return parts.reduce(function (a, n) {
-                        return a + n;
-                      }, 0);
+                      return {
+                        monto: parts.reduce(function (a, n) {
+                          return a + n;
+                        }, 0),
+                        recibos: recibos,
+                      };
                     });
                   });
                 })
               ).then(function (perOpTotals) {
-                var extra = perOpTotals.reduce(function (a, n) {
-                  return a + n;
-                }, 0);
-                map[sedeId] = { id: sedeId, monto: base + extra };
+                var extra = 0;
+                var recibos = 0;
+                perOpTotals.forEach(function (x) {
+                  extra += x.monto || 0;
+                  recibos += x.recibos || 0;
+                });
+                map[sedeId] = { id: sedeId, monto: base + extra, recibos: recibos };
               });
             });
         });
@@ -1004,16 +1263,303 @@
     return map;
   }
 
+  function parseMoneyVal(v) {
+    if (v == null || v === "") return 0;
+    if (typeof v === "number" && isFinite(v)) return v;
+    var s = String(v).replace(/[^\d.,-]/g, "");
+    if (s.indexOf(",") >= 0 && s.indexOf(".") >= 0) {
+      s = s.replace(/\./g, "").replace(",", ".");
+    } else {
+      s = s.replace(",", ".");
+    }
+    var n = parseFloat(s);
+    return isFinite(n) ? n : 0;
+  }
+
+  function extractFacturaTotal(d) {
+    return parseMoneyVal(
+      pick(d, "total", "totalCobrado", "monto", "valor", "importe", "recaudo")
+    );
+  }
+
+  function extractFacturaSede(d) {
+    return (
+      String(
+        pick(d, "sede", "sedeNombre", "estacionamiento", "parkingId", "nombreSede") || ""
+      ).trim() || "Sin sede"
+    );
+  }
+
+  function docDateFromData(d, docId) {
+    d = d || {};
+    var ts = pick(d, "fechaFactura", "fecha", "createdAt", "timestamp", "fechaCreacion", "updatedAt");
+    if (ts && typeof ts.toDate === "function") {
+      try {
+        return ts.toDate();
+      } catch (e) {}
+    }
+    if (ts instanceof Date && !isNaN(ts.getTime())) return ts;
+    if (typeof ts === "number" && isFinite(ts)) return new Date(ts);
+    var s = String(ts || "");
+    var m = s.match(/(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return new Date(+m[1], +m[2] - 1, +m[3], 12, 0, 0);
+    m = s.match(/(\d{2})[\/-](\d{2})[\/-](\d{4})/);
+    if (m) return new Date(+m[3], +m[2] - 1, +m[1], 12, 0, 0);
+    m = /^(\d{2})-(\d{2})-(\d{4})/.exec(String(docId || ""));
+    if (m) return new Date(+m[3], +m[2] - 1, +m[1], 12, 0, 0);
+    return null;
+  }
+
+  function inStatsDateRange(dt) {
+    if (!dt || isNaN(dt.getTime())) return statsRangeDays === 0;
+    if (statsRangeDays === 0 && !statsDateFrom && !statsDateTo) return true;
+    var t = dt.getTime();
+    if (statsDateFrom && t < statsDateFrom.getTime()) return false;
+    if (statsDateTo && t > statsDateTo.getTime() + 86400000 - 1) return false;
+    return true;
+  }
+
+  function applyStatsDateRange(days) {
+    statsRangeDays = days == null ? 30 : Number(days);
+    var hoy = new Date();
+    hoy.setHours(23, 59, 59, 999);
+    if (statsRangeDays === 0) {
+      statsDateFrom = null;
+      statsDateTo = null;
+      if (dateFromEl) dateFromEl.value = "";
+      if (dateToEl) dateToEl.value = "";
+      return;
+    }
+    statsDateTo = hoy;
+    statsDateFrom = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() - statsRangeDays + 1);
+    statsDateFrom.setHours(0, 0, 0, 0);
+    if (dateFromEl) dateFromEl.value = formatDateInput(statsDateFrom);
+    if (dateToEl) dateToEl.value = formatDateInput(statsDateTo);
+  }
+
+  function formatDateInput(d) {
+    if (!d) return "";
+    return (
+      d.getFullYear() +
+      "-" +
+      String(d.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(d.getDate()).padStart(2, "0")
+    );
+  }
+
+  function readStatsDateInputs() {
+    if (dateFromEl && dateFromEl.value) {
+      statsDateFrom = new Date(dateFromEl.value + "T00:00:00");
+      statsRangeDays = -1;
+    } else {
+      statsDateFrom = null;
+    }
+    if (dateToEl && dateToEl.value) {
+      statsDateTo = new Date(dateToEl.value + "T23:59:59");
+    } else {
+      statsDateTo = null;
+    }
+  }
+
+  async function fetchFacturasStats() {
+    var cols = uniqueStrings([
+      cfg.facturasVentaCollection || "facturas_de_venta",
+      cfg.facturasVentaCollectionLegacy || "caja_facturas",
+    ]);
+    var bySede = {};
+    var total = 0;
+    var count = 0;
+    var seen = {};
+    await Promise.all(
+      cols.map(function (col) {
+        return db
+          .collection(col)
+          .get()
+          .then(function (snap) {
+            snap.docs.forEach(function (doc) {
+              if (seen[doc.id]) return;
+              seen[doc.id] = true;
+              var d = doc.data() || {};
+              var dt = docDateFromData(d, doc.id);
+              if (!inStatsDateRange(dt)) return;
+              var sede = extractFacturaSede(d);
+              var m = extractFacturaTotal(d);
+              if (!bySede[sede]) bySede[sede] = { count: 0, total: 0 };
+              bySede[sede].count++;
+              bySede[sede].total += m;
+              total += m;
+              count++;
+            });
+          })
+          .catch(function (err) {
+            console.warn("[estadistico] facturas", col, err.code || err.message);
+          });
+      })
+    );
+    return { bySede: bySede, total: total, count: count };
+  }
+
+  function extractPosTotal(data) {
+    if (!data || typeof data !== "object") return 0;
+    var keys = ["totalRecaudo", "total_recaudo", "recaudoTotal", "grandTotal", "total"];
+    var i, v;
+    for (i = 0; i < keys.length; i++) {
+      v = parseMoneyVal(data[keys[i]]);
+      if (v > 0) return v;
+    }
+    return 0;
+  }
+
+  function sedeFromPosDocId(docId) {
+    var m = /^POS_(.+)_(\d{8})_/i.exec(String(docId || "").trim());
+    return m ? decodeId(m[1].replace(/_/g, " ")) : "Sin sede";
+  }
+
+  async function fetchPosCierresStats() {
+    var col = cfg.cierresPosCollection || "CIERRES";
+    var bySede = {};
+    var total = 0;
+    var count = 0;
+    try {
+      var snap = await db.collection(col).get();
+      snap.docs.forEach(function (doc) {
+        var d = doc.data() || {};
+        var dt = docDateFromData(d, doc.id);
+        if (!inStatsDateRange(dt)) return;
+        var sede = sedeFromPosDocId(doc.id);
+        var m = extractPosTotal(d);
+        if (!bySede[sede]) bySede[sede] = { count: 0, total: 0 };
+        bySede[sede].count++;
+        bySede[sede].total += m;
+        total += m;
+        count++;
+      });
+    } catch (e) {
+      console.warn("[estadistico] POS", col, e.code || e.message);
+    }
+    return { bySede: bySede, total: total, count: count };
+  }
+
+  async function fetchAppIndicators() {
+    var out = {
+      mensualidades: 0,
+      operarios: 0,
+      programacionSemanas: 0,
+    };
+    try {
+      var mesCol = cfg.mensualidadesCollection || "mensualidades";
+      var mesSub = cfg.mensualidadesSubcollection || "residentes";
+      var mesSnap = await db.collectionGroup(mesSub).get();
+      out.mensualidades = mesSnap.size;
+    } catch (e) {
+      try {
+        var mesCol2 = cfg.mensualidadesCollection || "mensualidades";
+        var root = await db.collection(mesCol2).get();
+        var counts = await Promise.all(
+          root.docs.map(function (d) {
+            return d.ref.collection(mesSub).get().then(function (s) {
+              return s.size;
+            });
+          })
+        );
+        out.mensualidades = counts.reduce(function (a, n) {
+          return a + n;
+        }, 0);
+      } catch (e2) {
+        console.warn("[estadistico] mensualidades", e2.code || e2.message);
+      }
+    }
+    try {
+      var opCol = cfg.operatorsCollection || cfg.cierresOperatorsCollection || "operators";
+      var opSnap = await db.collection(opCol).get();
+      out.operarios = opSnap.size;
+    } catch (e) {
+      console.warn("[estadistico] operators", e.code || e.message);
+    }
+    try {
+      var progCol = cfg.programacionSemanalCollection || "programacion_semanal";
+      var progSnap = await db.collection(progCol).get();
+      out.programacionSemanas = progSnap.size;
+    } catch (e) {
+      console.warn("[estadistico] programacion", e.code || e.message);
+    }
+    return out;
+  }
+
+  function makeBarChart(canvasId, labels, data, label, color, colorBorder, fmtY) {
+    var el = document.getElementById(canvasId);
+    if (!el) return null;
+    var ch = new Chart(el, {
+      type: "bar",
+      data: {
+        labels: labels.length ? labels : ["(sin datos)"],
+        datasets: [
+          {
+            label: label,
+            data: data.length ? data : [0],
+            backgroundColor: color,
+            borderColor: colorBorder,
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: fmtY
+              ? {
+                  label: function (ctx) {
+                    return fmtY(ctx.parsed.y || 0);
+                  },
+                }
+              : {},
+          },
+        },
+        scales: {
+          x: { ticks: { maxRotation: 45, minRotation: 0 } },
+          y: { beginAtZero: true, ticks: fmtY ? {} : { stepSize: 1 } },
+        },
+      },
+    });
+    chartInstances.push(ch);
+    return ch;
+  }
+
+  function mergeSedeKeys() {
+    var keys = {};
+    var i;
+    for (i = 0; i < arguments.length; i++) {
+      var src = arguments[i] || {};
+      Object.keys(src).forEach(function (k) {
+        keys[k] = true;
+      });
+    }
+    return Object.keys(keys).sort(function (a, b) {
+      return a.localeCompare(b, "es");
+    });
+  }
+
   async function loadStats() {
     if (!auth.currentUser) return;
-    setLoading("Cargando datos de Firestore…");
+    readStatsDateInputs();
+    setLoading("Cargando informes desde Firestore…");
     destroyCharts();
 
     var docs;
     var cierresMap;
+    var facturas;
+    var pos;
+    var appInd;
     try {
       docs = await fetchAllPlanilladoDocs();
       cierresMap = await fetchCierresBySede();
+      facturas = await fetchFacturasStats();
+      pos = await fetchPosCierresStats();
+      appInd = await fetchAppIndicators();
     } catch (e) {
       setLoading("Error: " + (e.message || String(e)));
       return;
@@ -1022,14 +1568,16 @@
     var byStation = {};
     var withPhoto = 0;
     var withoutPhoto = 0;
+    var planilladoFiltrado = 0;
 
     docs.forEach(function (docSnap) {
-      var sede = stationLabelFromDoc(docSnap);
-      if (!byStation[sede]) {
-        byStation[sede] = { total: 0, conFoto: 0, sinFoto: 0 };
-      }
-      byStation[sede].total++;
       var d = docSnap.data();
+      var dt = docDateFromData(d, docSnap.id);
+      if (!inStatsDateRange(dt)) return;
+      planilladoFiltrado++;
+      var sede = stationLabelFromDoc(docSnap);
+      if (!byStation[sede]) byStation[sede] = { total: 0, conFoto: 0, sinFoto: 0 };
+      byStation[sede].total++;
       if (documentHasDisplayablePhoto(d)) {
         byStation[sede].conFoto++;
         withPhoto++;
@@ -1043,226 +1591,442 @@
       return byStation[b].total - byStation[a].total;
     });
 
-    var labelsVeh = sedesSorted;
-    var dataVeh = sedesSorted.map(function (s) {
-      return byStation[s].total;
+    var totalRecaudoCierres = 0;
+    var totalRecibosCaja = 0;
+    Object.keys(cierresMap).forEach(function (id) {
+      totalRecaudoCierres += cierresMap[id].monto || 0;
+      totalRecibosCaja += cierresMap[id].recibos || 0;
     });
-
-    var recaudoLabels = Object.keys(cierresMap).sort(function (a, b) {
-      return cierresMap[b].monto - cierresMap[a].monto;
-    });
-    var recaudoData = recaudoLabels.map(function (id) {
-      return cierresMap[id].monto;
-    });
-
-    var totalRecaudoCierres = recaudoLabels.reduce(function (acc, id) {
-      return acc + (cierresMap[id].monto || 0);
-    }, 0);
 
     Chart.defaults.color = "#9ca3af";
     Chart.defaults.borderColor = "#333";
-
     var pink = "rgba(255, 152, 0, 0.85)";
     var pinkBorder = "#f57c00";
+    var blue = "rgba(100, 181, 246, 0.75)";
+    var blueBorder = "#42a5f5";
+    var green = "rgba(76, 175, 80, 0.75)";
+    var greenBorder = "#4caf50";
 
-    var ch1 = new Chart(document.getElementById("chart-vehiculos-sede"), {
-      type: "bar",
-      data: {
-        labels: labelsVeh,
-        datasets: [
-          {
-            label: "Registros",
-            data: dataVeh,
-            backgroundColor: pink,
-            borderColor: pinkBorder,
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              title: function (items) {
-                return items[0] ? String(items[0].label) : "";
-              }
-            }
-          }
+    var labelsFact = Object.keys(facturas.bySede).sort(function (a, b) {
+      return facturas.bySede[b].total - facturas.bySede[a].total;
+    });
+    makeBarChart(
+      "chart-facturas-sede",
+      labelsFact,
+      labelsFact.map(function (s) {
+        return facturas.bySede[s].total;
+      }),
+      "Recaudo",
+      pink,
+      pinkBorder,
+      fmtCop
+    );
+    var labelsCierre = Object.keys(cierresMap).sort(function (a, b) {
+      return cierresMap[b].monto - cierresMap[a].monto;
+    });
+    makeBarChart(
+      "chart-recaudos-sede",
+      labelsCierre.length ? labelsCierre : ["(sin cierres)"],
+      labelsCierre.length
+        ? labelsCierre.map(function (id) {
+            return cierresMap[id].monto;
+          })
+        : [0],
+      "Cierres",
+      blue,
+      blueBorder,
+      fmtCop
+    );
+    makeBarChart(
+      "chart-recibos-caja",
+      labelsCierre.length ? labelsCierre : ["(sin recibos)"],
+      labelsCierre.length
+        ? labelsCierre.map(function (id) {
+            return cierresMap[id].recibos || 0;
+          })
+        : [0],
+      "Recibos",
+      green,
+      greenBorder,
+      null
+    );
+    makeBarChart(
+      "chart-vehiculos-sede",
+      sedesSorted,
+      sedesSorted.map(function (s) {
+        return byStation[s].total;
+      }),
+      "Registros",
+      "rgba(255, 183, 77, 0.55)",
+      pinkBorder,
+      null
+    );
+
+    makeBarChart(
+      "chart-facturas-count",
+      labelsFact,
+      labelsFact.map(function (s) {
+        return facturas.bySede[s].count;
+      }),
+      "Facturas",
+      pink,
+      pinkBorder,
+      null
+    );
+    makeBarChart(
+      "chart-facturas-monto",
+      labelsFact,
+      labelsFact.map(function (s) {
+        return facturas.bySede[s].total;
+      }),
+      "COP",
+      blue,
+      blueBorder,
+      fmtCop
+    );
+
+    var compareLabels = mergeSedeKeys(cierresMap, pos.bySede);
+    var elPos = document.getElementById("chart-pos-vs-cierres");
+    if (elPos) {
+      var chPos = new Chart(elPos, {
+        type: "bar",
+        data: {
+          labels: compareLabels.length ? compareLabels : ["(sin datos)"],
+          datasets: [
+            {
+              label: "Cierres caja",
+              data: compareLabels.map(function (s) {
+                return findCierreMontoForStationLabel(cierresMap, s) || 0;
+              }),
+              backgroundColor: blue,
+              borderColor: blueBorder,
+              borderWidth: 1,
+            },
+            {
+              label: "POS (CIERRES)",
+              data: compareLabels.map(function (s) {
+                var k = normalizeSedeKey(s);
+                var found = 0;
+                Object.keys(pos.bySede).forEach(function (pk) {
+                  if (normalizeSedeKey(pk) === k) found = pos.bySede[pk].total;
+                });
+                return found;
+              }),
+              backgroundColor: pink,
+              borderColor: pinkBorder,
+              borderWidth: 1,
+            },
+          ],
         },
-        scales: {
-          x: { ticks: { maxRotation: 45, minRotation: 0 } },
-          y: { beginAtZero: true, ticks: { stepSize: 1 } }
-        }
-      }
-    });
-    chartInstances.push(ch1);
-
-    var ch2 = new Chart(document.getElementById("chart-recaudos-sede"), {
-      type: "bar",
-      data: {
-        labels: recaudoLabels.length ? recaudoLabels : ["(sin documentos en cierres)"],
-        datasets: [
-          {
-            label: "Recaudo",
-            data: recaudoLabels.length ? recaudoData : [0],
-            backgroundColor: "rgba(100, 181, 246, 0.75)",
-            borderColor: "#42a5f5",
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: function (ctx) {
-                return fmtCop(ctx.parsed.y || 0);
-              }
-            }
-          }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: "bottom" },
+            tooltip: {
+              callbacks: {
+                label: function (ctx) {
+                  return ctx.dataset.label + ": " + fmtCop(ctx.parsed.y || 0);
+                },
+              },
+            },
+          },
+          scales: { y: { beginAtZero: true } },
         },
-        scales: {
-          x: { ticks: { maxRotation: 45, minRotation: 0 } },
-          y: { beginAtZero: true }
-        }
-      }
-    });
-    chartInstances.push(ch2);
+      });
+      chartInstances.push(chPos);
+    }
 
-    var ch3 = new Chart(document.getElementById("chart-fotos"), {
-      type: "doughnut",
-      data: {
-        labels: ["Con foto", "Sin foto"],
-        datasets: [
-          {
-            data: [withPhoto, withoutPhoto],
-            backgroundColor: ["rgba(76, 175, 80, 0.75)", "rgba(97, 97, 97, 0.55)"],
-            borderColor: ["#4caf50", "#757575"],
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { position: "bottom" }
-        }
-      }
-    });
-    chartInstances.push(ch3);
+    makeBarChart(
+      "chart-cierres-monto",
+      labelsCierre.length ? labelsCierre : ["(sin cierres)"],
+      labelsCierre.length
+        ? labelsCierre.map(function (id) {
+            return cierresMap[id].monto;
+          })
+        : [0],
+      "Recaudo",
+      blue,
+      blueBorder,
+      fmtCop
+    );
+    makeBarChart(
+      "chart-cierres-count",
+      labelsCierre.length ? labelsCierre : ["(sin recibos)"],
+      labelsCierre.length
+        ? labelsCierre.map(function (id) {
+            return cierresMap[id].recibos || 0;
+          })
+        : [0],
+      "Recibos",
+      green,
+      greenBorder,
+      null
+    );
 
-    var ch4 = new Chart(document.getElementById("chart-registros-horizontal"), {
-      type: "bar",
-      data: {
-        labels: labelsVeh.slice(),
-        datasets: [
-          {
-            label: "Registros",
-            data: dataVeh.slice(),
-            backgroundColor: "rgba(255, 183, 77, 0.55)",
-            borderColor: pinkBorder,
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        indexAxis: "y",
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false }
+    var elFotos = document.getElementById("chart-fotos");
+    if (elFotos) {
+      var ch3 = new Chart(elFotos, {
+        type: "doughnut",
+        data: {
+          labels: ["Con foto", "Sin foto"],
+          datasets: [
+            {
+              data: [withPhoto, withoutPhoto],
+              backgroundColor: ["rgba(76, 175, 80, 0.75)", "rgba(97, 97, 97, 0.55)"],
+              borderColor: ["#4caf50", "#757575"],
+              borderWidth: 1,
+            },
+          ],
         },
-        scales: {
-          x: { beginAtZero: true, ticks: { stepSize: 1 } }
-        }
-      }
-    });
-    chartInstances.push(ch4);
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: "bottom" } },
+        },
+      });
+      chartInstances.push(ch3);
+    }
+
+    var elHoriz = document.getElementById("chart-registros-horizontal");
+    if (elHoriz) {
+      var ch4 = new Chart(elHoriz, {
+        type: "bar",
+        data: {
+          labels: sedesSorted.slice(),
+          datasets: [
+            {
+              label: "Registros",
+              data: sedesSorted.map(function (s) {
+                return byStation[s].total;
+              }),
+              backgroundColor: "rgba(255, 183, 77, 0.55)",
+              borderColor: pinkBorder,
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } },
+        },
+      });
+      chartInstances.push(ch4);
+    }
+
+    var rangoTxt =
+      statsRangeDays === 0
+        ? "todo el historial"
+        : statsDateFrom && statsDateTo
+          ? formatDateInput(statsDateFrom) + " → " + formatDateInput(statsDateTo)
+          : statsRangeDays + " días";
 
     kpisEl.innerHTML =
-      '<div class="stats-kpi"><span>Total registros</span><strong>' +
-      docs.length +
+      '<div class="stats-kpi"><span>Planillados (rango)</span><strong>' +
+      planilladoFiltrado +
       "</strong></div>" +
-      '<div class="stats-kpi"><span>Con foto</span><strong>' +
-      withPhoto +
+      '<div class="stats-kpi"><span>Facturas venta</span><strong>' +
+      facturas.count +
       "</strong></div>" +
-      '<div class="stats-kpi"><span>Sin foto</span><strong>' +
-      withoutPhoto +
+      '<div class="stats-kpi"><span>Recaudo facturas</span><strong>' +
+      fmtCop(facturas.total) +
       "</strong></div>" +
-      '<div class="stats-kpi"><span>Sedes (planillado)</span><strong>' +
-      sedesSorted.length +
+      '<div class="stats-kpi"><span>Recibos de caja</span><strong>' +
+      totalRecibosCaja +
       "</strong></div>" +
-      '<div class="stats-kpi"><span>Sedes con cierre (Firestore)</span><strong>' +
-      Object.keys(cierresMap).length +
-      "</strong></div>" +
-      '<div class="stats-kpi"><span>Recaudo total (cierres)</span><strong>' +
+      '<div class="stats-kpi"><span>Recaudo cierres</span><strong>' +
       fmtCop(totalRecaudoCierres) +
+      "</strong></div>" +
+      '<div class="stats-kpi"><span>Cierres POS</span><strong>' +
+      pos.count +
+      "</strong></div>" +
+      '<div class="stats-kpi"><span>Recaudo POS</span><strong>' +
+      fmtCop(pos.total) +
+      "</strong></div>" +
+      '<div class="stats-kpi"><span>Rango</span><strong style="font-size:14px">' +
+      escapeHtml(rangoTxt) +
       "</strong></div>";
 
-    var allDetailSedes = {};
-    sedesSorted.forEach(function (s) {
-      allDetailSedes[s] = true;
-    });
-    Object.keys(cierresMap).forEach(function (id) {
-      allDetailSedes[id] = true;
-    });
-    var detailSedes = Object.keys(allDetailSedes).sort(function (a, b) {
-      return a.localeCompare(b, "es");
-    });
+    if (kpisAppEl) {
+      kpisAppEl.innerHTML =
+        '<div class="stats-kpi"><span>Mensualidades (residentes)</span><strong>' +
+        appInd.mensualidades +
+        "</strong></div>" +
+        '<div class="stats-kpi"><span>Operarios registrados</span><strong>' +
+        appInd.operarios +
+        "</strong></div>" +
+        '<div class="stats-kpi"><span>Semanas programación</span><strong>' +
+        appInd.programacionSemanas +
+        "</strong></div>";
+    }
 
-    detailBody.innerHTML = "";
-    detailSedes.forEach(function (sede) {
-      var row = byStation[sede];
-      var tot = row ? row.total : 0;
-      var cf = row ? row.conFoto : 0;
-      var sf = row ? row.sinFoto : 0;
-      var pct = tot ? Math.round((cf / tot) * 1000) / 10 : 0;
-      var rec = findCierreMontoForStationLabel(cierresMap, sede);
-      var tr = document.createElement("tr");
-      tr.innerHTML =
-        "<td>" +
-        escapeHtml(sede) +
-        "</td>" +
-        '<td class="num">' +
-        tot +
-        "</td>" +
-        '<td class="num">' +
-        cf +
-        "</td>" +
-        '<td class="num">' +
-        sf +
-        "</td>" +
-        '<td class="num">' +
-        (tot ? pct + "%" : "—") +
-        "</td>" +
-        '<td class="num">' +
-        (rec != null ? fmtCop(rec) : "—") +
-        "</td>";
-      detailBody.appendChild(tr);
-    });
+    var detailSedes = mergeSedeKeys(byStation, facturas.bySede, cierresMap, pos.bySede);
+    if (detailBody) {
+      detailBody.innerHTML = "";
+      detailSedes.forEach(function (sede) {
+        var pl = byStation[sede];
+        var fc = facturas.bySede[sede];
+        var ci = findCierreEntry(cierresMap, sede);
+        var po = findPosEntry(pos.bySede, sede);
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" +
+          escapeHtml(sede) +
+          "</td>" +
+          '<td class="num">' +
+          (pl ? pl.total : 0) +
+          "</td>" +
+          '<td class="num">' +
+          (fc ? fc.count : 0) +
+          "</td>" +
+          '<td class="num">' +
+          (fc ? fmtCop(fc.total) : "—") +
+          "</td>" +
+          '<td class="num">' +
+          (ci ? ci.recibos : 0) +
+          "</td>" +
+          '<td class="num">' +
+          (ci ? fmtCop(ci.monto) : "—") +
+          "</td>" +
+          '<td class="num">' +
+          (po ? fmtCop(po.total) : "—") +
+          "</td>";
+        detailBody.appendChild(tr);
+      });
+    }
+
+    if (recaudosBody) {
+      recaudosBody.innerHTML = "";
+      detailSedes.forEach(function (sede) {
+        var fc = facturas.bySede[sede];
+        var po = findPosEntry(pos.bySede, sede);
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" +
+          escapeHtml(sede) +
+          "</td>" +
+          '<td class="num">' +
+          (fc ? fc.count : 0) +
+          "</td>" +
+          '<td class="num">' +
+          (fc ? fmtCop(Math.round(fc.total / 1.19)) : "—") +
+          "</td>" +
+          '<td class="num">' +
+          (fc ? fmtCop(fc.total) : "—") +
+          "</td>" +
+          '<td class="num">' +
+          (po ? po.count : 0) +
+          "</td>" +
+          '<td class="num">' +
+          (po ? fmtCop(po.total) : "—") +
+          "</td>";
+        recaudosBody.appendChild(tr);
+      });
+    }
+
+    if (planilladoBody) {
+      planilladoBody.innerHTML = "";
+      sedesSorted.forEach(function (sede) {
+        var row = byStation[sede];
+        var tot = row.total;
+        var pct = tot ? Math.round((row.conFoto / tot) * 1000) / 10 : 0;
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" +
+          escapeHtml(sede) +
+          "</td>" +
+          '<td class="num">' +
+          tot +
+          "</td>" +
+          '<td class="num">' +
+          row.conFoto +
+          "</td>" +
+          '<td class="num">' +
+          row.sinFoto +
+          "</td>" +
+          '<td class="num">' +
+          (tot ? pct + "%" : "—") +
+          "</td>";
+        planilladoBody.appendChild(tr);
+      });
+    }
+
+    if (cierresBody) {
+      cierresBody.innerHTML = "";
+      labelsCierre.forEach(function (sede) {
+        var ci = cierresMap[sede];
+        var prom = ci.recibos ? ci.monto / ci.recibos : 0;
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" +
+          escapeHtml(sede) +
+          "</td>" +
+          '<td class="num">' +
+          (ci.recibos || 0) +
+          "</td>" +
+          '<td class="num">' +
+          fmtCop(ci.monto) +
+          "</td>" +
+          '<td class="num">' +
+          (ci.recibos ? fmtCop(prom) : "—") +
+          "</td>";
+        cierresBody.appendChild(tr);
+      });
+    }
 
     var statusExtra = "";
     if (Object.keys(cierresMap).length && totalRecaudoCierres === 0) {
       statusExtra =
-        " · Cierres: hay sedes en «cierres» pero recaudo $0 (revisar descifrado AES/CBC o sufijo user.name en firebase-config).";
+        " · Cierres: revise descifrado en firebase-config si el recaudo sale $0.";
     }
     setLoading(
       "Actualizado " +
         new Date().toLocaleString("es-CO") +
         " · " +
-        docs.length +
-        " documentos planillado · recaudo cierres " +
-        fmtCop(totalRecaudoCierres) +
-        "." +
+        planilladoFiltrado +
+        " planillados · " +
+        facturas.count +
+        " facturas · " +
+        totalRecibosCaja +
+        " recibos caja." +
         statusExtra
     );
+  }
+
+  function findCierreEntry(cierresMap, stationLabel) {
+    if (!cierresMap || !stationLabel) return null;
+    if (cierresMap[stationLabel]) return cierresMap[stationLabel];
+    var want = normalizeSedeKey(stationLabel);
+    var k;
+    for (k in cierresMap) {
+      if (normalizeSedeKey(k) === want) return cierresMap[k];
+    }
+    return null;
+  }
+
+  function findPosEntry(bySede, stationLabel) {
+    if (!bySede || !stationLabel) return null;
+    if (bySede[stationLabel]) return bySede[stationLabel];
+    var want = normalizeSedeKey(stationLabel);
+    var k;
+    for (k in bySede) {
+      if (normalizeSedeKey(k) === want) return bySede[k];
+    }
+    return null;
+  }
+
+  function activateStatsTab(tabId) {
+    document.querySelectorAll("[data-stats-tab]").forEach(function (btn) {
+      var on = btn.getAttribute("data-stats-tab") === tabId;
+      btn.classList.toggle("is-active", on);
+      btn.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    document.querySelectorAll("[data-stats-panel]").forEach(function (panel) {
+      panel.hidden = panel.getAttribute("data-stats-panel") !== tabId;
+    });
   }
 
   function escapeHtml(s) {
@@ -1297,6 +2061,37 @@
   document.getElementById("stats-btn-refresh").addEventListener("click", function () {
     loadStats();
   });
+
+  document.querySelectorAll("[data-stats-tab]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      activateStatsTab(btn.getAttribute("data-stats-tab") || "overview");
+    });
+  });
+
+  document.querySelectorAll("[data-range]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll("[data-range]").forEach(function (b) {
+        b.classList.toggle("is-active", b === btn);
+      });
+      applyStatsDateRange(Number(btn.getAttribute("data-range")));
+      loadStats();
+    });
+  });
+
+  if (dateFromEl) {
+    dateFromEl.addEventListener("change", function () {
+      readStatsDateInputs();
+      loadStats();
+    });
+  }
+  if (dateToEl) {
+    dateToEl.addEventListener("change", function () {
+      readStatsDateInputs();
+      loadStats();
+    });
+  }
+
+  applyStatsDateRange(30);
 
   auth.onAuthStateChanged(function (user) {
     if (user) {

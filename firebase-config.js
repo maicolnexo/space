@@ -129,6 +129,12 @@ const firebaseConfig = {
    */
   administradoresCollection: "administradores",
   /**
+   * Ajustes globales de la app móvil (seguridad.html).
+   * Documento: app_settings/global_config — mapa featureVisibility { clave: bool }.
+   */
+  appSettingsCollection: "app_settings",
+  globalConfigDocId: "global_config",
+  /**
    * Cierres de caja (estadistico.html). Estructura típica:
    * cierres/{sede}/{nombreOperario}/{idCierre} — ej. …/E-5 - Falabella/luis jimenez/28-01-2026_15-14-45
    * La página lista subcolecciones por sede y suma importes en cada cierre.

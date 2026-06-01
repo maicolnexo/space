@@ -63,6 +63,14 @@
       background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
       color: #fff;
     }
+    .u-toolbar button.admin-nav {
+      border-color: #5c6bc0;
+      background: linear-gradient(180deg, #3949ab 0%, #303f9f 100%);
+      color: #e8eaf6;
+    }
+    .u-toolbar button.admin-nav:hover {
+      filter: brightness(1.08);
+    }
     .u-toolbar button.danger {
       border-color: #b71c1c;
       background: #3e1616;
@@ -346,6 +354,90 @@
       font-family: ui-monospace, Consolas, monospace;
       font-size: 12px;
     }
+    .u-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 12000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    .u-modal[hidden] {
+      display: none !important;
+    }
+    .u-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.72);
+    }
+    .u-modal-panel {
+      position: relative;
+      z-index: 1;
+      width: min(1100px, 100%);
+      max-height: min(92vh, 900px);
+      overflow: auto;
+      background: #0f0f12;
+      border: 1px solid #444;
+      border-radius: 14px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+      padding: 0 0 18px;
+    }
+    .u-modal-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 18px;
+      border-bottom: 1px solid #333;
+      background: linear-gradient(180deg, #2a2a35 0%, #1a1a22 100%);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    .u-modal-head h2 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 600;
+      color: #e8eaef;
+    }
+    .u-modal-head p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: #94a3b8;
+      flex: 1 1 100%;
+    }
+    .u-modal-close {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: #252525;
+      color: #eee;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .u-modal-body {
+      padding: 14px 18px 0;
+    }
+    .u-li-badge--inactive {
+      background: rgba(97, 97, 97, 0.35);
+      color: #e0e0e0;
+      border: 1px solid #616161;
+    }
+    .u-btn-inline {
+      margin-top: 6px;
+      padding: 6px 10px;
+      font-size: 11px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #252525;
+      color: #cbd5e1;
+      cursor: pointer;
+      font-family: inherit;
+    }
     </style>
 </head>
 
@@ -399,6 +491,7 @@
   <div id="u-main" class="u-wrap">
     <div class="u-toolbar">
       <button type="button" class="primary" id="u-btn-new">Nuevo operador</button>
+      <button type="button" class="admin-nav" id="u-btn-admins">Administradores</button>
       <button type="button" id="u-btn-reload">Recargar lista</button>
       <button type="button" class="danger" id="u-btn-delete">Eliminar documento</button>
       <span id="u-status"></span>
@@ -556,6 +649,98 @@
             <button type="submit" class="primary" id="u-btn-save">Guardar en Firestore</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="u-admin-modal" class="u-modal" hidden aria-hidden="true">
+    <div class="u-modal-backdrop" id="u-admin-backdrop"></div>
+    <div class="u-modal-panel" role="dialog" aria-labelledby="u-admin-title" aria-modal="true">
+      <div class="u-modal-head">
+        <div>
+          <h2 id="u-admin-title">Administradores del portal</h2>
+          <p>
+            Cuentas con permiso para el sitio web (Google + contraseña en
+            <code>administradores</code>). El ID del documento debe coincidir con el UID de Firebase Auth del usuario Google.
+          </p>
+        </div>
+        <button type="button" class="u-modal-close" id="u-admin-close">Cerrar</button>
+      </div>
+      <div class="u-modal-body">
+        <div class="u-toolbar">
+          <button type="button" class="primary" id="a-btn-new">Nuevo administrador</button>
+          <button type="button" id="a-btn-reload">Recargar</button>
+          <button type="button" class="danger" id="a-btn-delete">Eliminar</button>
+          <span id="a-status"></span>
+        </div>
+        <div class="u-layout">
+          <div class="u-list-card">
+            <h3>Administradores (<span id="a-count">0</span>)</h3>
+            <div class="u-search">
+              <input type="search" id="a-filter" placeholder="Filtrar por ID, nombre o correo…" autocomplete="off" />
+            </div>
+            <ul class="u-list" id="a-list"></ul>
+          </div>
+          <div class="u-form-card">
+            <h3 id="a-form-title">Datos del administrador</h3>
+            <form id="a-form" autocomplete="off">
+              <div class="u-grid">
+                <div class="u-field u-field-full">
+                  <span>ID documento (UID Firebase Auth)</span>
+                  <input type="text" id="a-docId" placeholder="Ej. UID de Google al iniciar sesión" autocomplete="off" />
+                  <p class="u-field-hint">
+                    En usuarios nuevos, copie el UID desde Firebase Console → Authentication, o use el de su propia sesión Google.
+                  </p>
+                  <button type="button" class="u-btn-inline" id="a-btn-use-my-uid">Usar mi UID de Google</button>
+                </div>
+                <div class="u-field">
+                  <span>nombre</span>
+                  <input type="text" id="a-nombre" placeholder="Nombre completo" />
+                </div>
+                <div class="u-field">
+                  <span>email</span>
+                  <input type="email" id="a-email" placeholder="correo@empresa.com" autocomplete="off" />
+                </div>
+                <div class="u-field">
+                  <span>rol</span>
+                  <select id="a-rol">
+                    <option value="administrador">administrador</option>
+                    <option value="supervisor">supervisor</option>
+                    <option value="soporte">soporte</option>
+                    <option value="lectura">lectura</option>
+                  </select>
+                </div>
+                <div class="u-field u-field-full">
+                  <span>Estado</span>
+                  <label class="u-check" style="margin-top: 4px;">
+                    <input type="checkbox" id="a-active" checked />
+                    <span style="text-transform: none">Cuenta activa (puede iniciar sesión en el portal)</span>
+                  </label>
+                </div>
+                <div class="u-password-panel">
+                  <header>
+                    <p class="u-pass-title">Contraseña del portal (segundo paso tras Google)</p>
+                    <span id="a-pass-status" class="u-pass-badge no" role="status"></span>
+                  </header>
+                  <p class="u-pass-hint">
+                    Se guarda como <code>passwordEncrypted</code> y <code>salt</code> (formato hash:salt, igual que la verificación del sitio).
+                  </p>
+                  <div class="u-pass-row">
+                    <input type="password" id="a-password-plain" autocomplete="new-password" placeholder="Nueva contraseña" />
+                    <button type="button" class="u-pass-toggle" id="a-toggle-pass1">Mostrar</button>
+                  </div>
+                  <div class="u-pass-row">
+                    <input type="password" id="a-password-plain2" autocomplete="new-password" placeholder="Confirmar contraseña" />
+                    <button type="button" class="u-pass-toggle" id="a-toggle-pass2">Mostrar</button>
+                  </div>
+                </div>
+              </div>
+              <div class="u-toolbar" style="margin-top:16px;margin-bottom:0;">
+                <button type="submit" class="primary" id="a-btn-save">Guardar administrador</button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1022,6 +1207,336 @@
       countEl.textContent = "0";
       setStatus("");
       clearForm();
+      closeAdminModal();
+    }
+  });
+
+  /* ——— Panel administradores (colección administradores) ——— */
+  var ADMIN_COL =
+    cfg.administradoresCollection || "administradores";
+  var adminModal = document.getElementById("u-admin-modal");
+  var aListEl = document.getElementById("a-list");
+  var aCountEl = document.getElementById("a-count");
+  var aFilterEl = document.getElementById("a-filter");
+  var aFormEl = document.getElementById("a-form");
+  var aStatusEl = document.getElementById("a-status");
+  var allAdmins = [];
+  var selectedAdminId = null;
+  var isNewAdminMode = false;
+
+  function setAdminStatus(msg) {
+    if (aStatusEl) aStatusEl.textContent = msg || "";
+  }
+
+  async function hashPasswordForAdministrador(plain) {
+    var combined = await hashPasswordLikeOperatorKotlin(plain);
+    var parts = combined.split(":");
+    return {
+      passwordEncrypted: combined,
+      salt: parts[1] || "",
+    };
+  }
+
+  function clearAdminPasswordInputs() {
+    ["a-password-plain", "a-password-plain2"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.value = "";
+    });
+  }
+
+  function updateAdminPasswordBadge(hasStored) {
+    var el = document.getElementById("a-pass-status");
+    if (!el) return;
+    if (hasStored) {
+      el.textContent = "Contraseña configurada";
+      el.className = "u-pass-badge ok";
+    } else {
+      el.textContent = "Sin contraseña";
+      el.className = "u-pass-badge no";
+    }
+  }
+
+  function fillAdminForm(data, docId) {
+    data = data || {};
+    var docInput = document.getElementById("a-docId");
+    if (docInput) {
+      docInput.value = docId || "";
+      docInput.readOnly = !isNewAdminMode;
+    }
+    document.getElementById("a-nombre").value =
+      data.nombre != null ? String(data.nombre) : "";
+    document.getElementById("a-email").value =
+      data.email != null ? String(data.email) : "";
+    var rol = data.rol != null ? String(data.rol) : "administrador";
+    var rolSel = document.getElementById("a-rol");
+    var opts = ["administrador", "supervisor", "soporte", "lectura"];
+    if (opts.indexOf(rol) >= 0) rolSel.value = rol;
+    else rolSel.value = "administrador";
+    document.getElementById("a-active").checked =
+      data.active !== false && data.activo !== false;
+    clearAdminPasswordInputs();
+    updateAdminPasswordBadge(!!(data.passwordEncrypted && String(data.passwordEncrypted).trim()));
+  }
+
+  function clearAdminForm() {
+    isNewAdminMode = true;
+    selectedAdminId = null;
+    document.getElementById("a-form-title").textContent = "Nuevo administrador";
+    fillAdminForm({}, "");
+    var docInput = document.getElementById("a-docId");
+    if (docInput) docInput.readOnly = false;
+    renderAdminList(aFilterEl ? aFilterEl.value : "");
+  }
+
+  function renderAdminList(filter) {
+    if (!aListEl) return;
+    var q = String(filter || "")
+      .trim()
+      .toLowerCase();
+    aListEl.innerHTML = "";
+    var n = 0;
+    allAdmins.forEach(function (item) {
+      var id = item.id;
+      var nombre = (item.data && item.data.nombre) || "";
+      var email = (item.data && item.data.email) || "";
+      if (
+        q &&
+        id.toLowerCase().indexOf(q) < 0 &&
+        String(nombre).toLowerCase().indexOf(q) < 0 &&
+        String(email).toLowerCase().indexOf(q) < 0
+      ) {
+        return;
+      }
+      n++;
+      var li = document.createElement("li");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      var inactive = item.data && item.data.active === false;
+      btn.innerHTML =
+        "<strong>" +
+        escapeHtml(id) +
+        "</strong>" +
+        (inactive
+          ? '<span class="u-li-badge u-li-badge--inactive">Inactivo</span>'
+          : "") +
+        '<span class="u-li-sub">' +
+        escapeHtml(nombre || email || "sin nombre") +
+        "</span>";
+      if (inactive) btn.classList.add("u-li-inactive");
+      if (selectedAdminId === id) btn.classList.add("is-active");
+      btn.addEventListener("click", function () {
+        selectAdmin(id);
+      });
+      li.appendChild(btn);
+      aListEl.appendChild(li);
+    });
+    if (aCountEl) aCountEl.textContent = String(n);
+  }
+
+  function selectAdmin(id) {
+    var found = allAdmins.filter(function (x) {
+      return x.id === id;
+    })[0];
+    if (!found) return;
+    isNewAdminMode = false;
+    selectedAdminId = id;
+    document.getElementById("a-form-title").textContent = "Editar · " + id;
+    fillAdminForm(found.data, id);
+    renderAdminList(aFilterEl ? aFilterEl.value : "");
+  }
+
+  async function loadAdministradores() {
+    if (!auth.currentUser) return;
+    setAdminStatus("Cargando «" + ADMIN_COL + "»…");
+    try {
+      var snap = await db.collection(ADMIN_COL).get();
+      allAdmins = snap.docs.map(function (d) {
+        return { id: d.id, data: d.data() || {} };
+      });
+      allAdmins.sort(function (a, b) {
+        return String(a.data.nombre || a.id).localeCompare(
+          String(b.data.nombre || b.id),
+          "es"
+        );
+      });
+      if (
+        selectedAdminId &&
+        !allAdmins.some(function (x) {
+          return x.id === selectedAdminId;
+        })
+      ) {
+        selectedAdminId = null;
+      }
+      setAdminStatus(allAdmins.length + " administrador(es)");
+      clearAdminForm();
+    } catch (e) {
+      setAdminStatus("Error: " + (e.code || "") + " " + (e.message || e));
+      console.error(e);
+    }
+  }
+
+  function openAdminModal() {
+    if (!auth.currentUser) {
+      setStatus("Inicie sesión para administrar cuentas.");
+      return;
+    }
+    if (adminModal) {
+      adminModal.hidden = false;
+      adminModal.setAttribute("aria-hidden", "false");
+    }
+    loadAdministradores();
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeAdminModal() {
+    if (adminModal) {
+      adminModal.hidden = true;
+      adminModal.setAttribute("aria-hidden", "true");
+    }
+    document.body.style.overflow = "";
+  }
+
+  bindPasswordToggle("a-toggle-pass1", "a-password-plain");
+  bindPasswordToggle("a-toggle-pass2", "a-password-plain2");
+
+  document.getElementById("u-btn-admins").addEventListener("click", openAdminModal);
+  document.getElementById("u-admin-close").addEventListener("click", closeAdminModal);
+  document.getElementById("u-admin-backdrop").addEventListener("click", closeAdminModal);
+
+  document.getElementById("a-btn-use-my-uid").addEventListener("click", function () {
+    var u = auth.currentUser;
+    if (!u || !u.uid) {
+      setAdminStatus("No hay sesión Google activa.");
+      return;
+    }
+    var inp = document.getElementById("a-docId");
+    if (inp) inp.value = u.uid;
+    setAdminStatus("UID de Google asignado al documento.");
+  });
+
+  document.getElementById("a-btn-new").addEventListener("click", function () {
+    clearAdminForm();
+    document.getElementById("a-nombre").focus();
+  });
+
+  document.getElementById("a-btn-reload").addEventListener("click", loadAdministradores);
+
+  if (aFilterEl) {
+    aFilterEl.addEventListener("input", function () {
+      renderAdminList(aFilterEl.value);
+    });
+  }
+
+  document.getElementById("a-btn-delete").addEventListener("click", async function () {
+    var docId = String(document.getElementById("a-docId").value || "").trim();
+    if (!docId || isNewAdminMode) {
+      setAdminStatus("Seleccioná un administrador existente para eliminar.");
+      return;
+    }
+    if (
+      !confirm(
+        "¿Eliminar permanentemente administradores/" + docId + "?\n\nEsa cuenta no podrá entrar al portal."
+      )
+    ) {
+      return;
+    }
+    setAdminStatus("Eliminando…");
+    try {
+      await db.collection(ADMIN_COL).doc(docId).delete();
+      await loadAdministradores();
+      setAdminStatus("Administrador eliminado.");
+    } catch (e) {
+      setAdminStatus("Error al eliminar: " + (e.message || e));
+    }
+  });
+
+  if (aFormEl) {
+    aFormEl.addEventListener("submit", async function (ev) {
+      ev.preventDefault();
+      var docId = String(document.getElementById("a-docId").value || "").trim();
+      if (!docId) {
+        setAdminStatus("Indique el ID del documento (UID de Firebase Auth).");
+        return;
+      }
+      var nombre = String(document.getElementById("a-nombre").value || "").trim();
+      var email = String(document.getElementById("a-email").value || "")
+        .trim()
+        .toLowerCase();
+      var rol = String(document.getElementById("a-rol").value || "administrador").trim();
+      var active = !!document.getElementById("a-active").checked;
+      if (!nombre || !email) {
+        setAdminStatus("Nombre y correo son obligatorios.");
+        return;
+      }
+
+      var existing = allAdmins.filter(function (x) {
+        return x.id === docId;
+      })[0];
+      var existingData = existing ? existing.data : {};
+      var now = Date.now();
+      var payload = {
+        nombre: nombre,
+        email: email,
+        rol: rol,
+        active: active,
+        activo: active,
+        lastAccess:
+          existingData.lastAccess != null ? existingData.lastAccess : now,
+      };
+      if (existingData.createdAt != null) {
+        payload.createdAt = existingData.createdAt;
+      } else {
+        payload.createdAt = now;
+      }
+
+      var p1 = String(document.getElementById("a-password-plain").value || "");
+      var p2 = String(document.getElementById("a-password-plain2").value || "");
+      if (p1.length || p2.length) {
+        if (p1 !== p2) {
+          setAdminStatus("Las contraseñas no coinciden.");
+          return;
+        }
+        if (p1.length < 6) {
+          setAdminStatus("La contraseña debe tener al menos 6 caracteres.");
+          return;
+        }
+        try {
+          var hashed = await hashPasswordForAdministrador(p1);
+          payload.passwordEncrypted = hashed.passwordEncrypted;
+          payload.salt = hashed.salt;
+        } catch (err) {
+          setAdminStatus(err.message || String(err));
+          return;
+        }
+      } else if (!existing) {
+        setAdminStatus("Defina una contraseña para el nuevo administrador.");
+        return;
+      } else if (existingData.passwordEncrypted) {
+        payload.passwordEncrypted = existingData.passwordEncrypted;
+        payload.salt = existingData.salt != null ? String(existingData.salt) : "";
+      } else {
+        setAdminStatus("Este administrador no tiene contraseña; defina una nueva.");
+        return;
+      }
+
+      setAdminStatus("Guardando…");
+      try {
+        await db.collection(ADMIN_COL).doc(docId).set(payload, { merge: true });
+        isNewAdminMode = false;
+        selectedAdminId = docId;
+        await loadAdministradores();
+        selectAdmin(docId);
+        setAdminStatus("Administrador guardado.");
+      } catch (e) {
+        setAdminStatus("Error al guardar: " + (e.code || "") + " " + (e.message || e));
+        console.error(e);
+      }
+    });
+  }
+
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape" && adminModal && !adminModal.hidden) {
+      closeAdminModal();
     }
   });
 })();
