@@ -7646,6 +7646,62 @@
       .trim();
   }
 
+  function sedeCodePrefix(id) {
+    var m = String(id || "")
+      .trim()
+      .match(/^([A-Za-z]+-\d+)/);
+    return m ? m[1].toUpperCase() : "";
+  }
+
+  function sedesAreSameStation(a, b) {
+    if (!a || !b) return false;
+    if (String(a).trim() === String(b).trim()) return true;
+    if (normalizeSedeKey(a) === normalizeSedeKey(b)) return true;
+    var pa = sedeCodePrefix(a);
+    var pb = sedeCodePrefix(b);
+    if (pa && pb && pa === pb) return true;
+    var na = normalizeSedeKey(a);
+    var nb = normalizeSedeKey(b);
+    if (pa && nb.indexOf(pa.toLowerCase()) === 0) return true;
+    if (pb && na.indexOf(pb.toLowerCase()) === 0) return true;
+    return false;
+  }
+
+  /** ID canónico en catálogo «sedes» para una etiqueta de ruta POS o campo sede. */
+  function resolveCanonicalSedeId(rawSede) {
+    rawSede = String(rawSede || "").trim();
+    if (!rawSede) return "";
+    var i;
+    for (i = 0; i < sedeDocs.length; i++) {
+      var id = sedeDocs[i].id;
+      var nom = String((sedeDocs[i].data() || {}).nombre || "").trim();
+      if (sedesAreSameStation(id, rawSede)) return id;
+      if (nom && sedesAreSameStation(nom, rawSede)) return id;
+    }
+    return rawSede;
+  }
+
+  function sedeDisplayLabelForCatalogId(canonId) {
+    var i;
+    for (i = 0; i < sedeDocs.length; i++) {
+      if (sedeDocs[i].id === canonId) {
+        var nom = String((sedeDocs[i].data() || {}).nombre || "").trim();
+        return nom || canonId;
+      }
+    }
+    return canonId;
+  }
+
+  function lotesRowMatchesSedeFilter(rowSede, filterCanonId) {
+    if (!filterCanonId) return true;
+    if (!rowSede) return false;
+    var rowCanon = resolveCanonicalSedeId(rowSede);
+    if (rowCanon === filterCanonId) return true;
+    if (sedesAreSameStation(rowSede, filterCanonId)) return true;
+    if (sedesAreSameStation(rowCanon, filterCanonId)) return true;
+    return false;
+  }
+
   function findCierreMontoForStationLabel(cierresMap, stationLabel) {
     if (!cierresMap || !stationLabel) return null;
     if (cierresMap[stationLabel] != null) return cierresMap[stationLabel].monto;
@@ -7700,6 +7756,10 @@
   var sedeHorarioRefreshTimer = null;
   var sedeDocs = [];
   var planilladoSedeIdsPending = [];
+  var sedesCatalogUnsub = null;
+  var planilladoRootsUnsubs = [];
+  var sedesRealtimeStarted = false;
+  var PLANILLADO_ROOT_COLS_SEDES = ["planillado", "Planillado", "planillados"];
   var sedeSelectedId = null;
   var sedeIsNew = false;
   var sedeOperariosReqInput = document.getElementById("esta-f-operarios-req");
@@ -8356,29 +8416,31 @@
     return partes.join(" · ");
   }
 
-  /** Sedes conocidas en planillado (fallback, raíz planillado, collectionGroup). */
+  /** Sedes que existen hoy en planillado (raíz + rutas con registros; sin lista fija obsoleta). */
   async function discoverSedesFromPlanillado() {
     var ids = {};
-    (cfg.planilladoParkingIdsFallback || []).forEach(function (id) {
-      var s = String(id || "").trim();
-      if (s) ids[s] = true;
-    });
-    try {
-      var rootSnap = await db.collection("planillado").get();
-      rootSnap.docs.forEach(function (d) {
-        if (d.id) ids[d.id] = true;
-      });
-    } catch (e1) {
-      console.warn("[sedes] planillado.get", e1.code || e1.message);
+    var ri;
+    for (ri = 0; ri < PLANILLADO_ROOT_COLS_SEDES.length; ri++) {
+      var rootCol = PLANILLADO_ROOT_COLS_SEDES[ri];
+      try {
+        var rootSnap = await db.collection(rootCol).get();
+        rootSnap.docs.forEach(function (d) {
+          if (d.id) ids[d.id] = true;
+        });
+      } catch (e1) {
+        console.warn("[sedes] " + rootCol + ".get", e1.code || e1.message);
+      }
     }
     if (auth.currentUser) {
-      try {
-        var restIds = await listDocumentsInCollectionREST("planillado");
-        restIds.forEach(function (id) {
-          if (id) ids[id] = true;
-        });
-      } catch (e2) {
-        console.warn("[sedes] REST planillado", e2.message || e2);
+      for (ri = 0; ri < PLANILLADO_ROOT_COLS_SEDES.length; ri++) {
+        try {
+          var restIds = await listDocumentsInCollectionREST(PLANILLADO_ROOT_COLS_SEDES[ri]);
+          restIds.forEach(function (id) {
+            if (id) ids[id] = true;
+          });
+        } catch (e2) {
+          console.warn("[sedes] REST " + PLANILLADO_ROOT_COLS_SEDES[ri], e2.message || e2);
+        }
       }
     }
     var docs = await fetchAllPlanilladoDocs();
@@ -10275,10 +10337,12 @@
 
   function parsePosDocPath(fullPath) {
     var parts = String(fullPath || "").split("/").filter(Boolean);
-    if (parts.length < 4 || parts[0] !== POS_COL) return null;
+    if (parts.length < 4) return null;
+    var root = decodeId(parts[0]);
+    if (root.toUpperCase() !== String(POS_COL || "POS").toUpperCase()) return null;
     return {
-      sede: parts[1],
-      subcol: parts[2],
+      sede: decodeId(parts[1]),
+      subcol: decodeId(parts[2]),
       docId: parts.slice(3).join("/"),
       path: parts.join("/"),
     };
@@ -10868,11 +10932,138 @@
     return payload;
   }
 
+  async function buildPosScanSubcollections() {
+    var uniq = {};
+    function add(s) {
+      s = String(s || "").trim();
+      if (s) uniq[s] = true;
+    }
+    (cfg.posSubcollections || []).forEach(add);
+    (cfg.planilladoDefaultSubcollectionsForAllParkings || []).forEach(add);
+    (cfg.cierresOperatorSubcollectionsFallback || []).forEach(function (x) {
+      add(x);
+      add(operatorPathSegmentFromDisplayName(x));
+    });
+    var opCol = cfg.operatorsCollection || cfg.cierresOperatorsCollection || "operators";
+    try {
+      var snap = await db.collection(opCol).get();
+      snap.docs.forEach(function (d) {
+        add(d.id);
+        var raw = pick(d, "name", "nombre", "operatorName", "displayName");
+        if (raw) {
+          add(raw);
+          add(operatorPathSegmentFromDisplayName(raw));
+        }
+      });
+    } catch (e) {
+      console.warn("[lotes] operators catalog", e.code || e.message);
+    }
+    try {
+      var nameSubs = await fetchOperatorSubcollectionNames();
+      (nameSubs || []).forEach(add);
+    } catch (e2) {
+      console.warn("[lotes] operator names", e2.message || e2);
+    }
+    return Object.keys(uniq);
+  }
+
+  function collectPosSedeIdsFromCatalog() {
+    var ids = {};
+    sedeDocs.forEach(function (d) {
+      if (d.id) ids[d.id] = true;
+      var nom = String((d.data() || {}).nombre || "").trim();
+      if (nom) ids[nom] = true;
+    });
+    return ids;
+  }
+
+  async function fetchPosSedeIdsForScan() {
+    var ids = collectPosSedeIdsFromCatalog();
+    if (auth.currentUser) {
+      try {
+        var rest = await listDocumentsInCollectionREST(POS_COL);
+        (rest || []).forEach(function (id) {
+          if (id) ids[id] = true;
+        });
+      } catch (e) {
+        console.warn("[lotes] REST POS raíz", e.message || e);
+      }
+    }
+    return Object.keys(ids);
+  }
+
+  function pushPosDocItem(doc, meta, seen, posDocItems) {
+    if (!doc || !meta) return;
+    var p = meta.path || (doc.ref && doc.ref.path) || "";
+    if (!p || seen[p]) return;
+    seen[p] = true;
+    posDocItems.push({ doc: doc, meta: meta });
+  }
+
+  async function fetchPosDocsDirectForSedes(sedeIds, subsHint, seen, posDocItems) {
+    if (!sedeIds.length || !auth.currentUser) return;
+    await Promise.all(
+      sedeIds.map(function (sedeId) {
+        var sedeRef = db.collection(POS_COL).doc(sedeId);
+        return listCollectionIdsRESTForFullPath(sedeRef.path)
+          .then(function (json) {
+            var subs = uniqueStrings((json.collectionIds || []).concat(subsHint || []));
+            return Promise.all(
+              subs.map(function (subId) {
+                return sedeRef
+                  .collection(subId)
+                  .get()
+                  .then(function (snap) {
+                    snap.docs.forEach(function (doc) {
+                      var meta = parsePosDocPath(doc.ref.path);
+                      if (!meta) {
+                        meta = {
+                          sede: decodeId(sedeId),
+                          subcol: subId,
+                          docId: doc.id,
+                          path: doc.ref.path.split("/").filter(Boolean).join("/"),
+                        };
+                      }
+                      pushPosDocItem(doc, meta, seen, posDocItems);
+                    });
+                  })
+                  .catch(function (err) {
+                    console.warn("[lotes] POS get", sedeId, subId, err.code || err.message);
+                  });
+              })
+            );
+          })
+          .catch(function (err) {
+            console.warn("[lotes] POS listSubs", sedeId, err.message || err);
+            return Promise.all(
+              (subsHint || []).map(function (subId) {
+                return sedeRef
+                  .collection(subId)
+                  .get()
+                  .then(function (snap) {
+                    snap.docs.forEach(function (doc) {
+                      var meta = parsePosDocPath(doc.ref.path) || {
+                        sede: decodeId(sedeId),
+                        subcol: subId,
+                        docId: doc.id,
+                        path: doc.ref.path.split("/").filter(Boolean).join("/"),
+                      };
+                      pushPosDocItem(doc, meta, seen, posDocItems);
+                    });
+                  })
+                  .catch(function (err2) {
+                    console.warn("[lotes] POS fallback get", sedeId, subId, err2.code || err2.message);
+                  });
+              })
+            );
+          });
+      })
+    );
+  }
+
   async function fetchAllPosDocs() {
-    var subs =
-      (cfg.posSubcollections && cfg.posSubcollections.length
-        ? cfg.posSubcollections
-        : cfg.planilladoDefaultSubcollectionsForAllParkings) || ["LugMC421"];
+    var subs = await buildPosScanSubcollections();
+    if (!subs.length) subs = ["LugMC421"];
     var seen = {};
     var planFechaByKey = {};
     var posDocItems = [];
@@ -10896,9 +11087,7 @@
                 }
                 var meta = parsePosDocPath(doc.ref.path);
                 if (!meta) return;
-                if (seen[meta.path]) return;
-                seen[meta.path] = true;
-                posDocItems.push({ doc: doc, meta: meta });
+                pushPosDocItem(doc, meta, seen, posDocItems);
               });
             })
             .catch(function (err) {
@@ -10907,6 +11096,8 @@
         })
       ),
     ]);
+    var sedeIds = await fetchPosSedeIdsForScan();
+    await fetchPosDocsDirectForSedes(sedeIds, subs, seen, posDocItems);
     var facturaIndex = fetched[0] || {};
     var out = posDocItems.map(function (item) {
       return normalizePosFirestoreRow(
@@ -10915,6 +11106,9 @@
         planFechaByKey,
         facturaIndex
       );
+    });
+    out.forEach(function (row) {
+      row.sedeCanon = resolveCanonicalSedeId(row.sede);
     });
     out.sort(function (a, b) {
       var ta = a.fechaEntrada ? a.fechaEntrada.getTime() : 0;
@@ -10974,8 +11168,15 @@
   }
 
   function getSedeDataById(sedeId) {
-    for (var i = 0; i < sedeDocs.length; i++) {
-      if (sedeDocs[i].id === sedeId) return sedeDocs[i].data() || {};
+    var canon = resolveCanonicalSedeId(sedeId);
+    var i;
+    for (i = 0; i < sedeDocs.length; i++) {
+      if (sedeDocs[i].id === canon) return sedeDocs[i].data() || {};
+    }
+    for (i = 0; i < sedeDocs.length; i++) {
+      if (sedesAreSameStation(sedeDocs[i].id, sedeId)) return sedeDocs[i].data() || {};
+      var nom = String((sedeDocs[i].data() || {}).nombre || "").trim();
+      if (nom && sedesAreSameStation(nom, sedeId)) return sedeDocs[i].data() || {};
     }
     return {};
   }
@@ -11042,7 +11243,8 @@
     });
     var generalId = grupos.length ? grupos[grupos.length - 1].id : "general";
     lotesRawRows.forEach(function (r) {
-      if (!r.activa || r.sede !== sedeId) return;
+      if (!r.activa || resolveCanonicalSedeId(r.sedeCanon || r.sede) !== resolveCanonicalSedeId(sedeId))
+        return;
       var gid = r.grupoLote || generalId;
       if (!byId[gid]) byId[gid] = { auto: 0, moto: 0 };
       if (esTipoMotoLote(r.tipoVehiculo)) byId[gid].moto++;
@@ -11215,24 +11417,17 @@
 
   function getCuposLoteFromSedeDoc(sedeId) {
     if (!sedeId) return 0;
-    for (var i = 0; i < sedeDocs.length; i++) {
-      if (sedeDocs[i].id !== sedeId) continue;
-      var c = sedeDocs[i].data().cuposLote;
-      if (typeof c === "number" && !isNaN(c) && c >= 0) return Math.floor(c);
-      break;
-    }
-    var legacy = getLotesCapRef()[sedeId];
+    var canon = resolveCanonicalSedeId(sedeId);
+    var c = getSedeDataById(canon).cuposLote;
+    if (typeof c === "number" && !isNaN(c) && c >= 0) return Math.floor(c);
+    var legacy = getLotesCapRef()[canon] || getLotesCapRef()[sedeId];
     if (typeof legacy === "number" && legacy > 0) return Math.floor(legacy);
     return 0;
   }
 
   function getLimitarLoteFromSedeDoc(sedeId) {
     if (!sedeId) return false;
-    for (var i = 0; i < sedeDocs.length; i++) {
-      if (sedeDocs[i].id !== sedeId) continue;
-      return sedeDocs[i].data().limitarLote === true;
-    }
-    return false;
+    return getSedeDataById(resolveCanonicalSedeId(sedeId)).limitarLote === true;
   }
 
   function getLimitarLoteFromCuposRow(row) {
@@ -11245,7 +11440,8 @@
     var bySede = {};
     lotesRawRows.forEach(function (r) {
       if (!r.activa) return;
-      bySede[r.sede] = (bySede[r.sede] || 0) + 1;
+      var canon = r.sedeCanon || resolveCanonicalSedeId(r.sede);
+      bySede[canon] = (bySede[canon] || 0) + 1;
     });
     return bySede;
   }
@@ -11980,24 +12176,45 @@
     var sel = document.getElementById("esta-lotes-f-sede");
     if (!sel) return;
     var prev = sel.value;
-    var sedes = {};
-    (rows || []).forEach(function (r) {
-      if (r.sede) sedes[r.sede] = true;
-    });
+    var sedesMap = {};
     sedeDocs.forEach(function (d) {
-      if (d.id) sedes[d.id] = true;
+      if (!d.id) return;
+      sedesMap[d.id] = sedeDisplayLabelForCatalogId(d.id);
     });
-    var list = Object.keys(sedes).sort(function (a, b) {
-      return a.localeCompare(b, "es", { sensitivity: "base" });
+    (rows || []).forEach(function (r) {
+      if (!r.sede) return;
+      var canon = resolveCanonicalSedeId(r.sede);
+      if (!sedesMap[canon]) sedesMap[canon] = String(r.sede).trim() || canon;
+    });
+    Object.keys(getLotesCapRef()).forEach(function (id) {
+      if (id && !sedesMap[id]) sedesMap[id] = sedeDisplayLabelForCatalogId(id);
+    });
+    var list = Object.keys(sedesMap).sort(function (a, b) {
+      return String(sedesMap[a] || a).localeCompare(String(sedesMap[b] || b), "es", {
+        sensitivity: "base",
+      });
     });
     sel.innerHTML = '<option value="">Todas las sedes</option>';
     list.forEach(function (id) {
       var opt = document.createElement("option");
       opt.value = id;
-      opt.textContent = id;
+      var label = sedesMap[id] || id;
+      opt.textContent = label === id ? id : label + " (" + id + ")";
       sel.appendChild(opt);
     });
-    if (prev && sedes[prev]) sel.value = prev;
+    if (prev && sedesMap[prev]) sel.value = prev;
+  }
+
+  function refreshLotesSedeUiFromCatalog() {
+    lotesRawRows.forEach(function (r) {
+      r.sedeCanon = resolveCanonicalSedeId(r.sede);
+    });
+    populateLotesSedeFilter(lotesRawRows);
+    var panel = document.getElementById("esta-panel-lotes");
+    if (!panel || panel.hidden) return;
+    if (lotesRawRows.length) {
+      renderLotesTable();
+    }
   }
 
   function getLotesFilteredRows() {
@@ -12016,7 +12233,8 @@
     var desde = desdeStr ? new Date(desdeStr + "T00:00:00") : null;
     var hasta = hastaStr ? new Date(hastaStr + "T23:59:59.999") : null;
     return lotesRawRows.filter(function (r) {
-      if (sede && r.sede !== sede) return false;
+      var rowSede = r.sedeCanon || r.sede;
+      if (sede && !lotesRowMatchesSedeFilter(rowSede, sede)) return false;
       if (estado === "activo" && !r.activa) return false;
       if (estado === "cerrado" && r.activa) return false;
       if (estado === "factura" && !r.listoParaFacturar) return false;
@@ -12037,7 +12255,8 @@
     var bySede = {};
     rows.forEach(function (r) {
       if (!r.activa) return;
-      bySede[r.sede] = (bySede[r.sede] || 0) + 1;
+      var canon = resolveCanonicalSedeId(r.sede);
+      bySede[canon] = (bySede[canon] || 0) + 1;
     });
     var keys = Object.keys(bySede).sort();
     if (!keys.length) {
@@ -12047,6 +12266,7 @@
     }
     var html = "";
     keys.forEach(function (sede) {
+      var sedeLabel = sedeDisplayLabelForCatalogId(sede);
       var n = bySede[sede];
       if (getUsarGruposLoteFromSedeDoc(sede)) {
         var grupos = getGruposLoteFromSedeDoc(sede);
@@ -12069,7 +12289,7 @@
         });
         html +=
           '<div class="esta-lotes-cap-row"><strong>' +
-          escapeHtml(sede) +
+          escapeHtml(sedeLabel) +
           "</strong>: " +
           n +
           " en lote · <span style=\"font-size:11px\">" +
@@ -12082,7 +12302,7 @@
       var libres = cap > 0 ? Math.max(0, cap - n) : null;
       html +=
         '<div class="esta-lotes-cap-row"><strong>' +
-        escapeHtml(sede) +
+        escapeHtml(sedeLabel) +
         "</strong>: " +
         n +
         " en lote" +
@@ -12159,8 +12379,10 @@
         '<td class="esta-lotes-placa">' +
         escapeHtml(r.placa) +
         "</td>" +
-        "<td>" +
-        escapeHtml(r.sede) +
+        "<td title=\"" +
+        escapeHtml(r.sede || "") +
+        "\">" +
+        escapeHtml(sedeDisplayLabelForCatalogId(r.sedeCanon || r.sede)) +
         "</td>" +
         "<td>" +
         (r.numeroTiquete > 0 ? escapeHtml(String(r.numeroTiquete)) : "—") +
@@ -12492,6 +12714,7 @@
     lotesLoading = true;
     setLotesStatus("Cargando tiquetes POS…");
     try {
+      if (!sedeDocs.length) await loadSedesList();
       lotesRawRows = await fetchAllPosDocs();
       var pathSet = {};
       lotesRawRows.forEach(function (r) {
@@ -12502,10 +12725,13 @@
       });
       populateLotesSedeFilter(lotesRawRows);
       renderLotesTable();
+      var nSedes = Object.keys(collectPosSedeIdsFromCatalog()).length;
       setLotesStatus(
         "Actualizado · " +
           lotesRawRows.length +
           " tiquete(s) POS · " +
+          nSedes +
+          " sede(s) en catálogo · " +
           new Date().toLocaleTimeString("es-CO")
       );
     } catch (e) {
@@ -13684,49 +13910,38 @@
     }
   }
 
-  function loadSedesList() {
-    if (!auth.currentUser) {
-      setSedeStatus("Inicie sesión para administrar sedes.");
-      return Promise.resolve();
+  function sortSedeDocs(docs) {
+    return docs.slice().sort(function (a, b) {
+      var na = ((a.data() || {}).nombre || a.id || "").toLowerCase();
+      var nb = ((b.data() || {}).nombre || b.id || "").toLowerCase();
+      return na.localeCompare(nb, "es");
+    });
+  }
+
+  function syncSedeSelectionAfterCatalogChange() {
+    if (!sedeSelectedId || sedeIsNew) return;
+    var found = false;
+    var i;
+    for (i = 0; i < sedeDocs.length; i++) {
+      if (sedeDocs[i].id === sedeSelectedId) {
+        found = true;
+        break;
+      }
     }
-    setSedeStatus("Cargando catálogo y sedes de planillado…");
-    return db
-      .collection(SEDES_COL)
-      .get()
-      .then(function (snap) {
-        sedeDocs = snap.docs.slice().sort(function (a, b) {
-          var na = ((a.data() || {}).nombre || a.id || "").toLowerCase();
-          var nb = ((b.data() || {}).nombre || b.id || "").toLowerCase();
-          return na.localeCompare(nb, "es");
-        });
-        return discoverSedesFromPlanillado();
-      })
+    if (!found) clearSedeForm();
+  }
+
+  function refreshPlanilladoSedesState() {
+    return discoverSedesFromPlanillado()
       .then(function (planilladoIds) {
         recomputePlanilladoPending(planilladoIds);
-        if (sedeDocs.length === 0 && planilladoSedeIdsPending.length > 0) {
-          var auto = planilladoSedeIdsPending.slice();
-          return importSedesBatch(auto, "Catálogo vacío: importando desde planillado").then(function () {
-            return db.collection(SEDES_COL).get();
-          }).then(function (snap2) {
-            sedeDocs = snap2.docs.slice().sort(function (a, b) {
-              var na = ((a.data() || {}).nombre || a.id || "").toLowerCase();
-              var nb = ((b.data() || {}).nombre || b.id || "").toLowerCase();
-              return na.localeCompare(nb, "es");
-            });
-            recomputePlanilladoPending(planilladoIds);
-            renderSedeList();
-            setSedeStatus(
-              "Se importaron " + auto.length + " sede(s) desde planillado. Complete dirección y teléfono en cada una."
-            );
-            return planilladoIds;
-          });
-        }
+        syncSedeSelectionAfterCatalogChange();
         renderSedeList();
         var msg =
           sedeDocs.length +
           " en catálogo · " +
           planilladoIds.length +
-          " detectada(s) en planillado";
+          " en planillado (tiempo real)";
         if (planilladoSedeIdsPending.length) {
           msg += " · " + planilladoSedeIdsPending.length + " pendiente(s) de importar";
         }
@@ -13735,8 +13950,63 @@
       })
       .catch(function (err) {
         console.warn("[sedes]", err);
-        setSedeStatus("Error al cargar: " + (err.code || "") + " " + (err.message || err));
+        setSedeStatus("Error al sincronizar: " + (err.code || "") + " " + (err.message || err));
       });
+  }
+
+  function stopSedesRealtimeSync() {
+    if (sedesCatalogUnsub) {
+      try {
+        sedesCatalogUnsub();
+      } catch (e1) {}
+      sedesCatalogUnsub = null;
+    }
+    planilladoRootsUnsubs.forEach(function (unsub) {
+      if (typeof unsub === "function") {
+        try {
+          unsub();
+        } catch (e2) {}
+      }
+    });
+    planilladoRootsUnsubs = [];
+    sedesRealtimeStarted = false;
+  }
+
+  function startSedesRealtimeSync() {
+    if (!auth.currentUser) {
+      setSedeStatus("Inicie sesión para administrar sedes.");
+      return Promise.resolve();
+    }
+    if (!sedesRealtimeStarted) {
+      sedesRealtimeStarted = true;
+      setSedeStatus("Conectando catálogo y planillado en tiempo real…");
+      sedesCatalogUnsub = db.collection(SEDES_COL).onSnapshot(
+        function (snap) {
+          sedeDocs = sortSedeDocs(snap.docs);
+          refreshPlanilladoSedesState();
+          refreshLotesSedeUiFromCatalog();
+        },
+        function (err) {
+          setSedeStatus("Error sedes: " + (err.code || "") + " " + (err.message || err));
+        }
+      );
+      PLANILLADO_ROOT_COLS_SEDES.forEach(function (rootCol) {
+        var unsubRoot = db.collection(rootCol).onSnapshot(
+          function () {
+            refreshPlanilladoSedesState();
+          },
+          function (err) {
+            console.warn("[sedes] planillado root " + rootCol, err.code || err.message);
+          }
+        );
+        planilladoRootsUnsubs.push(unsubRoot);
+      });
+    }
+    return refreshPlanilladoSedesState();
+  }
+
+  function loadSedesList() {
+    return startSedesRealtimeSync();
   }
 
   function importSedesBatch(sedeIds, statusPrefix) {
@@ -14077,7 +14347,9 @@
     } else {
       destroyCharts();
       setLoading("");
+      stopSedesRealtimeSync();
       sedeDocs = [];
+      planilladoSedeIdsPending = [];
       clearSedeForm();
       renderSedeList();
       setSedeStatus("");

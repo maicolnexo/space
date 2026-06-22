@@ -1049,6 +1049,16 @@
   var discoveredSubcolFromPath = new Set();
   /** Sedes vistas por REST documents.list sobre la colección raíz planillado / Planillado / planillados */
   var restPlanilladoSedeKeys = new Set();
+  /** IDs vivos en Firestore (raíz planillado + catálogo sedes + rutas con datos). */
+  var livePlanilladoRootIds = {};
+  var liveSedesCatalogIds = {};
+  var liveSedesCatalogMeta = {};
+  var dynamicPlanilladoSubcollections = {};
+  var operatorCollectionGroupUnsubs = {};
+  var sedesCatalogUnsub = null;
+  var operatorsCatalogUnsub = null;
+  var planilladoBootstrapDone = false;
+  var planilladoLastCgError = "";
 
   var authErrorStrip = document.getElementById("auth-error-strip");
   var authBannerDetail = document.getElementById("auth-banner-detail");
@@ -1185,6 +1195,28 @@
     planilladoParkingsFromPathsAttached.clear();
     discoveredSubcolFromPath.clear();
     restPlanilladoSedeKeys.clear();
+    livePlanilladoRootIds = {};
+    liveSedesCatalogIds = {};
+    liveSedesCatalogMeta = {};
+    dynamicPlanilladoSubcollections = {};
+    Object.keys(operatorCollectionGroupUnsubs).forEach(function (cid) {
+      detachOperatorCollectionGroup(cid);
+    });
+    operatorCollectionGroupUnsubs = {};
+    if (sedesCatalogUnsub) {
+      try {
+        sedesCatalogUnsub();
+      } catch (eSedeUnsub) {}
+      sedesCatalogUnsub = null;
+    }
+    if (operatorsCatalogUnsub) {
+      try {
+        operatorsCatalogUnsub();
+      } catch (eOpUnsub) {}
+      operatorsCatalogUnsub = null;
+    }
+    planilladoBootstrapDone = false;
+    planilladoLastCgError = "";
     if (discoverIntervalId) {
       clearInterval(discoverIntervalId);
       discoverIntervalId = null;
@@ -1211,7 +1243,16 @@
         onSignedOut: onIndexSignedOut,
       },
     });
+  } else if (auth) {
+    auth.onAuthStateChanged(function (user) {
+      if (user) tryStartFirestoreListenersOnce();
+      else onIndexSignedOut();
+    });
   }
+
+  window.addEventListener("lugano-auth-ready", function () {
+    tryStartFirestoreListenersOnce();
+  });
 
   if (window.location.protocol === "file:") {
     console.warn(
@@ -1219,7 +1260,291 @@
     );
   }
 
-  function logLine() {}
+  function getCfgFb() {
+    return typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
+  }
+
+  function uniqueTrimStrings(arr) {
+    var seen = {};
+    var out = [];
+    (arr || []).forEach(function (x) {
+      var s = String(x == null ? "" : x).trim();
+      if (!s || seen[s]) return;
+      seen[s] = true;
+      out.push(s);
+    });
+    return out;
+  }
+
+  function registerPlanilladoIdsFromPath(fullPath) {
+    var parts = String(fullPath || "").split("/").filter(Boolean);
+    if (parts.length < 3 || !isPlanilladoRootName(parts[0])) return;
+    var sedeId = parts[1];
+    try {
+      sedeId = decodeId(parts[1]);
+    } catch (ePark) {}
+    if (sedeId) livePlanilladoRootIds[sedeId] = true;
+    if (parts.length >= 3 && parts[2]) {
+      dynamicPlanilladoSubcollections[parts[2]] = true;
+    }
+  }
+
+  function rebuildLivePlanilladoRootIds() {
+    livePlanilladoRootIds = {};
+    stationsSeenPairs.forEach(function (p) {
+      if (p && p.id) livePlanilladoRootIds[p.id] = true;
+    });
+  }
+
+  function detachOperatorCollectionGroup(cid) {
+    var unsub = operatorCollectionGroupUnsubs[cid];
+    if (typeof unsub === "function") {
+      try {
+        unsub();
+      } catch (eUnsub) {}
+      delete operatorCollectionGroupUnsubs[cid];
+      var ix = collectionGroupUnsubs.indexOf(unsub);
+      if (ix !== -1) collectionGroupUnsubs.splice(ix, 1);
+    }
+  }
+
+  function getPlanilladoSubcollectionIds() {
+    var cfg = getCfgFb();
+    var list = (cfg.planilladoDefaultSubcollectionsForAllParkings || []).slice();
+    Object.keys(dynamicPlanilladoSubcollections).forEach(function (id) {
+      if (id && list.indexOf(id) === -1) list.push(id);
+    });
+    if (list.indexOf(SUB_REGISTROS) === -1) list.unshift(SUB_REGISTROS);
+    return uniqueTrimStrings(list);
+  }
+
+  function getPlanilladoParkingIds() {
+    var ids = {};
+    Object.keys(livePlanilladoRootIds).forEach(function (id) {
+      if (id) ids[id] = true;
+    });
+    Object.keys(liveSedesCatalogIds).forEach(function (id) {
+      if (id) ids[id] = true;
+    });
+    rows.forEach(function (r, fullPath) {
+      var parts = String(fullPath || "").split("/").filter(Boolean);
+      if (parts.length < 2 || !isPlanilladoRootName(parts[0])) return;
+      try {
+        ids[decodeId(parts[1])] = true;
+      } catch (eRow) {
+        ids[parts[1]] = true;
+      }
+    });
+    return uniqueTrimStrings(Object.keys(ids));
+  }
+
+  function normalizeSedeKey(s) {
+    return String(s || "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .replace(/\s*-\s*/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function sedeCodePrefix(id) {
+    var m = String(id || "")
+      .trim()
+      .match(/^([A-Za-z]+-\d+)/);
+    return m ? m[1].toUpperCase() : "";
+  }
+
+  function sedesAreSameStation(a, b) {
+    if (!a || !b) return false;
+    if (String(a).trim() === String(b).trim()) return true;
+    if (normalizeSedeKey(a) === normalizeSedeKey(b)) return true;
+    var pa = sedeCodePrefix(a);
+    var pb = sedeCodePrefix(b);
+    if (pa && pb && pa === pb) return true;
+    var na = normalizeSedeKey(a);
+    var nb = normalizeSedeKey(b);
+    if (pa && nb.indexOf(pa.toLowerCase()) === 0) return true;
+    if (pb && na.indexOf(pb.toLowerCase()) === 0) return true;
+    return false;
+  }
+
+  function pickCanonicalSedeId(a, b, plateCounts) {
+    var ca = plateCounts[a] || 0;
+    var cb = plateCounts[b] || 0;
+    if (cb > ca) return b;
+    if (ca > cb) return a;
+    if (liveSedesCatalogIds[b] && !liveSedesCatalogIds[a]) return b;
+    if (liveSedesCatalogIds[a] && !liveSedesCatalogIds[b]) return a;
+    if (String(b).length > String(a).length) return b;
+    if (String(a).length > String(b).length) return a;
+    return a;
+  }
+
+  function resolveCanonicalSedeId(id, allIds, plateCounts) {
+    var best = id;
+    var i;
+    for (i = 0; i < allIds.length; i++) {
+      if (!sedesAreSameStation(id, allIds[i])) continue;
+      best = pickCanonicalSedeId(best, allIds[i], plateCounts);
+    }
+    return best;
+  }
+
+  function sedeDisplayLabel(canonId) {
+    var meta = liveSedesCatalogMeta[canonId];
+    if (meta && meta.nombre) return meta.nombre;
+    return canonId;
+  }
+
+  function mergeParkingPlatesByCanonicalSede(rawBySede, extraIds) {
+    var plateCounts = {};
+    rawBySede.forEach(function (plates, id) {
+      plateCounts[id] = plates.size;
+    });
+    var allIds = uniqueTrimStrings(
+      (extraIds || []).concat(Array.from(rawBySede.keys()))
+    );
+    var aliasToCanon = {};
+    var i;
+    for (i = 0; i < allIds.length; i++) {
+      aliasToCanon[allIds[i]] = resolveCanonicalSedeId(allIds[i], allIds, plateCounts);
+    }
+    var merged = new Map();
+    rawBySede.forEach(function (plates, rawId) {
+      var canon = aliasToCanon[rawId] || rawId;
+      if (!merged.has(canon)) merged.set(canon, new Map());
+      var target = merged.get(canon);
+      plates.forEach(function (n, pl) {
+        target.set(pl, (target.get(pl) || 0) + n);
+      });
+    });
+    var canonSet = {};
+    for (i = 0; i < allIds.length; i++) {
+      canonSet[aliasToCanon[allIds[i]]] = true;
+    }
+    var orderedIds = Object.keys(canonSet).sort(function (a, b) {
+      return String(a).localeCompare(String(b), "es");
+    });
+    return { bySede: merged, orderedIds: orderedIds };
+  }
+
+  function syncOperatorsCatalogFromSnapshot(snap) {
+    var next = {};
+    snap.docs.forEach(function (d) {
+      if (d.id) next[d.id] = true;
+    });
+    Object.keys(dynamicPlanilladoSubcollections).forEach(function (id) {
+      if (!next[id] && id !== SUB_REGISTROS) {
+        delete dynamicPlanilladoSubcollections[id];
+        detachOperatorCollectionGroup(id);
+      }
+    });
+    Object.keys(next).forEach(function (id) {
+      dynamicPlanilladoSubcollections[id] = true;
+    });
+    attachPlanilladoOperatorCollectionGroups();
+    logLine("Operarios en tiempo real: " + snap.size);
+  }
+
+  function syncSedesCatalogFromSnapshot(snap) {
+    liveSedesCatalogIds = {};
+    liveSedesCatalogMeta = {};
+    snap.docs.forEach(function (d) {
+      if (!d.id) return;
+      liveSedesCatalogIds[d.id] = true;
+      var data = d.data() || {};
+      liveSedesCatalogMeta[d.id] = {
+        nombre: data.nombre != null ? String(data.nombre).trim() : d.id,
+      };
+    });
+    logLine("Sedes en catálogo (tiempo real): " + snap.size);
+    refreshAllPlanilladoParkingListeners();
+    scheduleRender();
+  }
+
+  function attachRealtimeCatalogListeners() {
+    var cfg = getCfgFb();
+    var opsCol = cfg.operatorsCollection || cfg.cierresOperatorsCollection || "operators";
+    var sedesCol = cfg.sedesCollection || "sedes";
+
+    if (operatorsCatalogUnsub) {
+      try {
+        operatorsCatalogUnsub();
+      } catch (eOp) {}
+      operatorsCatalogUnsub = null;
+    }
+    if (sedesCatalogUnsub) {
+      try {
+        sedesCatalogUnsub();
+      } catch (eSe) {}
+      sedesCatalogUnsub = null;
+    }
+
+    operatorsCatalogUnsub = db.collection(opsCol).onSnapshot(
+      function (snap) {
+        syncOperatorsCatalogFromSnapshot(snap);
+      },
+      function (err) {
+        logLine("ERROR operarios tiempo real: " + (err.code || "") + " " + (err.message || err));
+      }
+    );
+
+    sedesCatalogUnsub = db.collection(sedesCol).onSnapshot(
+      function (snap) {
+        syncSedesCatalogFromSnapshot(snap);
+      },
+      function (err) {
+        logLine("ERROR sedes tiempo real: " + (err.code || "") + " " + (err.message || err));
+      }
+    );
+
+    return Promise.resolve();
+  }
+
+  function bootstrapPlanilladoFromCollectionGroups() {
+    if (planilladoBootstrapDone) return Promise.resolve();
+    var subs = getPlanilladoSubcollectionIds();
+    return Promise.all(
+      subs.map(function (sub) {
+        return db
+          .collectionGroup(sub)
+          .get()
+          .then(function (snap) {
+            logLine("Bootstrap collectionGroup(" + sub + "): " + snap.size + " doc(s)");
+            snap.docs.forEach(function (doc) {
+              registerPlanilladoIdsFromPath(doc.ref.path);
+              updateRowForDoc(doc.ref, doc.data(), "added", true);
+              attachNestedCollectionListeners(doc.ref);
+            });
+          })
+          .catch(function (err) {
+            planilladoLastCgError =
+              "collectionGroup(" + sub + "): " + (err.code || "") + " " + (err.message || err);
+            logLine("ERROR " + planilladoLastCgError);
+          });
+      })
+    ).then(function () {
+      planilladoBootstrapDone = true;
+      scheduleRender();
+    });
+  }
+
+  function refreshAllPlanilladoParkingListeners() {
+    var ids = getPlanilladoParkingIds();
+    PLANILLADO_ROOT_COLS.forEach(function (rootCol) {
+      ids.forEach(function (parkingId) {
+        refreshParkingSubcollections(rootCol, parkingId);
+      });
+    });
+  }
+
+  function logLine(msg) {
+    if (msg == null || msg === "") return;
+    if (typeof console !== "undefined" && console.log) {
+      console.log("[index planillado]", msg);
+    }
+  }
 
   function fmtTs(v) {
     if (v == null || v === "") return "";
@@ -2084,7 +2409,11 @@
 
   function plateLabel(r) {
     var d = r.data || {};
-    return String(pick(d, "licensePlate", "placa", "Placa") || r.docId || "").trim();
+    return String(
+      pick(d, "licensePlate", "placa", "Placa", "placaVehiculo", "plateNumber", "plate") ||
+        r.docId ||
+        ""
+    ).trim();
   }
 
   function normalizePlateKey(placa) {
@@ -2097,17 +2426,31 @@
     var want = normalizePlateKey(placa);
     if (!want) return [];
     return Array.from(rows.values()).filter(function (r) {
+      if (!r.fullPath || !pathUnderPlanilladoTree(r.fullPath)) return false;
       return normalizePlateKey(plateLabel(r)) === want;
     });
   }
 
   function extractVehicleFields(r) {
     var d = r.data || {};
-    var placa = pick(d, "licensePlate", "placa", "Placa") || r.docId;
+    var placa =
+      pick(d, "licensePlate", "placa", "Placa", "placaVehiculo", "plateNumber", "plate") ||
+      r.docId;
     var idOp =
-      pick(d, "lastOperator", "user", "idOperario", "operarioId", "id_operario", "operatorName") ||
-      r.operarioId;
-    var est = pick(d, "parking", "parkingName", "estacionamiento", "sede") || r.stationId;
+      pick(
+        d,
+        "lastOperator",
+        "user",
+        "idOperario",
+        "operarioId",
+        "id_operario",
+        "operatorName",
+        "operatorId",
+        "nombreOperario"
+      ) || r.operarioId;
+    var est =
+      pick(d, "parking", "parkingName", "estacionamiento", "sede", "nombreSede", "parkingLot") ||
+      r.stationId;
 
     var fechaVal = pick(d, "dateTime", "fecha", "lastCheckDateTime", "createdAt");
     var horaVal = pick(d, "hora");
@@ -2424,43 +2767,11 @@
       platesMap.set(pl, (platesMap.get(pl) || 0) + 1);
     });
 
-    var cfgFb = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
-    var fallbackRaw = cfgFb.planilladoParkingIdsFallback || [];
-    var fallbackList = [];
-    var seenFallback = new Set();
-    fallbackRaw.forEach(function (x) {
-      var id = String(x).trim();
-      if (!id || seenFallback.has(id)) return;
-      seenFallback.add(id);
-      fallbackList.push(id);
-    });
-    var inFallbackSet = new Set(fallbackList);
-    var orderedSedeIds = fallbackList.slice();
-    var extraSedeIds = [];
-    byParkingDocId.forEach(function (_, sedeId) {
-      if (!inFallbackSet.has(sedeId)) extraSedeIds.push(sedeId);
-    });
-    extraSedeIds.sort(function (a, b) {
-      return a.localeCompare(b, "es");
-    });
-    extraSedeIds.forEach(function (id) {
-      orderedSedeIds.push(id);
-    });
-
-    var otros = Array.from(rows.values()).filter(function (r) {
-      if (!r.fullPath) return false;
-      if (pathUnderPlanilladoTree(r.fullPath)) return false;
-      if (r.fullPath.indexOf(PLANILLADO_OLD + "/") === 0) return false;
-      return plateLabel(r).length > 0;
-    });
-    var byStationOtros = new Map();
-    otros.forEach(function (r) {
-      var st = stationLabelForRow(r) + " · otros";
-      var pl = plateLabel(r);
-      if (!byStationOtros.has(st)) byStationOtros.set(st, new Map());
-      var pm = byStationOtros.get(st);
-      pm.set(pl, (pm.get(pl) || 0) + 1);
-    });
+    var mergedSedes = mergeParkingPlatesByCanonicalSede(
+      byParkingDocId,
+      getPlanilladoParkingIds()
+    );
+    var orderedSedeIds = mergedSedes.orderedIds;
 
     function renderStationCardsOrdered(sedeIdsOrdered, getPlateMap) {
       if (!sedeIdsOrdered.length) return "";
@@ -2471,6 +2782,7 @@
             return a.localeCompare(b, "es");
           });
           var count = plates.length;
+          var label = sedeDisplayLabel(st);
           var chips = plates
             .map(function (p) {
               var n = plateMap.get(p);
@@ -2484,7 +2796,7 @@
                 '<span class="station-chip" role="button" tabindex="0" data-placa="' +
                 escAttr(p) +
                 '" title="' +
-                escAttr(st + " · " + p + " · toque para detalle") +
+                escAttr(label + " · " + p + " · toque para detalle") +
                 '">' +
                 esc(p) +
                 dup +
@@ -2495,9 +2807,9 @@
           return (
             '<div class="station-card">' +
             '<h4 title="' +
-            escAttr(st) +
+            escAttr(label + (label !== st ? " · " + st : "")) +
             '">' +
-            esc(st) +
+            esc(label) +
             ' <span style="color:#888;font-weight:400;font-size:11px;">(' +
             count +
             ")</span></h4>" +
@@ -2511,27 +2823,16 @@
     }
 
     var htmlMain = renderStationCardsOrdered(orderedSedeIds, function (sid) {
-      return byParkingDocId.get(sid);
+      return mergedSedes.bySede.get(sid);
     });
-    var htmlOtros = byStationOtros.size
-      ? '<div style="grid-column:1/-1;margin:6px 0 4px;font-size:12px;color:#999;">Registros fuera del árbol «planillado» (misma base)</div>' +
-        renderStationCardsOrdered(
-          Array.from(byStationOtros.keys()).sort(function (a, b) {
-            return a.localeCompare(b, "es");
-          }),
-          function (k) {
-            return byStationOtros.get(k);
-          }
-        )
-      : "";
 
-    if (!htmlMain && !htmlOtros) {
+    if (!htmlMain) {
       grid.innerHTML =
         '<p style="color:#666;font-size:13px;margin:0;padding:8px 0;">No hay placas agrupadas por estacionamiento por el momento.</p>';
       return;
     }
 
-    grid.innerHTML = htmlMain + htmlOtros;
+    grid.innerHTML = htmlMain;
   }
 
   function renderPlacasList() {
@@ -2543,10 +2844,6 @@
     var soloPlanillado = all.filter(function (r) {
       return r.fullPath && pathUnderPlanilladoTree(r.fullPath);
     });
-    var legacy = all.filter(function (r) {
-      return r.fullPath && r.fullPath.indexOf(PLANILLADO_OLD + "/") === 0;
-    });
-
     var byPlate = new Map();
     soloPlanillado.forEach(function (r) {
       var p = plateLabel(r);
@@ -2580,6 +2877,9 @@
           planilladoRootDocCount +
           " sede(s) en «planillado», pero aún no se detectan placas en las subcolecciones. Verifique la aplicación de campo o los datos en Firebase.";
       }
+      if (planilladoLastCgError) {
+        msg += " · " + planilladoLastCgError;
+      }
     } else {
       msg =
         plates.length +
@@ -2590,14 +2890,6 @@
       }
       if (soloPlanillado.length !== plates.length) {
         msg += " · " + soloPlanillado.length + " registro(s) en total";
-      }
-      if (legacy.length) {
-        msg +=
-          " · +" +
-          legacy.length +
-          " en «" +
-          PLANILLADO_OLD +
-          "» (detalle en la tabla inferior)";
       }
       if (plates.length) {
         msg += " · toque una placa para ver el vehículo";
@@ -2734,7 +3026,9 @@
     fotoGalleryRegistry.clear();
     attachDiscoveredSubcollectionsFromPaths();
     attachPlanilladoParkingsDiscoveredFromRows();
-    var list = Array.from(rows.values());
+    var list = Array.from(rows.values()).filter(function (r) {
+      return r.fullPath && pathUnderPlanilladoTree(r.fullPath);
+    });
     list.sort(function (a, b) {
       var tb = recencyMillis(b.data);
       var ta = recencyMillis(a.data);
@@ -2885,6 +3179,7 @@
       rows.delete(key);
       nestedDiscoveredPaths.delete(key);
     } else {
+      registerPlanilladoIdsFromPath(key);
       rows.set(key, {
         stationId: parsed.stationId,
         operarioId: parsed.operarioId,
@@ -2933,15 +3228,19 @@
 
   function detachParkingListeners(rootCol, parkingId) {
     detachNestedListenersUnderPrefix(rootCol + "/" + parkingId + "/");
-    var inner = parkingListeners.get(parkingStorageKey(rootCol, parkingId));
+    var pk = parkingStorageKey(rootCol, parkingId);
+    var inner = parkingListeners.get(pk);
     if (inner) {
       inner.forEach(function (unsub) {
         unsub();
       });
-      parkingListeners.delete(parkingStorageKey(rootCol, parkingId));
+      parkingListeners.delete(pk);
     }
+    restPlanilladoSedeKeys.delete(pk);
+    if (parkingId) delete livePlanilladoRootIds[parkingId];
     removeRowsForParking(rootCol, parkingId);
     flushRender();
+    scheduleRender();
   }
 
   function attachNestedCollectionListeners(docRef) {
@@ -3178,11 +3477,14 @@
             );
             ids.forEach(function (parkingId) {
               var pid = String(parkingId).trim();
+              if (pid) livePlanilladoRootIds[pid] = true;
               restPlanilladoSedeKeys.add(
                 parkingStorageKey(rootCol, pid)
               );
               refreshParkingSubcollections(rootCol, pid);
             });
+            rebuildLivePlanilladoRootIds();
+            scheduleRender();
             return ids.length;
           })
           .catch(function (err) {
@@ -3204,20 +3506,18 @@
   }
 
   function subcollectionsFallbackForParking(parkingId) {
-    var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
+    var cfg = getCfgFb();
     var pid = String(parkingId || "").trim();
-    var out = [];
+    var out = getPlanilladoSubcollectionIds().slice();
     var byPark = cfg.planilladoParkingSubcollectionsFallback;
     if (byPark && typeof byPark === "object" && byPark[pid]) {
-      out = out.concat(byPark[pid]);
+      byPark[pid].forEach(function (cid) {
+        if (cid && out.indexOf(cid) === -1) out.push(cid);
+      });
     }
     var perSede = cfg.planilladoParkingOperarios;
     if (perSede && typeof perSede === "object" && perSede[pid]) {
-      out = out.concat(perSede[pid]);
-    }
-    var forAll = cfg.planilladoDefaultSubcollectionsForAllParkings;
-    if (Array.isArray(forAll)) {
-      forAll.forEach(function (cid) {
+      perSede[pid].forEach(function (cid) {
         if (cid && out.indexOf(cid) === -1) out.push(cid);
       });
     }
@@ -3329,13 +3629,14 @@
         }
       },
       function (err) {
+        planilladoLastCgError =
+          "collectionGroup(registros): " + (err.code || "") + " — " + (err.message || err);
         logLine(
-          "collectionGroup(registros) ERROR: " +
-            err.code +
-            " — " +
-            err.message +
+          "ERROR " +
+            planilladoLastCgError +
             " · Suele ser reglas: permite leer consultas sobre collectionGroup «registros» para usuarios autenticados."
         );
+        scheduleRender();
       }
     );
     collectionGroupUnsubs.push(unsub);
@@ -3347,14 +3648,10 @@
    * el documento padre de la sede ni figure en planilladoParkingIdsFallback.
    */
   function attachPlanilladoOperatorCollectionGroups() {
-    var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
-    var subs = cfg.planilladoDefaultSubcollectionsForAllParkings || [];
-    var seen = {};
+    var subs = getPlanilladoSubcollectionIds();
     subs.forEach(function (cidRaw) {
       var cid = String(cidRaw).trim();
-      if (!cid || seen[cid]) return;
-      seen[cid] = true;
-      if (cid === SUB_REGISTROS) return;
+      if (!cid || cid === SUB_REGISTROS || operatorCollectionGroupUnsubs[cid]) return;
       var unsub = db.collectionGroup(cid).onSnapshot(
         function (snap) {
           snap.docChanges().forEach(function (ch) {
@@ -3371,19 +3668,19 @@
           }
         },
         function (err) {
+          planilladoLastCgError =
+            "collectionGroup(" + cid + "): " + (err.code || "") + " — " + (err.message || err);
           logLine(
-            "collectionGroup(" +
-              cid +
-              ") ERROR: " +
-              err.code +
-              " — " +
-              err.message +
+            "ERROR " +
+              planilladoLastCgError +
               " · Reglas/index: permite leer collectionGroup «" +
               cid +
               "» (Firestore puede pedir crear índice compuesto en el enlace del error)."
           );
+          scheduleRender();
         }
       );
+      operatorCollectionGroupUnsubs[cid] = unsub;
       collectionGroupUnsubs.push(unsub);
     });
   }
@@ -3424,6 +3721,8 @@
           stationsSeenPairs.forEach(function (p) {
             if (stationsSeen.indexOf(p.id) === -1) stationsSeen.push(p.id);
           });
+          rebuildLivePlanilladoRootIds();
+          refreshAllPlanilladoParkingListeners();
 
           var total = PLANILLADO_ROOT_COLS.reduce(function (sum, rc) {
             return sum + (rootSnapCounts[rc] !== undefined ? rootSnapCounts[rc] : 0);
@@ -3462,21 +3761,8 @@
       );
     });
 
-    var fb = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
-    var fallbackIds = fb.planilladoParkingIdsFallback;
-    if (Array.isArray(fallbackIds) && fallbackIds.length) {
-      logLine(
-        "Sedes fallback (firebase-config planilladoParkingIdsFallback): " +
-          fallbackIds.join(", ")
-      );
-      PLANILLADO_ROOT_COLS.forEach(function (rootCol) {
-        fallbackIds.forEach(function (parkingId) {
-          var pid = String(parkingId).trim();
-          if (!pid) return;
-          refreshParkingSubcollections(rootCol, pid);
-        });
-      });
-    }
+    attachRealtimeCatalogListeners();
+    bootstrapPlanilladoFromCollectionGroups();
 
     db.collection(PLANILLADO_OLD).onSnapshot(
       function (snap) {

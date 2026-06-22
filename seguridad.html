@@ -312,6 +312,11 @@
       background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
       color: #fff;
     }
+    .sec-global-toolbar button.gc-btn-firestore-on {
+      border-color: #2e7d32;
+      background: linear-gradient(180deg, #43a047 0%, #2e7d32 100%);
+      color: #fff;
+    }
     #gc-status {
       font-size: 13px;
       color: #94a3b8;
@@ -596,6 +601,119 @@
       padding: 10px 12px 12px;
       max-height: min(42vh, 380px);
       overflow-y: auto;
+    }
+    .gc-payment-sede {
+      background: #141416;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 14px 16px 12px;
+      margin-bottom: 16px;
+      border-left: 3px solid #43a047;
+    }
+    .gc-payment-sede[hidden] {
+      display: none !important;
+    }
+    .gc-payment-sede-head h3 {
+      margin: 0 0 6px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #e8eaef;
+    }
+    .gc-payment-sede-head p {
+      margin: 0 0 10px;
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.5;
+    }
+    .gc-payment-sede-summary {
+      display: block;
+      font-size: 12px;
+      color: #a5d6a7;
+      margin-bottom: 10px;
+    }
+    .gc-payment-sede-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .gc-payment-sede-actions input[type="search"] {
+      flex: 1;
+      min-width: 160px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #1a1a1e;
+      color: #eee;
+      font-size: 12px;
+      font-family: inherit;
+    }
+    .gc-payment-sede-actions button {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #222;
+      color: #ccc;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .gc-payment-sede-actions button:hover {
+      background: #333;
+    }
+    .gc-payment-sede-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: min(36vh, 320px);
+      overflow-y: auto;
+      display: grid;
+      gap: 6px;
+    }
+    .gc-payment-sede-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #1a1a1e;
+    }
+    .gc-payment-sede-item.is-hidden {
+      border-color: rgba(229, 115, 115, 0.35);
+      background: rgba(229, 115, 115, 0.08);
+    }
+    .gc-payment-sede-item.is-visible {
+      border-color: rgba(76, 175, 80, 0.25);
+    }
+    .gc-payment-sede-label {
+      min-width: 0;
+      flex: 1;
+    }
+    .gc-payment-sede-label strong {
+      display: block;
+      font-size: 13px;
+      color: #e8eaef;
+    }
+    .gc-payment-sede-label code {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+    .gc-payment-sede-hide {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #cbd5e1;
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    .gc-payment-sede-hide input {
+      accent-color: #e57373;
     }
     .gc-panel--admin .gc-panel-head {
       border-left: 3px solid #ab47bc;
@@ -986,7 +1104,28 @@
         <div class="sec-global-toolbar">
           <button type="button" id="gc-btn-reload">Recargar</button>
           <button type="button" class="sec-btn-accent" id="gc-btn-save">Guardar cambios</button>
+          <button type="button" class="gc-btn-firestore-on" id="gc-btn-payment-point-on" title="Escribe paymentPointVisible: true en Firestore (raíz y featureVisibility)">
+            Activar punto de pago
+          </button>
           <span id="gc-status" role="status"></span>
+        </div>
+        <div class="gc-payment-sede" id="gc-payment-sede" hidden>
+          <header class="gc-payment-sede-head">
+            <h3>💳 Punto de pago por sede</h3>
+            <p>
+              Con el punto de pago <strong>activado globalmente</strong>, marque las sedes donde debe
+              <strong>ocultarse</strong> en la app móvil. Se guarda en Firestore como
+              <code>paymentPointHiddenSedes</code> (lista de IDs de sede).
+            </p>
+            <span id="gc-payment-sede-summary" class="gc-payment-sede-summary" aria-live="polite">—</span>
+            <div class="gc-payment-sede-actions">
+              <input type="search" id="gc-payment-sede-filter" placeholder="Buscar sede por nombre o código…" autocomplete="off" />
+              <button type="button" id="gc-btn-payment-sede-show-all">Mostrar en todas</button>
+              <button type="button" id="gc-btn-payment-sede-hide-all">Ocultar en todas</button>
+            </div>
+          </header>
+          <div id="gc-payment-sede-empty" class="sec-global-empty" hidden>Cargando sedes…</div>
+          <ul class="gc-payment-sede-list" id="gc-payment-sede-list"></ul>
         </div>
         <div class="gc-controls">
           <div class="gc-controls-row">
@@ -1240,7 +1379,9 @@
   var cfg = typeof firebaseConfig !== "undefined" ? firebaseConfig : {};
   var COL = cfg.appSettingsCollection || "app_settings";
   var DOC_ID = cfg.globalConfigDocId || "global_config";
+  var SEDES_COL = cfg.sedesCollection || "sedes";
   var FEATURE_MAP_KEY = "featureVisibility";
+  var PAYMENT_HIDDEN_SEDES_KEY = "paymentPointHiddenSedes";
   var EXTRA_FEATURE_MAP_KEYS = [
     "featureVisibilityPending",
     "pendingFeatureVisibility",
@@ -1301,6 +1442,7 @@
     "showBiometricLockButton",
     "showDeleteButtonsForOperators",
     "syncButtonVisible",
+    "paymentPointVisible",
   ];
 
   /**
@@ -1311,6 +1453,7 @@
     "showBiometricLockButton",
     "showDeleteButtonsForOperators",
     "syncButtonVisible",
+    "paymentPointVisible",
   ];
 
   var panelsEl = document.getElementById("gc-panels");
@@ -1336,6 +1479,17 @@
   var gcRootBaseline = {};
   var gcSeenKeys = {};
   var gcNewKeysHighlight = {};
+  var gcSedesUnsub = null;
+  var gcSedeDocs = [];
+  var paymentHiddenBaseline = [];
+  var paymentHiddenPending = {};
+  var paymentSedeFilter = "";
+
+  var paymentSedePanelEl = document.getElementById("gc-payment-sede");
+  var paymentSedeListEl = document.getElementById("gc-payment-sede-list");
+  var paymentSedeEmptyEl = document.getElementById("gc-payment-sede-empty");
+  var paymentSedeSummaryEl = document.getElementById("gc-payment-sede-summary");
+  var paymentSedeFilterEl = document.getElementById("gc-payment-sede-filter");
 
   var gateEl = document.getElementById("gc-pass-gate");
   var gatePassInput = document.getElementById("gc-gate-password");
@@ -1358,6 +1512,12 @@
       desc:
         "Confirme su contraseña de administración para guardar los cambios en Firestore.",
       confirm: "Guardar cambios",
+    },
+    paymentPoint: {
+      title: "Activar punto de pago",
+      desc:
+        "Se actualizará Firestore (app_settings/global_config) con paymentPointVisible: true en la raíz del documento y dentro de featureVisibility.",
+      confirm: "Activar en Firestore",
     },
   };
 
@@ -1413,6 +1573,7 @@
     showBiometricLockButton: "Botón bloqueo biométrico",
     showDeleteButtonsForOperators: "Botones eliminar operarios",
     syncButtonVisible: "Botón sincronizar visible",
+    paymentPointVisible: "Punto de pago visible",
   };
 
   var FEATURE_GROUPS = [
@@ -1422,6 +1583,7 @@
     { id: "section", prefix: "section_", title: "Secciones checklist", icon: "✓" },
     { id: "flags", prefix: "show", title: "Opciones adicionales", icon: "🔧" },
     { id: "sync", prefix: "sync", title: "Sincronización", icon: "⟳" },
+    { id: "payment", prefix: "payment", title: "Punto de pago", icon: "💳" },
     { id: "other", prefix: "", title: "Otros", icon: "◇" },
   ];
 
@@ -1469,7 +1631,8 @@
 
   function openPasswordGate(mode) {
     if (!gateEl) return;
-    gcGateMode = mode === "save" ? "save" : "enter";
+    gcGateMode =
+      mode === "save" ? "save" : mode === "paymentPoint" ? "paymentPoint" : "enter";
     var copy = GC_GATE_COPY[gcGateMode] || GC_GATE_COPY.enter;
     if (gateTitleEl) gateTitleEl.textContent = copy.title;
     if (gateDescEl) gateDescEl.textContent = copy.desc;
@@ -1525,6 +1688,220 @@
       gcUnsub = null;
     }
     setLivePill(false);
+  }
+
+  function normalizeSedeId(id) {
+    return String(id || "").trim();
+  }
+
+  function readPaymentHiddenSedesFromDoc(data) {
+    data = data || {};
+    var raw = data[PAYMENT_HIDDEN_SEDES_KEY];
+    if (!Array.isArray(raw)) return [];
+    var out = [];
+    raw.forEach(function (id) {
+      var s = normalizeSedeId(id);
+      if (s && out.indexOf(s) < 0) out.push(s);
+    });
+    return out.sort();
+  }
+
+  function hiddenSedeMapFromList(list) {
+    var m = {};
+    (list || []).forEach(function (id) {
+      var s = normalizeSedeId(id);
+      if (s) m[s] = true;
+    });
+    return m;
+  }
+
+  function getPaymentHiddenSedesPendingList() {
+    return Object.keys(paymentHiddenPending)
+      .filter(function (k) {
+        return paymentHiddenPending[k];
+      })
+      .sort();
+  }
+
+  function paymentSedeHasChanges() {
+    var pendingList = getPaymentHiddenSedesPendingList();
+    if (pendingList.length !== paymentHiddenBaseline.length) return true;
+    for (var i = 0; i < pendingList.length; i++) {
+      if (paymentHiddenBaseline.indexOf(pendingList[i]) < 0) return true;
+    }
+    return false;
+  }
+
+  function isPaymentHiddenForSede(sedeId) {
+    return !!paymentHiddenPending[normalizeSedeId(sedeId)];
+  }
+
+  function setPaymentHiddenForSede(sedeId, hidden) {
+    var id = normalizeSedeId(sedeId);
+    if (!id) return;
+    if (hidden) paymentHiddenPending[id] = true;
+    else delete paymentHiddenPending[id];
+    markGcDirty();
+    updatePaymentSedeSummary();
+  }
+
+  function mergePaymentSedeFromDom() {
+    if (!paymentSedeListEl) return;
+    paymentSedeListEl.querySelectorAll("input[data-gc-payment-sede]").forEach(function (cb) {
+      var id = normalizeSedeId(cb.getAttribute("data-gc-payment-sede"));
+      if (!id) return;
+      if (cb.checked) paymentHiddenPending[id] = true;
+      else delete paymentHiddenPending[id];
+    });
+  }
+
+  function updatePaymentSedeSummary(globalOn) {
+    if (!paymentSedeSummaryEl) return;
+    if (globalOn === undefined) globalOn = getToggleValue("paymentPointVisible");
+    var hiddenCount = getPaymentHiddenSedesPendingList().length;
+    var total = gcSedeDocs.length;
+    if (!globalOn) {
+      paymentSedeSummaryEl.textContent =
+        "El punto de pago está desactivado globalmente; permanece oculto en todas las sedes.";
+      return;
+    }
+    paymentSedeSummaryEl.textContent =
+      hiddenCount +
+      " de " +
+      total +
+      " sede(s) con punto de pago oculto · Firestore: " +
+      PAYMENT_HIDDEN_SEDES_KEY;
+  }
+
+  function renderPaymentSedePanel() {
+    if (!paymentSedePanelEl || !paymentSedeListEl) return;
+    if (!gcUnlocked) {
+      paymentSedePanelEl.hidden = true;
+      return;
+    }
+    paymentSedePanelEl.hidden = false;
+    paymentSedeListEl.innerHTML = "";
+
+    var sedes = gcSedeDocs.slice().sort(function (a, b) {
+      var na = String((a.data() || {}).nombre || "").trim() || a.id;
+      var nb = String((b.data() || {}).nombre || "").trim() || b.id;
+      return na.localeCompare(nb, "es", { sensitivity: "base" });
+    });
+
+    var q = paymentSedeFilter.toLowerCase();
+    var shown = 0;
+    sedes.forEach(function (docSnap) {
+      var id = docSnap.id;
+      var data = docSnap.data() || {};
+      var nombre = String(data.nombre || "").trim() || id;
+      var haystack = (nombre + " " + id).toLowerCase();
+      if (q && haystack.indexOf(q) < 0) return;
+      shown++;
+
+      var hidden = isPaymentHiddenForSede(id);
+      var li = document.createElement("li");
+      li.className =
+        "gc-payment-sede-item " + (hidden ? "is-hidden" : "is-visible");
+
+      var label = document.createElement("div");
+      label.className = "gc-payment-sede-label";
+      label.innerHTML =
+        "<strong>" + nombre + "</strong><code>" + id + "</code>";
+
+      var hideLabel = document.createElement("label");
+      hideLabel.className = "gc-payment-sede-hide";
+      hideLabel.title = hidden
+        ? "Punto de pago oculto en esta sede"
+        : "Punto de pago visible en esta sede";
+      hideLabel.innerHTML =
+        '<input type="checkbox" data-gc-payment-sede="' +
+        id +
+        '" ' +
+        (hidden ? "checked" : "") +
+        ' /> Ocultar';
+
+      var cb = hideLabel.querySelector("input");
+      cb.addEventListener("change", function () {
+        setPaymentHiddenForSede(id, cb.checked);
+        li.classList.toggle("is-hidden", cb.checked);
+        li.classList.toggle("is-visible", !cb.checked);
+        hideLabel.title = cb.checked
+          ? "Punto de pago oculto en esta sede"
+          : "Punto de pago visible en esta sede";
+        setStatus("Excepciones por sede sin guardar · tiempo real activo");
+      });
+
+      li.appendChild(label);
+      li.appendChild(hideLabel);
+      paymentSedeListEl.appendChild(li);
+    });
+
+    if (paymentSedeEmptyEl) {
+      if (!gcSedeDocs.length) {
+        paymentSedeEmptyEl.hidden = false;
+        paymentSedeEmptyEl.textContent =
+          "No hay sedes en Firestore (colección «" + SEDES_COL + "»).";
+      } else if (!shown) {
+        paymentSedeEmptyEl.hidden = false;
+        paymentSedeEmptyEl.textContent = "Ninguna sede coincide con la búsqueda.";
+      } else {
+        paymentSedeEmptyEl.hidden = true;
+      }
+    }
+    updatePaymentSedeSummary();
+  }
+
+  function syncPaymentHiddenFromDoc(data, preserveLocal) {
+    var list = readPaymentHiddenSedesFromDoc(data);
+    paymentHiddenBaseline = list.slice();
+    if (!preserveLocal) {
+      paymentHiddenPending = hiddenSedeMapFromList(list);
+    }
+    renderPaymentSedePanel();
+  }
+
+  function stopSedesRealtime() {
+    if (gcSedesUnsub) {
+      gcSedesUnsub();
+      gcSedesUnsub = null;
+    }
+  }
+
+  function startSedesRealtime() {
+    stopSedesRealtime();
+    if (!auth.currentUser || !gcUnlocked) return;
+    gcSedesUnsub = db.collection(SEDES_COL).onSnapshot(
+      function (snap) {
+        gcSedeDocs = [];
+        snap.forEach(function (d) {
+          gcSedeDocs.push(d);
+        });
+        renderPaymentSedePanel();
+      },
+      function (err) {
+        console.warn("[global-config] sedes onSnapshot", err);
+        if (paymentSedeEmptyEl) {
+          paymentSedeEmptyEl.hidden = false;
+          paymentSedeEmptyEl.textContent =
+            "Error al cargar sedes: " + (err.message || err.code || err);
+        }
+      }
+    );
+  }
+
+  function setAllPaymentSedeHidden(hidden) {
+    gcSedeDocs.forEach(function (docSnap) {
+      var id = normalizeSedeId(docSnap.id);
+      if (!id) return;
+      if (hidden) paymentHiddenPending[id] = true;
+      else delete paymentHiddenPending[id];
+    });
+    markGcDirty();
+    renderPaymentSedePanel();
+    setStatus(
+      (hidden ? "Ocultar" : "Mostrar") +
+        " punto de pago en todas las sedes · sin guardar"
+    );
   }
 
   function flattenFeatureMap(map, prefix) {
@@ -1618,6 +1995,7 @@
         }
       });
       renderToggles(data);
+      syncPaymentHiddenFromDoc(data, paymentSedeHasChanges());
       var msg =
         "En vivo · " +
         toggleKeys.length +
@@ -1638,6 +2016,7 @@
     if (fromRemote) gcEditedKeys = {};
     pendingStates = {};
     renderToggles(data);
+    syncPaymentHiddenFromDoc(data, false);
     if (fromRemote) {
       setStatus(
         "Sincronizado en tiempo real · " +
@@ -1653,6 +2032,7 @@
     stopGcRealtime();
     if (!auth.currentUser || !gcUnlocked) return;
     setLivePill(true);
+    startSedesRealtime();
     gcUnsub = db
       .collection(COL)
       .doc(DOC_ID)
@@ -1990,6 +2370,7 @@
       updateSummary();
       markGcDirty();
       setStatus("Cambios sin guardar · tiempo real sigue activo para opciones nuevas");
+      if (key === "paymentPointVisible") updatePaymentSedeSummary(cb.checked);
     }
     cb.addEventListener("change", onToggleInput);
     cb.addEventListener("input", onToggleInput);
@@ -2129,7 +2510,12 @@
       return Promise.resolve();
     }
     mergeDomIntoPending();
-    if (!gcLocalDirty && !Object.keys(gcEditedKeys).length) {
+    mergePaymentSedeFromDom();
+    if (
+      !gcLocalDirty &&
+      !Object.keys(gcEditedKeys).length &&
+      !paymentSedeHasChanges()
+    ) {
       setStatus("No hay cambios para guardar.");
       return Promise.resolve();
     }
@@ -2137,7 +2523,123 @@
     return Promise.resolve();
   }
 
-  function writeGlobalConfigDoc(newFeatureMap, updatedBy) {
+  function requestEnablePaymentPoint() {
+    if (!auth.currentUser) {
+      setStatus("Inicie sesión.", true);
+      return;
+    }
+    if (!gcUnlocked) {
+      setStatus("Desbloquee la pantalla con su contraseña primero.", true);
+      return;
+    }
+    openPasswordGate("paymentPoint");
+  }
+
+  function writePaymentPointVisibleTrue(updatedBy) {
+    var ref = db.collection(COL).doc(DOC_ID);
+    var payload = {
+      paymentPointVisible: true,
+      featureVisibility: { paymentPointVisible: true },
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedBy: String(updatedBy || "").trim() || "portal_web",
+    };
+    console.info("[global-config] activar punto de pago", COL + "/" + DOC_ID, payload);
+    return ref.set(payload, { merge: true });
+  }
+
+  function doEnablePaymentPointVisible() {
+    if (!auth.currentUser) {
+      setStatus("Sesión expirada. Inicie sesión con Google de nuevo.", true);
+      return Promise.resolve();
+    }
+
+    var sess =
+      window.LuganoAdminAuth && window.LuganoAdminAuth.getAdminSession
+        ? window.LuganoAdminAuth.getAdminSession()
+        : null;
+    var updatedBy =
+      (sess && sess.nombre) ||
+      auth.currentUser.displayName ||
+      auth.currentUser.email ||
+      auth.currentUser.uid ||
+      "portal_web";
+
+    setStatus("Activando paymentPointVisible en " + COL + "/" + DOC_ID + "…");
+    gcSaveInProgress = true;
+    setLivePill(false);
+    stopGcRealtime();
+
+    return writePaymentPointVisibleTrue(updatedBy)
+      .then(function () {
+        if (db.waitForPendingWrites) {
+          return db.waitForPendingWrites();
+        }
+      })
+      .then(function () {
+        var ref = db.collection(COL).doc(DOC_ID);
+        return ref.get({ source: "server" }).catch(function () {
+          return ref.get();
+        });
+      })
+      .then(function (snap) {
+        if (!snap.exists) {
+          throw new Error("No se pudo verificar el guardado en Firestore.");
+        }
+        var docData = snap.data() || {};
+        var rootOk = readToggleValue(docData.paymentPointVisible) === true;
+        var fvOk =
+          readToggleValue(
+            docData[FEATURE_MAP_KEY] && docData[FEATURE_MAP_KEY].paymentPointVisible
+          ) === true;
+        setToggleValue("paymentPointVisible", true);
+        delete gcEditedKeys.paymentPointVisible;
+        var saved = extractFeatureMap(docData);
+        syncSaveBaseline(saved, docData);
+        applyRemoteDoc(docData, false);
+        renderToggles(rawDoc);
+        if (!rootOk || !fvOk) {
+          console.warn("[global-config] paymentPointVisible incompleto", {
+            raiz: docData.paymentPointVisible,
+            featureVisibility: docData[FEATURE_MAP_KEY],
+          });
+          setStatus(
+            "Escritura enviada, pero paymentPointVisible no quedó en true en " +
+              (!rootOk ? "raíz" : "featureVisibility") +
+              ". Revise Firebase Console.",
+            true
+          );
+        } else {
+          setStatus(
+            "paymentPointVisible activado en Firestore (raíz y featureVisibility)."
+          );
+        }
+        var toast = document.getElementById("sec-toast");
+        if (toast) {
+          toast.textContent = rootOk && fvOk
+            ? "Punto de pago activado (paymentPointVisible: true)."
+            : "Escritura enviada; verifique paymentPointVisible en Firebase Console.";
+          toast.classList.add("is-visible");
+          setTimeout(function () {
+            toast.classList.remove("is-visible");
+          }, 3200);
+        }
+      })
+      .catch(function (err) {
+        var msg = err.message || err.code || String(err);
+        if (err && err.code === "permission-denied") {
+          msg +=
+            " — Ejecute: firebase deploy --only firestore:rules (colección app_settings).";
+        }
+        setStatus("Error al activar punto de pago: " + msg, true);
+        console.error("[global-config] paymentPointVisible", err);
+      })
+      .finally(function () {
+        gcSaveInProgress = false;
+        if (gcUnlocked) startGcRealtime();
+      });
+  }
+
+  function writeGlobalConfigDoc(newFeatureMap, updatedBy, extraRoot) {
     var ref = db.collection(COL).doc(DOC_ID);
     var rootPayload = {};
     ROOT_LEGACY_TOGGLE_KEYS.forEach(function (k) {
@@ -2151,9 +2653,15 @@
     Object.keys(rootPayload).forEach(function (k) {
       fullPayload[k] = rootPayload[k];
     });
+    if (extraRoot && typeof extraRoot === "object") {
+      Object.keys(extraRoot).forEach(function (k) {
+        fullPayload[k] = extraRoot[k];
+      });
+    }
     console.info("[global-config] batch guardar", COL + "/" + DOC_ID, {
       raiz: rootPayload,
       featureVisibility: newFeatureMap,
+      extraRoot: extraRoot || null,
     });
     var batch = db.batch();
     batch.set(ref, fullPayload, { merge: true });
@@ -2171,7 +2679,12 @@
       return Promise.resolve();
     }
     mergeDomIntoPending();
-    if (!gcLocalDirty && !Object.keys(gcEditedKeys).length) {
+    mergePaymentSedeFromDom();
+    if (
+      !gcLocalDirty &&
+      !Object.keys(gcEditedKeys).length &&
+      !paymentSedeHasChanges()
+    ) {
       setStatus("No hay cambios para guardar.");
       return Promise.resolve();
     }
@@ -2180,14 +2693,9 @@
     if (!changedKeys.length && Object.keys(gcEditedKeys).length) {
       changedKeys = Object.keys(gcEditedKeys);
     }
-    if (!changedKeys.length) {
-      changedKeys = collectAllToggleKeyNames();
-    }
+    var expectedHidden = getPaymentHiddenSedesPendingList();
+    var sedeChanged = paymentSedeHasChanges();
 
-    var expected = {};
-    changedKeys.forEach(function (k) {
-      expected[k] = !!getToggleValue(k);
-    });
     var newFeatureMap = buildFlatFeatureMapForSave();
 
     var sess =
@@ -2206,8 +2714,26 @@
       if (newFeatureMap[k]) activos++;
     });
 
+    var expected = {};
+    changedKeys.forEach(function (k) {
+      expected[k] = !!getToggleValue(k);
+    });
+
+    var saveParts = [];
+    if (changedKeys.length) saveParts.push(changedKeys.length + " interruptor(es)");
+    if (sedeChanged) {
+      saveParts.push(
+        expectedHidden.length + " sede(s) oculta(s) en " + PAYMENT_HIDDEN_SEDES_KEY
+      );
+    }
     setStatus(
-      "Guardando " + changedKeys.length + " cambio(s) en " + COL + "/" + DOC_ID + "…"
+      "Guardando " +
+        (saveParts.length ? saveParts.join(" · ") : "configuración") +
+        " en " +
+        COL +
+        "/" +
+        DOC_ID +
+        "…"
     );
     gcSaveInProgress = true;
     setLivePill(false);
@@ -2215,7 +2741,11 @@
 
     console.info("[global-config] guardando", COL + "/" + DOC_ID, newFeatureMap);
 
-    return writeGlobalConfigDoc(newFeatureMap, updatedBy)
+    return writeGlobalConfigDoc(newFeatureMap, updatedBy, (function () {
+      var extra = {};
+      extra[PAYMENT_HIDDEN_SEDES_KEY] = expectedHidden;
+      return extra;
+    })())
       .then(function () {
         if (db.waitForPendingWrites) {
           return db.waitForPendingWrites();
@@ -2242,9 +2772,17 @@
         var legacyRootFail = ROOT_LEGACY_TOGGLE_KEYS.filter(function (k) {
           return readToggleValue(docData[k]) !== !!newFeatureMap[k];
         });
+        var savedHidden = readPaymentHiddenSedesFromDoc(docData);
+        var hiddenMismatch =
+          savedHidden.length !== expectedHidden.length ||
+          expectedHidden.some(function (id) {
+            return savedHidden.indexOf(id) < 0;
+          });
         clearGcDirty();
         clearNewKeyHighlight();
         syncSaveBaseline(saved, docData);
+        paymentHiddenBaseline = expectedHidden.slice();
+        paymentHiddenPending = hiddenSedeMapFromList(expectedHidden);
         applyRemoteDoc(snap.data() || {}, false);
         if (legacyRootFail.length) {
           console.warn("[global-config] raíz sin actualizar:", legacyRootFail, {
@@ -2265,22 +2803,39 @@
               " clave(s) no coinciden. Revise Firebase Console.",
             true
           );
+        } else if (hiddenMismatch) {
+          console.warn("[global-config] paymentPointHiddenSedes distinto", {
+            esperado: expectedHidden,
+            leido: savedHidden,
+          });
+          setStatus(
+            "Guardado parcial: " +
+              PAYMENT_HIDDEN_SEDES_KEY +
+              " no coincide al re-leer. Revise Firebase Console.",
+            true
+          );
         } else {
           var legacyOk = ROOT_LEGACY_TOGGLE_KEYS.map(function (k) {
             return k + "=" + (docData[k] ? "true" : "false");
           }).join(", ");
+          var sedeMsg = sedeChanged
+            ? " · " + expectedHidden.length + " sede(s) oculta(s)"
+            : "";
           setStatus(
             "Guardado en Firestore · " +
-              changedKeys.length +
-              " cambio(s) · raíz: " +
+              (changedKeys.length || (sedeChanged ? "excepciones por sede" : "sin cambios")) +
+              (changedKeys.length ? " cambio(s)" : "") +
+              sedeMsg +
+              " · raíz: " +
               legacyOk
           );
         }
         var toast = document.getElementById("sec-toast");
         if (toast) {
-          toast.textContent = mismatch.length
-            ? "Guardado enviado; verifique valores en Firebase Console."
-            : "Configuraciones globales guardadas en Firestore.";
+          toast.textContent =
+            mismatch.length || hiddenMismatch
+              ? "Guardado enviado; verifique valores en Firebase Console."
+              : "Configuraciones globales guardadas en Firestore.";
           toast.classList.add("is-visible");
           setTimeout(function () {
             toast.classList.remove("is-visible");
@@ -2324,6 +2879,14 @@
     gcSeenKeys = {};
     gcNewKeysHighlight = {};
     stopGcRealtime();
+    stopSedesRealtime();
+    gcSedeDocs = [];
+    paymentHiddenBaseline = [];
+    paymentHiddenPending = {};
+    paymentSedeFilter = "";
+    if (paymentSedeFilterEl) paymentSedeFilterEl.value = "";
+    if (paymentSedePanelEl) paymentSedePanelEl.hidden = true;
+    if (paymentSedeListEl) paymentSedeListEl.innerHTML = "";
     closePasswordGate();
   }
 
@@ -2341,6 +2904,16 @@
           return doSaveGlobalConfig().catch(function (err) {
             setStatus("Error al guardar: " + (err.message || err.code || err), true);
             console.error("[global-config] save gate", err);
+          });
+        }
+        if (mode === "paymentPoint") {
+          closePasswordGate();
+          return doEnablePaymentPointVisible().catch(function (err) {
+            setStatus(
+              "Error al activar punto de pago: " + (err.message || err.code || err),
+              true
+            );
+            console.error("[global-config] paymentPoint gate", err);
           });
         }
         gcUnlocked = true;
@@ -2385,6 +2958,27 @@
     loadGlobalConfig();
   });
   document.getElementById("gc-btn-save").addEventListener("click", saveGlobalConfig);
+  document
+    .getElementById("gc-btn-payment-point-on")
+    .addEventListener("click", requestEnablePaymentPoint);
+  if (paymentSedeFilterEl) {
+    paymentSedeFilterEl.addEventListener("input", function () {
+      paymentSedeFilter = String(paymentSedeFilterEl.value || "")
+        .trim()
+        .toLowerCase();
+      renderPaymentSedePanel();
+    });
+  }
+  document
+    .getElementById("gc-btn-payment-sede-show-all")
+    .addEventListener("click", function () {
+      setAllPaymentSedeHidden(false);
+    });
+  document
+    .getElementById("gc-btn-payment-sede-hide-all")
+    .addEventListener("click", function () {
+      setAllPaymentSedeHidden(true);
+    });
   document.getElementById("gc-btn-visible-on").addEventListener("click", function () {
     setManyToggles(true, {});
   });

@@ -13,9 +13,8 @@ const firebaseConfig = {
    */
   firestoreDatabaseId: "",
   /**
-   * Opcional: fuerza listeners por sede si falla el listado en raíz o REST.
-   * Las sedes nuevas deberían detectarse solas vía collectionGroup(LugMC421, …),
-   * siempre que el código de operario esté en planilladoDefaultSubcollectionsForAllParkings.
+   * Respaldo opcional si falla el listado en raíz o REST (la UI ya no muestra sedes solo por esta lista).
+   * index.html y estacionamientos.html sincronizan en tiempo real desde planillado + sedes + operators.
    */
   planilladoParkingIdsFallback: [
     "E-110 Amazon",
@@ -36,9 +35,9 @@ const firebaseConfig = {
     "E-50 FUNDONAL"
   ],
   /**
-   * Nombres de subcolección de operario (Lug…): la web escucha collectionGroup de cada uno,
-   * así entran registros de sedes nuevas sin añadirlas arriba. Si la app usa un código nuevo
-   * (p. ej. LugMC999), añádelo aquí.
+   * Nombres de subcolección de operario (Lug… / Pes…): la web escucha collectionGroup de cada uno.
+   * index.html también lee automáticamente los IDs de la colección operators y sedes.
+   * Si la app usa un código nuevo que no esté en operators, añádelo aquí.
    */
   planilladoDefaultSubcollectionsForAllParkings: [
     "registros",
@@ -131,6 +130,8 @@ const firebaseConfig = {
   /**
    * Ajustes globales de la app móvil (seguridad.html).
    * Documento: app_settings/global_config — mapa featureVisibility { clave: bool }.
+   * También en raíz: paymentPointVisible, syncButtonVisible, etc. (app móvil legacy).
+   * Excepciones por sede: paymentPointHiddenSedes: string[] (IDs en colección sedes).
    */
   appSettingsCollection: "app_settings",
   globalConfigDocId: "global_config",
