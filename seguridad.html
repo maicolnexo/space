@@ -1443,6 +1443,8 @@
     "showDeleteButtonsForOperators",
     "syncButtonVisible",
     "paymentPointVisible",
+    "newRecordVisible",
+    "consultRecordVisible",
   ];
 
   /**
@@ -1454,6 +1456,8 @@
     "showDeleteButtonsForOperators",
     "syncButtonVisible",
     "paymentPointVisible",
+    "newRecordVisible",
+    "consultRecordVisible",
   ];
 
   var panelsEl = document.getElementById("gc-panels");
@@ -1574,6 +1578,8 @@
     showDeleteButtonsForOperators: "Botones eliminar operarios",
     syncButtonVisible: "Botón sincronizar visible",
     paymentPointVisible: "Punto de pago visible",
+    newRecordVisible: "Nuevo registro visible",
+    consultRecordVisible: "Consultar registro visible",
   };
 
   var FEATURE_GROUPS = [
@@ -1584,11 +1590,20 @@
     { id: "flags", prefix: "show", title: "Opciones adicionales", icon: "🔧" },
     { id: "sync", prefix: "sync", title: "Sincronización", icon: "⟳" },
     { id: "payment", prefix: "payment", title: "Punto de pago", icon: "💳" },
+    { id: "records", prefix: "newRecord", title: "Registros (app)", icon: "📋" },
+    { id: "recordsConsult", prefix: "consultRecord", title: "Consultar registro", icon: "🔍" },
     { id: "other", prefix: "", title: "Otros", icon: "◇" },
   ];
 
   function isFeatureMetaKey(key) {
     return !!FV_META_KEYS[key];
+  }
+
+  /** Claves que la app móvil lee en la raíz del documento (además de featureVisibility). */
+  function isRootMirroredToggleKey(key) {
+    if (!key) return false;
+    if (ROOT_LEGACY_TOGGLE_KEYS.indexOf(key) >= 0) return true;
+    return /^[a-z][a-zA-Z0-9]*Visible$/.test(key);
   }
 
   function isFeatureToggleKey(key, val) {
@@ -1955,11 +1970,26 @@
         gcSaveBaseline[k] = false;
       }
     });
+    Object.keys(gcSaveBaseline).forEach(function (k) {
+      if (!isRootMirroredToggleKey(k) || Object.prototype.hasOwnProperty.call(gcRootBaseline, k)) return;
+      if (rawDoc && Object.prototype.hasOwnProperty.call(rawDoc, k)) {
+        gcRootBaseline[k] = rawDoc[k];
+        gcSaveBaseline[k] = rawDoc[k];
+      } else {
+        gcRootBaseline[k] = gcSaveBaseline[k];
+      }
+    });
+    Object.keys(rawDoc || {}).forEach(function (k) {
+      if (!isRootMirroredToggleKey(k) || !isToggleField(rawDoc[k])) return;
+      if (Object.prototype.hasOwnProperty.call(gcRootBaseline, k)) return;
+      gcRootBaseline[k] = rawDoc[k];
+      gcSaveBaseline[k] = rawDoc[k];
+    });
   }
 
   function getBaselineToggleValue(key) {
     if (
-      ROOT_LEGACY_TOGGLE_KEYS.indexOf(key) >= 0 &&
+      isRootMirroredToggleKey(key) &&
       Object.prototype.hasOwnProperty.call(gcRootBaseline, key)
     ) {
       return readToggleValue(gcRootBaseline[key]);
@@ -1986,7 +2016,7 @@
         if (!Object.prototype.hasOwnProperty.call(gcSaveBaseline, k)) {
           gcSaveBaseline[k] = remoteFlat[k];
         }
-        if (ROOT_LEGACY_TOGGLE_KEYS.indexOf(k) >= 0 && Object.prototype.hasOwnProperty.call(data, k)) {
+        if (isRootMirroredToggleKey(k) && Object.prototype.hasOwnProperty.call(data, k)) {
           gcRootBaseline[k] = data[k];
           gcSaveBaseline[k] = data[k];
         }
@@ -2188,10 +2218,9 @@
       if (!isToggleField(doc[k])) return;
       if (!Object.prototype.hasOwnProperty.call(flat, k)) flat[k] = doc[k];
     });
-    ROOT_LEGACY_TOGGLE_KEYS.forEach(function (k) {
-      if (Object.prototype.hasOwnProperty.call(doc, k) && isToggleField(doc[k])) {
-        flat[k] = doc[k];
-      }
+    Object.keys(doc).forEach(function (k) {
+      if (!isRootMirroredToggleKey(k) || !isToggleField(doc[k])) return;
+      flat[k] = doc[k];
     });
     delete flat.updatedAt;
     delete flat.updatedBy;
@@ -2200,7 +2229,7 @@
 
   function readToggleFromDoc(doc, key) {
     doc = doc || {};
-    if (ROOT_LEGACY_TOGGLE_KEYS.indexOf(key) >= 0) {
+    if (isRootMirroredToggleKey(key)) {
       if (Object.prototype.hasOwnProperty.call(doc, key) && isToggleField(doc[key])) {
         return readToggleValue(doc[key]);
       }
@@ -2265,6 +2294,9 @@
     });
     ROOT_LEGACY_TOGGLE_KEYS.forEach(function (k) {
       if (gcEditedKeys[k] && changed.indexOf(k) < 0) changed.push(k);
+    });
+    Object.keys(gcEditedKeys || {}).forEach(function (k) {
+      if (isRootMirroredToggleKey(k) && changed.indexOf(k) < 0) changed.push(k);
     });
     return changed;
   }
@@ -2345,7 +2377,7 @@
       '<div class="sec-toggle-label"><strong>' +
       humanLabel(key) +
       (isNew ? ' <span class="gc-new-badge">Nuevo</span>' : "") +
-      (ROOT_LEGACY_TOGGLE_KEYS.indexOf(key) >= 0
+      (isRootMirroredToggleKey(key)
         ? ' <span class="gc-new-badge gc-root-badge">Raíz</span>'
         : "") +
       '</strong><code>' +
@@ -2642,8 +2674,8 @@
   function writeGlobalConfigDoc(newFeatureMap, updatedBy, extraRoot) {
     var ref = db.collection(COL).doc(DOC_ID);
     var rootPayload = {};
-    ROOT_LEGACY_TOGGLE_KEYS.forEach(function (k) {
-      rootPayload[k] = !!newFeatureMap[k];
+    Object.keys(newFeatureMap || {}).forEach(function (k) {
+      if (isRootMirroredToggleKey(k)) rootPayload[k] = !!newFeatureMap[k];
     });
     var fullPayload = {
       featureVisibility: newFeatureMap,
@@ -2764,12 +2796,13 @@
         var docData = snap.data() || {};
         var saved = extractFeatureMap(docData);
         var mismatch = changedKeys.filter(function (k) {
-          if (ROOT_LEGACY_TOGGLE_KEYS.indexOf(k) >= 0) {
+          if (isRootMirroredToggleKey(k)) {
             return readToggleValue(docData[k]) !== expected[k];
           }
           return readToggleValue(saved[k]) !== expected[k];
         });
-        var legacyRootFail = ROOT_LEGACY_TOGGLE_KEYS.filter(function (k) {
+        var legacyRootFail = Object.keys(newFeatureMap).filter(function (k) {
+          if (!isRootMirroredToggleKey(k)) return false;
           return readToggleValue(docData[k]) !== !!newFeatureMap[k];
         });
         var savedHidden = readPaymentHiddenSedesFromDoc(docData);
@@ -2815,9 +2848,12 @@
             true
           );
         } else {
-          var legacyOk = ROOT_LEGACY_TOGGLE_KEYS.map(function (k) {
-            return k + "=" + (docData[k] ? "true" : "false");
-          }).join(", ");
+          var legacyOk = Object.keys(newFeatureMap)
+            .filter(isRootMirroredToggleKey)
+            .map(function (k) {
+              return k + "=" + (docData[k] ? "true" : "false");
+            })
+            .join(", ");
           var sedeMsg = sedeChanged
             ? " · " + expectedHidden.length + " sede(s) oculta(s)"
             : "";

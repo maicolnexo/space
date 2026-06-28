@@ -130,7 +130,7 @@ const firebaseConfig = {
   /**
    * Ajustes globales de la app móvil (seguridad.html).
    * Documento: app_settings/global_config — mapa featureVisibility { clave: bool }.
-   * También en raíz: paymentPointVisible, syncButtonVisible, etc. (app móvil legacy).
+   * También en raíz: paymentPointVisible, newRecordVisible, consultRecordVisible, syncButtonVisible, etc.
    * Excepciones por sede: paymentPointHiddenSedes: string[] (IDs en colección sedes).
    */
   appSettingsCollection: "app_settings",
