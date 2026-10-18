@@ -810,8 +810,10 @@
 </div>
 
 <script src="firebase-config.js"></script>
+<script src="cloudinary-media.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="supabase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 <script>
@@ -1601,6 +1603,10 @@
     }
     function recordUrl(norm) {
       if (!norm) return;
+      if (window.LuganoMedia && typeof LuganoMedia.toDeliveryUrl === "function") {
+        var mapped = LuganoMedia.toDeliveryUrl(norm);
+        if (mapped) norm = mapped;
+      }
       var fixed = sanitizePlanilladoEvidenceUrl(norm);
       if (!fixed || seen[fixed]) return;
       seen[fixed] = true;
@@ -1748,19 +1754,11 @@
   }
 
   function resolveStorageCandidates(candidates) {
-    if (!storage) return Promise.resolve([]);
-    if (!auth.currentUser) return Promise.resolve([]);
-    return Promise.all(
-      candidates.map(function (raw) {
-        var s = String(raw).trim();
-        if (s.toLowerCase().indexOf("gs://") === 0) {
-          return storage.refFromURL(s).getDownloadURL();
-        }
-        return storage.ref(s.replace(/^\/+/, "")).getDownloadURL();
-      })
-    ).catch(function () {
-      return [];
-    });
+    var urls =
+      window.LuganoMedia && typeof LuganoMedia.resolveList === "function"
+        ? LuganoMedia.resolveList(candidates)
+        : [];
+    return Promise.resolve(urls);
   }
 
   function setSlot(el, urlOrNull) {

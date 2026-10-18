@@ -3600,7 +3600,7 @@
         <h2>Evidencia fotográfica · álbumes</h2>
       </div>
       <p style="margin:0 0 14px;font-size:13px;color:#9ca3af;line-height:1.5;max-width:920px;">
-        Álbumes agrupados por <strong>carpeta en Firebase Storage</strong> y por registros de <strong>planillado / Check List</strong> con fotos.
+        Álbumes agrupados por carpeta en <strong>Cloudinary</strong> y por registros de <strong>planillado / Check List</strong> con fotos.
         Incluye rutas típicas como <code style="color:#aed581;">inspection_photos/…</code> y enlaces https del documento.
       </p>
       <div class="esta-evidencia-toolbar">
@@ -4348,8 +4348,10 @@
 </div>
 
   <script src="firebase-config.js"></script>
+  <script src="cloudinary-media.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="supabase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
   <script>
@@ -4475,6 +4477,10 @@
       return null;
     }
     function add(u) {
+      if (window.LuganoMedia && typeof LuganoMedia.toDeliveryUrl === "function") {
+        var mapped = LuganoMedia.toDeliveryUrl(u);
+        if (mapped) u = mapped;
+      }
       if (!u || seen[u]) return;
       seen[u] = true;
       out.push(u);
@@ -4548,13 +4554,12 @@
   }
 
   function resolveStoragePath(raw) {
-    if (!storage || !auth.currentUser) return Promise.reject(new Error("Storage no disponible"));
-    var s = String(raw || "").trim().replace(/^\/+/, "");
-    if (!s) return Promise.reject(new Error("Ruta vacía"));
-    if (s.toLowerCase().indexOf("gs://") === 0) {
-      return storage.refFromURL(s).getDownloadURL();
-    }
-    return storage.ref(s).getDownloadURL();
+    var url =
+      window.LuganoMedia && typeof LuganoMedia.toDeliveryUrl === "function"
+        ? LuganoMedia.toDeliveryUrl(raw)
+        : "";
+    if (!url) return Promise.reject(new Error("Sin URL de Cloudinary"));
+    return Promise.resolve(url);
   }
 
   function plateFromDocData(d, docId) {
@@ -7188,7 +7193,7 @@
 
   async function loadStats() {
     if (!auth.currentUser) return;
-    setLoading("Cargando datos de Firestore…");
+    setLoading("Cargando datos…");
     destroyCharts();
 
     var docs;

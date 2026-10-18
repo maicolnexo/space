@@ -237,6 +237,13 @@
         }
       })
       .then(function () {
+        if (window.__supabaseFirestoreInstalled) return;
+        return loadScript("supabase-firestore.js");
+      })
+      .then(function () {
+        if (typeof window.__installSupabaseFirestore === "function") {
+          window.__installSupabaseFirestore();
+        }
         if (!firebase.auth) {
           return loadScript(AUTH_SDK);
         }

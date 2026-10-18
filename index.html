@@ -994,8 +994,10 @@
 </div>
 
 <script src="firebase-config.js"></script>
+<script src="cloudinary-media.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="supabase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 <script src="lugano-admin-auth.js"></script>
@@ -1692,6 +1694,10 @@
     }
 
     function recordUrl(norm) {
+      if (window.LuganoMedia && typeof LuganoMedia.toDeliveryUrl === "function") {
+        var mapped = LuganoMedia.toDeliveryUrl(norm);
+        if (mapped) norm = mapped;
+      }
       if (!norm || seen[norm]) return;
       seen[norm] = true;
       out.push(norm);
@@ -1811,21 +1817,11 @@
   }
 
   function resolveStorageCandidates(candidates) {
-    if (!storage) {
-      return Promise.reject(new Error("Firebase Storage no está cargado."));
-    }
-    if (!auth.currentUser) {
-      return Promise.reject(new Error("Inicia sesión con Google para cargar fotos desde Storage."));
-    }
-    return Promise.all(
-      candidates.map(function (raw) {
-        var s = String(raw).trim();
-        if (s.toLowerCase().indexOf("gs://") === 0) {
-          return storage.refFromURL(s).getDownloadURL();
-        }
-        return storage.ref(s.replace(/^\/+/, "")).getDownloadURL();
-      })
-    );
+    var urls =
+      window.LuganoMedia && typeof LuganoMedia.resolveList === "function"
+        ? LuganoMedia.resolveList(candidates)
+        : [];
+    return Promise.resolve(urls);
   }
 
   var fotosLightbox = document.getElementById("fotos-lightbox");
@@ -2328,13 +2324,17 @@
       }
       resolveStorageCandidates(entry.storageCandidates)
         .then(function (urls) {
+          if (!urls || !urls.length) {
+            window.alert("No hay una URL de Cloudinary para estas fotos.");
+            return;
+          }
           entry.urls = urls;
           fotoGalleryRegistry.set(path, entry);
           openFotoLightbox(urls, entry.plate);
         })
         .catch(function (err) {
           window.alert(
-            "No se pudieron obtener las URLs de Storage (¿sesión y reglas de lectura?). " +
+            "No se pudieron abrir las fotos en Cloudinary. " +
               (err && err.message ? err.message : String(err))
           );
         })
@@ -2527,8 +2527,8 @@
         ? summarizeMediaButtonLabel(urlsHttp)
         : storageCands.length
           ? storageCands.length === 1
-            ? "Ver foto (Storage)"
-            : "Ver " + storageCands.length + " fotos (Storage)"
+            ? "Ver foto"
+            : "Ver " + storageCands.length + " fotos"
           : "",
       recency: recencyMillis(d),
     };
@@ -3134,13 +3134,13 @@
           '">' +
           esc(
             storageCands.length === 1
-              ? "Ver foto (Storage)"
-              : "Ver " + storageCands.length + " fotos (Storage)"
+              ? "Ver foto"
+              : "Ver " + storageCands.length + " fotos"
           ) +
           "</button>";
       } else if (Array.isArray(fotos) && fotos.length) {
         fotoHtml =
-          '<span class="fotos-cell-muted" title="Solo hay rutas locales file:// u otros formatos sin URL https ni ruta gs:// / Storage. Esta página no puede abrir archivos del teléfono; actualiza la app para guardar URL de descarga o subir a Storage.">' +
+          '<span class="fotos-cell-muted" title="Solo hay rutas locales del teléfono, sin URL de Cloudinary. Esta página no puede abrir esos archivos.">' +
           esc(fotos.length + " ruta(s) · sin URL web") +
           "</span>";
       } else if (fotos) {

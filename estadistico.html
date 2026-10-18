@@ -536,6 +536,7 @@
   <script src="firebase-config.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="supabase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script>
 (function () {
@@ -1546,7 +1547,7 @@
   async function loadStats() {
     if (!auth.currentUser) return;
     readStatsDateInputs();
-    setLoading("Cargando informes desde Firestore…");
+    setLoading("Cargando informes…");
     destroyCharts();
 
     var docs;

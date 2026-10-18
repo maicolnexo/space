@@ -52,7 +52,7 @@
     wrap.hidden = true;
     wrap.innerHTML =
       '<p class="auth-panel-title" id="auth-admin-title">Cuenta de administración</p>' +
-      '<p class="auth-panel-desc">Google validado. Ingrese el <strong>correo y contraseña</strong> registrados en la colección <strong>administradores</strong> de Firestore.</p>' +
+      '<p class="auth-panel-desc">Google validado. Ingrese el <strong>correo y contraseña</strong> registrados en <strong>administradores</strong>.</p>' +
       '<p id="auth-admin-google-line" class="auth-admin-google-line"></p>' +
       '<label class="auth-admin-field"><span>Correo administración</span><input type="email" id="auth-admin-email" autocomplete="username" placeholder="correo@empresa.com" /></label>' +
       '<label class="auth-admin-field"><span>Contraseña</span><input type="password" id="auth-admin-password" autocomplete="current-password" placeholder="Contraseña" /></label>' +

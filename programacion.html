@@ -2432,6 +2432,7 @@
   <script src="firebase-config.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="supabase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="lugano-firestore-alertas.js"></script>
   <script>
@@ -5338,16 +5339,20 @@
 
   function cuposLibresEnSede(sede, uso) {
     if (!sede) return 0;
+    var turnos = getTurnosListaSede(sede);
+    if (turnos.length) {
+      var total = 0;
+      turnos.forEach(function (t) {
+        var used = uso.turnoCounts[sede.id + "|" + t.id] || 0;
+        total += Math.max(0, turnoCupoMax(t) - used);
+      });
+      return total;
+    }
     var req = sede.operariosRequeridos != null ? parseInt(sede.operariosRequeridos, 10) : 0;
     if (!isNaN(req) && req > 0) {
       return Math.max(0, req - (uso.sedeCountsRegular[sede.id] || 0));
     }
-    var total = 0;
-    getTurnosListaSede(sede).forEach(function (t) {
-      var used = uso.turnoCounts[sede.id + "|" + t.id] || 0;
-      total += Math.max(0, turnoCupoMax(t) - used);
-    });
-    return total;
+    return 0;
   }
 
   function descansosPendientesEnSede(sedeId, excludeTr) {

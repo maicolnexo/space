@@ -6,6 +6,15 @@ const firebaseConfig = {
   messagingSenderId: "400755737958",
   appId: "1:400755737958:web:56b2404d349e2b917534a7",
   /**
+   * Base de datos de lectura y escritura (tabla public.documents).
+   * El inicio de sesión sigue en Firebase. Las fotos se sirven desde Cloudinary.
+   */
+  cloudinaryCloudName: "huf6reyb",
+  cloudinaryApiKey: "892518541338425",
+  supabaseUrl: "https://lmocpizuoyqvrrbxmtos.supabase.co",
+  supabaseAnonKey:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxtb2NwaXp1b3lxdnJyYnhtdG9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyNzc2MTksImV4cCI6MjEwNzg1MzYxOX0.Xkj9DTMFj2LDNgImwJJCeVZLdmaWSZ6ennjemCpSTv4",
+  /**
    * Si en la consola de Firebase abres otra base de datos (no la predeterminada),
    * pon aquí su ID. Vacío = base "(default)".
    * Hoy la página usa la base «default» del SDK compat; si tus datos están en otra base,

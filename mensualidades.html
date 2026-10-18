@@ -543,7 +543,7 @@
                   <textarea id="mes-notas" name="notas" maxlength="500" placeholder="Observaciones internas (opcional)"></textarea>
                 </div>
                 <div class="mes-form-actions">
-                  <button type="submit" class="mes-btn-primary" id="mes-btn-save">Guardar en Firestore</button>
+                  <button type="submit" class="mes-btn-primary" id="mes-btn-save">Guardar Mensual</button>
                   <button type="button" class="mes-btn-ghost" id="mes-btn-cancel-edit" hidden>Cancelar edición</button>
                   <button type="reset" class="mes-btn-ghost" id="mes-btn-reset-form">Limpiar formulario</button>
                 </div>
@@ -566,6 +566,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="supabase-firestore.js"></script>
 <script>
   firebase.initializeApp(typeof firebaseConfig !== "undefined" ? firebaseConfig : {});
   var auth = firebase.auth();
@@ -1152,7 +1153,7 @@
         : "Registrar mensualidad";
     }
     if (btnSave) {
-      btnSave.textContent = mesEditingId ? "Guardar cambios" : "Guardar en Firestore";
+      btnSave.textContent = mesEditingId ? "Guardar cambios" : "Guardar Mensual";
     }
     if (btnCancelEdit) btnCancelEdit.hidden = !mesEditingId;
   }

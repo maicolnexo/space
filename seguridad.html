@@ -1368,6 +1368,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="supabase-firestore.js"></script>
 <script src="lugano-admin-auth.js"></script>
 <script src="lugano-auth-gate.js"></script>
 <script>
@@ -2032,7 +2033,7 @@
         " opción(es) · " +
         new Date().toLocaleTimeString("es-CO");
       if (added.length) {
-        msg += " · +" + added.length + " nueva(s) desde Firestore";
+        msg += " · +" + added.length + " nueva(s)";
       } else if (toggleKeys.length !== prevCount) {
         msg += " · lista actualizada";
       } else {
@@ -2987,7 +2988,7 @@
   }
 
   document.getElementById("gc-btn-reload").addEventListener("click", function () {
-    if (gcLocalDirty && !window.confirm("Tiene cambios sin guardar. ¿Recargar desde Firestore?")) {
+    if (gcLocalDirty && !window.confirm("Tiene cambios sin guardar. ¿Recargar desde la base de datos?")) {
       return;
     }
     clearGcDirty();
