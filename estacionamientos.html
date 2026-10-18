@@ -416,9 +416,119 @@
       background: rgba(76, 175, 80, 0.2);
       color: #a5d6a7;
     }
+    button.esta-lotes-badge--activo {
+      border: 0;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    button.esta-lotes-badge--activo:hover {
+      background: rgba(76, 175, 80, 0.38);
+      color: #e8f5e9;
+    }
     .esta-lotes-badge--cerrado {
       background: rgba(158, 158, 158, 0.2);
       color: #bdbdbd;
+    }
+    button.esta-lotes-badge--cerrado {
+      border: 0;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    button.esta-lotes-badge--cerrado:hover {
+      background: rgba(158, 158, 158, 0.38);
+      color: #f5f5f5;
+    }
+    .esta-factura-preview {
+      margin: 0;
+    }
+    .esta-factura-preview-total {
+      margin: 0 0 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #10161c;
+      border: 1px solid #2d4a6e;
+    }
+    .esta-factura-preview-total span {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #9ca3af;
+    }
+    .esta-factura-preview-total strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 28px;
+      color: #e8f5e9;
+      font-variant-numeric: tabular-nums;
+    }
+    .esta-factura-preview dl {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 8px 12px;
+      margin: 0;
+    }
+    .esta-factura-preview dt {
+      margin: 0;
+      color: #9ca3af;
+      font-size: 12px;
+    }
+    .esta-factura-preview dd {
+      margin: 0;
+      color: #f3f4f6;
+      font-size: 14px;
+      word-break: break-word;
+    }
+    .esta-factura-preview-empty {
+      margin: 0;
+      color: #d1d5db;
+      line-height: 1.5;
+    }
+    .esta-tiquete-preview {
+      max-width: 280px;
+      margin: 0 auto;
+      padding: 16px 14px 18px;
+      background: #f7f4ee;
+      color: #1c1c1c;
+      font-family: "Courier New", Courier, monospace;
+      border-radius: 4px;
+    }
+    .esta-tiquete-preview h4,
+    .esta-tiquete-preview .esta-tiquete-sede,
+    .esta-tiquete-preview .esta-tiquete-pie {
+      margin: 0;
+      text-align: center;
+    }
+    .esta-tiquete-preview h4 {
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+    .esta-tiquete-preview .esta-tiquete-sede {
+      margin-top: 4px;
+      font-size: 12px;
+    }
+    .esta-tiquete-preview hr {
+      border: 0;
+      border-top: 1px dashed #8a8a8a;
+      margin: 10px 0;
+    }
+    .esta-tiquete-preview dl {
+      margin: 0;
+    }
+    .esta-tiquete-preview dt,
+    .esta-tiquete-preview dd {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .esta-tiquete-preview dt {
+      float: left;
+      clear: left;
+      margin-right: 6px;
+    }
+    .esta-tiquete-preview .esta-tiquete-pie {
+      font-size: 11px;
+      line-height: 1.4;
     }
     .esta-lotes-badge--factura {
       background: rgba(33, 150, 243, 0.2);
@@ -3855,6 +3965,22 @@
         <div class="esta-tarifas-dialog-foot">
           <button type="button" id="esta-lotes-purga-cancel">Cancelar</button>
           <button type="button" class="primary danger" id="esta-lotes-purga-confirm">Confirmar purga</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="esta-lotes-factura-dialog" class="esta-tarifas-dialog" hidden role="dialog" aria-modal="true" aria-labelledby="esta-lotes-factura-title">
+      <div class="esta-tarifas-dialog-card">
+        <div class="esta-tarifas-dialog-head">
+          <div>
+            <h3 id="esta-lotes-factura-title">Factura</h3>
+            <p id="esta-lotes-factura-sub">Tiquete cerrado</p>
+          </div>
+          <button type="button" class="esta-tarifas-dialog-close" id="esta-lotes-factura-x" aria-label="Cerrar">×</button>
+        </div>
+        <div class="esta-tarifas-dialog-body" id="esta-lotes-factura-body"></div>
+        <div class="esta-tarifas-dialog-foot">
+          <button type="button" id="esta-lotes-factura-close">Cerrar</button>
         </div>
       </div>
     </div>
@@ -7782,6 +7908,8 @@
   var sedeTarifasPasswordInput = document.getElementById("esta-tarifas-password");
   var sedeTarifasPassErrorEl = document.getElementById("esta-tarifas-pass-error");
   var tarifasPasswordVerified = false;
+  var tarifasDirty = false;
+  var tarifasDirtyBeforeDialog = false;
   var TARIFAS_IVA_DEFAULT = 19;
   var tarifasIvaPct = TARIFAS_IVA_DEFAULT;
   var sedeTarifasIvaInput = document.getElementById("esta-tarifas-iva");
@@ -7847,6 +7975,7 @@
     tarifasIvaPct = TARIFAS_IVA_DEFAULT;
     if (sedeTarifasIvaInput) sedeTarifasIvaInput.value = String(TARIFAS_IVA_DEFAULT);
     tarifasPasswordVerified = false;
+    tarifasDirty = false;
     updateTarifasResumen();
   }
 
@@ -7879,6 +8008,34 @@
 
   function marcarTarifasSinVerificar() {
     tarifasPasswordVerified = false;
+    tarifasDirty = true;
+  }
+
+  function sedeIdParaTarifas() {
+    if (!sedeIsNew && sedeSelectedId) return String(sedeSelectedId).trim();
+    return sedeIdInput && sedeIdInput.value ? String(sedeIdInput.value).trim() : "";
+  }
+
+  function persistirTarifasSedeActual(esNueva) {
+    var sedeId = sedeIdParaTarifas();
+    if (!sedeId) {
+      return Promise.reject(new Error("Indique el código de sede antes de guardar las tarifas."));
+    }
+    if (/\//.test(sedeId)) {
+      return Promise.reject(new Error("El código de sede no puede contener «/»."));
+    }
+    var nombre = sedeNombreInput ? sedeNombreInput.value.trim() : "";
+    return db
+      .collection(TARIFAS_COL)
+      .doc(sedeId)
+      .get()
+      .then(function (snap) {
+        return saveTarifasForSede(sedeId, nombre, !!esNueva || !snap.exists);
+      })
+      .then(function () {
+        tarifasDirty = false;
+        return sedeId;
+      });
   }
 
   function tarifaVehiculoDesdeFirestore(data, key, legacyRoot) {
@@ -7981,6 +8138,7 @@
   function abrirDialogoTarifas() {
     if (!sedeTarifasDialogEl) return;
     if (!tarifasState) resetTarifasState();
+    tarifasDirtyBeforeDialog = tarifasDirty;
     tarifasStateSnapshot = snapshotTarifasCompleto();
     if (!sedeTarifasDialogBodyEl.querySelector("[data-tarifa-vehiculo]")) {
       buildTarifasDialogBody();
@@ -8007,6 +8165,8 @@
     if (!sedeTarifasDialogEl) return;
     if (revertir && tarifasStateSnapshot) {
       restaurarSnapshotTarifas(tarifasStateSnapshot);
+      tarifasDirty = tarifasDirtyBeforeDialog;
+      if (!tarifasDirty) tarifasPasswordVerified = false;
       updateTarifasResumen();
     }
     tarifasStateSnapshot = null;
@@ -8033,7 +8193,11 @@
         readTarifasDialogIntoState();
         tarifasPasswordVerified = true;
         if (sedeTarifasPasswordInput) sedeTarifasPasswordInput.value = "";
+        return persistirTarifasSedeActual(sedeIsNew);
+      })
+      .then(function (sedeId) {
         cerrarDialogoTarifas(false);
+        setSedeStatus("Tarifas guardadas: " + sedeId);
       })
       .catch(function (err) {
         marcarTarifasSinVerificar();
@@ -10574,6 +10738,7 @@
           salida: salida,
           facturaDocId: doc.id,
           numeroFactura: String(d.numeroFactura || "").trim(),
+          data: d,
         };
         lotesFacturaMatchKeys(sede, placa, tiq, nFactura).forEach(function (key) {
           lotesFacturaIndexPut(map, key, entry);
@@ -10837,6 +11002,7 @@
       salidaDesdeFactura: salidaDesdeFactura,
       facturaVentaId: factHit ? factHit.facturaDocId || "" : "",
       facturaVentaNumero: factHit ? factHit.numeroFactura || "" : "",
+      facturaData: factHit ? factHit.data || null : null,
       activa: activa,
       estadoCaja: String(d.estadoCaja || (activa ? "EN_CAJA" : "CERRADO")),
       listoParaFacturar: d.listoParaFacturar === true,
@@ -12362,13 +12528,19 @@
     rows.forEach(function (r) {
       var checked = !!lotesSelectedPaths[r.path];
       var perm = calcularPermanenciaLotes(r, now);
-      var badgeClass = r.activa
-        ? "esta-lotes-badge--activo"
-        : "esta-lotes-badge--cerrado";
-      var badgeText = r.activa ? "En lote" : "Cerrado";
-      if (r.listoParaFacturar) {
-        badgeClass = "esta-lotes-badge--factura";
-        badgeText = "Listo factura";
+      var badgeHtml;
+      if (!r.activa) {
+        badgeHtml =
+          '<button type="button" class="esta-lotes-badge esta-lotes-badge--cerrado" data-lotes-factura="' +
+          escapeHtml(r.path) +
+          '" title="Ver factura del tiquete">Cerrado</button>';
+      } else if (r.listoParaFacturar) {
+        badgeHtml = '<span class="esta-lotes-badge esta-lotes-badge--factura">Listo factura</span>';
+      } else {
+        badgeHtml =
+          '<button type="button" class="esta-lotes-badge esta-lotes-badge--activo" data-lotes-tiquete="' +
+          escapeHtml(r.path) +
+          '" title="Ver tiquete de entrada">En lote</button>';
       }
       html +=
         "<tr data-lotes-path=\"" +
@@ -12407,11 +12579,9 @@
         "<td>" +
         escapeHtml(perm) +
         "</td>" +
-        '<td><span class="esta-lotes-badge ' +
-        badgeClass +
-        '">' +
-        escapeHtml(badgeText) +
-        "</span></td>" +
+        "<td>" +
+        badgeHtml +
+        "</td>" +
         "<td>" +
         escapeHtml(r.origen) +
         "</td>" +
@@ -12804,6 +12974,203 @@
     setLotesStatus("CSV exportado · " + rows.length + " fila(s)");
   }
 
+  function lotesPreviewPick(data, keys) {
+    if (!data) return "";
+    var i;
+    for (i = 0; i < keys.length; i++) {
+      var v = data[keys[i]];
+      if (v == null || v === "") continue;
+      if (v && typeof v.toDate === "function") {
+        try {
+          return formatPosDateTime(v.toDate());
+        } catch (e) {
+          continue;
+        }
+      }
+      if (v instanceof Date) return formatPosDateTime(v);
+      if (typeof v === "object") continue;
+      var s = String(v).trim();
+      if (!s) continue;
+      if (/^\d{4}-\d{2}-\d{2}/.test(s)) {
+        var parsed = new Date(s);
+        if (!isNaN(parsed.getTime())) return formatPosDateTime(parsed);
+      }
+      return s;
+    }
+    return "";
+  }
+
+  function lotesPreviewRaw(data, keys) {
+    if (!data) return null;
+    var i;
+    for (i = 0; i < keys.length; i++) {
+      var v = data[keys[i]];
+      if (v == null || v === "") continue;
+      if (typeof v === "object") continue;
+      return v;
+    }
+    return null;
+  }
+
+  function lotesPreviewMoney(data, keys) {
+    var raw = lotesPreviewRaw(data, keys);
+    if (raw == null || raw === "") return "";
+    var n =
+      typeof raw === "number"
+        ? raw
+        : Number(String(raw).replace(/\$/g, "").replace(/\s/g, "").replace(/\./g, "").replace(",", "."));
+    if (!isFinite(n)) return String(raw);
+    return (
+      "$" +
+      Math.round(n).toLocaleString("es-CO", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+    );
+  }
+
+  function lotesFacturaPreviewHtml(row) {
+    var d = row && row.facturaData;
+    if (!d) {
+      return (
+        '<p class="esta-factura-preview-empty">Este tiquete cerrado no tiene una factura de venta asociada.</p>'
+      );
+    }
+    var numero =
+      lotesPreviewPick(d, [
+        "numeroFactura",
+        "numeroFacturaFE",
+        "numeroDocumento",
+        "facturaNumero",
+        "folio",
+      ]) ||
+      (row.facturaVentaNumero || "") ||
+      (row.facturaVentaId || "");
+    var total = lotesPreviewMoney(d, [
+      "total",
+      "monto",
+      "valorTotal",
+      "valorCobrado",
+      "totalCobrado",
+      "importe",
+    ]);
+    var pares = [
+      ["Factura", numero],
+      ["Placa", lotesPreviewPick(d, ["placa"]) || row.placa],
+      ["Sede", lotesPreviewPick(d, ["sede"]) || row.sede],
+      ["Tiquete", lotesPreviewPick(d, ["numeroTiquete", "numero_tiquete"])],
+      ["Fecha", lotesPreviewPick(d, ["fechaFactura", "fecha_factura", "fechaSalida"])],
+      ["Entrada", lotesPreviewPick(d, ["fechaEntrada"])],
+      ["Salida", lotesPreviewPick(d, ["fechaSalida"])],
+      ["Subtotal", lotesPreviewMoney(d, ["subtotal", "subtotalImpreso", "baseGravable"])],
+      ["IVA", lotesPreviewMoney(d, ["iva", "ivaImpreso", "montoIva", "valorIva"])],
+      ["Pago", lotesPreviewPick(d, ["modoPago", "formaPago"])],
+      ["Operario", lotesPreviewPick(d, ["operario", "operarioPos", "operatorName"])],
+      ["Cliente", lotesPreviewPick(d, ["receptorNombre", "clienteNombre", "nombreCliente"])],
+    ];
+    var html = '<div class="esta-factura-preview">';
+    if (total) {
+      html +=
+        '<div class="esta-factura-preview-total"><span>Total</span><strong>' +
+        escapeHtml(total) +
+        "</strong></div>";
+    }
+    html += "<dl>";
+    pares.forEach(function (par) {
+      if (!par[1]) return;
+      html +=
+        "<dt>" +
+        escapeHtml(par[0]) +
+        "</dt><dd>" +
+        escapeHtml(par[1]) +
+        "</dd>";
+    });
+    html += "</dl></div>";
+    return html;
+  }
+
+  function closeLotesFacturaPreview() {
+    var dlg = document.getElementById("esta-lotes-factura-dialog");
+    if (dlg) dlg.hidden = true;
+  }
+
+  function openLotesFacturaPreview(path) {
+    var row = lotesRowByPath(path);
+    var dlg = document.getElementById("esta-lotes-factura-dialog");
+    var title = document.getElementById("esta-lotes-factura-title");
+    var sub = document.getElementById("esta-lotes-factura-sub");
+    var body = document.getElementById("esta-lotes-factura-body");
+    if (!dlg || !body || !row) return;
+    if (title) title.textContent = row.placa ? "Factura · " + row.placa : "Factura";
+    if (sub) {
+      sub.textContent = row.facturaData
+        ? "Tiquete cerrado"
+        : "Sin factura de venta";
+    }
+    body.innerHTML = lotesFacturaPreviewHtml(row);
+    dlg.hidden = false;
+  }
+
+  function lotesTipoVehiculoLabel(tipo) {
+    var t = String(tipo || "").toLowerCase();
+    if (t === "moto") return "Moto";
+    if (t === "bicicleta" || t === "bici") return "Bicicleta";
+    if (t === "ciclomotor") return "Ciclomotor";
+    if (t === "auto" || t === "automovil" || t === "automóvil") return "Automóvil";
+    return tipo ? String(tipo) : "";
+  }
+
+  function lotesTiquetePreviewHtml(row) {
+    var d = (row && row.rawData) || {};
+    var numero = row.numeroTiquete > 0 ? String(row.numeroTiquete) : "";
+    if (numero && numero.length < 3) numero = ("000" + numero).slice(-3);
+    var entrada = row.fechaEntrada ? formatPosDateTime(row.fechaEntrada) : "";
+    var operario = lotesPreviewPick(d, [
+      "operario",
+      "operarioPos",
+      "operatorName",
+      "nombreOperario",
+    ]);
+    if (!operario) operario = row.subcol || "";
+    var sede = sedeDisplayLabelForCatalogId(row.sedeCanon || row.sede) || row.sede || "";
+    var tipo = lotesTipoVehiculoLabel(row.tipoVehiculo);
+    var grupo = row.grupoLoteNombre || row.grupoLote || "";
+    var pares = [
+      ["Placa:", row.placa],
+      ["No. tiquete:", numero],
+      ["Entrada:", entrada && entrada !== "—" ? entrada : ""],
+      ["Operario:", operario],
+      ["Vehículo:", tipo],
+      ["Grupo:", grupo],
+    ];
+    var html =
+      '<div class="esta-tiquete-preview">' +
+      "<h4>TIQUETE DE ENTRADA</h4>" +
+      '<p class="esta-tiquete-sede">' +
+      escapeHtml(sede || "Estacionamiento") +
+      "</p><hr><dl>";
+    pares.forEach(function (par) {
+      if (!par[1]) return;
+      html += "<dt>" + escapeHtml(par[0]) + "</dt><dd>" + escapeHtml(par[1]) + "</dd>";
+    });
+    html +=
+      '</dl><hr><p class="esta-tiquete-pie">Conserve este comprobante<br>para retirar el vehiculo</p></div>';
+    return html;
+  }
+
+  function openLotesTiquetePreview(path) {
+    var row = lotesRowByPath(path);
+    var dlg = document.getElementById("esta-lotes-factura-dialog");
+    var title = document.getElementById("esta-lotes-factura-title");
+    var sub = document.getElementById("esta-lotes-factura-sub");
+    var body = document.getElementById("esta-lotes-factura-body");
+    if (!dlg || !body || !row) return;
+    if (title) title.textContent = row.placa ? "Tiquete · " + row.placa : "Tiquete de entrada";
+    if (sub) sub.textContent = "Vehículo en lote";
+    body.innerHTML = lotesTiquetePreviewHtml(row);
+    dlg.hidden = false;
+  }
+
   function wireLotesPanel() {
     var btnReload = document.getElementById("esta-lotes-btn-reload");
     var btnExport = document.getElementById("esta-lotes-btn-export");
@@ -12819,6 +13186,16 @@
     var cuposSaveAll = document.getElementById("esta-lotes-cupos-save-all");
     var cuposTbody = document.getElementById("esta-lotes-cupos-tbody");
     var checkAll = document.getElementById("esta-lotes-check-all");
+    var facturaDlg = document.getElementById("esta-lotes-factura-dialog");
+    var facturaClose = document.getElementById("esta-lotes-factura-close");
+    var facturaCloseX = document.getElementById("esta-lotes-factura-x");
+    if (facturaClose) facturaClose.addEventListener("click", closeLotesFacturaPreview);
+    if (facturaCloseX) facturaCloseX.addEventListener("click", closeLotesFacturaPreview);
+    if (facturaDlg) {
+      facturaDlg.addEventListener("click", function (ev) {
+        if (ev.target === facturaDlg) closeLotesFacturaPreview();
+      });
+    }
     var purgaDlg = document.getElementById("esta-lotes-purga-dialog");
     var purgaCancel = document.getElementById("esta-lotes-purga-cancel");
     var purgaConfirm = document.getElementById("esta-lotes-purga-confirm");
@@ -13052,6 +13429,16 @@
           syncLotesCheckAllState(getLotesFilteredRows());
           return;
         }
+        var facturaBtn = ev.target.closest("[data-lotes-factura]");
+        if (facturaBtn) {
+          openLotesFacturaPreview(facturaBtn.getAttribute("data-lotes-factura"));
+          return;
+        }
+        var tiqueteBtn = ev.target.closest("[data-lotes-tiquete]");
+        if (tiqueteBtn) {
+          openLotesTiquetePreview(tiqueteBtn.getAttribute("data-lotes-tiquete"));
+          return;
+        }
         var btn = ev.target.closest("[data-lotes-purga]");
         if (!btn) return;
         solicitarPurgaLotes([btn.getAttribute("data-lotes-purga")]);
@@ -13233,6 +13620,7 @@
     );
     if (sedeTarifasIvaInput) sedeTarifasIvaInput.value = String(tarifasIvaPct);
     marcarTarifasSinVerificar();
+    tarifasDirty = false;
     updateTarifasResumen();
   }
 
@@ -14142,18 +14530,16 @@
     setSedeStatus("Guardando sede y tarifas…");
     var ref = db.collection(SEDES_COL).doc(docId);
     var sedeEraNueva = sedeIsNew;
+    var debeGuardarTarifas = sedeEraNueva || tarifasDirty;
     if (sedeIsNew) {
       payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
     }
-    var tarifasRef = db.collection(TARIFAS_COL).doc(docId);
     ref
       .set(payload, { merge: true })
       .then(function () {
-        return tarifasRef.get();
-      })
-      .then(function (tarSnap) {
+        if (!debeGuardarTarifas) return;
         return verificarPasswordAntesDeGuardarTarifas().then(function () {
-          return saveTarifasForSede(docId, payload.nombre, sedeEraNueva || !tarSnap.exists);
+          return persistirTarifasSedeActual(sedeEraNueva);
         });
       })
       .then(function () {
@@ -14164,7 +14550,9 @@
           sedeIdInput.readOnly = true;
         }
         if (sedeDeleteBtn) sedeDeleteBtn.hidden = false;
-        setSedeStatus("Sede y tarifas guardadas: " + docId);
+        setSedeStatus(
+          (debeGuardarTarifas ? "Sede y tarifas guardadas: " : "Sede guardada: ") + docId
+        );
         return loadSedesList();
       })
       .then(function () {
