@@ -177,6 +177,16 @@
       color: #ffcdd2;
       border: 1px solid #c62828;
     }
+    .u-li-badge--online {
+      background: rgba(46, 125, 50, 0.35);
+      color: #c8e6c9;
+      border: 1px solid #2e7d32;
+    }
+    .u-li-badge--offline {
+      background: rgba(97, 97, 97, 0.35);
+      color: #e0e0e0;
+      border: 1px solid #616161;
+    }
     .u-list button.u-li-inactive {
       opacity: 0.72;
     }
@@ -773,6 +783,8 @@
   var allDocs = [];
   var selectedId = null;
   var isNewMode = false;
+  var presenceDirty = false;
+  var operatorsUnsub = null;
 
   /** Igual que Operator.encriptarContraseña en Kotlin: SHA-256(UTF-8(password + saltHex)), salt 16 bytes en hex. */
   async function hashPasswordLikeOperatorKotlin(plain) {
@@ -830,9 +842,92 @@
     statusEl.textContent = msg || "";
   }
 
+  function presenceMillis(value) {
+    if (value == null || value === "") return null;
+    if (typeof value === "number" && isFinite(value)) {
+      if (value <= 0) return null;
+      if (value < 1e12) return Math.round(value * 1000);
+      return value;
+    }
+    if (value instanceof Date) {
+      var dt = value.getTime();
+      return isNaN(dt) ? null : dt;
+    }
+    if (typeof value.toDate === "function") {
+      try {
+        var fromTs = value.toDate().getTime();
+        return isNaN(fromTs) ? null : fromTs;
+      } catch (e) {}
+    }
+    if (typeof value === "object") {
+      var sec = value.seconds != null ? value.seconds : value._seconds;
+      if (typeof sec === "number" && isFinite(sec)) {
+        var nano =
+          value.nanoseconds != null
+            ? value.nanoseconds
+            : value.nanos != null
+              ? value.nanos
+              : value._nanoseconds || 0;
+        return sec * 1000 + Math.floor(Number(nano) / 1e6);
+      }
+    }
+    var asNum = Number(value);
+    if (isFinite(asNum) && asNum > 0) return asNum < 1e12 ? Math.round(asNum * 1000) : asNum;
+    return null;
+  }
+
+  function asPresenceBool(value) {
+    if (value === true || value === 1) return true;
+    if (value === false || value === 0) return false;
+    if (typeof value === "string") {
+      var s = value.trim().toLowerCase();
+      if (s === "true" || s === "1" || s === "online" || s === "si" || s === "sí") return true;
+      if (s === "false" || s === "0" || s === "offline" || s === "no") return false;
+    }
+    return null;
+  }
+
+  function operatorPresence(data) {
+    data = data || {};
+    var online = asPresenceBool(data.online);
+    var offline = asPresenceBool(data.offline);
+    if (online === true) return "online";
+    if (offline === true || online === false) return "offline";
+    return "";
+  }
+
+  function presenceBadgeHtml(data) {
+    var state = operatorPresence(data);
+    if (state === "online") {
+      return '<span class="u-li-badge u-li-badge--online">En línea</span>';
+    }
+    if (state === "offline") {
+      return '<span class="u-li-badge u-li-badge--offline">Fuera de línea</span>';
+    }
+    return "";
+  }
+
+  function readPresenceFromForm() {
+    var online = !!document.getElementById("f-online").checked;
+    var offline = !!document.getElementById("f-offline").checked;
+    if (online) return { online: true, offline: false };
+    if (offline) return { online: false, offline: true };
+    return { online: false, offline: false };
+  }
+
+  function applyPresenceToForm(data) {
+    data = data || {};
+    var state = operatorPresence(data);
+    document.getElementById("f-lastLogin").value = msToDatetimeLocal(data.lastLogin);
+    document.getElementById("f-lastSeen").value = msToDatetimeLocal(data.lastSeen);
+    document.getElementById("f-online").checked = state === "online";
+    document.getElementById("f-offline").checked = state === "offline";
+  }
+
   function msToDatetimeLocal(ms) {
-    if (ms == null || ms === "" || !isFinite(Number(ms))) return "";
-    var d = new Date(Number(ms));
+    var n = presenceMillis(ms);
+    if (n == null) return "";
+    var d = new Date(n);
     if (isNaN(d.getTime())) return "";
     var pad = function (n) {
       return (n < 10 ? "0" : "") + n;
@@ -948,12 +1043,9 @@
     document.getElementById("f-profileImageUrl").value =
       data.profileImageUrl != null ? String(data.profileImageUrl) : "";
     document.getElementById("f-createdAt").value = msToDatetimeLocal(data.createdAt);
-    document.getElementById("f-lastLogin").value = msToDatetimeLocal(data.lastLogin);
-    document.getElementById("f-lastSeen").value = msToDatetimeLocal(data.lastSeen);
     document.getElementById("f-lastSyncTimestamp").value =
       data.lastSyncTimestamp != null ? String(data.lastSyncTimestamp) : "0";
-    document.getElementById("f-offline").checked = !!data.offline;
-    document.getElementById("f-online").checked = !!data.online;
+    applyPresenceToForm(data);
     document.getElementById("f-activo").checked = data.activo !== false;
     clearPasswordInputs();
     updatePasswordBadge(!!(data.password && String(data.password).trim()));
@@ -964,6 +1056,7 @@
   function clearForm() {
     isNewMode = true;
     selectedId = null;
+    presenceDirty = false;
     document.getElementById("u-form-title").textContent = "Datos del operador";
     fillFormFromData({}, "");
     document.getElementById("f-createdAt").value = "";
@@ -994,10 +1087,11 @@
       parkingId: String(document.getElementById("f-parkingId").value || "").trim(),
       parkingLot: String(document.getElementById("f-parkingLot").value || "").trim(),
       profileImageUrl: String(document.getElementById("f-profileImageUrl").value || "").trim(),
-      offline: !!document.getElementById("f-offline").checked,
-      online: !!document.getElementById("f-online").checked,
       activo: !!document.getElementById("f-activo").checked
     };
+    var presence = readPresenceFromForm();
+    payload.online = presence.online;
+    payload.offline = presence.offline;
 
     var ca = datetimeLocalToMs(document.getElementById("f-createdAt").value);
     if (ca != null) payload.createdAt = ca;
@@ -1042,6 +1136,7 @@
         (blocked
           ? '<span class="u-li-badge u-li-badge--blocked" title="Inicio de sesión deshabilitado">Bloqueado</span>'
           : "") +
+        presenceBadgeHtml(item.data) +
         '<span class="u-li-sub">' +
         escapeHtml(name || "sin nombre") +
         "</span>";
@@ -1063,9 +1158,54 @@
     if (!found) return;
     isNewMode = false;
     selectedId = id;
+    presenceDirty = false;
     document.getElementById("u-form-title").textContent = "Editar · " + id;
     fillFormFromData(found.data, id);
     renderList(filterEl.value);
+  }
+
+  function applyOperatorDocs(docs) {
+    allDocs = (docs || []).map(function (d) {
+      return { id: d.id, data: d.data() || {} };
+    });
+    allDocs.sort(function (a, b) {
+      return a.id.localeCompare(b.id, "es");
+    });
+    if (selectedId && !allDocs.some(function (x) { return x.id === selectedId; })) {
+      selectedId = null;
+      presenceDirty = false;
+      clearForm();
+    }
+    renderList(filterEl.value);
+    if (selectedId && !presenceDirty && !isNewMode) {
+      var found = allDocs.filter(function (x) {
+        return x.id === selectedId;
+      })[0];
+      if (found) applyPresenceToForm(found.data);
+    }
+    setStatus(allDocs.length + " documento(s) · " + COL);
+  }
+
+  function startOperatorsSync() {
+    if (!auth.currentUser || operatorsUnsub) return;
+    setStatus("Cargando «" + COL + "»…");
+    operatorsUnsub = db.collection(COL).onSnapshot(
+      function (snap) {
+        applyOperatorDocs(snap.docs);
+      },
+      function (err) {
+        setStatus("Error: " + (err.code || "") + " " + (err.message || err));
+        console.error(err);
+      }
+    );
+  }
+
+  function stopOperatorsSync() {
+    if (!operatorsUnsub) return;
+    try {
+      operatorsUnsub();
+    } catch (e) {}
+    operatorsUnsub = null;
   }
 
   async function loadOperators() {
@@ -1073,17 +1213,7 @@
     setStatus("Cargando «" + COL + "»…");
     try {
       var snap = await db.collection(COL).get();
-      allDocs = snap.docs.map(function (d) {
-        return { id: d.id, data: d.data() || {} };
-      });
-      allDocs.sort(function (a, b) {
-        return a.id.localeCompare(b.id, "es");
-      });
-      if (selectedId && !allDocs.some(function (x) { return x.id === selectedId; })) {
-        selectedId = null;
-      }
-      setStatus(allDocs.length + " documento(s) · " + COL);
-      clearForm();
+      applyOperatorDocs(snap.docs);
     } catch (e) {
       setStatus("Error: " + (e.code || "") + " " + (e.message || e));
       console.error(e);
@@ -1108,6 +1238,7 @@
   document.getElementById("u-btn-new").addEventListener("click", function () {
     isNewMode = true;
     selectedId = null;
+    presenceDirty = false;
     document.getElementById("u-form-title").textContent = "Nuevo operador";
     fillFormFromData({}, "");
     document.getElementById("f-createdAt").value = msToDatetimeLocal(Date.now());
@@ -1190,7 +1321,21 @@
         .collection(COL)
         .doc(docId)
         .set(payload, { merge: true });
-      await loadOperators();
+      var merged = Object.assign({}, existingData, payload);
+      var replaced = false;
+      allDocs.forEach(function (item, idx) {
+        if (item.id === docId) {
+          allDocs[idx] = { id: docId, data: merged };
+          replaced = true;
+        }
+      });
+      if (!replaced) allDocs.push({ id: docId, data: merged });
+      isNewMode = false;
+      selectedId = docId;
+      presenceDirty = false;
+      document.getElementById("u-form-title").textContent = "Editar · " + docId;
+      applyPresenceToForm(merged);
+      renderList(filterEl.value);
       setStatus("Guardado correctamente. · " + allDocs.length + " documento(s) · " + COL);
     } catch (e) {
       setStatus("Error al guardar: " + (e.code || "") + " " + (e.message || e));
@@ -1198,12 +1343,26 @@
     }
   });
 
+  document.getElementById("f-online").addEventListener("change", function () {
+    presenceDirty = true;
+    if (this.checked) document.getElementById("f-offline").checked = false;
+  });
+  document.getElementById("f-offline").addEventListener("change", function () {
+    presenceDirty = true;
+    if (this.checked) document.getElementById("f-online").checked = false;
+  });
+  document.getElementById("f-lastSeen").addEventListener("input", function () {
+    presenceDirty = true;
+  });
+
   auth.onAuthStateChanged(function (user) {
     if (user) {
-      loadOperators();
+      startOperatorsSync();
     } else {
+      stopOperatorsSync();
       allDocs = [];
       selectedId = null;
+      presenceDirty = false;
       listEl.innerHTML = "";
       countEl.textContent = "0";
       setStatus("");
